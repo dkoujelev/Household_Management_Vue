@@ -125,14 +125,6 @@ fabric.properties
 # Sonarlint plugin
 .idea/sonarlint
 
-### NetBeans ###
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-nbactions.xml
 
 ### Node ###
 # Logs
