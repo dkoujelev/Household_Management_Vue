@@ -1,21 +1,21 @@
 <template>
-  <div id="dashboard">
-
-      <div class="block">
-        <div class="box">
-          <a>
-             <router-link to="/Test">prøving</router-link>
-          </a>
-          <a>
-            <router-link to="/HelloWorld">Hello</router-link>
-          </a>
-          <a>
-          <router-link to="/Task">Gjøremål</router-link>
-          </a>
+  <div class="container">
+    <div class="navbar is-success">
+      <div class="navbar-brand">
+        <router-link class="navbar-item" to="/">
+          <img src="./img/logo_medium.png" alt="image not found" width="175"/>
+        </router-link>
+      </div>
+      <div class="navbar-menu">
+        <div class="navbar-start">
+          <router-link class="navbar-item" to="/">Hjem</router-link>
+          <router-link class="navbar-item" to="/HelloWorld">Hello World!</router-link>
+          <router-link class="navbar-item" to="/Task">Gjøremål</router-link>
+          <router-link class="navbar-item" to="/Login">Login</router-link>
+          <router-link class="navbar-item" to="/Register">Registrer deg</router-link>
         </div>
       </div>
-
-
+    </div>
     <router-view/>
   </div>
 </template>
@@ -27,10 +27,4 @@ export default {
 </script>
 
 <style>
-#dashboard {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: black;
-}
 </style>
