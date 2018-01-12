@@ -519,5 +519,8 @@ __pycache__/
 # By default, sensitive information, such as encrypted password
 # should be stored in the .pubxml.user file.
 
+### Added by Harald Geving ###
+# workspace file from Visual Studio Code
+*.code-workspace
 
 # End of https://www.gitignore.io/api/node,eclipse,netbeans,intellij,webstorm,visualstudio
