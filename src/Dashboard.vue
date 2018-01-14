@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <div class="navbar is-success">
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/">
@@ -27,4 +27,11 @@ export default {
 </script>
 
 <style>
+  .navbar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
 </style>
