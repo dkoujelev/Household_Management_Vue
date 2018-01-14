@@ -27,10 +27,14 @@ server.get('rest/undergrupperForBruker/:bruker_id',function(req, res, next){
   });
 });
 
-server.post('rest/undergruppe/',function(req, res, next){
-  connection.query("INSERT INTO Undergruppe SET ?", req.body, function(err, rows, fields){
-    res.send(err ? err : rows);
-    return next();
+server.post('rest/undergruppe/:bruker_id',function(req, res, next){
+  connection.query("INSERT INTO Undergruppe SET ?", req.body, function(err, rows1, fields){
+    if(err){res.send(err); return next();}
+
+    connection.query('INSERT INTO Bruker_Undergruppe SET bruker_id=?, undergruppe_id=?',[req.params.bruker_id, rows1.insertId], function(err,rows2,fields){
+      res.send(err ? err : rows1);
+      return next();
+    });
   });
 });
 

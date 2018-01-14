@@ -20,7 +20,7 @@ server.get('rest/kollektiv/',function(req, res, next){
 // Opprett nytt kollektiv
 server.post('rest/kollektiv/:bruker_id',function(req, res, next){
   connection.query("INSERT INTO Kollektiv SET ?", req.body, function(err, rows1, fields){
-    if(err) return err;
+    if(err){res.send(err); return next();}
 
     connection.query("INSERT INTO Bruker_Kollektiv SET bruker_id=?, kollektiv_id=?, er_admin=1", [req.params.bruker_id, rows1.insertId], function(err,rows2,fields){
       res.send(err ? err : rows1);

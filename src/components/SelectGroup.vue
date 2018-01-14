@@ -5,7 +5,7 @@
     </a>
     <div class="navbar-dropdown">
       <a v-for="group in groups" class="navbar-item" @click="$emit('selected-group',group)">
-        {{group.kollektiv_navn}} - {{group.navn}}
+        {{group.default_gruppe ? group.kollektiv_navn : ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      * ' + group.navn)}}
       </a>
     </div>
   </div>

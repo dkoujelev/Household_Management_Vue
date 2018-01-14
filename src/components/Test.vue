@@ -1,21 +1,20 @@
 <template>
-  <AddCollective :current_user="user" @added-collective="opprettetKollektiv"></AddCollective>
+  <AddGroup :current_user="this.$parent.current_user" :current_collective="{kollektiv_id: 1, navn: 'Testkollektiv 1'}" @added-group="addedGroup"></AddGroup>
 </template>
 
 <script>
 
-  import AddCollective from './AddCollective';
+  import AddGroup from './AddGroup';
 
   export default {
     name: 'Test',
-    components: {AddCollective},
+    components: {AddGroup},
     data () {
       return {
-        user: {bruker_id: 1, epost:'asd@asd.com'}
-      }
+      };
     },
     methods:{
-        opprettetKollektiv(e){
+      addedGroup(e){
             alert(JSON.stringify(e));
         }
     }

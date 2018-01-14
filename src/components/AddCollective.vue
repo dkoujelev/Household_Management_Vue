@@ -13,9 +13,8 @@
       </div>
     </div>
     <div class="field">
-      <div class="control">
         <a href="" class="button is-primary" @click.prevent="addCollective">Opprett kollektiv</a>
-      </div>
+        <a href="" class="button" @click.prevent="$emit('cancel')">Avbryt</a>
     </div>
   </div>
 </template>

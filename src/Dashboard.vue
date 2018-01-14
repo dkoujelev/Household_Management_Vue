@@ -16,10 +16,21 @@
           <router-link class="navbar-item" to="/Test">Test!</router-link>
         </div>
         <div class="navbar-end">
-          <SelectGroup :current_user="{bruker_id:1}" @selected-group="selectedGroup"></SelectGroup>
+          <SelectGroup :current_user="current_user" @selected-group="selectedGroup"></SelectGroup>
+          <a href="" class="navbar-item" @click.prevent="addingGroup=true">
+            <i class="fa fa-plus"></i>
+          </a>
+          <div class="modal" v-bind:class="{'is-active' : addingGroup}" @blur="console.log('blurring'); addingGroup=false" transition="zoom">
+            <div class="content has-text-centered">
+              <AddCollective @cancel="addingGroup=false"></AddCollective>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
+    <p>Innlogget bruker: {{current_user.epost}}</p>
+    <p>Aktiv gruppe: {{current_group.navn}}</p>
     <router-view/>
   </div>
 </template>
@@ -27,14 +38,31 @@
 <script>
 
   import SelectGroup from '@/components/SelectGroup';
+  import AddCollective from '@/components/AddCollective';
 
 export default {
   name: 'dashboard',
-  components: {SelectGroup},
+  components: {SelectGroup, AddCollective},
   methods:{
       selectedGroup(group){
-          alert('selected group ' + JSON.stringify(group));
+          this.current_group = group;
       }
+  },
+  data(){
+      return {
+          current_user:{
+            "bruker_id": 1,
+            "epost": "sj@apple.com",
+            "fornavn": "Steve ",
+            "etternavn": "Jobs",
+            "tlf": "12345678",
+            "adresse": "California",
+            "hashed_passord": "",
+            "salt": ""
+          },
+        current_group : {navn: ''},
+        addingGroup: false
+      };
   }
 }
 </script>
