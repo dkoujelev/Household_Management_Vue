@@ -18,10 +18,14 @@ server.get('rest/kollektiv/',function(req, res, next){
 });
 
 // Opprett nytt kollektiv
-server.post('rest/kollektiv/',function(req, res, next){
-  connection.query("INSERT INTO Kollektiv SET ?", req.body, function(err, rows, fields){
-    res.send(err ? err : rows);
-    return next();
+server.post('rest/kollektiv/:bruker_id',function(req, res, next){
+  connection.query("INSERT INTO Kollektiv SET ?", req.body, function(err, rows1, fields){
+    if(err) return err;
+
+    connection.query("INSERT INTO Bruker_Kollektiv SET bruker_id=?, kollektiv_id=?, er_admin=1", [req.params.bruker_id, rows1.insertId], function(err,rows2,fields){
+      res.send(err ? err : rows1);
+      return next();
+    });
   });
 });
 

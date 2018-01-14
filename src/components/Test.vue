@@ -1,35 +1,26 @@
 <template>
-  <div class="app">
-    <h1>{{ msg }}</h1>
-    dette er en test for å se om ting virker
-  </div>
+  <AddCollective :current_user="user" @added-collective="opprettetKollektiv"></AddCollective>
 </template>
 
 <script>
+
+  import AddCollective from './AddCollective';
+
   export default {
     name: 'Test',
+    components: {AddCollective},
     data () {
       return {
-        msg: 'yolo'
+        user: {bruker_id: 1, epost:'asd@asd.com'}
       }
+    },
+    methods:{
+        opprettetKollektiv(e){
+            alert(JSON.stringify(e));
+        }
     }
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  h1, h2 {
-    font-weight: normal;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-  a {
-    color: #42b983;
-  }
+<style>
 </style>
