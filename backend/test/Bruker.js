@@ -1,0 +1,8 @@
+
+beforeEach(() => {
+    //slettTestBasen
+});
+
+afterEach(() => {
+    //settOppTestBasen
+});

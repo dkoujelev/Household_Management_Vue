@@ -10,12 +10,17 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "rest": "node backend/REST/runserver.js"
   },
   "dependencies": {
     "axios": "^0.17.1",
     "bulma": "^0.6.2",
+    "mysql": "^2.15.0",
+    "restify": "^6.3.4",
+    "restify-cors-middleware": "^1.1.0",
     "vue": "^2.5.13",
+    "vue-bulma-modal": "^1.0.1",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
