@@ -1,4 +1,5 @@
 <template>
+
   <div class="app">
     <div class="container is-widescreen">
       <div class="notification">
@@ -44,33 +45,29 @@
       </div>
     </div>
   </div>
+
+  <AddGroup :current_user="this.$parent.current_user" :current_collective="{kollektiv_id: 1, navn: 'Testkollektiv 1'}" @added-group="addedGroup"></AddGroup>
+
 </template>
 
 <script>
+
+  import AddGroup from './AddGroup';
+
   export default {
     name: 'Test',
+    components: {AddGroup},
     data () {
       return {
-        msg: 'yolo'
-      }
+      };
+    },
+    methods:{
+      addedGroup(e){
+            alert(JSON.stringify(e));
+        }
     }
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  h1, h2 {
-    font-weight: normal;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-  a {
-    color: #42b983;
-  }
+<style>
 </style>
