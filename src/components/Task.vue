@@ -1,7 +1,7 @@
 <template>
-  <div class="app">
-    <div class="block">
-      <table class="table">
+  <div class="'columns">
+
+      <table class="table is-full-widescreen">
         <thead>
           <tr>
             <th>Beskrivelse</th>
@@ -12,12 +12,12 @@
         <tbody>
         <tr>
           <th>Vaske doen</th>
-          <th>Om 2 dager</th>
-          <th>
+          <td>Om 2 dager</td>
+          <td>
             <label class="checkbox">
               <input type="checkbox">
             </label>
-          </th>
+          </td>
         </tr>
         <tr>
           <th>Vaske doen</th>
@@ -39,7 +39,7 @@
         </tr>
         </tbody>
       </table>
-    </div>
+
   </div>
 </template>
 
@@ -70,4 +70,5 @@
   a {
     color: #42b983;
   }
+
 </style>
