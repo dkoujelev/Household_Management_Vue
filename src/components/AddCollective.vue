@@ -1,5 +1,6 @@
 <template>
   <div class="box">
+    <h1 class="title">Opprett nytt kollektiv</h1>
       <div class="field">
         <label for="name" class="label">Navn</label>
         <div class="control">
