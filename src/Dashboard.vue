@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="navbar is-success">
+    <nav class="navbar is-success is-active is-fixed-top" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/">
           <img src="./img/logo_medium.png" alt="image not found" width="175"/>
@@ -15,7 +15,8 @@
           <router-link class="navbar-item" to="/Register">Registrer deg</router-link>
         </div>
       </div>
-    </div>
+    </nav>
+    <br/><br/>
     <router-view/>
   </div>
 </template>
@@ -27,11 +28,4 @@ export default {
 </script>
 
 <style>
-  .navbar {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-  }
 </style>
