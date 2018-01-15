@@ -22,7 +22,7 @@
           </a>
           <div class="modal" v-bind:class="{'is-active' : addingGroup}" @blur="console.log('blurring'); addingGroup=false" transition="zoom">
             <div class="content has-text-centered">
-              <AddCollective @cancel="addingGroup=false"></AddCollective>
+              <AddCollective :current_user="current_user" @cancel="addingGroup=false"></AddCollective>
             </div>
           </div>
 
