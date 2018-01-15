@@ -8,14 +8,14 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-start">
-          <router-link class="navbar-item" to="/">Hjem</router-link>
-          <router-link class="navbar-item" to="/HelloWorld">Hello World!</router-link>
-          <router-link class="navbar-item" to="/Task">Gjøremål</router-link>
-          <router-link class="navbar-item" to="/Login">Login</router-link>
-          <router-link class="navbar-item" to="/Register">Registrer deg</router-link>
-          <router-link class="navbar-item" to="/Test">Test!</router-link>
+          <router-link class="navbar-item" v-show="isLoggedIn" to="/HelloWorld">Hello World!</router-link>
+          <router-link class="navbar-item" v-show="isLoggedIn" to="/Task">Gjøremål</router-link>
+          <router-link class="navbar-item" v-show="!isLoggedIn" to="/Login">Login</router-link>
+          <router-link class="navbar-item" v-show="!isLoggedIn" to="/Register">Registrer deg</router-link>
+          <router-link class="navbar-item" v-show="isLoggedIn" to="/Test">Test!</router-link>
+          <a class="navbar-item" href="#" @click="logout" v-show="isLoggedIn">Logg ut</a>
         </div>
-        <div class="navbar-end">
+        <div class="navbar-end" v-show="isLoggedIn">
           <SelectGroup :current_user="current_user" @selected-group="selectedGroup"></SelectGroup>
           <a href="" class="navbar-item" @click.prevent="addingGroup=true">
             <i class="fa fa-plus"></i>
@@ -29,9 +29,9 @@
       </div>
     </nav>
     <br/><br/>
-    <p>Innlogget bruker: {{current_user.epost}}</p>
+    <p>Innlogget bruker: {{current_email}}</p>
     <p>Aktiv gruppe: {{current_group.navn}}</p>
-    <router-view/>
+    <router-view @loggedin_user="loggedin_user"/>
   </div>
 </template>
 
@@ -39,6 +39,7 @@
 
   import SelectGroup from '@/components/SelectGroup';
   import AddCollective from '@/components/AddCollective';
+  import router from '@/router/index';
 
 export default {
   name: 'dashboard',
@@ -46,23 +47,31 @@ export default {
   methods:{
       selectedGroup(group){
           this.current_group = group;
-      }
+      },
+      loggedin_user(user){
+          this.current_user = user;
+      },
+    logout(){
+          this.current_user = null;
+          router.push('/login');
+    }
   },
   data(){
       return {
-          current_user:{
-            "bruker_id": 1,
-            "epost": "sj@apple.com",
-            "fornavn": "Steve ",
-            "etternavn": "Jobs",
-            "tlf": "12345678",
-            "adresse": "California",
-            "hashed_passord": "",
-            "salt": ""
-          },
+          current_user: null,
         current_group : {navn: ''},
         addingGroup: false
       };
+  },
+  computed: {
+      isLoggedIn(){
+          return (this.current_user != null);
+      },
+    current_email(){
+          if(this.current_user != null)
+            return this.current_user.epost
+          else return '';
+    }
   }
 }
 </script>

@@ -69,21 +69,20 @@
           this.login_info.passord = "";
           this.error = 'Ugyldig epost';
         } else{
-          axios.create({withCredentials: true}).post('http://localhost:9000/rest/login', this.login_info).then(response => {
+          axios.post('http://localhost:9000/rest/login', this.login_info).then(response => {
             this.$emit('logging_in', this.login_info);
             console.log("Logging in...");
 
             if(response.data == null){
               this.login_info.epost = "";
               this.login_info.passord = "";
-              this.error="Bruker med denne eposten finnes ikke";
-            } else if(!response.data.passwordMatch){
+              this.error="Feil brukernavn eller passord";
+            }
+            else{
               this.login_info.epost = "";
               this.login_info.passord = "";
-              this.error = "Feil passord";
-            } else{
-              this.login_info.epost = "";
-              this.login_info.passord = "";
+              this.$emit('loggedin_user', response.data);
+
               router.push('home');
             }
           }).catch(err => {
