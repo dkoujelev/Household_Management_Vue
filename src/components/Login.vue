@@ -1,19 +1,20 @@
 <template>
-  <section class="hero is-fullheight is-medium is-primary is-bold">
+  <section class="hero is-fullheight is-medium is-bold">
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
           <article class="card is-rounded">
             <div class="card-content">
               <img src="../img/logo_full.png" height="200" width="400"/>
+              <p class="help is-danger">{{this.error}}</p>
               <p class="control has-icon">
-                <input class="input" type="email" placeholder="Email">
+                <input class="input" type="email" placeholder="Email" v-model="login_info.epost">
                 <span class="icon is-small">
                   <i class="fa fa-envelope"></i>
                 </span>
               </p>
               <p class="control has-icon">
-                <input class="input" type="password" placeholder="Password">
+                <input class="input" type="password" placeholder="Password" v-model="login_info.passord">
                 <span class="icon is-small">
                   <i class="fa fa-lock"></i>
                 </span>
@@ -25,7 +26,7 @@
                 </label>
               </p>
               <p class="control">
-                <button class="button is-primary is-medium is-fullwidth">
+                <button class="button is-primary is-medium is-fullwidth" v-on:click="login">
                   <i class="fa fa-user"></i>
                   &nbsp Login
                 </button>
@@ -42,9 +43,56 @@
 </template>
 
 <script>
-    export default {
-        name: "login"
+  import axios from 'axios';
+  import router from '../router/index'
+
+  export default {
+    name: 'Login',
+    data(){
+      return {
+        login_info: {
+          epost: '',
+          passord: ''
+        },
+        error: ''
+      }
+    },
+    methods: {
+      validateEmail(email){
+        var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regex.test(email);
+      },
+      login(){
+        this.error = '';
+        if(!this.validateEmail(this.login_info.epost)){
+          this.login_info.epost = "";
+          this.login_info.passord = "";
+          this.error = 'Ugyldig epost';
+        } else{
+          axios.post('http://localhost:9000/rest/login', this.login_info).then(response => {
+            this.$emit('logging_in', this.login_info);
+            console.log("Logging in...");
+
+            if(response.data == null){
+              this.login_info.epost = "";
+              this.login_info.passord = "";
+              this.error="Bruker med denne eposten finnes ikke";
+            } else if(!response.data.passwordMatch){
+              this.login_info.epost = "";
+              this.login_info.passord = "";
+              this.error = "Feil passord";
+            } else{
+              this.login_info.epost = "";
+              this.login_info.passord = "";
+              router.push('home');
+            }
+          }).catch(err => {
+            console.log(err);
+          });
+        }
+      }
     }
+  }
 </script>
 
 <style scoped>

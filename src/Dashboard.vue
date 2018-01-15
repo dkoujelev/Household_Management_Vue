@@ -25,7 +25,6 @@
               <AddCollective @cancel="addingGroup=false"></AddCollective>
             </div>
           </div>
-
         </div>
       </div>
     </nav>
