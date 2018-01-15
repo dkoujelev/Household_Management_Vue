@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <div class="navbar is-success">
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/">
