@@ -7,6 +7,9 @@ import Task from '@/components/Task'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 
+import axios from 'axios';
+axios.defaults.withCredentials = true;
+
 Vue.use(Router)
 
 export default new Router({

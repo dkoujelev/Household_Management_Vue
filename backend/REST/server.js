@@ -7,9 +7,10 @@ server.use(CookieParser.parse);
 const corsMiddleware = require('restify-cors-middleware');
 
 const cors = corsMiddleware({
-    origins: ['*'],
+    origins: ['http://localhost:8080'],
     allowHeaders: ['API-Token', 'sessionId'],
-    exposeHeaders: ['API-Token-Expiry', 'sessionid']
+    exposeHeaders: ['API-Token-Expiry', 'sessionId'],
+    credentials: true
 });
 
 server.pre(cors.preflight);
