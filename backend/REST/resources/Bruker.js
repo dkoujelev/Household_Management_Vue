@@ -1,9 +1,18 @@
 let server = require("../server");
 let connection = require("../connection");
+let auth = require("../auth.js");
 
 // Hent en bestemt bruker
 server.get('rest/bruker/:bruker_id',function(req, res, next){
   connection.query("SELECT * FROM Bruker WHERE bruker_id=?", [req.params.bruker_id], function(err, rows, fields){
+    res.send(err ? err : (rows.length == 1 ? rows[0] : null));
+    return next();
+  });
+});
+
+// Finn bruker med bestemt epost
+server.get('rest/bruker/:epost',function(req, res, next){
+  connection.query("SELECT * FROM Bruker WHERE epost=?", [req.params.epost], function(err, rows, fields){
     res.send(err ? err : (rows.length == 1 ? rows[0] : null));
     return next();
   });
@@ -52,26 +61,52 @@ server.put('rest/bruker',function(req,res,next){
   });
 });
 
-// Login
-server.get('rest/login/:epost/:password',function(req, res, next){
-  connection.query("SELECT hashed_passord FROM Bruker WHERE epost=?", [req.params.epost], function(err, rows, fields){
 
-    //INSERT PASWORD CHECK W/HASHING HERE
-    let passord = [req.params.password];
 
-    res.send({passwordMatch: err.data.hashed_passord === passord});
-    return next();
-  });
-});
-
-// Legg til bruker
+// Logg inn bruker
 server.post('rest/login',function(req,res,next){
-  connection.query("SELECT hashed_passord FROM Bruker WHERE epost=?", [req.body.epost], function(err, rows, fields){
+  connection.query("SELECT * FROM Bruker WHERE epost=?", [req.body.epost], function(err, rows, fields){
+
+    if(err)
+      return next(err);
+
+    if(rows.length == 0){
+      // User doesn't exist;
+      console.log('user ' + req.body.epost + ' doesn\'t exist!');
+      res.send(null);
+      return next();
+    }
+
+    let bruker = rows[0];
+
+    console.log("seessions: " + JSON.stringify(auth.sessions));
+    console.log("cookies: " + JSON.stringify(req.cookies));
+
+    // User already logged in.
+    if(auth.getSession(req.cookies['sessionId'])){
+      console.log('user ' + bruker.epost + ' already logged in');
+      res.send(bruker);
+      return next();
+    }
 
     //INSERT PASWORD CHECK W/HASHING HERE
-    let passord = req.body.passord;
+    let passwordMatch = (bruker.hashed_passord === req.body.passord);
 
-    res.send(rows.length >= 1 ? {passwordMatch: rows[0].hashed_passord === passord} : null);
-    return next();
+    if(passwordMatch){
+      console.log('creating session for user ' + bruker.epost);
+
+      res.setCookie('sessionId', auth.newSession(bruker));
+
+      res.send(bruker);
+      return next();
+
+    }
+    else{
+      console.log('wrong password for user ' + req.body.epost);
+      res.send(null);
+      next();
+    }
+
+
   });
 });

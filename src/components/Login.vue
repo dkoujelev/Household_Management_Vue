@@ -69,7 +69,7 @@
           this.login_info.passord = "";
           this.error = 'Ugyldig epost';
         } else{
-          axios.post('http://localhost:9000/rest/login', this.login_info).then(response => {
+          axios.create({withCredentials: true}).post('http://localhost:9000/rest/login', this.login_info).then(response => {
             this.$emit('logging_in', this.login_info);
             console.log("Logging in...");
 
