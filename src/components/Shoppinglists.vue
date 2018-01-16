@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import Shoppinglist from './Shoppinglist'
+  import Shoppinglist from './ShoppingList/ShoppingList'
   export default {
     name: 'Shoppingslists',
 

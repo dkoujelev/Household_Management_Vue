@@ -13,15 +13,20 @@ import Shoppinglistshome from '@/components/home/Shoppinglistshome'
 import Shoppinglists from '@/components/Shoppinglists'
 import Addnews from '@/components/Addnews'
 import Paging from  '@/components/Paging'
+import ShoppingList from '@/components/ShoppingList/ShoppingList'
 
 
-
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
     {
       path: '/',
+      name: 'Hjem',
+      component: Home
+    },
+    {
+      path: '/home',
       name: 'Hjem',
       component: Home
     },
