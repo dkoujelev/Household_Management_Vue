@@ -10,6 +10,7 @@ import SeeAccounting from '@/components/SeeAccounting'
 import AddExpence from '@/components/AddExpence'
 
 
+
 Vue.use(Router)
 
 export default new Router({
@@ -45,14 +46,14 @@ export default new Router({
       component: Test
     },
     {
-      path: '/SeeAccounting',
-      name: 'SeeAccounting',
-      component: SeeAccounting
-    },
-    {
       path: '/Task',
       name: 'Task',
       component: Task
+    },
+    {
+      path: '/SeeAccounting',
+      name: 'SeeAccounting',
+      component: SeeAccounting
     },
     {
       path: '/AddExpence',

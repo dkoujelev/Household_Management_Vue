@@ -26,12 +26,15 @@
 </template>
 
 <script>
+  import axios from 'axios';
+
   export default{
     name: 'AddExpence',
     props: ['?'],
     data(){
         return{
-
+            expences: [],
+            expence: {},
         };
     },
     created(){

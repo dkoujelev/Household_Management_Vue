@@ -1,10 +1,21 @@
 <template>
-    <h1 class="title is-info">Velkomen hjem</h1>
+  <div>
+    <Newsfeedhome></Newsfeedhome>
+    <Taskhome></Taskhome>
+    <Shoppinglistshome></Shoppinglistshome>
+  </div>
+
 </template>
 
 <script>
+    import Newsfeedhome from './home/Newsfeedhome'
+    import Taskhome from './home/Taskhome'
+    import Shoppinglistshome from './home/Shoppinglistshome'
+
     export default {
-        name: "home"
+      name: 'Home',
+      components: {Newsfeedhome,Taskhome,Shoppinglistshome,}
+
     }
 </script>
 
