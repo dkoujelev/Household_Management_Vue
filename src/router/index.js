@@ -6,6 +6,7 @@ import Test from '@/components/Test'
 import Task from '@/components/Task'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
+import AddCostRegister from '@/components/AddCostRegister'
 
 Vue.use(Router)
 
@@ -40,6 +41,11 @@ export default new Router({
       path: '/Task',
       name: 'Task',
       component: Task
+    },
+    {
+      path: '/AddCostRegister',
+      name: 'AddCostRegister',
+      component: AddCostRegister
     },
   ]
 })
