@@ -10,11 +10,7 @@
   import Task from './Task'
 export default {
   name: 'HelloWorld',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  },
+
   components: {Task}
 }
 </script>

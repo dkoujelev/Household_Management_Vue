@@ -14,6 +14,9 @@
           <router-link class="navbar-item" to="/Login">Login</router-link>
           <router-link class="navbar-item" to="/Register">Registrer deg</router-link>
           <router-link class="navbar-item" to="/Test">Test!</router-link>
+          <router-link class="navbar-item" to="/Nyhetsfeed">Nyhet</router-link>
+          <router-link class="navbar-item" to="/Shoppinglists">Handlelister</router-link>
+          <router-link class="navbar-item" to="/AddCostRegister">Legg til kostnad</router-link>
         </div>
         <div class="navbar-end">
           <SelectGroup :current_user="current_user" @selected-group="selectedGroup"></SelectGroup>
@@ -22,7 +25,7 @@
           </a>
           <div class="modal" v-bind:class="{'is-active' : addingGroup}" @blur="console.log('blurring'); addingGroup=false" transition="zoom">
             <div class="content has-text-centered">
-              <AddCollective @cancel="addingGroup=false"></AddCollective>
+              <AddCollective :current_user="current_user" @cancel="addingGroup=false"></AddCollective>
             </div>
           </div>
         </div>

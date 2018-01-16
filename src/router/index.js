@@ -4,10 +4,21 @@ import Home from '@/components/Home'
 import HelloWorld from '@/components/HelloWorld'
 import Test from '@/components/Test'
 import Task from '@/components/Task'
+import Taskhome from '@/components/home/Taskhome'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
+import AddCostRegister from '@/components/AddCostRegister'
+import Nyhetsfeed from '@/components/Nyhetsfeed'
+import Newsfeedhome from '@/components/home/Newsfeedhome'
+import Shoppinglistshome from '@/components/home/Shoppinglistshome'
+import Shoppinglists from '@/components/Shoppinglists'
+import Addnews from '@/components/Addnews'
+import Paging from  '@/components/Paging'
+import ShoppingList from '@/components/ShoppingList/ShoppingList'
 
-Vue.use(Router)
+
+
+Vue.use(Router);
 
 export default new Router({
   routes: [
@@ -45,6 +56,46 @@ export default new Router({
       path: '/Task',
       name: 'Task',
       component: Task
+    },
+    {
+      path: '/AddCostRegister',
+      name: 'AddCostRegister',
+      component: AddCostRegister
+    },
+    {
+      path: '/Taskhome',
+      name: 'Taskhome',
+      component: Taskhome
+    },
+    {
+      path: '/Nyhetsfeed',
+      name: 'Nyhetsfeed',
+      component: Nyhetsfeed
+    },
+    {
+      path: '/Newsfeedhome',
+      name: 'Newfeedhome',
+      component: Newsfeedhome
+    },
+    {
+      path: '/Shoppinglistshome',
+      name: 'Shoppinglistshome',
+      component: Shoppinglistshome
+    },
+    {
+      path: '/Shoppinglists',
+      name: 'Shoppinglists',
+      component: Shoppinglists
+    },
+    {
+      path: '/Addnews',
+      name: 'Addnews',
+      component: Addnews
+    },
+    {
+      path: '/Paging',
+      name: 'Paging',
+      component: Paging
     },
   ]
 })

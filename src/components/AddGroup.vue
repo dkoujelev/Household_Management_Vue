@@ -41,11 +41,14 @@
       },
       methods:{
           addGroup(){
-              console.log(JSON.stringify(this.group));
             axios.post('http://localhost:9000/rest/undergruppe/' + this.current_user.bruker_id,this.group).then(response => {
-
+              let newGroup = {};
+              newGroup.navn = this.group.navn;
+              newGroup.beskrivelse = this.group.beskrivelse;
+              newGroup.undergruppe_id = response.insertId;
+              this.$emit('created-group',this.group);
             }).catch(err => {
-
+              console.log(err);
             });
           }
       }
