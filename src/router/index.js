@@ -6,6 +6,9 @@ import Test from '@/components/Test'
 import Task from '@/components/Task'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
+import SeeAccounting from '@/components/SeeAccounting'
+import AddExpence from '@/components/AddExpence'
+
 
 Vue.use(Router)
 
@@ -37,9 +40,19 @@ export default new Router({
       component: Test
     },
     {
+      path: '/SeeAccounting',
+      name: 'SeeAccounting',
+      component: SeeAccounting
+    },
+    {
       path: '/Task',
       name: 'Task',
       component: Task
+    },
+    {
+      path: '/AddExpence',
+      name: 'AddExpence',
+      component: AddExpence
     },
   ]
 })

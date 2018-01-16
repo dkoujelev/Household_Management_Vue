@@ -14,6 +14,7 @@
           <router-link class="navbar-item" to="/Login">Login</router-link>
           <router-link class="navbar-item" to="/Register">Registrer deg</router-link>
           <router-link class="navbar-item" to="/Test">Test!</router-link>
+          <router-link class="navbar-item" to="/SeeAccounting">Regnskap</router-link>
         </div>
         <div class="navbar-end">
           <SelectGroup :current_user="current_user" @selected-group="selectedGroup"></SelectGroup>
