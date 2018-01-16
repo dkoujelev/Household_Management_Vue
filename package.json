@@ -24,8 +24,10 @@
     "restify": "^6.3.4",
     "restify-cors-middleware": "^1.1.0",
     "restify-errors": "^5.0.0",
+    "sweetalert": "^2.1.0",
     "vue": "^2.5.13",
     "vue-bulma-modal": "^1.0.1",
+    "vue-date-picker": "^1.0.2",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
