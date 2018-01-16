@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div class="navbar is-success">
+  <div>
+    <nav class="navbar is-success is-active is-fixed-top" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/">
           <img src="./img/logo_medium.png" alt="image not found" width="175"/>
@@ -26,10 +26,10 @@
               <AddCollective @cancel="addingGroup=false"></AddCollective>
             </div>
           </div>
-
         </div>
       </div>
-    </div>
+    </nav>
+    <br/><br/>
     <p>Innlogget bruker: {{current_user.epost}}</p>
     <p>Aktiv gruppe: {{current_group.navn}}</p>
     <router-view/>
