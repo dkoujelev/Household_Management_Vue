@@ -9,18 +9,21 @@ server.get('rest/gjoremalsliste/:id',function(req, res, next){
 
     let liste = rows[0];
 
-    if('start' in liste)
-      liste.start = new Date(liste.start);
-    if('frist' in liste)
-      liste.frist = new Date(liste.frist);
-    if('ferdig' in liste)
-      liste.ferdig = new Date(liste.ferdig);
+    if('opprettet' in liste)
+      liste.opprettet = new Date(liste.opprettet);
 
     connection.query("SELECT Gjoremal.* FROM Gjoremal " +
-      "INNER JOIN Gjoremalsliste ON Gjoremalsliste.id = Gjoremal.liste_id WHERE Gjoremalsliste.id=?", [req.params.id], function(err, rows, filds){
+      "INNER JOIN Gjoremalsliste ON Gjoremalsliste.id = Gjoremal.liste_id WHERE Gjoremalsliste.id=?", [req.params.id], function(err, rows, fields){
       if(err)
         return next(err);
-
+      for(let gjoremal in rows){
+        if('start' in gjoremal)
+          gjoremal.start = new Date(gjoremal.start);
+        if('frist' in gjoremal)
+          gjoremal.frist = new Date(gjoremal.frist);
+        if('ferdig' in gjoremal)
+          gjoremal.ferdig = new Date(gjoremal.ferdig);
+      }
       liste.gjoremal = JSON.parse(JSON.stringify(rows));
 
       res.send(liste);
@@ -32,10 +35,14 @@ server.get('rest/gjoremalsliste/:id',function(req, res, next){
 //Hent alle lister i en undergruppe
 server.get('rest/gjoremalsliste/:undergruppe_id',function(req, res, next){
   connection.query("SELECT * FROM Gjoremalsliste WHERE undergruppe_id=?", [req.params.undergruppe_id], function(err, rows, fields){
-    res.send(err ? err : (rows.length == 1 ? rows[0] : null));
-    return next();
-
-
+    if(err || rows.length != 1)
+      return next(err);
+    let liste = [rows.length];
+    for(let i = 0; i < rows.length; i++){
+      liste = rows[i];
+      if('opprettet' in liste)
+        liste.opprettet = new Date(liste.opprettet);
+    }
 
     connection.query("SELECT Gjoremalsliste.*, Gjoremal.navn as gjoremal, Gjoremal.start, Gjoremal.frist, Gjoremal.ferdig," +
       "Bruker.fornavn, Bruker.etternavn FROM Gjoremalsliste " +
@@ -43,6 +50,19 @@ server.get('rest/gjoremalsliste/:undergruppe_id',function(req, res, next){
       "INNER JOIN Bruker", req.params.undergruppe_id, function(err, rows, fields){
       if(err)
         return next(err);
+      for(let item in rows){
+        if('opprettet' in item)
+          item.opprettet = new Date(item.opprettet);
+        if('start' in item)
+          item.start = new Date(item.start);
+        if('frist' in item)
+          item.frist = new Date(item.frist);
+        if('ferdig' in item)
+          item.ferdig = new Date(item.ferdig);
+      }
+      liste.gjoremal = JSON.parse(JSON.stringify(rows));
+
+      res.send(liste);
       return next();
     });
   });
@@ -63,10 +83,10 @@ server.post('rest/gjoremalsliste/:undergruppe_id',function(req, res, next){
 
   });
   let liste = Object.assign({}, req.body);
-  /*
-  if('varer' in liste)
-    delete handleliste.varer;
-  */
+
+  if('gjoremal' in liste)
+    delete iste.gjoremal;
+
   if('opprettet' in liste)
     liste.opprettet = new Date(liste.opprettet).getTime();
 
@@ -77,26 +97,30 @@ server.post('rest/gjoremalsliste/:undergruppe_id',function(req, res, next){
     let gjoremaler = [];
     for(let gjoremal of req.body.gjoremaler){
       let gjoremalen = [];
-
+      /*
+      if('start' in gjoremal)
+        gjoremal.start = new Date(gjoremal.start).getTime();
+      if('frist' in gjoremal)
+        gjoremal.frist = new Date(gjoremal.frist).getTime();
+      if('ferdig' in gjoremal)
+        gjoremal.ferdig = new Date(gjoremal.ferdig).getTime();
+       */
       gjoremalen.push(gjoremal.navn);
-      gjoremalen.push(gjoremal.start);
-      gjoremalen.push(gjoremal.frist);
-      gjoremalen.push(gjoremal.ferdig);
+      if('start' in gjoremal)
+        gjoremalen.push(new Date(gjoremal.start).getTime());
+      if('frist' in gjoremal)
+        gjoremalen.push(new Date(gjoremal.frist).getTime());
+      if('ferdig' in gjoremal)
+        gjoremalen.push(new Date(gjoremal.ferdig).getTime());
       gjoremalen.push(gjoremal.beskrivelse);
       gjoremalen.push(gjoremal.bruker_id);
       gjoremalen.push(rows.insertId);
       gjoremaler.push(gjoremalen);
-      if('start' in gjoremal)
-        liste.start = new Date(liste.start).getTime();
-      if('frist' in gjoremal)
-        liste.frist = new Date(liste.frist).getTime();
-      if('ferdig' in gjoremal)
-        liste.ferdig = new Date(liste.ferdig).getTime();
     }
 
-    console.log(JSON.stringify(varer));
+    console.log(JSON.stringify(gjoremaler));
 
-    connection.query('INSERT INTO Vare (navn, start, frist, ferdig, beskrivelse, bruker_id, liste_id) VALUES ?', [gjoremaler], function(err,rows,fields){
+    connection.query('INSERT INTO Gjoremal (navn, start, frist, ferdig, beskrivelse, bruker_id, liste_id) VALUES ?', [gjoremaler], function(err,rows,fields){
       if(err)
         return next(err);
       res.send(rows);
