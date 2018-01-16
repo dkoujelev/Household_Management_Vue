@@ -1,5 +1,5 @@
 <template>
-  <table class="table is-fullwidth    ">
+  <table class="table ">
     <thead>
     <tr>
       <th><abbr title="Position">Pos</abbr></th>
@@ -294,15 +294,16 @@
 </script>
 <style scoped>
 
-  html,
-  body {
-    height: 100%;
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
   }
 
-  table {
-    height: 100%;
-    display: flex;
-    overflow-y: auto;
-    flex-direction: column;
+  th, td {
+    text-align: left;
+    padding: 8px;
   }
+
 </style>
