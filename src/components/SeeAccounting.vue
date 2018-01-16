@@ -67,12 +67,11 @@
 </template>
 
 <script>
-  /*export default {
+  export default {
       name: 'SeeAccounting',
-      components: {addExpence},
 
     data(){
 
     },
-  }*/
+  }
 </script>

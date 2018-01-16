@@ -30,7 +30,6 @@
 
   export default{
     name: 'AddExpence',
-    props: ['?'],
     data(){
         return{
             expences: [],

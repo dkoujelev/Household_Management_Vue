@@ -8,10 +8,6 @@ import Login from '@/components/Login'
 import Register from '@/components/Register'
 import SeeAccounting from '@/components/SeeAccounting'
 import AddExpence from '@/components/AddExpence'
-
-
-
-Vue.use(Router)
 import AddCostRegister from '@/components/AddCostRegister'
 import Nyhetsfeed from '@/components/Nyhetsfeed'
 import Newsfeedhome from '@/components/home/Newsfeedhome'
@@ -21,9 +17,7 @@ import Addnews from '@/components/Addnews'
 import Paging from  '@/components/Paging'
 import ShoppingList from '@/components/ShoppingList/ShoppingList'
 
-
-
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
   routes: [
