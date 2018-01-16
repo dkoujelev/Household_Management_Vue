@@ -1,7 +1,7 @@
 <template>
-  <div class="'columns">
+  <div class="'columns ">
 
-      <table class="table is-full-widescreen">
+      <table class="table is-striped is-bordered is-fullwidth is-hoverable">
         <thead>
           <tr>
             <th>Beskrivelse</th>
@@ -11,7 +11,7 @@
         </thead>
         <tbody>
         <tr>
-          <th>Vaske doen</th>
+          <td>Vaske doen</td>
           <td>Om 2 dager</td>
           <td>
             <label class="checkbox">
@@ -20,25 +20,26 @@
           </td>
         </tr>
         <tr>
-          <th>Vaske doen</th>
-          <th>Om 5 dager</th>
-          <th>
+          <td>Vaske doen</td>
+          <td>Om 5 dager</td>
+          <td>
             <label class="checkbox">
               <input type="checkbox">
             </label>
-          </th>
+          </td>
         </tr>
         <tr>
-          <th>Vaske doen</th>
-          <th>Om 7 dager</th>
-          <th>
+          <td>Vaske doen</td>
+          <td>Om 7 dager</td>
+          <td>
             <label class="checkbox">
               <input type="checkbox">
             </label>
-          </th>
+          </td>
         </tr>
         </tbody>
       </table>
+    <router-link class="button" to="/Addnews">Lag gjøremål</router-link>
 
   </div>
 </template>
@@ -46,11 +47,6 @@
 <script>
   export default {
     name: 'Task',
-    data () {
-      return {
-        msg: ''
-      }
-    }
   }
 </script>
 

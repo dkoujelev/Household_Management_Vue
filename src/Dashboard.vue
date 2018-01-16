@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="navbar is-success">
+    <div class="navbar is-success ">
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/">
           <img src="./img/logo_medium.png" alt="image not found" width="175"/>
@@ -14,6 +14,8 @@
           <router-link class="navbar-item" to="/Login">Login</router-link>
           <router-link class="navbar-item" to="/Register">Registrer deg</router-link>
           <router-link class="navbar-item" to="/Test">Test!</router-link>
+          <router-link class="navbar-item" to="/Nyhetsfeed">Nyhet</router-link>
+          <router-link class="navbar-item" to="/Shoppinglists">Handlelister</router-link>
         </div>
         <div class="navbar-end">
           <SelectGroup :current_user="current_user" @selected-group="selectedGroup"></SelectGroup>
