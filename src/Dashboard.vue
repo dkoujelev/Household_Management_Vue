@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div class="navbar is-success">
+  <div>
+    <nav class="navbar is-success is-active is-fixed-top" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/">
           <img src="./img/logo_medium.png" alt="image not found" width="175"/>
@@ -14,6 +14,9 @@
           <router-link class="navbar-item" to="/Login">Login</router-link>
           <router-link class="navbar-item" to="/Register">Registrer deg</router-link>
           <router-link class="navbar-item" to="/Test">Test!</router-link>
+          <router-link class="navbar-item" to="/Nyhetsfeed">Nyhet</router-link>
+          <router-link class="navbar-item" to="/Shoppinglists">Handlelister</router-link>
+          <router-link class="navbar-item" to="/AddCostRegister">Legg til kostnad</router-link>
         </div>
         <div class="navbar-end">
           <SelectGroup :current_user="current_user" @selected-group="selectedGroup"></SelectGroup>
@@ -22,13 +25,13 @@
           </a>
           <div class="modal" v-bind:class="{'is-active' : addingGroup}" @blur="console.log('blurring'); addingGroup=false" transition="zoom">
             <div class="content has-text-centered">
-              <AddCollective @cancel="addingGroup=false"></AddCollective>
+              <AddCollective :current_user="current_user" @cancel="addingGroup=false"></AddCollective>
             </div>
           </div>
-
         </div>
       </div>
-    </div>
+    </nav>
+    <br/><br/>
     <p>Innlogget bruker: {{current_user.epost}}</p>
     <p>Aktiv gruppe: {{current_group.navn}}</p>
     <router-view/>
