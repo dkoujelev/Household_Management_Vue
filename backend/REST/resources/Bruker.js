@@ -1,5 +1,6 @@
 let server = require("../server");
 let connection = require("../connection");
+const bcrypt = require('bcrypt'); //Note: Changing the number of rounds from 10 to a much higher number makes bcrypt think youre using a salt instead!
 
 // Hent en bestemt bruker
 server.get('rest/bruker/:bruker_id',function(req, res, next){
@@ -11,6 +12,26 @@ server.get('rest/bruker/:bruker_id',function(req, res, next){
 
 // Legg til bruker
 server.post('rest/bruker/',function(req,res,next){
+// console.log('---------------------------------------------------------------');
+// console.log('Hashing: "p@a55w0rD!"');
+// let testPass = 'p@a55w0rD!';
+// let testHash = bcrypt.hashSync(testPass,10);
+// console.log('Result: ' + testHash);
+// console.log('---------------------------------------------------------------');
+// console.log('Validating password...');
+// if(bcrypt.compareSync(testPass, testHash)) {
+//   // Passwords match
+//   console.log("MATCH!");
+//  } else {
+//   // Passwords don't match
+//   console.log("FAIL!");
+//  }
+//  console.log('---------------------------------------------------------------');
+
+  let passord = [req.body.hashed_passord] + ""; //            Get the clear text password from the request body. (The + "" is apparently needed for bcrypt to read the data as a proper string.)
+  let hash = bcrypt.hashSync(passord,10); //                  Hashing the password 10 times
+  req.body.hashed_passord=hash; //                            Re-inserting the hashed value into the request body
+
   connection.query("INSERT INTO Bruker SET ?", req.body, function(err, rows, fields){
     res.send(err ? err : rows);
     return next();
@@ -27,7 +48,9 @@ server.get('rest/bruker/',function(req, res, next){
 
 // Sjekke om en epost er registrert
 server.get('rest/brukerepost/:epost',function(req, res, next){
+  console.log('Checking if the email already exists...');
   connection.query("SELECT * FROM Bruker WHERE epost=?", [req.params.epost], function(err, rows, fields){
+    console.log('Exists: ' + (rows.length == 1));
     res.send({exists: rows.length == 1});
     return next();
   });
@@ -53,25 +76,25 @@ server.put('rest/bruker',function(req,res,next){
 });
 
 // Login
-server.get('rest/login/:epost/:password',function(req, res, next){
-  connection.query("SELECT hashed_passord FROM Bruker WHERE epost=?", [req.params.epost], function(err, rows, fields){
-
-    //INSERT PASWORD CHECK W/HASHING HERE
-    let passord = [req.params.password];
-
-    res.send({passwordMatch: err.data.hashed_passord === passord});
-    return next();
-  });
-});
-
-// Legg til bruker
 server.post('rest/login',function(req,res,next){
   connection.query("SELECT hashed_passord FROM Bruker WHERE epost=?", [req.body.epost], function(err, rows, fields){
 
-    //INSERT PASWORD CHECK W/HASHING HERE
-    let passord = req.body.passord;
+    if(rows.length >= 1){ //                                  Check if there even is a user with this email
+      let passord = [req.body.passord] + ""; //               Load password from request (and force to proper string by adding + "")
+      let hashed_passord = rows[0].hashed_passord //          Get the hash returned from DB
 
-    res.send(rows.length >= 1 ? {passwordMatch: rows[0].hashed_passord === passord} : null);
-    return next();
+      if(bcrypt.compareSync(passord, hashed_passord)) { //    Compare the password to the hash
+        // Passwords match
+        res.send({passwordMatch: true}); //                   Log in the user... (But for now, just tell the GUI it's all good!)
+        return next();
+       } else {
+        // Passwords don't match
+        res.send({passwordMatch: false}); //                  Tell the GUI that the password was no good!
+        return next();
+       }
+    }else{ //                                                 apparently; there was no user with this email
+      res.send({passwordMatch: false}); //                    Tell the GUI that the password was no good!
+      return next();
+    };    
   });
 });
