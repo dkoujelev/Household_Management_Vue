@@ -15,6 +15,7 @@ import Shoppinglists from '@/components/Shoppinglists'
 import Addnews from '@/components/Addnews'
 import Paging from  '@/components/Paging'
 import ShoppingList from '@/components/ShoppingList/ShoppingList'
+import Innmelding from  '@/components/Innmelding'
 
 
 
@@ -97,5 +98,10 @@ export default new Router({
       name: 'Paging',
       component: Paging
     },
+    {
+      path: '/Innmelding',
+      name: 'Innmelding',
+      component: Innmelding
+    }
   ]
 })
