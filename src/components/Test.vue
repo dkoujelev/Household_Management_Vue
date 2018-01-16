@@ -1,11 +1,8 @@
 <template>
-
   <div class="app">
 
     <AddGroup :current_user="this.$parent.current_user" :current_collective="{kollektiv_id: 1, navn: 'Testkollektiv 1'}" @added-group="addedGroup"></AddGroup>
   </div>
-
-
 </template>
 
 <script>
@@ -17,6 +14,10 @@
     components: {AddGroup},
     data () {
       return {
+          current_group: {
+              undergruppe_id: 1,
+              navn: "test"
+          }
       };
     },
     methods:{
