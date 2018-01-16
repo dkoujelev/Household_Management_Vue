@@ -6,13 +6,19 @@ import Test from '@/components/Test'
 import Task from '@/components/Task'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
+import ShoppingList from '@/components/ShoppingList/ShoppingList'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
     {
       path: '/',
+      name: 'Hjem',
+      component: Home
+    },
+    {
+      path: '/home',
       name: 'Hjem',
       component: Home
     },
@@ -40,6 +46,11 @@ export default new Router({
       path: '/Task',
       name: 'Task',
       component: Task
+    },
+    {
+      path: '/ShoppingList',
+      name: 'ShoppingList',
+      component: ShoppingList
     },
   ]
 })
