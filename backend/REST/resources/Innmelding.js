@@ -12,7 +12,7 @@ server.get('rest/innmelding/',function(req, res, next){
   });  
 
 // Hent en bestemt innmelding
-server.get('rest/innmelding/:bruker_id',function(req, res, next){
+server.get('rest/innmelding/:kollektiv_id',function(req, res, next){
     if(req.params.kollektiv_id){
         connection.query("SELECT * FROM Innmelding WHERE bruker_id=? AND kollektiv_id=?", [req.params.bruker_id, req.params.kollektiv_id], function(err, rows, fields){
             res.send(err ? err : (rows.length == 1 ? rows[0] : null));
@@ -36,8 +36,24 @@ server.post('rest/innmelding/',function(req,res,next){
 
 // Oppdater en innmelding
 server.put('rest/innmelding/',function(req,res,next){
+
+/* VB-pseudo code for funksjonalitet
+
+if status_admin == 1 andalso status_bruker == 1 then
+    //Begge har sagt "ja".
+    -Legg til bruker
+    -Sett innmelding.active=false
+    -Sett riktige verdier på timestamp(s)
+elseif
+    //Minst én av partene har sagt "nei"
+    -Sett innmelding.active=false
+    -Sett riktige verdier på timestamp(s)
+end if
+*/
+
+
     if(req.params.kollektiv_id){
-        connection.query("UPDATE Innmelding SET ? WHERE bruker_id=?", [req.body, req.body.bruker_id], function(err, rows, fields){
+        connection.query("UPDATE Innmelding SET ? WHERE kollektiv_id=?", [req.body, req.body.bruker_id], function(err, rows, fields){
             res.send(err ? err : rows);
             return next();
         });

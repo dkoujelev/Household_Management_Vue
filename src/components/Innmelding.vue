@@ -42,8 +42,8 @@
 //       { text: 'Three', value: 'C' }
 //     ];
 //import Vue from 'vue';
-export { //Vue({
-  //el: '...',
+new window.Vue({
+  el: '...',
   data: {
     selected: 'A',
     options: [
@@ -52,7 +52,7 @@ export { //Vue({
       { text: 'Three', value: 'C' }
     ]
   }
-}
+});
 
 
   import axios from 'axios';
