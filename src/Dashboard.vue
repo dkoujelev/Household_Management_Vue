@@ -1,5 +1,5 @@
 <template>
-  <div id="bg">
+  <div>
     <nav class="navbar is-success is-active is-fixed-top" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/">
