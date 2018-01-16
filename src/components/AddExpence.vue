@@ -1,18 +1,11 @@
 <template>
   <div class="block">
-    <h1 class="title is-3">Legg til utgift</h1>
+    <h1 class="title is-3">Legg til utgift (NB! Denne brukes nå både for regnskap og utgifter)</h1>
     <div class="field">
-      <input class="input" type="text" placeholder="Navn på utgift">
+      <input class="input" type="text" placeholder="Tittel">
     </div>
     <div class="field">
       <input class="input" type="number" placeholder="Sum">
-    </div>
-
-    <div class="field">
-      <label class="label">Kommentar</label>
-      <div class="control">
-        <textarea class="textarea" placeholder="Textarea"></textarea>
-      </div>
     </div>
 
     <div class="field">

@@ -1,0 +1,50 @@
+<template>
+  <div class="box">
+    <h1 class="title is-3">Oversikt over utgifter</h1>
+    <table class="table is-striped is-bordered is-fullwidth is-hoverable">
+      <thead>
+      <tr>
+        <th>Tittel</th>
+        <th>Sum</th>
+        <th>Kvittering</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th>Helg</th>
+        <th>495.00</th>
+        <th><button class="button">Se kvittering</button></th>
+      </tr>
+      <tr>
+        <th>Mat hverdag</th>
+        <th>495.00</th>
+        <th><button class="button">Se kvittering</button></th>
+      </tr>
+      <tr>
+        <th>Renhold</th>
+        <th>495.00</th>
+        <th><button class="button">Se kvittering</button></th>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <th>Total</th>
+        <th>1485.00</th>
+      </tr>
+      </tfoot>
+    </table>
+    <br>
+    <br>
+    <router-link class="button" to="/AddExpence">Legg til utgift</router-link>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'ShowExpences',
+
+    data(){
+
+    },
+  }
+</script>

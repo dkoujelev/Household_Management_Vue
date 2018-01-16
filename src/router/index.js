@@ -14,6 +14,7 @@ import Newsfeedhome from '@/components/home/Newsfeedhome'
 import Shoppinglistshome from '@/components/home/Shoppinglistshome'
 import Shoppinglists from '@/components/Shoppinglists'
 import Addnews from '@/components/Addnews'
+import ShowExpences from '@/components/ShowExpences'
 import Paging from  '@/components/Paging'
 import ShoppingList from '@/components/ShoppingList/ShoppingList'
 
@@ -67,11 +68,6 @@ export default new Router({
       component: AddCostRegister
     },
     {
-      path: '/Taskhome',
-      name: 'Taskhome',
-      component: Taskhome
-    },
-    {
       path: '/Nyhetsfeed',
       name: 'Nyhetsfeed',
       component: Nyhetsfeed
@@ -100,6 +96,11 @@ export default new Router({
       path: '/AddExpence',
       name: 'AddExpence',
       component: AddExpence
+    },
+    {
+      path: '/ShowExpences',
+      name: 'ShowExpences',
+      component: ShowExpences
     },
   ]
 })

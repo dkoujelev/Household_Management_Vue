@@ -17,7 +17,7 @@
           <router-link class="navbar-item" to="/SeeAccounting">Regnskap</router-link>
           <router-link class="navbar-item" to="/Nyhetsfeed">Nyhet</router-link>
           <router-link class="navbar-item" to="/Shoppinglists">Handlelister</router-link>
-          <router-link class="navbar-item" to="/AddCostRegister">Legg til kostnad</router-link>
+          <router-link class="navbar-item" to="/ShowExpences">Utgifter</router-link>
         </div>
         <div class="navbar-end">
           <SelectGroup :current_user="current_user" @selected-group="selectedGroup"></SelectGroup>
