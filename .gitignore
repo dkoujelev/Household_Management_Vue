@@ -522,5 +522,6 @@ __pycache__/
 ### Added by Harald Geving ###
 # workspace file from Visual Studio Code
 *.code-workspace
+.vcode/
 
 # End of https://www.gitignore.io/api/node,eclipse,netbeans,intellij,webstorm,visualstudio
