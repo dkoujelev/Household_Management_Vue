@@ -30,11 +30,23 @@
         };
     },
     created(){
-
+      axios.get('http://localhost:9000/rest/kollektiv').then(response => {
+        this.expence = response.data;
+      }).catch(err => {
+        console.log(err);
+      });
     },
     methods: {
         addExpence(){
-
+          axios.post('http://localhost:9000/rest/kollektiv/' + this.current_user.bruker_id,this.expence).then(response => {
+            let newExpence = {};
+            newExpence.tittel = this.expence.tittel;
+            newExpence.sum = this.expence.sum;
+            newExpence.kvittering = this.expence.kvittering;
+            this.$emit('added-expence', newExpence);
+          }).catch(err => {
+            console.log(err);
+          });
         }
     }
   }

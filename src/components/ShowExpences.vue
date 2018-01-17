@@ -77,7 +77,7 @@
         axios.get('http://localhost:9000/rest/melding/sendt/bruker/1').then(response => {
           let resRows = response.data;
           for(let i = 0; i < resRows.length; i++){
-            let obj = {tittel: resRows[i].overskrift, sum: resRows[i].tekst};
+            let obj = {tittel: resRows[i].overskrift, sum: resRows[i].tekst, kvittering: resRows[i].button};
             this.rows.push(obj);
           }
         }).catch(err => {

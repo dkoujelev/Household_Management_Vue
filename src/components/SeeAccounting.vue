@@ -48,10 +48,50 @@
 
 <script>
   export default {
-      name: 'SeeAccounting',
+    name: 'SeeAccounting',
 
     data(){
-
+      return {
+        columns: [
+          {
+            label: 'Tittel',
+            field: 'tittel',
+            filterable: true,
+            placeholder: "Søk"
+          },
+          {
+            label: 'Når',
+            field: 'når',
+            type: 'date',
+            filterable: true
+          },
+          {
+            label: 'Sum',
+            field: 'sum',
+            type: 'number',
+            html: false,
+            sortable: true,
+            filterable: false
+          }
+        ],
+        rows: []
+      };
     },
+    mounted(){
+      this.fillRows();
+    },
+    methods: {
+      fillRows(){
+        axios.get('http://localhost:9000/rest/melding/sendt/bruker/1').then(response => {
+          let resRows = response.data;
+          for(let i = 0; i < resRows.length; i++){
+            let obj = {tittel: resRows[i].overskrift, når: resRows[i].date, sum: resRows[i].tekst};
+            this.rows.push(obj);
+          }
+        }).catch(err => {
+          console.log(err);
+        });
+      }
+    }
   }
 </script>
