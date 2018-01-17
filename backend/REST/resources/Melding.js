@@ -41,7 +41,7 @@ server.get('rest/melding/motta/bruker/:sendt_til_bruker',function(req, res, next
 
 // Hente meldinger til et kollektiv
 server.get('rest/melding/motta/kollektiv/:sendt_til_kollektiv',function(req, res, next){
-  connection.query("SELECT * FROM Melding WHERE sendt_til_kollektiv=?", [req.params.sendt_til_kollektiv], function(err, rows, fields){
+  connection.query("SELECT * FROM Melding WHERE sendt_til_kollektiv=? ORDER BY sent DESC", [req.params.sendt_til_kollektiv], function(err, rows, fields){
     res.send(err ? err : rows);
     return next();
   });

@@ -1,42 +1,71 @@
 <template>
-  <div class="'columns">
-
-    <table class="table is-striped is-bordered is-fullwidth is-hoverable ">
-      <thead>
-      <tr>
-        <th>Bruker</th>
-        <th>Nyhet</th>
-        <th>Når</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>DMITRI</td>
-        <td>dMITRI KOMMER HJEM </td>
-        <td>Om 2 dager</td>
-      </tr>
-      <tr>
-        <td>KHA</td>
-        <td>LIKER TRENING</td>
-        <td>FOR 5 DAGER</td>
-      </tr>
-      <tr>
-        <td>EIRIK</td>
-        <td>Vaske doen</td>
-        <td>Om 7 dager</td>
-      </tr>
-      </tbody>
-    </table>
-
+  <div >
+    <vue-good-table
+      title="Nyhets-feed"
+      :columns="columns"
+      :rows="rows"
+      :paginate="false"
+      per-page=5
+    next-text="Neste"
+    prev-text="Forrige"
+    rows-per-page-text="Antall rader"
+    of-text="av"
+    />
   </div>
 </template>
 
 <script>
+  import axios from 'axios';
+  import Vue from 'vue'
+  import VueGoodTable from 'vue-good-table';
+  Vue.use(VueGoodTable);
 
   export default {
-    name: 'Newsfeedhome',
-
-    components: {}
+    name: 'Nyhetsfeedhome',
+    data(){
+      return {
+        columns: [
+          {
+            label: 'Hvem',
+            field: 'hvem',
+            filterable: false
+          },
+          {
+            label: 'Nyhet',
+            field: 'nyhet',
+            filterable: false
+          },
+          {
+            label: 'Når',
+            field: 'nar',
+            html: true,
+            filterable: false
+          }
+        ],
+        rows: []
+      };
+    },
+    mounted(){
+      this.fillRows();
+    },
+    methods: {
+      formateDate(raw){
+        return raw.substring(8, 10) + " " + raw.substring(5, 7) + " " + raw.substring(0,4)
+          + " kl: " + raw.substring(11, 16);
+      },
+      fillRows(){
+        axios.get('http://localhost:9000/rest/melding/motta/kollektiv/1').then(response => {
+          let resRows = response.data;
+          for(let i = 0; i < 5; i++){
+            let date = this.formateDate(resRows[i].sent);
+            let obj = {hvem: resRows[i].overskrift, nyhet: resRows[i].tekst, nar: date};
+            this.rows.push(obj);
+          }
+        }).catch(err => {
+          console.log(err);
+        });
+      }
+    }
   }
 </script>
 
