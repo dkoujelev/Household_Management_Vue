@@ -3,9 +3,7 @@ let connection = require("../connection");
 
 // Hent en fullstendig handleliste
 server.get('rest/handleliste/:handleliste_id',function(req, res, next){
-  console.log("henter handleliste 1");
   connection.query("SELECT * FROM Handleliste WHERE handleliste_id=?", [req.params.handleliste_id], function(err, rows, fields){
-    console.log("inni første sql");
     if(err || rows.length != 1)
       return next(err);
 
@@ -20,7 +18,6 @@ server.get('rest/handleliste/:handleliste_id',function(req, res, next){
 
     connection.query("SELECT Vare.* FROM Vare " +
       "INNER JOIN Handleliste ON Vare.handleliste_Id=Handleliste.handleliste_id WHERE Handleliste.handleliste_id=?", req.params.handleliste_id, function(err, rows, fields){
-      console.log("inni andre sql");
         if(err)
           return next(err);
 
@@ -74,6 +71,16 @@ server.post('rest/handleliste/',function(req,res,next){
 // Hent handlelister for en bestemt undergruppe
 server.get('rest/handlelisteForUndergruppe/:undergruppe_id',function(req, res, next) {
   connection.query("SELECT * FROM Handleliste WHERE undergruppe_id=?", [req.params.undergruppe_id], function (err, rows, fields) {
+
+    for(let handleliste of rows){
+      if('opprettet' in handleliste)
+        handleliste.opprettet = new Date(handleliste.opprettet);
+      if('frist' in handleliste)
+        handleliste.frist = new Date(handleliste.frist);
+      if('handling_utfort' in handleliste)
+        handleliste.handling_utfort = new Date(handleliste.handling_utfort);
+    }
+
     res.send(err ? err : rows);
     return next();
   });
@@ -85,6 +92,16 @@ server.get('rest/handlelisteForBruker/:bruker_id',function(req, res, next){
     "INNER JOIN Undergruppe ON Handleliste.undergruppe_id=Undergruppe.undergruppe_id " +
     "INNER JOIN Bruker_Undergruppe ON Undergruppe.undergruppe_id=Bruker_Undergruppe.undergruppe_id " +
     "WHERE bruker_id=?", [req.params.bruker_id], function(err, rows, fields){
+
+    for(let handleliste of rows){
+      if('opprettet' in handleliste)
+        handleliste.opprettet = new Date(handleliste.opprettet);
+      if('frist' in handleliste)
+        handleliste.frist = new Date(handleliste.frist);
+      if('handling_utfort' in handleliste)
+        handleliste.handling_utfort = new Date(handleliste.handling_utfort);
+    }
+
     res.send(err ? err : rows);
     return next();
   });
