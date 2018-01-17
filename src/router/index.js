@@ -14,9 +14,7 @@ import Shoppinglistshome from '@/components/home/Shoppinglistshome'
 import Shoppinglists from '@/components/Shoppinglists'
 import Addnews from '@/components/Addnews'
 import Paging from  '@/components/Paging'
-import ShoppingList from '@/components/ShoppingList/ShoppingList'
-import TodoList from '@/components/TODO/TodoList'
-
+import Utgifter from '@/components/Utgifter'
 
 
 
@@ -31,7 +29,7 @@ export default new Router({
     },
     {
       path: '/home',
-      name: 'home',
+      name: 'Hjem',
       component: Home
     },
     {
@@ -100,9 +98,9 @@ export default new Router({
       component: Paging
     },
     {
-      path: '/TodoList',
-      name: 'TodoList',
-      component: TodoList
-    },
+      path: '/Utgifter',
+      name: 'Utgifter',
+      component: Utgifter
+    }
   ]
 })
