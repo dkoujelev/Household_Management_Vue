@@ -44,13 +44,14 @@
 
   export default {
     name: 'Addnews',
+    props: ['current_user', 'current_group'],
     data() {
       return {
         melding: {
           overskrift: '',
           tekst: '',
-          skrevet_av_bruker: 1, //Bruker id
-          sendt_til_kollektiv: 1 //Kollektiv id
+          skrevet_av_bruker: this.current_user.bruker_id,
+          sendt_til_kollektiv: this.current_group.undergruppe_id
         },
         errorMessages: {
           overskrift: '',
@@ -60,9 +61,7 @@
     },
     methods: {
       addNews() {
-        console.log("3");
         axios.post('http://localhost:9000/rest/melding', this.melding).then(response => {
-          console.log("4");
           this.$emit('added-news', this.melding);
           this.melding.tekst = "";
           this.melding.overskrift = "";
@@ -77,12 +76,10 @@
         this.errorMessages.tekst = '';
 
         if (this.melding.overskrift === "") {
-          console.log("1");
           this.errorMessages.overskrift = 'Meldingen må ha en overskift';
           noErrors = false;
         }
         if (this.melding.tekst === "") {
-          console.log("2");
           this.errorMessages.tekst = 'Meldingen må ha innhold';
           noErrors = false;
         }
