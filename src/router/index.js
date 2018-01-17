@@ -98,11 +98,6 @@ export default new Router({
       component: Paging
     },
     {
-      path: '/ShoppingList',
-      name: 'ShoppingList',
-      component: ShoppingList
-    },
-    {
       path: '/Utgifter',
       name: 'Utgifter',
       component: Utgifter
