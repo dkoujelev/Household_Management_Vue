@@ -2,21 +2,22 @@
   <div>
     <nav class="navbar is-success is-active is-fixed-top" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
-        <router-link class="navbar-item" to="/home">
-          <img src="./img/logo_medium.png" alt="image not found" width="175"/>
+        <router-link class="navbar-item" to="/home" v-if="loggedIn">
+          Hjem
+          <!--<img src="./img/logo_medium.png" alt="image not found" width="175"/>-->
         </router-link>
       </div>
       <div class="navbar-menu">
         <div class="navbar-start">
-          <router-link class="navbar-item" v-show="loggedIn" to="/Task">Gjøremål</router-link>
-          <router-link class="navbar-item" v-show="!loggedIn" to="/Login">Login</router-link>
-          <router-link class="navbar-item" v-show="!loggedIn" to="/Register">Registrer deg</router-link>
-          <router-link class="navbar-item" v-show="loggedIn" to="/Nyhetsfeed">Nyhet</router-link>
-          <router-link class="navbar-item" v-show="loggedIn" to="/Shoppinglists">Handlelister</router-link>
-          <router-link class="navbar-item" v-show="loggedIn" to="/ShowExpences">Utgifter</router-link>
-          <a class="navbar-item" v-show="loggedIn" @click.prevent="logOut">Logg ut</a>
+          <router-link class="navbar-item" v-if="loggedIn" to="/Task">Gjøremål</router-link>
+          <router-link class="navbar-item" v-if="!loggedIn" to="/Login">Login</router-link>
+          <router-link class="navbar-item" v-if="!loggedIn" to="/Register">Registrer deg</router-link>
+          <router-link class="navbar-item" v-if="loggedIn" to="/Nyhetsfeed">Nyhet</router-link>
+          <router-link class="navbar-item" v-if="loggedIn" to="/Shoppinglists">Handlelister</router-link>
+          <router-link class="navbar-item" v-if="loggedIn" to="/ShowExpences">Utgifter</router-link>
+          <a class="navbar-item" v-if="loggedIn" @click.prevent="logOut">Logg ut</a>
         </div>
-        <div class="navbar-end" v-show="loggedIn" >
+        <div class="navbar-end" v-if="loggedIn" >
           <SelectGroup :current_user="current_user" @selected-group="selectedGroup"></SelectGroup>
           <a href="" class="navbar-item" @click.prevent="addingGroup=true">
             <i class="fa fa-plus"></i>
@@ -30,8 +31,8 @@
       </div>
     </nav>
     <br/><br/>
-    <p v-show="loggedIn">Innlogget bruker: {{current_user.epost}}</p>
-    <p v-show="loggedIn">Aktiv gruppe: {{current_group.navn}}</p>
+    <p v-if="loggedIn">Innlogget bruker: {{current_user.epost}}</p>
+    <p v-if="loggedIn">Aktiv gruppe: {{current_group.navn}}</p>
     <router-view/>
   </div>
 </template>
