@@ -47,7 +47,7 @@
 </div>
 </template>
 
-<script type="text/javascript">
+<script>
   import axios from 'axios';
 
   export default {
