@@ -14,7 +14,7 @@ import Shoppinglistshome from '@/components/home/Shoppinglistshome'
 import Shoppinglists from '@/components/Shoppinglists'
 import Addnews from '@/components/Addnews'
 import Paging from  '@/components/Paging'
-import ShoppingList from '@/components/ShoppingList/ShoppingList'
+import Utgifter from '@/components/Utgifter'
 
 
 
@@ -97,5 +97,10 @@ export default new Router({
       name: 'Paging',
       component: Paging
     },
+    {
+      path: '/Utgifter',
+      name: 'Utgifter',
+      component: Utgifter
+    }
   ]
 })
