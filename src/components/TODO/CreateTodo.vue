@@ -7,12 +7,12 @@
       <div class='content'>
         <div class='ui form'>
           <div class='field'>
-            <label>Title</label>
+            <label>Tittel</label>
             <input v-model="titleText" type='text'>
           </div>
           <div class='field'>
-            <label>Project</label>
-            <input v-model="projectText" type='text'>
+            <label>Dato</label>
+            <input v-model="date" type='text'>
           </div>
           <label>Beskrivelse</label>
           <input v-model="beskrivelseText" type='text'>
@@ -38,8 +38,8 @@
         components: {
           datepicker
         },
-        titleText: '',
-        projectText: '',
+        titleText: "",
+        date: "",
         beskrivelseText: '',
         isCreating: false,
       };
@@ -52,21 +52,42 @@
         this.isCreating = false;
       },
       sendForm() {
-        if (this.titleText.length > 0 && this.projectText.length && this.beskrivelseText.length > 0) {
+
+        axios.post('http://localhost:9000/rest/gjoremal/:id', {
+          navn: "",
+          start: new Date(),
+        })
+          .then(response => {
+            console.log(response)
+          })
+          .catch(error => {
+            console.log(error.response)
+          });
+
+        if (this.titleText.length > 0  && this.beskrivelseText.length > 0) {
           const title = this.titleText;
-          const project = this.projectText;
+          const date = this.date;
           const beskrivelse = this.beskrivelse;
           this.$emit('create-todo', {
             title,
-            project,
+            date,
             beskrivelse,
             done: false,
           });
           this.titleText = '';
-          this.projectText = '';
+          this.date = '';
           this.beskrivelse = '';
           this.isCreating = false;
         }
+
+
+        /*
+        axios.post('http://localhost:9000/rest/gjoremal/:id', this.todo, response => {
+          //this.$emit('send-todo', this.todo); //gir beskjed til parrent komponent at "dette skjer"
+        }).catch(err => {
+          console.log(JSON.stringify(err));
+        });
+*/
       },
     },
   };

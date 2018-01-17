@@ -41,7 +41,8 @@
             filterable: false
           }
         ],
-        rows: []
+        rows: [],
+        bruker: this.$parent.$data.current_user
       };
     },
     mounted(){
@@ -49,10 +50,10 @@
     },
     methods: {
       fillRows(){
-        axios.get('http://localhost:9000/rest/melding/sendt/bruker/1').then(response => {
+        axios.get('http://localhost:9000/rest/melding/sendt/bruker/' + this.bruker.bruker_id).then(response => {
           let resRows = response.data;
           for(let i = 0; i < resRows.length; i++){
-            let obj = {kostnad: resRows[i].overskrift, sum: resRows[i].tekst};
+            let obj = {kostnad: resRows[i].overskrift, sum: 100};
             this.rows.push(obj);
           }
         }).catch(err => {
