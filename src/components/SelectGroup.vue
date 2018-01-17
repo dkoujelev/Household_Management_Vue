@@ -16,7 +16,8 @@
 
   export default {
     props: ['current_user'],
-      created(){
+      mounted(){
+          console.log('loadin groups for user ' + this.current_user.epost);
           axios.get('http://localhost:9000/rest/undergrupperForBruker/' + this.current_user.bruker_id).then(response => {
             this.groups = response.data;
           }).catch(err => {

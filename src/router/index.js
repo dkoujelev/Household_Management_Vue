@@ -24,8 +24,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hjem',
-      component: Home
+      name: 'Root',
+      component: Login
     },
     {
       path: '/home',
