@@ -1,5 +1,5 @@
 let server = require("../server");
-let connection = require("../connection");  
+let connection = require("../connection");
 
 /*
    Melding{
