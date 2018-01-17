@@ -38,8 +38,8 @@
         components: {
           datepicker
         },
-        titleText: '',
-        projectText: '',
+        titleText: "",
+        projectText: "",
         beskrivelseText: '',
         isCreating: false,
       };

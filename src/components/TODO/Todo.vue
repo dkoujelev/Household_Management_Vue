@@ -11,10 +11,10 @@
       {{ todo.beskrivelse }}
     </div>
     <div class='extra content'>
-          <span class='right floated edit icon' v-on:click="showForm">
+          <span class='right floated edit icon' @click="showForm">
           <i class='edit icon'></i>
         </span>
-      <span class='right floated trash icon' v-on:click="deleteTodo()">
+      <span class='right floated trash icon' @click="deleteTodo()">
           <i class='trash icon'></i>
         </span>
     </div>
@@ -38,10 +38,10 @@
       </button>
     </div>
   </div>
-  <div class='ui bottom attached green basic button' v-show="!isEditing && todo.done" disabled>
+  <div class='ui bottom attached green basic button' v-show="!isEditing && this.todo.done" disabled>
     Fullført
   </div>
-  <div class='ui bottom attached red basic button' @click="completeTodo()" v-show="!isEditing && !todo.done">
+  <div class='ui bottom attached red basic button' @click="completeTodo()" v-show="!isEditing && !this.todo.done">
     Ventende
   </div>
 </div>
@@ -51,7 +51,7 @@
   import axios from 'axios';
 
   export default {
-    props: ['todos'],
+    props: ['todo'],
     data() {
 
       return {
@@ -71,16 +71,23 @@
     },
     methods: {
       completeTodo() {
-        axios.post('http://localhost:9000/rest/gjoremal', this.todo, response => {
-          this.$emit('complete-todo', this.todo); //gir beskjed til parrent komponent at "dette skjer"
+        this.$emit('complete-todo', this.todo);
+      },
+      /*
+      completeTodo(todo) {
+        axios.post('http://localhost:9000/rest/gjoremal', todo, response => {
+          this.$emit('complete-todo', todo); //gir beskjed til parrent komponent at "dette skjer"
         }).catch(err => {
           console.log(JSON.stringify(err));
         });
       },
+      */
+
+
       deleteTodo() {
         axios.delete('http://localhost:9000/rest/gjoremal/:gjoremal_id', this.todo, response => {
           this.$emit('delete-todo', this.todo);
-
+          //  this.$delete('delete-todo', this.todos)
         }).catch(err => {
           console.log(JSON.stringify(err));
         });
