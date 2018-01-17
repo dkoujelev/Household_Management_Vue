@@ -36,11 +36,28 @@
 <script>
 
   import Addnews from './Addnews';
+  import axios from 'axios';
 
   export default {
     name: 'Nyhetsfeed',
-
+    data(){
+      return{
+        nyheter:[],
+        sendt_til_kollektiv: 1
+      }
+    },
     components: {Addnews},
+
+    methods:{
+      getAllNews(){
+        axios.get('http://localhost:9000/rest/melding/motta/kollektiv/' + this.sendt_til_kollektiv).then(function(response) {
+          console.log(response.data);
+        });
+      }
+    },
+    mounted() {
+      this.getAllNews();
+    }
 
   }
 </script>
