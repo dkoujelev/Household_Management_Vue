@@ -14,7 +14,7 @@ import Shoppinglistshome from '@/components/home/Shoppinglistshome'
 import Shoppinglists from '@/components/Shoppinglists'
 import Addnews from '@/components/Addnews'
 import Paging from  '@/components/Paging'
-import ShoppingList from '@/components/ShoppingList/ShoppingList'
+import Utgifter from '@/components/Utgifter'
 
 
 
@@ -102,5 +102,10 @@ export default new Router({
       name: 'ShoppingList',
       component: ShoppingList
     },
+    {
+      path: '/Utgifter',
+      name: 'Utgifter',
+      component: Utgifter
+    }
   ]
 })
