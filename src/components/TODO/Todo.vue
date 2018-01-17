@@ -5,16 +5,16 @@
       {{ todo.title }}
     </div>
     <div class='meta'>
-      {{ todo.project }}
+      {{ todo.date }}
     </div>
     <div class='meta'>
       {{ todo.beskrivelse }}
     </div>
     <div class='extra content'>
-          <span class='right floated edit icon' v-on:click="showForm">
+          <span class='right floated edit icon' @click="showForm">
           <i class='edit icon'></i>
         </span>
-      <span class='right floated trash icon' v-on:click="deleteTodo()">
+      <span class='right floated trash icon' @click="deleteTodo()">
           <i class='trash icon'></i>
         </span>
     </div>
@@ -22,12 +22,12 @@
   <div class="content" v-show="isEditing">
     <div class='ui form'>
       <div class='field'>
-        <label>Title</label>
+        <label>Tittel</label>
         <input type='text' v-model="todo.title" >
       </div>
       <div class='field'>
-        <label>Project</label>
-        <input type='text' v-model="todo.project" >
+        <label>Dato</label>
+        <input type='text' v-model="todo.date">
       </div>
       <div class='field'>
         <label>Beskrivelse</label>
@@ -38,11 +38,11 @@
       </button>
     </div>
   </div>
-  <div class='ui bottom attached green basic button' v-show="!isEditing && todo.done" disabled>
+  <div class='ui bottom attached green basic button' v-show="!isEditing && this.todo.done" disabled>
     Fullført
   </div>
-  <div class='ui bottom attached red basic button' @click="completeTodo()" v-show="!isEditing && !todo.done">
-    Ventende
+  <div class='ui bottom attached red basic button' @click="completeTodo()" v-show="!isEditing && !this.todo.done">
+    ugjort
   </div>
 </div>
 </template>
@@ -51,11 +51,11 @@
   import axios from 'axios';
 
   export default {
-    props: ['todos'],
+    props: ['todo'],
     data() {
 
       return {
-
+/*
         todo: {
           gjoremal_id: 1,
           navn: "",
@@ -66,10 +66,23 @@
           bruker_id: 2,
           liste_id: 5
       },
+        */
         isEditing: false,
       };
     },
     methods: {
+/*
+      completeTodo() {
+        this.$emit('complete-todo', this.todo);
+      },
+*/
+
+      undoTodo: {
+        undoTodo(){
+          this.$emit('undo-todo', this.todo);
+        }
+      },
+
       completeTodo() {
         axios.post('http://localhost:9000/rest/gjoremal', this.todo, response => {
           this.$emit('complete-todo', this.todo); //gir beskjed til parrent komponent at "dette skjer"
@@ -77,10 +90,13 @@
           console.log(JSON.stringify(err));
         });
       },
+
+
+
       deleteTodo() {
         axios.delete('http://localhost:9000/rest/gjoremal/:gjoremal_id', this.todo, response => {
           this.$emit('delete-todo', this.todo);
-
+          //  this.$delete('delete-todo', this.todos)
         }).catch(err => {
           console.log(JSON.stringify(err));
         });
