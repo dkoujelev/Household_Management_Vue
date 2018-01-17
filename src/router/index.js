@@ -103,11 +103,6 @@ export default new Router({
       component: ShowExpences
     },
     {
-      path: '/ShoppingList',
-      name: 'ShoppingList',
-      component: ShoppingList
-    },
-    {
       path: '/Utgifter',
       name: 'Utgifter',
       component: Utgifter
