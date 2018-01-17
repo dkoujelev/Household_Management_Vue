@@ -19,7 +19,8 @@ import Utgifter from '@/components/Utgifter'
 import ShoppingList from '@/components/ShoppingList/ShoppingList'
 import TodoList from '@/components/TODO/TodoList'
 import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
-
+import GjeldInn from '@/components/Gjeld/GjeldInn'
+import GjeldUt from '@/components/Gjeld/GjeldUt'
 
 Vue.use(Router);
 
@@ -125,6 +126,18 @@ export default new Router({
       path: '/ViewShoppingList',
       name: 'ViewShoppingList',
       component: ViewShoppingList
+    },
+    {
+      path: '/GjeldInn',
+      name: 'GjeldInn',
+      component: GjeldInn,
+      props: true
+    },
+    {
+      path: '/GjeldUt',
+      name: 'GjeldUt',
+      component: GjeldUt,
+      props: true
     }
   ]
 })

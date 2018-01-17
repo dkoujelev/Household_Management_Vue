@@ -1,17 +1,18 @@
 <template>
   <div class="app">
 
-    <AddGroup :current_user="window.current_user" :current_collective="{kollektiv_id: 1, navn: 'Testkollektiv 1'}" @added-group="addedGroup"></AddGroup>
+    <GjeldInn></GjeldInn>
   </div>
 </template>
 
 <script>
 
-  import AddGroup from './AddGroup';
+  import GjeldInn from './Gjeld/GjeldInn';
 
   export default {
+      props: ['current_user'],
     name: 'Test',
-    components: {AddGroup},
+    components: {GjeldInn},
     methods:{
       addedGroup(e){
             alert(JSON.stringify(e));
