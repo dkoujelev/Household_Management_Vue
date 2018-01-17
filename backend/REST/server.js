@@ -8,8 +8,8 @@ const corsMiddleware = require('restify-cors-middleware');
 
 const cors = corsMiddleware({
     origins: ['http://localhost:8080'],
-    allowHeaders: ['API-Token', 'sessionId'],
-    exposeHeaders: ['API-Token-Expiry', 'sessionId'],
+    allowHeaders: ['*'],
+    exposeHeaders: ['*'],
     credentials: true
 });
 

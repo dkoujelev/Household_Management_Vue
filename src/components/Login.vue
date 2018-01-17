@@ -62,6 +62,7 @@
         return regex.test(email);
       },
       login(){
+
         this.error = '';
         if(!this.validateEmail(this.login_info.epost)){
           this.login_info.epost = "";
@@ -76,10 +77,6 @@
               this.login_info.epost = "";
               this.login_info.passord = "";
               this.error = "Ukjent brukernavn eller passord!"; //this.error="Bruker med denne eposten finnes ikke";
-            } else if(!response.data.passwordMatch){
-              //this.login_info.epost = "";
-              this.login_info.passord = "";
-              this.error = "Ukjent brukernavn eller passord!"; //this.error = "Feil passord";
             } else{
               this.login_info.epost = "";
               this.login_info.passord = "";
