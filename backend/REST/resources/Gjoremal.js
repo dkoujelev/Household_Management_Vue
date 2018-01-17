@@ -10,8 +10,8 @@ server.get('rest/gjoremal/:gjoremal_id',function(req, res, next){
 });
 
 // Opprette nytt gjoremal
-server.post('rest/gjoremal/:id',function(req, res, next){
-  connection.query("INSERT INTO Gjoremalsliste SET ?", req.body, function(err, rows1, fields){
+server.post('rest/gjoremal/',function(req, res, next){
+  connection.query("INSERT INTO Gjoremal SET ?", req.body, function(err, rows, fields){
     if(err){res.send(err); return next();}
   });
 });

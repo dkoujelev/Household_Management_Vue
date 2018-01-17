@@ -5,7 +5,7 @@
       {{ todo.title }}
     </div>
     <div class='meta'>
-      {{ todo.project }}
+      {{ todo.date }}
     </div>
     <div class='meta'>
       {{ todo.beskrivelse }}
@@ -22,12 +22,12 @@
   <div class="content" v-show="isEditing">
     <div class='ui form'>
       <div class='field'>
-        <label>Title</label>
+        <label>Tittel</label>
         <input type='text' v-model="todo.title" >
       </div>
       <div class='field'>
-        <label>Project</label>
-        <input type='text' v-model="todo.project" >
+        <label>Dato</label>
+        <input type='text' v-model="todo.date">
       </div>
       <div class='field'>
         <label>Beskrivelse</label>
@@ -42,7 +42,7 @@
     Fullført
   </div>
   <div class='ui bottom attached red basic button' @click="completeTodo()" v-show="!isEditing && !this.todo.done">
-    Ventende
+    ugjort
   </div>
 </div>
 </template>
@@ -71,18 +71,18 @@
       };
     },
     methods: {
-
+/*
       completeTodo() {
         this.$emit('complete-todo', this.todo);
       },
-
+*/
 
       undoTodo: {
         undoTodo(){
           this.$emit('undo-todo', this.todo);
         }
       },
-/*
+
       completeTodo() {
         axios.post('http://localhost:9000/rest/gjoremal', this.todo, response => {
           this.$emit('complete-todo', this.todo); //gir beskjed til parrent komponent at "dette skjer"
@@ -90,7 +90,7 @@
           console.log(JSON.stringify(err));
         });
       },
-*/
+
 
 
       deleteTodo() {
