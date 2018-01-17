@@ -66,6 +66,16 @@ export default {
         current_group : {navn: ''},
         addingGroup: false
       };
+  },
+  computed: {
+      isLoggedIn(){
+          return (this.current_user != null);
+      },
+    current_email(){
+          if(this.current_user != null)
+            return this.current_user.epost
+          else return '';
+    }
   }
 }
 </script>

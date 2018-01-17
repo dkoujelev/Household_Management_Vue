@@ -1,20 +1,21 @@
 let server = require("../server");
 let connection = require("../connection");
 
-// Sende melding til bruker eller kollektiv
 /*
-Melding{
-  overskrift: '',
-  tekst: '',
-  skrevet_av_bruker: '' //Bruker id
+   Melding{
+     overskrift: '',
+     tekst: '',
+     skrevet_av_bruker: '' //Bruker id
 
-  //Option til bruker
-  sendt_til_bruker: '' //Bruker id
+     //Option til bruker
+     sendt_til_bruker: '' //Bruker id
 
-  //Option til kollektiv
-  sendt_til_kollektiv: '' //Kollektiv id
-}
- */
+     //Option til kollektiv
+     sendt_til_kollektiv: '' //Kollektiv id
+   }
+*/
+
+// Sende melding til bruker eller kollektiv
 server.post('rest/melding',function(req,res,next){
   connection.query("INSERT INTO Melding SET ?", req.body, function(err, rows, fields){
     res.send(err ? err : rows);
@@ -45,5 +46,4 @@ server.get('rest/melding/motta/kollektiv/:sendt_til_kollektiv',function(req, res
     return next();
   });
 });
-
 //Slette en melding
