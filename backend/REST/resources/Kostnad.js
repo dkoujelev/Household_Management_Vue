@@ -62,6 +62,8 @@ server.post('rest/kostnad/', function (req, res, next) {
 
   if('opprettet' in kostnad)
     kostnad.opprettet = new Date(kostnad.opprettet).getTime();
+
+  connection.query('INSERT INTO Kostnad SET ?', [kostnad], function (err, rows, fields) {
   console.log(kostnad);
   connection.query('INSERT INTO Kostnad SET?', [kostnad], function (err, rows, fields) {
     if(err)
@@ -93,5 +95,6 @@ server.post('rest/kostnad/', function (req, res, next) {
         res.send(rows);
       });
     });
+  });
   });
 });

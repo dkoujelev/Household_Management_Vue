@@ -14,9 +14,10 @@
           <router-link class="navbar-item" to="/Login">Login</router-link>
           <router-link class="navbar-item" to="/Register">Registrer deg</router-link>
           <router-link class="navbar-item" to="/Test">Test!</router-link>
+          <router-link class="navbar-item" to="/SeeAccounting">Regnskap</router-link>
           <router-link class="navbar-item" to="/Nyhetsfeed">Nyhet</router-link>
           <router-link class="navbar-item" to="/Shoppinglists">Handlelister</router-link>
-          <router-link class="navbar-item" to="/AddCostRegister">Legg til kostnad</router-link>
+          <router-link class="navbar-item" to="/ShowExpences">Utgifter</router-link>
         </div>
         <div class="navbar-end">
           <SelectGroup :current_user="current_user" @selected-group="selectedGroup"></SelectGroup>
@@ -25,7 +26,7 @@
           </a>
           <div class="modal" v-bind:class="{'is-active' : addingGroup}" @blur="console.log('blurring'); addingGroup=false" transition="zoom">
             <div class="content has-text-centered">
-              <AddCollective :current_user="current_user" @cancel="addingGroup=false"></AddCollective>
+              <AddCollective @cancel="addingGroup=false"></AddCollective>
             </div>
           </div>
         </div>
@@ -50,6 +51,19 @@ export default {
       selectedGroup(group){
           this.current_group = group;
       }
+  },
+  created(){
+      window.current_user={
+      "bruker_id": 1,
+        "epost": "sj@apple.com",
+        "fornavn": "Steve ",
+        "etternavn": "Jobs",
+        "tlf": "12345678",
+        "adresse": "California",
+        "hashed_passord": "",
+        "salt": ""
+    };
+      window.current_group= {navn: 'test', undergruppe_id: 1};
   },
   data(){
       return {
