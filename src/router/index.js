@@ -20,87 +20,92 @@ import Utgifter from '@/components/Utgifter'
 
 Vue.use(Router);
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'Hjem',
-      component: Home
-    },
-    {
-      path: '/home',
-      name: 'Hjem',
-      component: Home
-    },
-    {
-      path: '/Login',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/Register',
-      name: 'Register',
-      component: Register
-    },
-    {
-      path: '/HelloWorld',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
-    {
-      path: '/Test',
-      name: 'Test',
-      component: Test
-    },
-    {
-      path: '/Task',
-      name: 'Task',
-      component: Task
-    },
-    {
-      path: '/AddCostRegister',
-      name: 'AddCostRegister',
-      component: AddCostRegister
-    },
-    {
-      path: '/Taskhome',
-      name: 'Taskhome',
-      component: Taskhome
-    },
-    {
-      path: '/Nyhetsfeed',
-      name: 'Nyhetsfeed',
-      component: Nyhetsfeed
-    },
-    {
-      path: '/Newsfeedhome',
-      name: 'Newfeedhome',
-      component: Newsfeedhome
-    },
-    {
-      path: '/Shoppinglistshome',
-      name: 'Shoppinglistshome',
-      component: Shoppinglistshome
-    },
-    {
-      path: '/Shoppinglists',
-      name: 'Shoppinglists',
-      component: Shoppinglists
-    },
-    {
-      path: '/Addnews',
-      name: 'Addnews',
-      component: Addnews
-    },
-    {
-      path: '/Paging',
-      name: 'Paging',
-      component: Paging
-    },
-    {
-      path: '/Utgifter',
-      name: 'Utgifter',
-      component: Utgifter
+let routes = [
+  {
+    path: '/',
+    name: 'Hjem',
+    component: Home
+  },
+  {
+    path: '/home',
+    name: 'Hjem',
+    component: Home
+  },
+  {
+    path: '/Login',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '/Register',
+    name: 'Register',
+    component: Register
+  },
+  {
+    path: '/HelloWorld',
+    name: 'HelloWorld',
+    component: HelloWorld
+  },
+  {
+    path: '/Test',
+    name: 'Test',
+    component: Test
+  },
+  {
+    path: '/Task',
+    name: 'Task',
+    component: Task
+  },
+  {
+    path: '/AddCostRegister',
+    name: 'AddCostRegister',
+    component: AddCostRegister
+  },
+  {
+    path: '/Taskhome',
+    name: 'Taskhome',
+    component: Taskhome
+  },
+  {
+    path: '/Nyhetsfeed',
+    name: 'Nyhetsfeed',
+    component: Nyhetsfeed
+  },
+  {
+    path: '/Newsfeedhome',
+    name: 'Newfeedhome',
+    component: Newsfeedhome
+  },
+  {
+    path: '/Shoppinglistshome',
+    name: 'Shoppinglistshome',
+    component: Shoppinglistshome
+  },
+  {
+    path: '/Shoppinglists',
+    name: 'Shoppinglists',
+    component: Shoppinglists
+  },
+  {
+    path: '/Addnews',
+    name: 'Addnews',
+    component: Addnews
+  },
+  {
+    path: '/Paging',
+    name: 'Paging',
+    component: Paging
+  },
+  {
+    path: '/Utgifter',
+    name: 'Utgifter',
+    component: Utgifter,
+    props: {
+      default: { current_user: 'current_user' }
     }
-  ]
+  }
+]
+
+export default new Router({
+  routes: routes
 })

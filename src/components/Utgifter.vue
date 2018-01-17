@@ -23,7 +23,6 @@
 
   export default {
     name: 'utgifter',
-    props: ['current_user'],
     data(){
       return {
         columns: [
@@ -43,20 +42,18 @@
           }
         ],
         rows: [],
-        bruker: 1
+        bruker: this.$parent.$data.current_user
       };
     },
     mounted(){
       this.fillRows();
-      this.bruker = this.current_user.bruker_id;
     },
     methods: {
       fillRows(){
-        axios.get('http://localhost:9000/rest/melding/sendt/bruker/' + this.bruker).then(response => {
-          console.log(response.data[0].sent);
+        axios.get('http://localhost:9000/rest/melding/sendt/bruker/' + this.bruker.bruker_id).then(response => {
           let resRows = response.data;
           for(let i = 0; i < resRows.length; i++){
-            let obj = {kostnad: resRows[i].overskrift, sum: resRows[i].tekst};
+            let obj = {kostnad: resRows[i].overskrift, sum: 100};
             this.rows.push(obj);
           }
         }).catch(err => {
