@@ -1,5 +1,6 @@
 let server = require("../server");
 let connection = require("../connection");
+let bcrypt = require('bcrypt');
 
 // Hent en bestemt bruker
 server.get('rest/bruker/:bruker_id',function(req, res, next){
