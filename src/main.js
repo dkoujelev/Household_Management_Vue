@@ -3,9 +3,6 @@
 import Vue from 'vue'
 import Dashboard from './Dashboard'
 import router from './router'
-import axios from 'axios'
-
-axios.defaults.withCredentials = true;
 
 Vue.config.productionTip = false;
 
