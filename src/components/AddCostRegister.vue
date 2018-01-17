@@ -36,7 +36,7 @@
     },
     methods: {
       addCostRegister(){
-          this.costRegister.undergruppe_id = 1; //= this.current_group.undergruppe_id;
+          this.costRegister.undergruppe_id = this.current_group.undergruppe_id;
 
           axios.post('http://localhost:9000/rest/regnskap',this.costRegister).then(response => {
             let newCostRegister = {};
