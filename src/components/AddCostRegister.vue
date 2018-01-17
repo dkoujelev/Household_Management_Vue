@@ -36,17 +36,18 @@
     },
     methods: {
       addCostRegister(){
-          this.costRegister.undergruppe_id = this.current_group.undergruppe_id;
+          this.costRegister.undergruppe_id = 1; //= this.current_group.undergruppe_id;
 
-        axios.post('http://localhost:9000/rest/regnskap',this.costRegister).then(response => {
-          let newCostRegister = {};
-        newCostRegister.navn = this.costRegister.navn;
-        newCostRegister.beskrivelse = this.costRegister.beskrivelse;
-        newCostRegister.kollektiv_id = response.data.insertId;
-        this.$emit('added-costRegister', newCostRegister);
-      }).catch(err => {
-          console.log(err);
-      });
+          axios.post('http://localhost:9000/rest/regnskap',this.costRegister).then(response => {
+            let newCostRegister = {};
+            newCostRegister.navn = this.costRegister.navn;
+            newCostRegister.beskrivelse = this.costRegister.beskrivelse;
+            newCostRegister.kollektiv_id = response.data.insertId;
+            this.$emit('added-costRegister', newCostRegister);
+          }).catch(err => {
+            console.log(err);
+          });
+
       }
     }
   }
