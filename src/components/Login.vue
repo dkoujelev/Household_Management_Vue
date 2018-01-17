@@ -14,7 +14,7 @@
                 </span>
               </p>
               <p class="control has-icon">
-                <input class="input" type="password" placeholder="Password" v-model="login_info.passord">
+                <input class="input" type="password" placeholder="Password" @keyup.enter="login" v-model="login_info.passord">
                 <span class="icon is-small">
                   <i class="fa fa-lock"></i>
                 </span>
@@ -36,7 +36,6 @@
             </div>
           </article>
         </div>
-
       </div>
     </div>
   </section>
@@ -76,11 +75,11 @@
             if(response.data == null){
               this.login_info.epost = "";
               this.login_info.passord = "";
-              this.error="Bruker med denne eposten finnes ikke";
+              this.error = "Ukjent brukernavn eller passord!"; //this.error="Bruker med denne eposten finnes ikke";
             } else if(!response.data.passwordMatch){
-              this.login_info.epost = "";
+              //this.login_info.epost = "";
               this.login_info.passord = "";
-              this.error = "Feil passord";
+              this.error = "Ukjent brukernavn eller passord!"; //this.error = "Feil passord";
             } else{
               this.login_info.epost = "";
               this.login_info.passord = "";
