@@ -20,6 +20,7 @@
 
   export default {
     name: 'AddCostRegister',
+    props: ['current_group'],
     data(){
       return {
         costRegisters: [],
@@ -35,7 +36,7 @@
     },
     methods: {
       addCostRegister(){
-          this.costRegister.undergruppe_id = window.current_group.undergruppe_id;
+          this.costRegister.undergruppe_id = this.$parent.$data.current_group.undergruppe_id;
 
         axios.post('http://localhost:9000/rest/regnskap',this.costRegister).then(response => {
           let newCostRegister = {};
