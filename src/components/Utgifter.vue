@@ -29,13 +29,15 @@
           {
             label: 'Kostnad',
             field: 'kostnad',
-            filterable: true
+            filterable: true,
+            placeholder: "Søk i kostnader"
           },
           {
             label: 'Sum',
             field: 'sum',
             type: 'number',
             html: false,
+            sortable: true,
             filterable: false
           }
         ],
