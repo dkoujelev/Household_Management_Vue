@@ -58,6 +58,7 @@
     methods: {
       addNews() {
         console.log("3");
+        this.melding.sendt = new Date();
         axios.post('http://localhost:9000/rest/melding', this.melding).then(response => {
           console.log("4");
           this.$emit('added-news', this.melding);

@@ -17,6 +17,7 @@ import Paging from  '@/components/Paging'
 import Utgifter from '@/components/Utgifter'
 import ShoppingList from '@/components/ShoppingList/ShoppingList'
 import TodoList from '@/components/TODO/TodoList'
+import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
 
 
 Vue.use(Router);
@@ -112,6 +113,11 @@ export default new Router({
       path: '/TodoList',
       name: 'TodoList',
       component: TodoList
+    },
+    {
+      path: '/ViewShoppingList',
+      name: 'ViewShoppingList',
+      component: ViewShoppingList
     }
   ]
 })

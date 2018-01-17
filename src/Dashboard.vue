@@ -64,7 +64,8 @@ export default {
             "salt": ""
           },
         current_group : {navn: ''},
-        addingGroup: false
+        addingGroup: false,
+        handleliste_id: ''
       };
   },
   computed: {

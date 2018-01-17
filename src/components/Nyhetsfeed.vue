@@ -42,6 +42,9 @@
           {
             label: 'Når',
             field: 'nar',
+            type: 'date',
+            inputFormat: 'YYYYMMDD',
+            outputFormat: 'MMM Do YY',
             html: true,
             filterable: false
           }
@@ -60,14 +63,15 @@
       fillRows(){
         axios.get('http://localhost:9000/rest/melding/motta/kollektiv/1').then(response => {
           let resRows = response.data;
+          console.log(resRows[0].sendt);
           for(let i = 0; i < resRows.length; i++){
-            let date = this.formateDate(resRows[i].sent);
+            let date = this.formateDate(resRows[i].sendt);
             let obj = {hvem: resRows[i].overskrift, nyhet: resRows[i].tekst, nar: date};
             this.rows.push(obj);
           }
-        }).catch(err => {
-          console.log(err);
-        });
+          }).catch(err => {
+            console.log(err);
+          });
       }
     }
   }

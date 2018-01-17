@@ -4,12 +4,6 @@
       title="Nyhets-feed"
       :columns="columns"
       :rows="rows"
-      :paginate="false"
-      per-page=5
-    next-text="Neste"
-    prev-text="Forrige"
-    rows-per-page-text="Antall rader"
-    of-text="av"
     />
   </div>
 </template>
@@ -21,8 +15,8 @@
   Vue.use(VueGoodTable);
 
   export default {
-    name: 'Nyhetsfeedhome',
-    data(){
+    name: 'Nyhetsfeed',
+    data() {
       return {
         columns: [
           {
@@ -38,6 +32,9 @@
           {
             label: 'Når',
             field: 'nar',
+            type: 'date',
+            inputFormat: 'YYYYMMDD',
+            outputFormat: 'MMM Do YY',
             html: true,
             filterable: false
           }
@@ -45,19 +42,20 @@
         rows: []
       };
     },
-    mounted(){
+    mounted() {
       this.fillRows();
     },
     methods: {
-      formateDate(raw){
-        return raw.substring(8, 10) + " " + raw.substring(5, 7) + " " + raw.substring(0,4)
+      formateDate(raw) {
+        return raw.substring(8, 10) + " " + raw.substring(5, 7) + " " + raw.substring(0, 4)
           + " kl: " + raw.substring(11, 16);
       },
-      fillRows(){
+      fillRows() {
         axios.get('http://localhost:9000/rest/melding/motta/kollektiv/1').then(response => {
           let resRows = response.data;
-          for(let i = 0; i < 5; i++){
-            let date = this.formateDate(resRows[i].sent);
+          console.log(resRows[0].sendt);
+          for (let i = 0; i < resRows.length; i++) {
+            let date = this.formateDate(resRows[i].sendt);
             let obj = {hvem: resRows[i].overskrift, nyhet: resRows[i].tekst, nar: date};
             this.rows.push(obj);
           }
@@ -67,6 +65,9 @@
       }
     }
   }
+
+
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
