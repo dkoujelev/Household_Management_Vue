@@ -16,6 +16,7 @@ import Addnews from '@/components/Addnews'
 import Paging from  '@/components/Paging'
 import ShoppingList from '@/components/ShoppingList/ShoppingList'
 import Innmelding from  '@/components/Innmelding'
+import TestMail from  '@/components/TestMail'
 
 
 
@@ -102,6 +103,11 @@ export default new Router({
       path: '/Innmelding',
       name: 'Innmelding',
       component: Innmelding
+    },
+    {
+      path: '/TestMail',
+      name: 'TestMail',
+      component: TestMail
     }
   ]
 })

@@ -9,18 +9,20 @@
 -->
 
         <button id="btnSendMail" name="btnSendMail" @click="doSendMailStuff">Send en mail</button>
-        <div id="resultFromPOST"></div>
+        <div id="resultFromPOST">{{ sendResult }}</div>
     </div>
 </template>
 
 <script>
- import axios from 'axios';
+import axios from 'axios';
+//let sendResult = 'Ukjent';
 
 export default {
     name: 'TestMail',
     data () {
         return{
-            testHeadline: 'Testing av SMTP'
+            testHeadline: 'Testing av SMTP',
+            sendResult: ''
         }
     },
     methods: {
@@ -31,9 +33,11 @@ export default {
                  subject: 'Test mail',
                  body: 'This is a nice body!'
              }).then(response => {
-                console.log('GUI got: ' + response.data);
+                console.log('GUI got: ' + response.data); // response.data is seemingly empty, but how can we check?
+                this.sendResult = 'Epost sendt!';
             }).catch(err => {
-                console.log(err.data);
+                console.log(err); // We assume that this suffers from the same issue(s) as response.data
+                this.sendResult = 'Epost IKKE sendt!';
             });
         }
     }

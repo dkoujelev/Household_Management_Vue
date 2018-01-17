@@ -17,6 +17,26 @@ server.get('rest/kollektiv/',function(req, res, next){
   });
 });
 
+// Hent alle kollektiv for en spesifikk bruker
+server.get('rest/kollektivForBruker/:bruker_id',function(req, res, next){
+  connection.query("SELECT Bruker_Kollektiv.*, Kollektiv.Navn AS navn FROM Bruker_Kollektiv " +
+  "INNER JOIN Kollektiv ON Bruker_Kollektiv.kollektiv_id=Kollektiv.kollektiv_id " +
+  "WHERE bruker_id=?",req.params.bruker_id, function(err, rows, fields){
+    res.send(err ? err : rows);
+    return next();
+  });
+});
+
+// Hent alle kollektiv hvor en spesifikk bruker er admin
+server.get('rest/kollektivForAdmin/:bruker_id',function(req, res, next){
+  connection.query("SELECT Bruker_Kollektiv.*, Kollektiv.Navn AS navn FROM Bruker_Kollektiv " +
+  "INNER JOIN Kollektiv ON Bruker_Kollektiv.kollektiv_id=Kollektiv.kollektiv_id " +
+  "WHERE bruker_id=? AND er_admin=1",req.params.bruker_id, function(err, rows, fields){
+    res.send(err ? err : rows);
+    return next();
+  });
+});
+
 // Opprett nytt kollektiv
 server.post('rest/kollektiv/:bruker_id',function(req, res, next){
   connection.query("INSERT INTO Kollektiv SET ?", req.body, function(err, rows1, fields){
