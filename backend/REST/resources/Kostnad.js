@@ -57,12 +57,15 @@ server.get('rest/kostnaderForUndergruppe/:undergruppe_id', function (req,res,nex
 
 // Leg til en kostnad
 server.post('rest/kostnad/', function (req, res, next) {
+  console.log(req.body.bruker_id);
   let kostnad = Object.assign({}, req.body);
 
   if('opprettet' in kostnad)
     kostnad.opprettet = new Date(kostnad.opprettet).getTime();
 
   connection.query('INSERT INTO Kostnad SET ?', [kostnad], function (err, rows, fields) {
+  console.log(kostnad);
+  connection.query('INSERT INTO Kostnad SET?', [kostnad], function (err, rows, fields) {
     if(err)
       return next(err);
 
@@ -70,11 +73,11 @@ server.post('rest/kostnad/', function (req, res, next) {
       if(err)
         return next(err);
 
-      let sum = kostnad.sum / rows.length;
+      let sum = Math.round(kostnad.sum / rows.length);
       let gjeld = [];
 
       for(let bruker of rows){
-        if(!('bruker_id' in bruker.equals(req.body.bruker_id))){
+        if(!(bruker.bruker_id === req.body.bruker_id)){
           gjeld.push(sum);
           gjeld.push(kostnad.opprettet);
           gjeld.push(kostnad.tittel);
@@ -90,5 +93,6 @@ server.post('rest/kostnad/', function (req, res, next) {
         res.send(rows);
       });
     });
+  });
   });
 });
