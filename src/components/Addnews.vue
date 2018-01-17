@@ -2,13 +2,15 @@
   <div>
     <div class="field">
       <label class="label">Tittel</label>
-      <input type="text" class="input" placeholder="Skriv tittel her">
+      <p class="help is-danger">{{this.errorMessages.overskrift}}</p>
+      <input type="text" class="input" placeholder="Skriv tittel her" v-model="melding.overskrift">
     </div>
     <div class="block">
       <div class="field">
         <label class="label">Nyhet</label>
+        <p class="help is-danger">{{this.errorMessages.tekst}}</p>
           <p class="control">
-            <textarea class="textarea" placeholder="Skriv nyhet her"></textarea>
+            <textarea class="textarea" placeholder="Skriv nyhet her" v-model="melding.tekst"></textarea>
           </p>
 
 
@@ -16,7 +18,7 @@
           <nav class="level">
             <!-- left side -->
             <div class="level-left">
-              <p class="level-item"><a class="button is-primary">Post nyhet</a></p>
+              <p class="level-item"><a class="button is-primary" v-on:click="checkInput">Post nyhet</a></p>
             </div>
 
             <!-- right side -->
@@ -38,11 +40,55 @@
 </template>
 
 <script>
+  import axios from 'axios';
 
   export default {
     name: 'Addnews',
-    components: {}
+    data() {
+      return {
+        melding: {
+          overskrift: '',
+          tekst: '',
+          skrevet_av_bruker: 1, //Bruker id
+          sendt_til_kollektiv: 1 //Kollektiv id
+        },
+        errorMessages: {
+          overskrift: '',
+          tekst: ''
+        }
+      };
+    },
+    methods: {
+      addNews() {
+        console.log("3");
+        axios.post('http://localhost:9000/rest/melding', this.melding).then(response => {
+          console.log("4");
+          this.$emit('added-news', this.melding);
+          this.melding.tekst = "";
+          this.melding.overskrift = "";
+          alert("denne meldingen er sendt");
+        }).catch(err => {
+          console.log(err);
+        });
+      },
+      checkInput() {
+        let noErrors = true;
+        this.errorMessages.overskrift = '';
+        this.errorMessages.tekst = '';
 
+        if (this.melding.overskrift === "") {
+          console.log("1");
+          this.errorMessages.overskrift = 'Meldingen må ha en overskift';
+          noErrors = false;
+        }
+        if (this.melding.tekst === "") {
+          console.log("2");
+          this.errorMessages.tekst = 'Meldingen må ha innhold';
+          noErrors = false;
+        }
+        if (noErrors) this.addNews();
+      }
+    }
   }
 </script>
 

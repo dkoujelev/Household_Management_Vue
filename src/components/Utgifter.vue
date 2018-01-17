@@ -9,6 +9,7 @@
       next-text="Neste"
       prev-text="Forrige"
       rows-per-page-text="Antall rader"
+      of-text="av"
       />
   </div>
 </template>
