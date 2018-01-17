@@ -21,6 +21,7 @@ import TodoList from '@/components/TODO/TodoList'
 import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
 import GjeldInn from '@/components/Gjeld/GjeldInn'
 import GjeldUt from '@/components/Gjeld/GjeldUt'
+import GjeldInnSpesifisert from '@/components/Gjeld/GjeldInnSpesifisert'
 
 Vue.use(Router);
 
@@ -137,6 +138,12 @@ export default new Router({
       path: '/GjeldUt',
       name: 'GjeldUt',
       component: GjeldUt,
+      props: true
+    },
+    {
+      path: '/GjeldInnSpesifisert',
+      name: 'GjeldInnSpesifisert',
+      component: GjeldInnSpesifisert,
       props: true
     }
   ]
