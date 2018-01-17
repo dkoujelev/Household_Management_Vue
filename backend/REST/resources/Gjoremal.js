@@ -18,7 +18,7 @@ server.get('rest/gjoremal/:gjoremal_id',function(req, res, next){
 });
 
 // Opprette nytt gjoremal
-server.post('rest/gjoremal/:id',function(req, res, next){
+server.post('rest/gjoremal/',function(req, res, next){
   if('start' in req.body)
     req.body.start = new Date(req.body.start).getTime();
   if('frist' in req.body)
@@ -26,7 +26,7 @@ server.post('rest/gjoremal/:id',function(req, res, next){
   if('ferdig' in req.body)
     req.body.ferdig = new Date(req.body.ferdig).getTime();
 
-  connection.query("INSERT INTO Gjoremalsliste SET ?", req.body, function(err, rows1, fields){
+  connection.query("INSERT INTO Gjoremal SET ?", req.body, function(err, rows1, fields){
 
     if(err){res.send(err); return next();}
   });

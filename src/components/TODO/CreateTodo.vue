@@ -31,7 +31,7 @@
 
 <script>
   import datepicker from 'vue-date-picker';
-
+  import axios from 'axios';
   export default {
     data() {
       return {
@@ -53,16 +53,24 @@
       },
       sendForm() {
 
-        axios.post('http://localhost:9000/rest/gjoremal/:id', {
-          navn: "",
-          start: new Date(),
-        })
-          .then(response => {
-            console.log(response)
-          })
-          .catch(error => {
-            console.log(error.response)
-          });
+        let todoList =
+          {
+            navn: "",
+            start: new Date(),
+            beskrivelse: "",
+            bruker_id: 1,
+            liste_id: 2,
+          };
+        console.dir(todoList);
+        axios.post('http://localhost:9000/rest/gjoremal/', todoList).then( response => {
+          alert('Legge til gjøremål ordnet!');
+          this.$emit('create-todo', todoList);
+          console.log("1");
+          router.push('todoList');
+        }).catch(err => {
+          console.log(JSON.stringify(err));
+        });
+
 
         if (this.titleText.length > 0  && this.beskrivelseText.length > 0) {
           const title = this.titleText;

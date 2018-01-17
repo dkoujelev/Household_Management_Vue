@@ -71,18 +71,18 @@
       };
     },
     methods: {
-/*
+
       completeTodo() {
         this.$emit('complete-todo', this.todo);
       },
-*/
+
 
       undoTodo: {
         undoTodo(){
           this.$emit('undo-todo', this.todo);
         }
       },
-
+/*
       completeTodo() {
         axios.post('http://localhost:9000/rest/gjoremal', this.todo, response => {
           this.$emit('complete-todo', this.todo); //gir beskjed til parrent komponent at "dette skjer"
@@ -90,8 +90,7 @@
           console.log(JSON.stringify(err));
         });
       },
-
-
+*/
 
       deleteTodo() {
         axios.delete('http://localhost:9000/rest/gjoremal/:gjoremal_id', this.todo, response => {
