@@ -18,7 +18,6 @@
 
 <script>
 
-  import Addnews from './Addnews';
   import axios from 'axios';
   import Vue from 'vue'
   import VueGoodTable from 'vue-good-table';
@@ -42,10 +41,6 @@
           {
             label: 'Når',
             field: 'nar',
-            type: 'date',
-            inputFormat: 'YYYYMMDD',
-            outputFormat: 'MMM Do YY',
-            html: true,
             filterable: false
           }
         ],

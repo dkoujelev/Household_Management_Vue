@@ -30,6 +30,10 @@ server.post('rest/melding',function(req,res,next){
 // Hent meldinger skrevet av en bruker
 server.get('rest/melding/sendt/bruker/:skrevet_av_bruker',function(req, res, next){
   connection.query("SELECT * FROM Melding WHERE skrevet_av_bruker=?", [req.params.skrevet_av_bruker], function(err, rows, fields){
+    for(let melding of rows){
+      if('sendt' in melding)
+        melding.sendt = new Date(melding.sendt);
+    }
     res.send(err ? err : rows);
     return next();
   });
