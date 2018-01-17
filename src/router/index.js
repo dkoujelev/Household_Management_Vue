@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
-import HelloWorld from '@/components/HelloWorld'
-import Test from '@/components/Test'
+import CreateGroup from '@/components/CreateGroup'
 import Task from '@/components/Task'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
@@ -15,7 +14,6 @@ import Shoppinglistshome from '@/components/home/Shoppinglistshome'
 import Shoppinglists from '@/components/Shoppinglists'
 import Addnews from '@/components/Addnews'
 import ShowExpences from '@/components/ShowExpences'
-import Utgifter from '@/components/Utgifter'
 import ShoppingList from '@/components/ShoppingList/ShoppingList'
 import TodoList from '@/components/TODO/TodoList'
 import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
@@ -30,11 +28,6 @@ export default new Router({
         component: Home
       },
       {
-        path: '/home',
-        name: 'Hjem',
-        component: Home
-      },
-      {
         path: '/Login',
         name: 'Login',
         component: Login
@@ -45,14 +38,9 @@ export default new Router({
         component: Register
       },
       {
-        path: '/HelloWorld',
-        name: 'HelloWorld',
-        component: HelloWorld
-      },
-      {
-        path: '/Test',
-        name: 'Test',
-        component: Test
+        path: '/CreateGroup',
+        name: 'CreateGroup',
+        component: CreateGroup
       },
       {
         path: '/Task',
@@ -103,11 +91,6 @@ export default new Router({
         path: '/ShowExpences',
         name: 'ShowExpences',
         component: ShowExpences
-      },
-      {
-        path: '/Utgifter',
-        name: 'Utgifter',
-        component: Utgifter
       },
       {
         path: '/ShoppingList',

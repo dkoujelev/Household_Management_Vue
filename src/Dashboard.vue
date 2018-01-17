@@ -8,17 +8,12 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-start">
-          <router-link class="navbar-item" to="/">Hjem</router-link>
-          <router-link class="navbar-item" to="/HelloWorld">Hello World!</router-link>
           <router-link class="navbar-item" to="/TodoList">Gjøremål</router-link>
-          <router-link class="navbar-item" to="/Login">Login</router-link>
-          <router-link class="navbar-item" to="/Register">Registrer deg</router-link>
-          <router-link class="navbar-item" to="/Test">Test!</router-link>
+          <router-link class="navbar-item" to="/CreateGroup">Opprett gruppe</router-link>
           <router-link class="navbar-item" to="/SeeAccounting">Regnskap</router-link>
           <router-link class="navbar-item" to="/Nyhetsfeed">Nyhet</router-link>
           <router-link class="navbar-item" to="/Shoppinglists">Handlelister</router-link>
           <router-link class="navbar-item" to="/AddCostRegister">Legg til kostnad</router-link>
-          <router-link class="navbar-item" to="/Utgifter">Utgifter</router-link>
           <router-link class="navbar-item" to="/ShowExpences">Utgifter</router-link>
         </div>
         <div class="navbar-end">
