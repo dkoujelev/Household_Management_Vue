@@ -23,8 +23,8 @@
       </tr>
       </tbody>
     </table>
-    <router-link class="button" to="/Addnews">Lag handleliste</router-link>
-    <Shoppinglist></Shoppinglist>
+    <router-link class="button" to="/ShoppingList">Lag handleliste</router-link>
+
   </div>
 </template>
 
