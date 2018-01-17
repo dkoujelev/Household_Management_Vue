@@ -1,7 +1,7 @@
 <template>
   <div class='ui basic content center aligned segment'>
-    <button class='ui basic button icon' v-on:click="openForm" v-show="!isCreating">
-      <i class='plus icon'></i>
+    <button class='button in-sucsess' @click="openForm" v-show="!isCreating">
+      <i class="fa fa-plus-circle" aria-hidden="true"></i>
     </button>
     <div class='ui centered card' v-show="isCreating">
       <div class='content'>
@@ -17,21 +17,20 @@
           <label>Beskrivelse</label>
           <input v-model="beskrivelseText" type='text'>
         </div>
-          <div class='ui two button attached buttons'>
-            <button class='ui basic blue button' v-on:click="sendForm()">
-              Opprett
-            </button>
-            <button class='ui basic red button' v-on:click="closeForm">
-              Avbryt
-            </button>
-          </div>
+        <button class='ui basic blue button' @click="sendForm()">
+          Opprett
+        </button>
+        <button class='ui basic red button' @click="closeForm">
+          Avbryt
+        </button>
+
         </div>
       </div>
     </div>
 </template>
 
 <script>
-  import datepicker from '/Datepicker.vue';
+  import datepicker from 'vue-date-picker';
 
   export default {
     data() {
@@ -53,7 +52,7 @@
         this.isCreating = false;
       },
       sendForm() {
-        if (this.titleText.length > 0 && this.projectText.length > 0 && this.beskrivelse > 0) {
+        if (this.titleText.length > 0 && this.projectText.length && this.beskrivelseText.length > 0) {
           const title = this.titleText;
           const project = this.projectText;
           const beskrivelse = this.beskrivelse;

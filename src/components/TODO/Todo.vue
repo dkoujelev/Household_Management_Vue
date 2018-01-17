@@ -33,7 +33,7 @@
         <label>Beskrivelse</label>
         <input type='text' v-model="todo.beskrivelse">
       </div>
-      <button class='ui secondary basic button' id="closeButton" v-on:click="hideForm">
+      <button class='ui secondary basic button' id="closeButton" @click="hideForm">
         Oppdater
       </button>
     </div>
@@ -41,7 +41,7 @@
   <div class='ui bottom attached green basic button' v-show="!isEditing && todo.done" disabled>
     Fullført
   </div>
-  <div class='ui bottom attached red basic button' v-on:click="completeTodo()" v-show="!isEditing && !todo.done">
+  <div class='ui bottom attached red basic button' @click="completeTodo()" v-show="!isEditing && !todo.done">
     Ventende
   </div>
 </div>
@@ -70,7 +70,6 @@
       };
     },
     methods: {
-
       completeTodo() {
         axios.post('http://localhost:9000/rest/gjoremal', this.todo, response => {
           this.$emit('complete-todo', this.todo);
@@ -102,8 +101,6 @@
 <style>
 
 .content{
-
   padding-top: 10px;
   }
-
 </style>
