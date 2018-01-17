@@ -20,7 +20,7 @@
           <router-link class="navbar-item" to="/ShowExpences">Utgifter</router-link>
         </div>
         <div class="navbar-end">
-          <SelectGroup :current_user="cur_user" @selected-group="selectedGroup"></SelectGroup>
+          <SelectGroup :current_user="current_user" @selected-group="selectedGroup"></SelectGroup>
           <a href="" class="navbar-item" @click.prevent="addingGroup=true">
             <i class="fa fa-plus"></i>
           </a>
@@ -33,8 +33,8 @@
       </div>
     </nav>
     <br/><br/>
-    <p>Innlogget bruker: {{cur_user}}</p>
-    <p>Aktiv gruppe: {{cur_group}}</p>
+    <p>Innlogget bruker: {{current_user.epost}}</p>
+    <p>Aktiv gruppe: {{current_group.navn}}</p>
     <router-view/>
   </div>
 </template>
@@ -67,19 +67,29 @@ export default {
   },
   data(){
       return {
+        current_user: {
+          "bruker_id": 1,
+          "epost": "sj@apple.com",
+          "fornavn": "Steve ",
+          "etternavn": "Jobs",
+          "tlf": "12345678",
+          "adresse": "California",
+          "hashed_passord": ""
+        },
+        current_group:{
+          "navn": "Testkollektiv 1",
+          "beskrivelse": "test",
+          "undergruppe_id": 1,
+          "kollektiv_id": 1,
+          "default_gruppe": 1
+        },
         addingGroup: false
       };
   },
   computed: {
       isLoggedIn(){
-          return (window.current_user != null);
-      },
-    cur_user(){
-      return ('current_user' in window) ? window.current_user.epost : '';
-    },
-    cur_group(){
-      return ('current_group' in window) ? window.current_group.navn : '';
-    }
+          return (this.current_user != null);
+      }
   }
 }
 </script>
