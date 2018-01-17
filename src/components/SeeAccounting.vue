@@ -35,7 +35,6 @@
         </tr>
         </tfoot>
       </table>
-          <router-link class="button" to="/AddExpence">Legg til utgift</router-link>
       <br>
       <br>
       </span>

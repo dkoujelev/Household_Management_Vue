@@ -62,11 +62,11 @@ server.post('rest/kostnad/', function (req, res, next) {
   if('opprettet' in kostnad)
     kostnad.opprettet = new Date(kostnad.opprettet).getTime();
 
-  connection.query('ISERT INTO Kostnad SET ?', [kostnad], function (err, rows, fields) {
+  connection.query('INSERT INTO Kostnad SET ?', [kostnad], function (err, rows, fields) {
     if(err)
       return next(err);
 
-    connection.query('SELECT bruker_id FROM Bruker_Undergruppe WHERE underuppe_id=?', req.body.undergruppe_id, function (err, rows, field) {
+    connection.query('SELECT bruker_id FROM Bruker_Undergruppe WHERE undergruppe_id=?', req.body.undergruppe_id, function (err, rows, field) {
       if(err)
         return next(err);
 

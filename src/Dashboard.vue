@@ -52,6 +52,19 @@ export default {
           this.current_group = group;
       }
   },
+  created(){
+      window.current_user={
+      "bruker_id": 1,
+        "epost": "sj@apple.com",
+        "fornavn": "Steve ",
+        "etternavn": "Jobs",
+        "tlf": "12345678",
+        "adresse": "California",
+        "hashed_passord": "",
+        "salt": ""
+    };
+      window.current_group= {navn: 'test', undergruppe_id: 1};
+  },
   data(){
       return {
           current_user:{

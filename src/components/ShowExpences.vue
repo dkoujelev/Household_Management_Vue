@@ -10,26 +10,16 @@
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <th>Helg</th>
-        <th>495.00</th>
-        <th><button class="button">Se kvittering</button></th>
-      </tr>
-      <tr>
-        <th>Mat hverdag</th>
-        <th>495.00</th>
-        <th><button class="button">Se kvittering</button></th>
-      </tr>
-      <tr>
-        <th>Renhold</th>
-        <th>495.00</th>
+      <tr v-for="row in rows">
+        <th>{{row.tittel}}</th>
+        <th>{{row.sum}}</th>
         <th><button class="button">Se kvittering</button></th>
       </tr>
       </tbody>
       <tfoot>
       <tr>
         <th>Total</th>
-        <th>1485.00</th>
+        <th>{{totalsum}}</th>
       </tr>
       </tfoot>
     </table>
@@ -40,6 +30,9 @@
 </template>
 
 <script>
+
+  import axios from 'axios';
+
   export default {
     name: 'ShowExpences',
 
@@ -71,19 +64,25 @@
     },
     mounted(){
       this.fillRows();
+      console.log(window.test);
     },
     methods: {
       fillRows(){
-        axios.get('http://localhost:9000/rest/melding/sendt/bruker/1').then(response => {
-          let resRows = response.data;
-          for(let i = 0; i < resRows.length; i++){
-            let obj = {tittel: resRows[i].overskrift, sum: resRows[i].tekst, kvittering: resRows[i].button};
-            this.rows.push(obj);
-          }
+        axios.get('http://localhost:9000/rest/kostnaderForUndergruppe/1').then(response => {
+          this.rows = response.data;
         }).catch(err => {
           console.log(err);
         });
       }
+    },
+    computed:{
+        totalsum(){
+            let sum = 0;
+            for(let row of this.rows){
+                sum += row.sum;
+            }
+            return sum;
+        }
     }
   }
 </script>
