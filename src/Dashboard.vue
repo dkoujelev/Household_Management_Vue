@@ -18,15 +18,26 @@
           <a class="navbar-item" v-if="loggedIn" @click.prevent="logOut">Logg ut</a>
         </div>
         <div class="navbar-end" v-if="loggedIn" >
-          <SelectGroup :current_user="current_user" @selected-group="selectedGroup"></SelectGroup>
+          <SelectGroup :current_user="current_user" @selected-group="selectedGroup" ref="SelectGroup"></SelectGroup>
+
+          <a href="" class="navbar-item" @click.prevent="addingCollective=true">
+            <i class="fa fa-plus"></i>
+          </a>
+          <div class="modal" v-bind:class="{'is-active' : addingCollective}" transition="zoom">
+            <div class="content has-text-centered">
+              <AddCollective :current_user="current_user" @cancel="addingCollective=false" @added-collective="addedCollective"></AddCollective>
+            </div>
+          </div>
+
           <a href="" class="navbar-item" @click.prevent="addingGroup=true">
             <i class="fa fa-plus"></i>
           </a>
-          <div class="modal" v-bind:class="{'is-active' : addingGroup}" @blur="console.log('blurring'); addingGroup=false" transition="zoom">
+          <div class="modal" v-bind:class="{'is-active' : addingGroup}" transition="zoom">
             <div class="content has-text-centered">
-              <AddCollective :current_user="current_user" @cancel="addingGroup=false"></AddCollective>
+              <addGroup :current_group="current_group" :current_user="current_user" @cancel="addingGroup=false" @added-group="addedGroup"></addGroup>
             </div>
           </div>
+
         </div>
       </div>
     </nav>
@@ -41,15 +52,24 @@
 
   import SelectGroup from '@/components/SelectGroup';
   import AddCollective from '@/components/AddCollective';
+  import AddGroup from '@/components/AddGroup';
   import router from '@/router/index.js';
 
 export default {
   name: 'dashboard',
-  components: {SelectGroup, AddCollective},
+  components: {SelectGroup, AddCollective, AddGroup},
   methods:{
       selectedGroup(group){
           this.current_group = group;
       },
+    addedGroup(group){
+      this.$refs.SelectGroup.loadGroups();
+      this.addingGroup = false;
+    },
+    addedCollective(collective){
+      this.$refs.SelectGroup.loadGroups();
+      this.addingCollective = false;
+    },
     logOut(){
         this.loggedIn=false;
         router.push('Login');
@@ -87,6 +107,7 @@ export default {
           "kollektiv_id": 1,
           "default_gruppe": 1
         },
+        addingCollective: false,
         addingGroup: false
       };
   }
