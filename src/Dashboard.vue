@@ -10,7 +10,7 @@
         <div class="navbar-start">
           <router-link class="navbar-item" to="/">Hjem</router-link>
           <router-link class="navbar-item" to="/HelloWorld">Hello World!</router-link>
-          <router-link class="navbar-item" to="/Task">Gjøremål</router-link>
+          <router-link class="navbar-item" to="/TodoList">Gjøremål</router-link>
           <router-link class="navbar-item" to="/Login">Login</router-link>
           <router-link class="navbar-item" to="/Register">Registrer deg</router-link>
           <router-link class="navbar-item" to="/Test">Test!</router-link>

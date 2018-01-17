@@ -20,6 +20,7 @@
   import VueGoodTable from 'vue-good-table';
   Vue.use(VueGoodTable);
   import Shoppinglist from '../ShoppingList/ShoppingList'
+  import router from '../../router/index'
 
 
   export default {
