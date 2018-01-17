@@ -9,18 +9,13 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-start">
-          <router-link class="navbar-item" to="/">Hjem</router-link>
-          <router-link class="navbar-item" to="/HelloWorld">Hello World!</router-link>
-          <router-link class="navbar-item" to="/TodoList">Gjøremål</router-link>
-          <router-link class="navbar-item" to="/Login">Login</router-link>
-          <router-link class="navbar-item" to="/Register">Registrer deg</router-link>
-          <router-link class="navbar-item" to="/Test">Test!</router-link>
-          <router-link class="navbar-item" to="/SeeAccounting">Regnskap</router-link>
-          <router-link class="navbar-item" to="/Nyhetsfeed">Nyhet</router-link>
-          <router-link class="navbar-item" to="/Shoppinglists">Handlelister</router-link>
-          <router-link class="navbar-item" to="/AddCostRegister">Legg til kostnad</router-link>
-          <router-link class="navbar-item" to="/Utgifter">Utgifter</router-link>
-          <router-link class="navbar-item" to="/ShowExpences">Utgifter</router-link>
+          <router-link class="navbar-item" v-if="loggedIn" to="/TodoList">Gjøremål</router-link>
+          <router-link class="navbar-item" v-if="!loggedIn" to="/Login">Login</router-link>
+          <router-link class="navbar-item" v-if="!loggedIn" to="/Register">Registrer deg</router-link>
+          <router-link class="navbar-item" v-if="loggedIn" to="/Nyhetsfeed">Nyhet</router-link>
+          <router-link class="navbar-item" v-if="loggedIn" to="/Shoppinglists">Handlelister</router-link>
+          <router-link class="navbar-item" v-if="loggedIn" to="/Utgifter">Utgifter</router-link>
+          <router-link class="navbar-item" v-if="loggedIn" to="/ShowExpences">Utgifter</router-link>
         </div>
         <div class="navbar-end" v-if="loggedIn" >
           <SelectGroup :current_user="current_user" @selected-group="selectedGroup" ref="SelectGroup"></SelectGroup>
@@ -46,10 +41,13 @@
         </div>
       </div>
     </nav>
-    <br/><br/>
-    <p v-if="loggedIn">Innlogget bruker: {{current_user.epost}}</p>
-    <p v-if="loggedIn">Aktiv gruppe: {{current_group.navn}}</p>
-    <router-view/>
+    <br/><br/><br/>
+
+    <div class="container">
+      <p v-if="loggedIn">Innlogget bruker: {{current_user.epost}}</p>
+      <p v-if="loggedIn">Aktiv gruppe: {{current_group.navn}}</p>
+      <router-view/>
+    </div>
   </div>
 </template>
 
