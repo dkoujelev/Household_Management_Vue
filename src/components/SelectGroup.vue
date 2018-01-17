@@ -17,16 +17,20 @@
   export default {
     props: ['current_user'],
       mounted(){
-          console.log('loadin groups for user ' + this.current_user.epost);
-          axios.get('http://localhost:9000/rest/undergrupperForBruker/' + this.current_user.bruker_id).then(response => {
-            this.groups = response.data;
-          }).catch(err => {
-          });
       },
     data(){
           return {
               groups: [],
           };
+    },
+    watch:{
+      current_user: function(newVal, oldVal){
+        console.log('loadin groups for user ' + this.current_user.epost);
+        axios.get('http://localhost:9000/rest/undergrupperForBruker/' + this.current_user.bruker_id).then(response => {
+            this.groups = response.data;
+          }).catch(err => {
+        });
+      }
     }
   };
 </script>
