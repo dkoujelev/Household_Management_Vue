@@ -5,9 +5,7 @@
     <Todo v-on:delete-todo="deleteTodo" v-on:complete-todo="completeTodo" v-for="todo in todos" :key="todo.id" :todo.sync="todo"></Todo>
     <create-todo v-on:create-todo="createTodo"></create-todo>
    <!-- <todo-list v-bind:todos="todos"></todo-list> -->
-
   </div>
-
 
 </template>
 
@@ -24,22 +22,7 @@
           project: 'Project A',
           beskrivelse: '',
           done: false,
-        }, {
-          title: 'Todo B',
-          project: 'Project B',
-          beskrivelse: '',
-          done: true,
-        }, {
-          title: 'Todo C',
-          project: 'Project C',
-          beskrivelse: '',
-          done: false,
-        }, {
-          title: 'Todo D',
-          project: 'Project D',
-          beskrivelse: '',
-          done: false,
-        }]
+        }, ]
       }
       },
 
@@ -67,8 +50,10 @@
         const todoIndex = this.todos.indexOf(todo);
         this.todos[todoIndex].done = true;
         swal('Success!', 'Gjøremål gjort!', 'success');
-        console.log();
-        alert('hei');
+      },
+
+      deleteTodo (index) {
+        this.$delete(this.todos, index)
       },
 
       createTodo(newTodo) {

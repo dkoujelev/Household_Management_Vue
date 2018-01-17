@@ -15,6 +15,7 @@ import Shoppinglists from '@/components/Shoppinglists'
 import Addnews from '@/components/Addnews'
 import Paging from  '@/components/Paging'
 import Utgifter from '@/components/Utgifter'
+import TodoList from '@/components/TODO/TodoList'
 
 
 
@@ -101,6 +102,11 @@ export default new Router({
       path: '/Utgifter',
       name: 'Utgifter',
       component: Utgifter
+    },
+    {
+      path: '/TodoList',
+      name: 'TodoList',
+      component: TodoList
     }
   ]
 })
