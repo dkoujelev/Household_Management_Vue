@@ -1,6 +1,7 @@
 let server = require("../server");
 let connection = require("../connection");
 let bcrypt = require('bcrypt');
+let auth = require('../auth.js');
 
 // Hent en bestemt bruker
 server.get('rest/bruker/:bruker_id',function(req, res, next){
@@ -87,16 +88,23 @@ server.put('rest/bruker',function(req,res,next){
 server.post('rest/login',function(req,res,next){
   connection.query("SELECT hashed_passord FROM Bruker WHERE epost=?", [req.body.epost], function(err, rows, fields){
 
+    console.log(req.cookies.sessionId);
+
     if(rows.length >= 1){ //                                  Check if there even is a user with this email
       let passord = [req.body.passord] + ""; //               Load password from request (and force to proper string by adding + "")
       let hashed_passord = rows[0].hashed_passord //          Get the hash returned from DB
 
       if(bcrypt.compareSync(passord, hashed_passord)) { //    Compare the password to the hash
         // Passwords match
+
+        let session = auth.newSession(req.body);
+
         res.send({passwordMatch: true}); //                   Log in the user... (But for now, just tell the GUI it's all good!)
         return next();
        } else {
         // Passwords don't match
+
+        res.setCookie('sessionId',auth.generate_sessionId());
         res.send({passwordMatch: false}); //                  Tell the GUI that the password was no good!
         return next();
        }
