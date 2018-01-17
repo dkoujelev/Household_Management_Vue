@@ -38,10 +38,10 @@ server.get('rest/gjoremalsliste/:undergruppe_id',function(req, res, next){
     if(err || rows.length != 1)
       return next(err);
     let liste = [rows.length];
-    for(let i = 0; i < rows.length; i++){
+    for(gjoremalsliste in rows){
       liste = rows[i];
-      if('opprettet' in liste)
-        liste.opprettet = new Date(liste.opprettet);
+      if('opprettet' in gjoremalsliste)
+        rows.opprettet = new Date(rows.opprettet);
     }
 
     connection.query("SELECT Gjoremalsliste.*, Gjoremal.navn as gjoremal, Gjoremal.start, Gjoremal.frist, Gjoremal.ferdig," +
@@ -85,7 +85,7 @@ server.post('rest/gjoremalsliste/:undergruppe_id',function(req, res, next){
   let liste = Object.assign({}, req.body);
 
   if('gjoremal' in liste)
-    delete iste.gjoremal;
+    delete liste.gjoremal;
 
   if('opprettet' in liste)
     liste.opprettet = new Date(liste.opprettet).getTime();
