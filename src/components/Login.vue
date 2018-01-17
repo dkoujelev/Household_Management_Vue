@@ -80,6 +80,7 @@
             } else{
               this.login_info.epost = "";
               this.login_info.passord = "";
+              window.current_user = response.data;
               router.push('home');
             }
           }).catch(err => {

@@ -15,9 +15,8 @@
   import axios from 'axios';
 
   export default {
-      props:['current_user'],
       created(){
-          axios.get('http://localhost:9000/rest/undergrupperForBruker/' + this.current_user.bruker_id).then(response => {
+          axios.get('http://localhost:9000/rest/undergrupperForBruker/' + window.current_user.bruker_id).then(response => {
             this.groups = response.data;
           }).catch(err => {
           });

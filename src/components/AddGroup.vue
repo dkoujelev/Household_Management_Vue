@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <h1 class="title">Opprett gruppe i {{current_collective.navn}}</h1>
+    <h1 class="title">Opprett gruppe i {{cur_collective_name}}</h1>
     <div class="field">
       <label for="name" class="label">Navn</label>
       <div class="control">
@@ -24,7 +24,6 @@
   import axios from 'axios';
 
   export default {
-      props:['current_user', 'current_collective'],
       data(){
           return {
             group:{default_gruppe:false},
@@ -32,7 +31,7 @@
           };
       },
       created(){
-        this.group.kollektiv_id = this.current_collective.kollektiv_id;
+        this.group.kollektiv_id = window.current_group.kollektiv_id;
         axios.get('http://localhost:9000/rest/undergruppe').then(response => {
             this.groups = response.data;
         }).catch(err => {
@@ -41,7 +40,7 @@
       },
       methods:{
           addGroup(){
-            axios.post('http://localhost:9000/rest/undergruppe/' + this.current_user.bruker_id,this.group).then(response => {
+            axios.post('http://localhost:9000/rest/undergruppe/' + window.current_user.bruker_id,this.group).then(response => {
               let newGroup = {};
               newGroup.navn = this.group.navn;
               newGroup.beskrivelse = this.group.beskrivelse;
@@ -51,7 +50,12 @@
               console.log(err);
             });
           }
+      },
+    computed: {
+        cur_collective_name(){
+          return 'Kollektivnavn her'; //TODO: FIX
       }
+    }
   };
 </script>
 <style></style>
