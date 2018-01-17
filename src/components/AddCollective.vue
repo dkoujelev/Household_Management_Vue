@@ -24,6 +24,7 @@
 
   export default {
       name: 'AddCollective',
+      props: ['current_user'],
       data(){
           return {
               collectives:[],
@@ -39,7 +40,7 @@
     },
     methods: {
       addCollective(){
-        axios.post('http://localhost:9000/rest/kollektiv/' + window.current_user.bruker_id,this.collective).then(response => {
+        axios.post('http://localhost:9000/rest/kollektiv/' + this.current_user.bruker_id,this.collective).then(response => {
             let newCollective = {};
             newCollective.navn = this.collective.navn;
             newCollective.beskrivelse = this.collective.beskrivelse;
