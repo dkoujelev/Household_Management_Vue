@@ -1,6 +1,5 @@
 let server = require("../server");
 let connection = require("../connection");
-let auth = require("../auth.js");
 
 // Hent en bestemt bruker
 server.get('rest/bruker/:bruker_id',function(req, res, next){
@@ -20,6 +19,26 @@ server.get('rest/bruker/:epost',function(req, res, next){
 
 // Legg til bruker
 server.post('rest/bruker/',function(req,res,next){
+// console.log('---------------------------------------------------------------');
+// console.log('Hashing: "p@a55w0rD!"');
+// let testPass = 'p@a55w0rD!';
+// let testHash = bcrypt.hashSync(testPass,10);
+// console.log('Result: ' + testHash);
+// console.log('---------------------------------------------------------------');
+// console.log('Validating password...');
+// if(bcrypt.compareSync(testPass, testHash)) {
+//   // Passwords match
+//   console.log("MATCH!");
+//  } else {
+//   // Passwords don't match
+//   console.log("FAIL!");
+//  }
+//  console.log('---------------------------------------------------------------');
+
+  let passord = [req.body.hashed_passord] + ""; //            Get the clear text password from the request body. (The + "" is apparently needed for bcrypt to read the data as a proper string.)
+  let hash = bcrypt.hashSync(passord,10); //                  Hashing the password 10 times
+  req.body.hashed_passord=hash; //                            Re-inserting the hashed value into the request body
+
   connection.query("INSERT INTO Bruker SET ?", req.body, function(err, rows, fields){
     res.send(err ? err : rows);
     return next();
@@ -36,7 +55,9 @@ server.get('rest/bruker/',function(req, res, next){
 
 // Sjekke om en epost er registrert
 server.get('rest/brukerepost/:epost',function(req, res, next){
+  console.log('Checking if the email already exists...');
   connection.query("SELECT * FROM Bruker WHERE epost=?", [req.params.epost], function(err, rows, fields){
+    console.log('Exists: ' + (rows.length == 1));
     res.send({exists: rows.length == 1});
     return next();
   });
@@ -61,52 +82,26 @@ server.put('rest/bruker',function(req,res,next){
   });
 });
 
-
-
-// Logg inn bruker
+// Login
 server.post('rest/login',function(req,res,next){
-  connection.query("SELECT * FROM Bruker WHERE epost=?", [req.body.epost], function(err, rows, fields){
+  connection.query("SELECT hashed_passord FROM Bruker WHERE epost=?", [req.body.epost], function(err, rows, fields){
 
-    if(err)
-      return next(err);
+    if(rows.length >= 1){ //                                  Check if there even is a user with this email
+      let passord = [req.body.passord] + ""; //               Load password from request (and force to proper string by adding + "")
+      let hashed_passord = rows[0].hashed_passord //          Get the hash returned from DB
 
-    if(rows.length == 0){
-      // User doesn't exist;
-      console.log('user ' + req.body.epost + ' doesn\'t exist!');
-      res.send(null);
+      if(bcrypt.compareSync(passord, hashed_passord)) { //    Compare the password to the hash
+        // Passwords match
+        res.send({passwordMatch: true}); //                   Log in the user... (But for now, just tell the GUI it's all good!)
+        return next();
+       } else {
+        // Passwords don't match
+        res.send({passwordMatch: false}); //                  Tell the GUI that the password was no good!
+        return next();
+       }
+    }else{ //                                                 apparently; there was no user with this email
+      res.send({passwordMatch: false}); //                    Tell the GUI that the password was no good!
       return next();
-    }
-
-    let bruker = rows[0];
-
-    console.log("seessions: " + JSON.stringify(auth.sessions));
-    console.log("cookies: " + JSON.stringify(req.cookies));
-
-    // User already logged in.
-    if(auth.getSession(req.cookies['sessionId'])){
-      console.log('user ' + bruker.epost + ' already logged in');
-      res.send(bruker);
-      return next();
-    }
-
-    //INSERT PASWORD CHECK W/HASHING HERE
-    let passwordMatch = (bruker.hashed_passord === req.body.passord);
-
-    if(passwordMatch){
-      console.log('creating session for user ' + bruker.epost);
-
-      res.setCookie('sessionId', auth.newSession(bruker));
-
-      res.send(bruker);
-      return next();
-
-    }
-    else{
-      console.log('wrong password for user ' + req.body.epost);
-      res.send(null);
-      next();
-    }
-
-
+    };
   });
 });

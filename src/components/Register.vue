@@ -38,7 +38,7 @@
               </p>
               <p class="help is-danger">{{this.errorMessages.passwordMissmatch}}</p>
               <p class="control has-icon">
-                <input class="input" type="password" placeholder="Gjenta passord" v-model="gjentaPassord">
+                <input class="input" type="password" placeholder="Gjenta passord" @keyup.enter="passMatch" v-model="gjentaPassord">
                 <span class="icon is-small">
                 <i class="fa fa-lock"></i>
               </span>
@@ -70,8 +70,7 @@
           epost: '',
           fornavn: '',
           etternavn: '',
-          hashed_passord: '',
-          salt: ''
+          hashed_passord: ''
         },
         passord: '',
         gjentaPassord: '',
