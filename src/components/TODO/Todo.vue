@@ -55,7 +55,7 @@
     data() {
 
       return {
-
+/*
         todo: {
           gjoremal_id: 1,
           navn: "",
@@ -66,22 +66,31 @@
           bruker_id: 2,
           liste_id: 5
       },
+        */
         isEditing: false,
       };
     },
     methods: {
+
       completeTodo() {
         this.$emit('complete-todo', this.todo);
       },
-      /*
-      completeTodo(todo) {
-        axios.post('http://localhost:9000/rest/gjoremal', todo, response => {
-          this.$emit('complete-todo', todo); //gir beskjed til parrent komponent at "dette skjer"
+
+
+      undoTodo: {
+        undoTodo(){
+          this.$emit('undo-todo', this.todo);
+        }
+      },
+/*
+      completeTodo() {
+        axios.post('http://localhost:9000/rest/gjoremal', this.todo, response => {
+          this.$emit('complete-todo', this.todo); //gir beskjed til parrent komponent at "dette skjer"
         }).catch(err => {
           console.log(JSON.stringify(err));
         });
       },
-      */
+*/
 
 
       deleteTodo() {
