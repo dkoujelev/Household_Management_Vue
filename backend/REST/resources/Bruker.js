@@ -1,10 +1,18 @@
 let server = require("../server");
 let connection = require("../connection");
-const bcrypt = require('bcrypt'); //Note: Changing the number of rounds from 10 to a much higher number makes bcrypt think youre using a salt instead!
+let bcrypt = require('bcrypt');
 
 // Hent en bestemt bruker
 server.get('rest/bruker/:bruker_id',function(req, res, next){
   connection.query("SELECT * FROM Bruker WHERE bruker_id=?", [req.params.bruker_id], function(err, rows, fields){
+    res.send(err ? err : (rows.length == 1 ? rows[0] : null));
+    return next();
+  });
+});
+
+// Finn bruker med bestemt epost
+server.get('rest/bruker/:epost',function(req, res, next){
+  connection.query("SELECT * FROM Bruker WHERE epost=?", [req.params.epost], function(err, rows, fields){
     res.send(err ? err : (rows.length == 1 ? rows[0] : null));
     return next();
   });
@@ -95,6 +103,6 @@ server.post('rest/login',function(req,res,next){
     }else{ //                                                 apparently; there was no user with this email
       res.send({passwordMatch: false}); //                    Tell the GUI that the password was no good!
       return next();
-    };    
+    };
   });
 });

@@ -16,6 +16,7 @@ import Addnews from '@/components/Addnews'
 import Paging from  '@/components/Paging'
 import Utgifter from '@/components/Utgifter'
 import ShoppingList from '@/components/ShoppingList/ShoppingList'
+import TodoList from '@/components/TODO/TodoList'
 
 
 Vue.use(Router);
@@ -103,11 +104,14 @@ export default new Router({
       component: Utgifter
     },
     {
-
       path: '/ShoppingList',
       name: 'ShoppingList',
       component: ShoppingList
+    },
+    {
+      path: '/TodoList',
+      name: 'TodoList',
+      component: TodoList
     }
-
   ]
 })
