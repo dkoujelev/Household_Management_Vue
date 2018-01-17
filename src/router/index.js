@@ -97,5 +97,10 @@ export default new Router({
       name: 'Paging',
       component: Paging
     },
+    {
+      path: '/ShoppingList',
+      name: 'ShoppingList',
+      component: ShoppingList
+    },
   ]
 })

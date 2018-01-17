@@ -28,9 +28,8 @@
                       <i class="fa fa-trash-o" aria-hidden="true"></i>
                     </button>
                     <div>
-                      {{row.antall}}
+                      <button class="button is-success">{{row.antall}}</button>
                     </div>
-
                 </div>
               </div>
 
