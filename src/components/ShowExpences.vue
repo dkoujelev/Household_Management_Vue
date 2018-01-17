@@ -44,7 +44,46 @@
     name: 'ShowExpences',
 
     data(){
-
+      return {
+        columns: [
+          {
+            label: 'Tittel',
+            field: 'tittel',
+            filterable: true,
+            placeholder: "Søk"
+          },
+          {
+            label: 'Sum',
+            field: 'sum',
+            type: 'number',
+            html: false,
+            sortable: true,
+            filterable: false
+          },
+          {
+            label: 'Kvittering',
+            field: 'kvittering',
+            filterable: false
+          }
+        ],
+        rows: []
+      };
     },
+    mounted(){
+      this.fillRows();
+    },
+    methods: {
+      fillRows(){
+        axios.get('http://localhost:9000/rest/melding/sendt/bruker/1').then(response => {
+          let resRows = response.data;
+          for(let i = 0; i < resRows.length; i++){
+            let obj = {tittel: resRows[i].overskrift, sum: resRows[i].tekst};
+            this.rows.push(obj);
+          }
+        }).catch(err => {
+          console.log(err);
+        });
+      }
+    }
   }
 </script>
