@@ -1,7 +1,9 @@
 <template>
   <div>
     <Newsfeedhome></Newsfeedhome>
+    <div></div>
     <Taskhome></Taskhome>
+    <div></div>
     <Shoppinglistshome></Shoppinglistshome>
   </div>
 

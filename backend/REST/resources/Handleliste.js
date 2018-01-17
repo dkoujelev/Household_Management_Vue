@@ -3,9 +3,7 @@ let connection = require("../connection");
 
 // Hent en fullstendig handleliste
 server.get('rest/handleliste/:handleliste_id',function(req, res, next){
-  console.log("henter handleliste 1");
   connection.query("SELECT * FROM Handleliste WHERE handleliste_id=?", [req.params.handleliste_id], function(err, rows, fields){
-    console.log("inni første sql");
     if(err || rows.length != 1)
       return next(err);
 
@@ -20,7 +18,6 @@ server.get('rest/handleliste/:handleliste_id',function(req, res, next){
 
     connection.query("SELECT Vare.* FROM Vare " +
       "INNER JOIN Handleliste ON Vare.handleliste_Id=Handleliste.handleliste_id WHERE Handleliste.handleliste_id=?", req.params.handleliste_id, function(err, rows, fields){
-      console.log("inni andre sql");
         if(err)
           return next(err);
 

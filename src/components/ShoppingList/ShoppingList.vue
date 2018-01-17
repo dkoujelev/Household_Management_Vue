@@ -6,9 +6,10 @@
           <article class="tile is-child notification">
             <div class="container is-fluid">
               <div class="field">
-                <label class="label">Navn å vareliste</label>
+                <label class="label">Navn å handleliste</label>
+                <p class="help is-danger">{{this.errorMessages.overskrift}}</p>
                 <div class="control">
-                  <input class="input" type="text" placeholder="Text input" value="">
+                  <input class="input" type="text" placeholder="Text input" v-model="name">
                 </div>
               </div>
 
@@ -40,14 +41,12 @@
               </div>
             </div>
             <div class="field">
-              <label class="label">Message</label>
-              <div class="control">
-                <textarea class="textarea" placeholder="Textarea"></textarea>
-              </div>
             </div>
             <div class="control">
-              <button class="button is-link" @click="sendData">Godkjenn</button>
-              <button class="button is-danger" @click="">Slett handleliste</button>
+              <button class="button is-link" v-on:click="checkInput">Godkjenn</button>
+              <button class="button is-danger"  @click="">Slett handleliste</button>
+              <router-link class="button" to="/Shoppinglists">Avbrytt</router-link>
+
             </div>
           </article>
         </div>
@@ -65,16 +64,22 @@
   //metode som inneholder et objekt som returnern data
 
   import axios from 'axios';
+  import router from '../../router/index'
+  import Shoppinglists from '../Shoppinglists';
 
   export default {
 
 
     data() {
       return {
-        name: "handle",
+        name: "",
         rows: [
           {navn: "", antall: 1},
-        ]
+        ],
+        errorMessages: {
+          overskrift: '',
+          tekst: ''
+        }
       }
     },
     methods: {
@@ -96,20 +101,31 @@
         {
           navn: this.name,
           opprettet: new Date(),
-          frist: null,
           beskrivelse: "",
           undergruppe_id: 2, //Må leses inn fra komponent (foreldre som inneholder)
-          handling_utfort: null,
           varer: this.rows
         };
         console.dir(shoppinglist);
 
-        axios.post('http://localhost:9000/rest/handleliste', shoppinglist, response => {
+        axios.post('http://localhost:9000/rest/handleliste', shoppinglist).then( response => {
           alert('handleliste lagt inn!');
+          this.$emit('added-shoppinglist', shoppinglist);
+          console.log("1");
+          router.push('Shoppinglists');
         }).catch(err => {
           console.log(JSON.stringify(err));
         });
 
+      },
+      checkInput() {
+        let noErrors = true;
+        this.errorMessages.name = '';
+        if (this.name === "") {
+          console.log("1");
+          this.errorMessages.overskrift = 'Meldingen må ha en overskift';
+          noErrors = false;
+        }
+        if (noErrors) this.sendData();
       }
     }
   }

@@ -17,7 +17,11 @@ let connection = require("../connection");
 
 // Sende melding til bruker eller kollektiv
 server.post('rest/melding',function(req,res,next){
-  connection.query("INSERT INTO Melding SET ?", req.body, function(err, rows, fields){
+  let melding = Object.assign({}, req.body);
+  if('sendt' in melding)
+    melding.sendt = new Date(melding.sendt).getTime();
+
+  connection.query("INSERT INTO Melding SET ?", [melding], function(err, rows, fields){
     res.send(err ? err : rows);
     return next();
   });
@@ -41,7 +45,11 @@ server.get('rest/melding/motta/bruker/:sendt_til_bruker',function(req, res, next
 
 // Hente meldinger til et kollektiv
 server.get('rest/melding/motta/kollektiv/:sendt_til_kollektiv',function(req, res, next){
-  connection.query("SELECT * FROM Melding WHERE sendt_til_kollektiv=?", [req.params.sendt_til_kollektiv], function(err, rows, fields){
+  connection.query("SELECT * FROM Melding WHERE sendt_til_kollektiv=? ORDER BY sendt DESC", [req.params.sendt_til_kollektiv], function(err, rows, fields){
+    for(let melding of rows){
+      if('sendt' in melding)
+        melding.sendt = new Date(melding.sendt);
+    }
     res.send(err ? err : rows);
     return next();
   });

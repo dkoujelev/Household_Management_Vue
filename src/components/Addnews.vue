@@ -12,28 +12,24 @@
           <p class="control">
             <textarea class="textarea" placeholder="Skriv nyhet her" v-model="melding.tekst"></textarea>
           </p>
-
-
         <div class="block">
           <nav class="level">
             <!-- left side -->
             <div class="level-left">
-              <p class="level-item"><a class="button is-primary" v-on:click="checkInput">Post nyhet</a></p>
+              <p class="level-item"><a class="button is-primary" v-on:click="checkInput" to="/Nyhetsfeed">Post nyhet</a></p>
             </div>
 
             <!-- right side -->
             <div class="level-right">
               <div class="level-item">
-                <p class="level-item"><a class="button is-danger">Avbryt</a></p>
+                <p class="level-item">
+                  <router-link class="button is-danger" to="/Nyhetsfeed">Avbryt</router-link>
+                </p>
+
               </div>
             </div>
           </nav>
         </div>
-
-
-
-
-
       </div>
     </div>
   </div>
@@ -41,6 +37,7 @@
 
 <script>
   import axios from 'axios';
+  import router from '../router/index'
 
   export default {
     name: 'Addnews',
@@ -61,12 +58,14 @@
     methods: {
       addNews() {
         console.log("3");
+        this.melding.sendt = new Date();
         axios.post('http://localhost:9000/rest/melding', this.melding).then(response => {
           console.log("4");
           this.$emit('added-news', this.melding);
           this.melding.tekst = "";
           this.melding.overskrift = "";
           alert("denne meldingen er sendt");
+          router.push('nyhetsfeed');
         }).catch(err => {
           console.log(err);
         });

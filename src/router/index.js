@@ -15,10 +15,14 @@ import Shoppinglistshome from '@/components/home/Shoppinglistshome'
 import Shoppinglists from '@/components/Shoppinglists'
 import Addnews from '@/components/Addnews'
 import ShowExpences from '@/components/ShowExpences'
-import Paging from  '@/components/Paging'
 import Utgifter from '@/components/Utgifter'
+import ShoppingList from '@/components/ShoppingList/ShoppingList'
+import TodoList from '@/components/TODO/TodoList'
+import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
 
-Vue.use(Router)
+
+Vue.use(Router);
+
 
 export default new Router({
   routes: [
@@ -106,6 +110,21 @@ export default new Router({
       path: '/Utgifter',
       name: 'Utgifter',
       component: Utgifter
+    },
+    {
+      path: '/ShoppingList',
+      name: 'ShoppingList',
+      component: ShoppingList
+    },
+    {
+      path: '/TodoList',
+      name: 'TodoList',
+      component: TodoList
+    },
+    {
+      path: '/ViewShoppingList',
+      name: 'ViewShoppingList',
+      component: ViewShoppingList
     }
   ]
 })
