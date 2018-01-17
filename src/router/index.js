@@ -16,7 +16,7 @@ import Shoppinglists from '@/components/Shoppinglists'
 import Addnews from '@/components/Addnews'
 import ShowExpences from '@/components/ShowExpences'
 import Paging from  '@/components/Paging'
-import ShoppingList from '@/components/ShoppingList/ShoppingList'
+import Utgifter from '@/components/Utgifter'
 
 Vue.use(Router)
 
@@ -102,5 +102,10 @@ export default new Router({
       name: 'ShowExpences',
       component: ShowExpences
     },
+    {
+      path: '/Utgifter',
+      name: 'Utgifter',
+      component: Utgifter
+    }
   ]
 })
