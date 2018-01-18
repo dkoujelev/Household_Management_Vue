@@ -46,16 +46,6 @@ export default new Router({
         component: Register
       },
       {
-        path: '/HelloWorld',
-        name: 'HelloWorld',
-        component: HelloWorld
-      },
-      {
-        path: '/Test',
-        name: 'Test',
-        component: Test
-      },
-      {
         path: '/Task',
         name: 'Task',
         component: Task
