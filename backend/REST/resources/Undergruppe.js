@@ -1,6 +1,7 @@
 let server = require("../server");
 let connection = require("../connection");
 
+// Hent en spesifikk undergruppe
 server.get('rest/undergruppe/:undergruppe_id',function(req, res, next){
   connection.query("SELECT * FROM Undergruppe WHERE undergruppe_id=?", [req.params.undergruppe_id], function(err, rows, fields){
     res.send(err ? err : (rows.length == 1 ? rows[0] : null));
@@ -8,12 +9,30 @@ server.get('rest/undergruppe/:undergruppe_id',function(req, res, next){
   });
 });
 
+// Hent alle undergrupper
 server.get('rest/undergruppe/',function(req, res, next){
   connection.query("SELECT * FROM Undergruppe", function(err, rows, fields){
     res.send(err ? err : rows);
     return next();
   });
 });
+
+// Hent undergrupper til ett spesifikt kollektiv
+server.get('rest/undergrupperForKollektiv/:kollektiv_id',function(req, res, next){
+  connection.query("SELECT * FROM Undergruppe WHERE kollektiv_id=?", req.params.kollektiv_id, function(err, rows, fields){
+    res.send(err ? err : rows);
+    return next();
+  });
+});
+
+// Hent hovedgruppen til ett spesifikt kollektiv
+server.get('rest/hovedgruppenForKollektiv/:kollektiv_id',function(req, res, next){
+  connection.query("SELECT * FROM Undergruppe WHERE kollektiv_id=? AND default_gruppe=1", req.params.kollektiv_id, function(err, rows, fields){
+    res.send(err ? err : rows);
+    return next();
+  });
+});
+
 
 server.get('rest/undergrupperForBruker/:bruker_id',function(req, res, next){
   connection.query("SELECT Undergruppe.*, Kollektiv.navn as kollektiv_navn FROM Undergruppe " +

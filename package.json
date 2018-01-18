@@ -20,6 +20,7 @@
     "bulma": "^0.6.2",
     "mysql": "^2.15.0",
     "node-gyp": "^3.6.2",
+    "nodemailer": "^4.4.1",
     "npm": "^5.6.0",
     "restify": "^6.3.4",
     "restify-cookies": "^0.2.2",

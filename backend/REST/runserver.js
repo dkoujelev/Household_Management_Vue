@@ -2,9 +2,10 @@ require("./resources/Bruker");
 require("./resources/Kollektiv");
 require("./resources/Undergruppe");
 require("./resources/Handleliste");
+require("./resources/Innmelding");
+require("./resources/Epost");
 require("./resources/Melding");
 require("./resources/Gjoremal");
 require("./resources/Gjoremalsliste");
 require("./resources/Gjeld");
 require("./resources/Kostnad");
-

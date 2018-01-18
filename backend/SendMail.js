@@ -25,16 +25,7 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-
 var doMail = function(mailData,next){
-  //var mailData = {toAddress,fromAddress,subject,body};
-  console.log('doMail(' + mailData[0] + ',' + mailData[1] + ',' + mailData[2] + ',' + mailData[3] + ')');
-
-  //var myRes = function(){  
-    //var myResult={
-      // myResult: 'unknown',
-      // data: null
-    //};
     mailOptions = {
       to: mailData[0],
       from: mailData[1],
@@ -46,35 +37,14 @@ var doMail = function(mailData,next){
       console.log('Performing the sendMail function...');
       if (error) {
         console.log(error);
-        // myResult={
-        //   result: 'Epic fail!',
-        //   data: error
-        // };
-        //return myResult;
-        //myResult=error;
-        //return error;
-        next.send(error);
+        rest.send(error);
+        return next;
       } else {
-        //console.log('Info: (' + info + ')');
         console.log('Email sent! (' + info.response + ')');
-        // myResult={
-        //   result: 'Success!',
-        //   data: info.response
-        // };
-        //return myResult;
-        //myResult= info.response;
-        //return info.response;
-        next.send(info.response);
-        //return info.response;
+        rest.send(info.response);
+        return next;
       };
     });
-   //return myResult; 
-   //console.log('Result: ' + myRes);
-   //return myRes;
-   //return next;
   };
-  // console.log('The email should have been sent!');
-  
-
 
 module.exports= doMail;

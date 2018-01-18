@@ -15,6 +15,8 @@ import Shoppinglists from '@/components/Shoppinglists'
 import Addnews from '@/components/Addnews'
 import ShowExpences from '@/components/ShowExpences'
 import ShoppingList from '@/components/ShoppingList/ShoppingList'
+import Innmelding from  '@/components/Innmelding'
+import TestMail from  '@/components/TestMail'
 import TodoList from '@/components/TODO/TodoList'
 import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
 import GjeldInn from '@/components/Gjeld/GjeldInn'
@@ -128,6 +130,16 @@ export default new Router({
         component: GjeldInnSpesifisert,
         props: true
       },
+      {
+        path: '/Innmelding',
+        name: 'Innmelding',
+        component: Innmelding
+      },
+      {
+        path: '/TestMail',
+        name: 'TestMail',
+        component: TestMail
+      }
     ]
   }
 )

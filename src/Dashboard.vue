@@ -9,6 +9,7 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-start">
+
           <router-link class="navbar-item" v-if="loggedIn" to="/TodoList">Gjøremål</router-link>
           <router-link class="navbar-item" v-if="!loggedIn" to="/Login">Login</router-link>
           <router-link class="navbar-item" v-if="!loggedIn" to="/Register">Registrer deg</router-link>
@@ -19,6 +20,7 @@
           <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldInn', params: {current_user: current_user}}">Gjeld Inn</router-link>
           <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldUt', params: {current_user: current_user}}">Gjeld Ut</router-link>
           <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut">Logg Ut</a>
+
         </div>
         <div class="navbar-end" v-if="loggedIn" >
           <SelectGroup :current_user="current_user" @selected-group="selectedGroup" ref="SelectGroup"></SelectGroup>
