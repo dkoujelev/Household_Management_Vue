@@ -20,11 +20,22 @@ server.get('rest/kollektiv/',function(req, res, next){
 // Opprett nytt kollektiv
 server.post('rest/kollektiv/:bruker_id',function(req, res, next){
   connection.query("INSERT INTO Kollektiv SET ?", req.body, function(err, rows1, fields){
-    if(err){res.send(err); return next();}
+    if(err) return next(err);
 
     connection.query("INSERT INTO Bruker_Kollektiv SET bruker_id=?, kollektiv_id=?, er_admin=1", [req.params.bruker_id, rows1.insertId], function(err,rows2,fields){
-      res.send(err ? err : rows1);
-      return next();
+      if(err) return next(err);
+
+      connection.query("INSERT INTO Undergruppe SET navn=?, beskrivelse=?, kollektiv_id=?, default_gruppe=1",[req.body.navn, req.body.beskrivelse, rows1.insertId],function(err,rows3,fields){
+        if(err) return next(err);
+
+        connection.query("INSERT INTO Bruker_Undergruppe SET bruker_id=?, undergruppe_id=?",[req.params.bruker_id, rows3.insertId], function(err, rows4, fields){
+          if(err) return next(err);
+
+          res.send(rows1);
+          return next();
+
+        });
+      });
     });
   });
 });

@@ -20,6 +20,7 @@
 
   export default {
     name: 'AddCostRegister',
+    props: ['current_group'],
     data(){
       return {
         costRegisters: [],
@@ -27,11 +28,11 @@
       };
     },
     created(){
-      /*axios.get('http://localhost:9000/rest/kollektiv').then(response => {
-        this.costRegisters = response.data;
-      }).catch(err => {
-          console.log(err);
-      });*/
+//      axios.get('http://localhost:9000/rest/kollektiv').then(response => {
+//        this.costRegisters = response.data;
+//    }).catch(err => {
+//        console.log(err);
+//    });
     },
     methods: {
       addCostRegister(){

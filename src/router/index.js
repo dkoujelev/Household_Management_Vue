@@ -17,6 +17,9 @@ import ShowExpences from '@/components/ShowExpences'
 import ShoppingList from '@/components/ShoppingList/ShoppingList'
 import TodoList from '@/components/TODO/TodoList'
 import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
+import GjeldInn from '@/components/Gjeld/GjeldInn'
+import GjeldUt from '@/components/Gjeld/GjeldUt'
+import GjeldInnSpesifisert from '@/components/Gjeld/GjeldInnSpesifisert'
 
 Vue.use(Router);
 
@@ -24,6 +27,11 @@ export default new Router({
     routes: [
       {
         path: '/',
+        name: 'Root',
+        component: Login
+      },
+      {
+        path: '/home',
         name: 'Hjem',
         component: Home
       },
@@ -38,9 +46,14 @@ export default new Router({
         component: Register
       },
       {
-        path: '/CreateGroup',
-        name: 'CreateGroup',
-        component: CreateGroup
+        path: '/HelloWorld',
+        name: 'HelloWorld',
+        component: HelloWorld
+      },
+      {
+        path: '/Test',
+        name: 'Test',
+        component: Test
       },
       {
         path: '/Task',
@@ -106,7 +119,25 @@ export default new Router({
         path: '/ViewShoppingList',
         name: 'ViewShoppingList',
         component: ViewShoppingList
-      }
+      },
+      {
+        path: '/GjeldInn',
+        name: 'GjeldInn',
+        component: GjeldInn,
+        props: true
+      },
+      {
+        path: '/GjeldUt',
+        name: 'GjeldUt',
+        component: GjeldUt,
+        props: true
+      },
+      {
+        path: '/GjeldInnSpesifisert',
+        name: 'GjeldInnSpesifisert',
+        component: GjeldInnSpesifisert,
+        props: true
+      },
     ]
   }
 )

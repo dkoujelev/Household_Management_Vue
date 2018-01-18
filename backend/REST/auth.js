@@ -16,6 +16,9 @@ let auth = {
     let sha = crypto.createHash('sha256');
     sha.update(Math.random().toString());
     return sha.digest('hex');
+  },
+  hasSession(session_id){
+    return (session_id in this.sessions);
   }
 };
 
