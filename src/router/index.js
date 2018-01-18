@@ -14,7 +14,6 @@ import Shoppinglistshome from '@/components/home/Shoppinglistshome'
 import Shoppinglists from '@/components/Shoppinglists'
 import Addnews from '@/components/Addnews'
 import ShowExpences from '@/components/ShowExpences'
-import Utgifter from '@/components/Utgifter'
 import ShoppingList from '@/components/ShoppingList/ShoppingList'
 import TodoList from '@/components/TODO/TodoList'
 import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
@@ -28,8 +27,8 @@ export default new Router({
     routes: [
       {
         path: '/',
-        name: 'Hjem',
-        component: Home
+        name: 'Root',
+        component: Login
       },
       {
         path: '/home',
@@ -107,11 +106,6 @@ export default new Router({
         component: ShowExpences
       },
       {
-        path: '/Utgifter',
-        name: 'Utgifter',
-        component: Utgifter
-      },
-      {
         path: '/ShoppingList',
         name: 'ShoppingList',
         component: ShoppingList
@@ -125,7 +119,25 @@ export default new Router({
         path: '/ViewShoppingList',
         name: 'ViewShoppingList',
         component: ViewShoppingList
-      }
+      },
+      {
+        path: '/GjeldInn',
+        name: 'GjeldInn',
+        component: GjeldInn,
+        props: true
+      },
+      {
+        path: '/GjeldUt',
+        name: 'GjeldUt',
+        component: GjeldUt,
+        props: true
+      },
+      {
+        path: '/GjeldInnSpesifisert',
+        name: 'GjeldInnSpesifisert',
+        component: GjeldInnSpesifisert,
+        props: true
+      },
     ]
   }
 )
