@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
-import HelloWorld from '@/components/HelloWorld'
-import Test from '@/components/Test'
+import CreateGroup from '@/components/CreateGroup'
 import Task from '@/components/Task'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
@@ -25,126 +24,108 @@ import GjeldInnSpesifisert from '@/components/Gjeld/GjeldInnSpesifisert'
 
 Vue.use(Router);
 
-
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'Root',
-      component: Login
-    },
-    {
-      path: '/home',
-      name: 'Hjem',
-      component: Home
-    },
-    {
-      path: '/Login',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/Register',
-      name: 'Register',
-      component: Register
-    },
-    {
-      path: '/HelloWorld',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
-    {
-      path: '/Test',
-      name: 'Test',
-      component: Test
-    },
-    {
-      path: '/Task',
-      name: 'Task',
-      component: Task
-    },
-    {
-      path: '/SeeAccounting',
-      name: 'SeeAccounting',
-      component: SeeAccounting
-    },
-    {
-      path: '/AddCostRegister',
-      name: 'AddCostRegister',
-      component: AddCostRegister
-    },
-    {
-      path: '/Nyhetsfeed',
-      name: 'Nyhetsfeed',
-      component: Nyhetsfeed
-    },
-    {
-      path: '/Newsfeedhome',
-      name: 'Newfeedhome',
-      component: Newsfeedhome
-    },
-    {
-      path: '/Shoppinglistshome',
-      name: 'Shoppinglistshome',
-      component: Shoppinglistshome
-    },
-    {
-      path: '/Shoppinglists',
-      name: 'Shoppinglists',
-      component: Shoppinglists
-    },
-    {
-      path: '/Addnews',
-      name: 'Addnews',
-      component: Addnews
-    },
-    {
-      path: '/AddExpence',
-      name: 'AddExpence',
-      component: AddExpence
-    },
-    {
-      path: '/ShowExpences',
-      name: 'ShowExpences',
-      component: ShowExpences
-    },
-    {
-      path: '/Utgifter',
-      name: 'Utgifter',
-      component: Utgifter
-    },
-    {
-      path: '/ShoppingList',
-      name: 'ShoppingList',
-      component: ShoppingList
-    },
-    {
-      path: '/TodoList',
-      name: 'TodoList',
-      component: TodoList
-    },
-    {
-      path: '/ViewShoppingList',
-      name: 'ViewShoppingList',
-      component: ViewShoppingList
-    },
-    {
-      path: '/GjeldInn',
-      name: 'GjeldInn',
-      component: GjeldInn,
-      props: true
-    },
-    {
-      path: '/GjeldUt',
-      name: 'GjeldUt',
-      component: GjeldUt,
-      props: true
-    },
-    {
-      path: '/GjeldInnSpesifisert',
-      name: 'GjeldInnSpesifisert',
-      component: GjeldInnSpesifisert,
-      props: true
-    }
-  ]
-})
+    routes: [
+      {
+        path: '/',
+        name: 'Hjem',
+        component: Home
+      },
+      {
+        path: '/home',
+        name: 'Hjem',
+        component: Home
+      },
+      {
+        path: '/Login',
+        name: 'Login',
+        component: Login
+      },
+      {
+        path: '/Register',
+        name: 'Register',
+        component: Register
+      },
+      {
+        path: '/HelloWorld',
+        name: 'HelloWorld',
+        component: HelloWorld
+      },
+      {
+        path: '/Test',
+        name: 'Test',
+        component: Test
+      },
+      {
+        path: '/Task',
+        name: 'Task',
+        component: Task
+      },
+      {
+        path: '/SeeAccounting',
+        name: 'SeeAccounting',
+        component: SeeAccounting
+      },
+      {
+        path: '/AddCostRegister',
+        name: 'AddCostRegister',
+        component: AddCostRegister
+      },
+      {
+        path: '/Nyhetsfeed',
+        name: 'Nyhetsfeed',
+        component: Nyhetsfeed
+      },
+      {
+        path: '/Newsfeedhome',
+        name: 'Newfeedhome',
+        component: Newsfeedhome
+      },
+      {
+        path: '/Shoppinglistshome',
+        name: 'Shoppinglistshome',
+        component: Shoppinglistshome
+      },
+      {
+        path: '/Shoppinglists',
+        name: 'Shoppinglists',
+        component: Shoppinglists
+      },
+      {
+        path: '/Addnews',
+        name: 'Addnews',
+        component: Addnews
+      },
+      {
+        path: '/AddExpence',
+        name: 'AddExpence',
+        component: AddExpence
+      },
+      {
+        path: '/ShowExpences',
+        name: 'ShowExpences',
+        component: ShowExpences
+      },
+      {
+        path: '/Utgifter',
+        name: 'Utgifter',
+        component: Utgifter
+      },
+      {
+        path: '/ShoppingList',
+        name: 'ShoppingList',
+        component: ShoppingList
+      },
+      {
+        path: '/TodoList',
+        name: 'TodoList',
+        component: TodoList
+      },
+      {
+        path: '/ViewShoppingList',
+        name: 'ViewShoppingList',
+        component: ViewShoppingList
+      }
+    ]
+  }
+)
