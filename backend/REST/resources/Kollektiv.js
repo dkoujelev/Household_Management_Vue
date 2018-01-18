@@ -9,6 +9,14 @@ server.get('rest/kollektiv/:kollektiv_id',function(req, res, next){
   });
 });
 
+// Hent et bestemt kollektiv via navn
+server.get('rest/kollektivMedNavn/:navn',function(req, res, next){
+  connection.query("SELECT * FROM Kollektiv WHERE navn=?", [req.params.navn], function(err, rows, fields){
+    res.send(err ? err : (rows.length == 1 ? rows[0] : null));
+    return next();
+  });
+});
+
 // Hent alle kollektiv
 server.get('rest/kollektiv/',function(req, res, next){
   connection.query("SELECT * FROM Kollektiv", function(err, rows, fields){
