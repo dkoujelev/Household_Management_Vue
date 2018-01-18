@@ -27,7 +27,7 @@
 
     export default {
       name: 'Home',
-      components: {Newsfeedhome,Taskhome,Shoppinglistshome,},
+      components: {Newsfeedhome,Taskhome,Shoppinglistshome,Todo},
       created(){
         if(!this.$parent.loggedIn){
           router.push('Login');
