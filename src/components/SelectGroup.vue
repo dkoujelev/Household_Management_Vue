@@ -15,17 +15,28 @@
   import axios from 'axios';
 
   export default {
-      props:['current_user'],
+    props: ['current_user'],
       created(){
-          axios.get('http://localhost:9000/rest/undergrupperForBruker/' + this.current_user.bruker_id).then(response => {
-            this.groups = response.data;
-          }).catch(err => {
-          });
+        this.loadGroups();
       },
     data(){
           return {
               groups: [],
           };
+    },
+    watch:{
+      current_user: function(newVal, oldVal){
+          this.loadGroups();
+      }
+    },
+    methods:{
+        loadGroups(){
+          console.log('loading groups for user ' + this.current_user.epost);
+          axios.get('http://localhost:9000/rest/undergrupperForBruker/' + this.current_user.bruker_id).then(response => {
+            this.groups = response.data;
+          }).catch(err => {
+          });
+        }
     }
   };
 </script>

@@ -1,38 +1,78 @@
 <template>
-  <div class="'columns">
+  <div>
 
-    <table class="table is-striped is-bordered is-fullwidth is-hoverable ">
-      <thead>
-      <tr>
-        <td>Handleliste</td>
-        <td>Frist</td>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>Grillfest</td>
-        <td>Om 2 uker</td>
-      </tr>
-      <tr>
-        <td>Bursdag</td>
-        <td>Om 3 mnd</td>
-      </tr>
-      <tr>
-        <td>Vaske kollektiv</td>
-        <td>Om 5 mnd</td>
-      </tr>
-      </tbody>
-    </table>
+    <vue-good-table
+      title="Handlelister"
+      :columns="columns"
+      :rows="rows"
+      :onClick="click"
+      per-page=5
+    rows-per-page-text="Antall rader"
+    of-text="av"
 
+    />
   </div>
 </template>
 
 <script>
+  import axios from 'axios';
+  import Vue from 'vue'
+  import VueGoodTable from 'vue-good-table';
+  Vue.use(VueGoodTable);
+  import Shoppinglist from '../ShoppingList/ShoppingList'
+  import router from '../../router/index'
+
 
   export default {
-    name: 'Shoppingslistshome',
+    name: 'Shoppinglists',
+    components: {Shoppinglist},
 
-    components: {}
+    data(){
+      return {
+        columns: [
+          {
+            label: 'Navn',
+            field: 'navn',
+            filterable: false
+          },
+          {
+            label: 'Frist',
+            field: 'frist ',
+            filterable: false
+          },
+        ],
+        rows: [],
+        handleliste_id: []
+      };
+    },
+    mounted(){
+      this.fillRows();
+    },
+    methods: {
+      click(row, index){
+        let id = this.handleliste_id[row.originalIndex];
+        this.$root.$data.handleliste_id = id;
+        router.push("ViewShoppingList");
+      },
+      formateDate(raw){
+        return raw.substring(8, 10) + " " + raw.substring(5, 7) + " " + raw.substring(0,4)
+          + " kl: " + raw.substring(11, 16);
+      },
+      fillRows(){
+        axios.get('http://localhost:9000/rest/handlelisteForUndergruppe/2').then(response => {
+          let resRows = response.data;
+          for(let i = 0; i < 5; i++){
+            let date = this.formateDate(resRows[i].frist);
+            let obj = {navn: resRows[i].navn, Frist: date};
+            this.handleliste_id.push(resRows[i].handleliste_id);
+            this.rows.push(obj);
+          }
+        }).catch(err => {
+          console.log(err);
+        });
+      }
+    }
+
   }
 </script>
 

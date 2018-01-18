@@ -1,7 +1,6 @@
 <template>
-  <div>
     <vue-good-table
-      title="Nyhets-feed"
+      title="Regnskap"
       :columns="columns"
       :rows="rows"
       :paginate="true"
@@ -12,35 +11,35 @@
       of-text="av"
 
     />
-    <router-link class="button" to="/Addnews">Lag nyhet</router-link>
-  </div>
 </template>
 
 <script>
-
   import axios from 'axios';
-  import Vue from 'vue'
-  import VueGoodTable from 'vue-good-table';
-  Vue.use(VueGoodTable);
 
   export default {
-    name: 'Nyhetsfeed',
+    name: 'SeeAccounting',
+
     data(){
       return {
         columns: [
           {
-            label: 'Hvem',
-            field: 'hvem',
-            filterable: false
-          },
-          {
-            label: 'Nyhet',
-            field: 'nyhet',
-            filterable: false
+            label: 'Tittel',
+            field: 'tittel',
+            filterable: true,
+            placeholder: "Søk"
           },
           {
             label: 'Når',
             field: 'nar',
+            html: false,
+            filterable: false
+          },
+          {
+            label: 'Sum',
+            field: 'sum',
+            type: 'number',
+            html: false,
+            sortable: true,
             filterable: false
           }
         ],
@@ -56,37 +55,17 @@
           + " kl: " + raw.substring(11, 16);
       },
       fillRows(){
-        axios.get('http://localhost:9000/rest/melding/motta/kollektiv/1').then(response => {
+        axios.get('http://localhost:9000/rest/melding/sendt/bruker/1').then(response => {
           let resRows = response.data;
-          console.log(resRows[0].sendt);
           for(let i = 0; i < resRows.length; i++){
             let date = this.formateDate(resRows[i].sendt);
-            let obj = {hvem: resRows[i].overskrift, nyhet: resRows[i].tekst, nar: date};
+            let obj = {tittel: resRows[i].overskrift, nar: date, sum: resRows[i].sendt_til_kollektiv};
             this.rows.push(obj);
           }
-          }).catch(err => {
-            console.log(err);
-          });
+        }).catch(err => {
+          console.log(err);
+        });
       }
     }
   }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  h1, h2 {
-    font-weight: normal;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-  a {
-    color: #42b983;
-  }
-
-</style>

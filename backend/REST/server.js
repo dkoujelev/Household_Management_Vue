@@ -1,12 +1,16 @@
 let restify = require("restify");
+let CookieParser = require('restify-cookies');
+
 let server = restify.createServer();
+server.use(CookieParser.parse);
 
 const corsMiddleware = require('restify-cors-middleware');
 
 const cors = corsMiddleware({
-    origins: ['*'],
-    allowHeaders: ['API-Token'],
-    exposeHeaders: ['API-Token-Expiry']
+    origins: ['http://localhost:8080'],
+    allowHeaders: ['API-Token', 'sessionId'],
+    exposeHeaders: ['API-Token-Expiry', 'sessionId'],
+    credentials: true
 });
 
 server.pre(cors.preflight);
@@ -19,7 +23,7 @@ server.use(restify.plugins.bodyParser({
 }));
 
 server.listen(9000, function(){
-    console.log("starting rest server");
+    console.log("STARTED rest server! :)");
 });
 
 module.exports = server;

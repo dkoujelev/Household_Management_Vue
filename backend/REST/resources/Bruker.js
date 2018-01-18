@@ -1,10 +1,19 @@
 let server = require("../server");
 let connection = require("../connection");
-const bcrypt = require('bcrypt'); //Note: Changing the number of rounds from 10 to a much higher number makes bcrypt think youre using a salt instead!
+let bcrypt = require('bcrypt');
+let auth = require('../auth.js');
 
 // Hent en bestemt bruker
 server.get('rest/bruker/:bruker_id',function(req, res, next){
   connection.query("SELECT * FROM Bruker WHERE bruker_id=?", [req.params.bruker_id], function(err, rows, fields){
+    res.send(err ? err : (rows.length == 1 ? rows[0] : null));
+    return next();
+  });
+});
+
+// Finn bruker med bestemt epost
+server.get('rest/bruker/:epost',function(req, res, next){
+  connection.query("SELECT * FROM Bruker WHERE epost=?", [req.params.epost], function(err, rows, fields){
     res.send(err ? err : (rows.length == 1 ? rows[0] : null));
     return next();
   });
@@ -77,24 +86,74 @@ server.put('rest/bruker',function(req,res,next){
 
 // Login
 server.post('rest/login',function(req,res,next){
-  connection.query("SELECT hashed_passord FROM Bruker WHERE epost=?", [req.body.epost], function(err, rows, fields){
+  console.log("login requested");
+  connection.query("SELECT * FROM Bruker WHERE epost=?", [req.body.epost], function(err, rows, fields){
+console.log("in query");
 
-    if(rows.length >= 1){ //                                  Check if there even is a user with this email
-      let passord = [req.body.passord] + ""; //               Load password from request (and force to proper string by adding + "")
-      let hashed_passord = rows[0].hashed_passord //          Get the hash returned from DB
-
-      if(bcrypt.compareSync(passord, hashed_passord)) { //    Compare the password to the hash
-        // Passwords match
-        res.send({passwordMatch: true}); //                   Log in the user... (But for now, just tell the GUI it's all good!)
-        return next();
-       } else {
-        // Passwords don't match
-        res.send({passwordMatch: false}); //                  Tell the GUI that the password was no good!
-        return next();
-       }
-    }else{ //                                                 apparently; there was no user with this email
-      res.send({passwordMatch: false}); //                    Tell the GUI that the password was no good!
+    if(rows.length == 0){
+      res.send(null);
       return next();
-    };    
+    }
+
+    let user = rows[0];
+
+    if('sessionId' in req.cookies && req.cookies.sessionId != ''){
+      console.log("session cookie found");
+      if(auth.hasSession(req.cookies.sessionId)){
+        // User already logged in!
+        console.log('user already logged in with sessionId: ' + req.cookies.sessionId);
+        res.send(user);
+        return next();
+      }
+      else{
+        console.log("session forgotten");
+        // User had sessionId cookie but server forgot about it. Kill the cookie.
+        res.setCookie('sessionId','');
+      }
+    }
+
+    console.log("past if");
+
+
+    //  Check if there even is a user with this email
+    let passord = [req.body.passord] + ""; //               Load password from request (and force to proper string by adding + "")
+    let hashed_passord = rows[0].hashed_passord; //          Get the hash returned from DB
+
+    if(bcrypt.compareSync(passord, hashed_passord)) { //    Compare the password to the hash
+      // Passwords match
+
+      let session = auth.newSession(req.body);
+      console.log('adding session ' + session);
+      res.setCookie('sessionId', session);
+      res.send(user); //                   Log in the user... (But for now, just tell the GUI it's all good!)
+      return next();
+    } else {
+      // Passwords don't match
+      console.log('login denied');
+      res.send(null); //                  Tell the GUI that the password was no good!
+      return next();
+    }
   });
+});
+
+// Check if user is already logged in.
+server.post('rest/loggedIn',function(req,res,next){
+
+  if('sessionId' in req.cookies && req.cookies.sessionId != ''){
+    if(auth.hasSession(req.cookies.sessionId)) {
+      res.send(auth.getSession(req.cookies.sessionId));
+      return next();
+    }
+    else{
+      res.setCookie('sessionId','');
+      res.send(null);
+      return next();
+    }
+  }
+  else{
+    res.send(null);
+    return next();
+  }
+
+
 });
