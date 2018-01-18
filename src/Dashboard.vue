@@ -15,7 +15,6 @@
           <router-link class="navbar-item" v-if="!loggedIn" to="/Register">Registrer deg</router-link>
           <router-link class="navbar-item" v-if="loggedIn" to="/Nyhetsfeed">Nyhet</router-link>
           <router-link class="navbar-item" v-if="loggedIn" to="/Shoppinglists">Handlelister</router-link>
-          <router-link class="navbar-item" v-if="loggedIn" to="/Utgifter">Utgifter</router-link>
           <router-link class="navbar-item" v-if="loggedIn" to="/ShowExpences">Utgifter</router-link>
           <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldInn', params: {current_user: current_user}}">Gjeld Inn</router-link>
           <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldUt', params: {current_user: current_user}}">Gjeld Ut</router-link>
