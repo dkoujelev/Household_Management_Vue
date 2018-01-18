@@ -86,14 +86,19 @@ server.put('rest/bruker',function(req,res,next){
 
 // Login
 server.post('rest/login',function(req,res,next){
+  console.log("login requested");
   connection.query("SELECT * FROM Bruker WHERE epost=?", [req.body.epost], function(err, rows, fields){
+console.log("in query");
 
-    if(rows.length == 0)
-      return next(err);
+    if(rows.length == 0){
+      res.send(null);
+      return next();
+    }
 
     let user = rows[0];
 
     if('sessionId' in req.cookies && req.cookies.sessionId != ''){
+      console.log("session cookie found");
       if(auth.hasSession(req.cookies.sessionId)){
         // User already logged in!
         console.log('user already logged in with sessionId: ' + req.cookies.sessionId);
@@ -101,10 +106,13 @@ server.post('rest/login',function(req,res,next){
         return next();
       }
       else{
+        console.log("session forgotten");
         // User had sessionId cookie but server forgot about it. Kill the cookie.
         res.setCookie('sessionId','');
       }
     }
+
+    console.log("past if");
 
 
     //  Check if there even is a user with this email

@@ -18,6 +18,7 @@
           <router-link class="navbar-item" v-if="loggedIn" to="/ShowExpences">Utgifter</router-link>
           <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldInn', params: {current_user: current_user}}">Gjeld Inn</router-link>
           <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldUt', params: {current_user: current_user}}">Gjeld Ut</router-link>
+          <a href="" class="navbar-item" @click.prevent="logOut">Logg Ut</a>
         </div>
         <div class="navbar-end" v-if="loggedIn" >
           <SelectGroup :current_user="current_user" @selected-group="selectedGroup" ref="SelectGroup"></SelectGroup>
