@@ -33,20 +33,22 @@ server.get('rest/gjoremalsliste/:id',function(req, res, next){
 });
 
 //Hent alle lister i en undergruppe
-server.get('rest/gjoremalsliste/:undergruppe_id',function(req, res, next){
+server.get('rest/gjoremalslister/:undergruppe_id',function(req, res, next){
   connection.query("SELECT * FROM Gjoremalsliste WHERE undergruppe_id=?", [req.params.undergruppe_id], function(err, rows, fields){
     if(err)
       return next(err);
-    let liste = JSON.parse(JSON.stringify(rows));
-    for(let gjoremalsliste of rows){
-      liste = rows[i];
-      if('opprettet' in gjoremalsliste)
-        rows.opprettet = new Date(rows.opprettet);
-    }
 
+    for(let gjoremalsliste of rows){
+      if('opprettet' in gjoremalsliste)
+        gjoremalsliste.opprettet = new Date(gjoremalsliste.opprettet);
+    }
+    let liste = JSON.parse(JSON.stringify(rows));
+    res.send(liste);
+    return next();
+    /*
     connection.query("SELECT Gjoremalsliste.*, Gjoremal.navn as gjoremal, Gjoremal.start, Gjoremal.frist, Gjoremal.ferdig," +
       "Bruker.fornavn, Bruker.etternavn FROM Gjoremalsliste " +
-      "INNER JOIN Gjoremal ON Gjoremalsliste.id = Gjoremal.liste_id" +
+      "INNER JOIN Gjoremal ON Gjoremalsliste.id = Gjoremal.liste_id " +
       "INNER JOIN Bruker", req.params.undergruppe_id, function(err, rows, fields){
       if(err)
         return next(err);
@@ -60,80 +62,125 @@ server.get('rest/gjoremalsliste/:undergruppe_id',function(req, res, next){
         if('ferdig' in item)
           item.ferdig = new Date(item.ferdig);
       }
-      liste.gjoremal = JSON.parse(JSON.stringify(rows));
+      liste.push(JSON.parse(JSON.stringify(rows)));
 
       res.send(liste);
       return next();
     });
+    */
   });
 });
-/*
-// Hent alle lister
-server.get('rest/gjoremalsliste/:kollektiv_id',function(req, res, next){
-  connection.query("SELECT * FROM Gjoremalsliste WHERE ", function(err, rows, fields){
-    res.send(err ? err : rows);
-    return next();
-  });
-});
-*/
-// Opprett ny liste
-server.post('rest/gjoremalsliste/:undergruppe_id',function(req, res, next){
-  /*
-  connection.query("INSERT INTO Gjoremalsliste SET ?", req.body, function(err, rows, fields){
-    if(err)
-      res.send(err);
-    return next();
-    let liste = Object.assign({}, req.body);
 
-    if('gjoremal' in liste)
-      delete liste.gjoremal;
-
-    if('opprettet' in liste)
-      liste.opprettet = new Date(liste.opprettet).getTime();
-  });
-  */
-  connection.query('INSERT INTO Gjoremalsliste SET ?', [liste], function(err,rows,fields){
+// Hent alle lister i et kollektiv
+server.get('rest/gjoremalslisterKollektiv/:kollektiv_id',function(req, res, next){
+  connection.query("SELECT * FROM Gjoremalsliste WHERE ", function(err, rows, field){
     if(err)
       return next(err);
+    for(liste of rows){
+      if('opprettet' in liste)
+        liste.opprettet = new Date(liste.opprettet);
+    }
+    let lister = JSON.parse(JSON.stringify(rows));
+    res.send(lister);
+    return next();
+  });
+});
 
-    let gjoremaler = [];
-    for(let gjoremal of req.body.gjoremaler){
-      let gjoremalen = [];
-      /*
-      if('start' in gjoremal)
-        gjoremal.start = new Date(gjoremal.start).getTime();
-      if('frist' in gjoremal)
-        gjoremal.frist = new Date(gjoremal.frist).getTime();
-      if('ferdig' in gjoremal)
-        gjoremal.ferdig = new Date(gjoremal.ferdig).getTime();
-       */
-      gjoremalen.push(gjoremal.navn);
-      if('start' in gjoremal)
-        gjoremalen.push(new Date(gjoremal.start).getTime());
-      if('frist' in gjoremal)
-        gjoremalen.push(new Date(gjoremal.frist).getTime());
-      if('ferdig' in gjoremal)
-        gjoremalen.push(new Date(gjoremal.ferdig).getTime());
-      gjoremalen.push(gjoremal.beskrivelse);
-      gjoremalen.push(gjoremal.bruker_id);
-      gjoremalen.push(rows.insertId);
-      gjoremaler.push(gjoremalen);
+// Opprett ny liste
+server.post('rest/gjoremalsliste/:undergruppe_id',function(req, res, next) {
+  let liste = Object.assign({}, req.body);
+  let gjoremaler = [];
+  if ('gjoremal' in liste) {
+    //gjoremal = Object.assign({}, liste.gjoremal);
+    delete liste.gjoremal;
+  }
+  if('opprettet' in liste)
+    liste.opprettet = new Date(liste.opprettet).getTime();
+
+  connection.query('INSERT INTO Gjoremalsliste SET ?', [liste], function(err,rows,field){
+    if(err)
+      return next(err);
+    /*
+    for(let item of req.body.gjoremal){
+      let gjoremal = [];
+      if('start' in item)
+        gjoremal.push(new Date(item.start).getTime());
+      if('frist' in item)
+        gjoremal.push(new Date(item.frist).getTime());
+      if('ferdig' in item)
+        gjoremal.push(new Date(item.ferdig).getTime());
+      gjoremal.push(item.beskrivelse);
+      gjoremal.push(item.bruker_id);
+      gjoremal.push(rows.insert.id);
+      gjoremaler.push(gjoremal);
     }
 
-    console.log(JSON.stringify(gjoremaler));
+    //console.log(JSON.stringify(gjoremaler));
 
-    connection.query('INSERT INTO Gjoremal (navn, start, frist, ferdig, beskrivelse, bruker_id, liste_id) VALUES ?', [gjoremaler], function(err,rows,fields){
+    connection.query('INSERT INTO Gjoremal (navn, start, frist, ferdig, beskrivelse, bruker_id, liste_id) VALUES ?', [gjoremaler], function(err,rows,field){
       if(err)
         return next(err);
       res.send(rows);
+      return next();
     });
+    */
+    res.send(rows);
+    return next();
   });
 });
 
 // Oppdater en liste
-server.put('rest/gjoremalsliste',function(req,res,next){
-  connection.query("UPDATE Gjoremalsliste SET ? WHERE id=?", [req.body, req.body.id], function(err, rows, fields){
-    res.send(err ? err : rows);
+server.put('rest/gjoremalsliste/',function(req,res,next){
+  let liste = Object.assign({}, req.body);
+  if('opprettet' in liste)
+    liste.opprettet = new Date(liste.opprettet).getTime();
+
+  connection.query("UPDATE Gjoremalsliste SET ? WHERE id=?", [req.body, req.body.id], function(err, rows, field){
+    if(err)
+      return next(err);
+    /*
+    connection.query('SELECT * FROM Gjoremal WHERE liste_id=?', req.body.id, function (err, rows, field) {
+      if(err)
+        return next(err);
+      let gjoremaler = [];
+      for(let gjoremal of liste){
+        let gjoremalen = [];
+        gjoremalen.push(gjoremal.gjoremal_id);
+        if('start' in gjoremal)
+          gjoremalen.push(new Date(gjoremal.start).getTime());
+        if('frist' in gjoremal)
+          gjoremalen.push(new Date(gjoremal.frist).getTime());
+        if('ferdig' in gjoremal)
+          gjoremalen.push(new Date(gjoremal.ferdig).getTime());
+        gjoremalen.push(gjoremal.beskrivelse);
+        gjoremalen.push(gjoremal.bruker_id);
+        gjoremalen.push(rows.insertId);
+        gjoremaler.push(gjoremalen);
+      }
+      connection.query('UPDATE Gjoremal SET ?', [req.body.gjoremal], function (err,rows,field) {
+        if(err)
+          return next(err);
+
+        return next(rows);
+      });
+    });
+    */
+    res.send(rows);
     return next();
+  });
+});
+
+// Slett en liste
+server.del('rest/gjoremalsliste/', function (req,res,next) {
+  connection.query('DELETE FROM Gjoremal WHERE liste_id=?', req.body.id, function (err, rows, field) {
+    if(err)
+      return next(err);
+    //let info = rows;
+    connection.query('DELETE FROM Gjoremalsliste WHERE id=?', req.body.id, function (err, rows, field) {
+      if(err)
+        return next(err);
+      res.send(rows);
+      return next();
+    });
   });
 });
