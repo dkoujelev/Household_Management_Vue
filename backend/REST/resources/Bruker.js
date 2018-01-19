@@ -42,7 +42,11 @@ module.exports = function(connection, server) {
     req.body.hashed_passord = hash; //                            Re-inserting the hashed value into the request body
 
     connection.query("INSERT INTO Bruker SET ?", req.body, function (err, rows, fields) {
-      res.send(err ? err : rows);
+
+      if(err)
+        return next(err);
+
+      res.send(rows);
       return next();
     });
   });
@@ -57,9 +61,7 @@ module.exports = function(connection, server) {
 
 // Sjekke om en epost er registrert
   server.get('rest/brukerepost/:epost', function (req, res, next) {
-    console.log('Checking if the email already exists...');
     connection.query("SELECT * FROM Bruker WHERE epost=?", [req.params.epost], function (err, rows, fields) {
-      console.log('Exists: ' + (rows.length == 1));
       res.send({exists: rows.length == 1});
       return next();
     });
