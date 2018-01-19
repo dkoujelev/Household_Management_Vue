@@ -1,10 +1,10 @@
 <template>
   <div>
-    <nav class="navbar is-success is-active is-fixed-top" role="navigation" aria-label="main navigation">
+    <nav class="navbar is-dark is-active is-fixed-top" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/home" v-if="loggedIn">
           Hjem
-          <!--<img src="./img/logo_medium.png" alt="image not found" width="175"/>-->
+          <img src="./img/Minilogo.png" alt="image not found" width="45"/>
         </router-link>
       </div>
       <div class="navbar-menu">

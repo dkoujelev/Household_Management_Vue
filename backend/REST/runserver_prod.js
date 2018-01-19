@@ -11,11 +11,9 @@ connection.connect();
 
 let server = require("./server");
 
-module.exports = function(callback){
-  server.listen(9000, function(){
-    console.log("STARTED PROD rest server! :)");
-    callback();
-  });
-};
+server.listen(9000, function(){
+  console.log("STARTED PROD rest server! :)");
+});
+
 
 require("./runserver.js")(connection, server);

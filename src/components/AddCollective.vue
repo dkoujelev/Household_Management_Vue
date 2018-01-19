@@ -4,7 +4,7 @@
       <div class="field">
         <label for="name" class="label">Navn</label>
         <div class="control">
-          <input type="text" class="input" v-model="collective.navn" id="name" placeholder="Navn på nytt kollektiv">
+          <input type="text" class="input" v-model="collective.navn" placeholder="Navn på nytt kollektiv">
         </div>
       </div>
     <div class="field">

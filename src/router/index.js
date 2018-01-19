@@ -22,6 +22,7 @@ import GjeldInn from '@/components/Gjeld/GjeldInn'
 import GjeldUt from '@/components/Gjeld/GjeldUt'
 import GjeldInnSpesifisert from '@/components/Gjeld/GjeldInnSpesifisert'
 import NewUser from '@/components/NewUser'
+import ChangePassword from '@/components/ChangePassword'
 
 Vue.use(Router);
 
@@ -144,6 +145,11 @@ export default new Router({
         path: '/NewUser',
         name: 'NewUser',
         component: NewUser
+      },
+      {
+        path: '/ChangePassword',
+        name: 'ChangePassword',
+        component: ChangePassword
       }
     ]
   }
