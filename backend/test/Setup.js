@@ -12,7 +12,6 @@ beforeEach((done) => {
   // Det kan være at prod-basen er valgt ved en feil.
   if(connection.config.database === 'oddbjool'){
     connection.query(sql_statements, [], (err, rows, fields) => {
-      console.log("Cleared test database.");
       done();
     });
   }
