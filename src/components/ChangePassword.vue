@@ -75,7 +75,7 @@
         },
         changePassword(){
           if(this.validateInfo()){
-            let update = {newPassword: this.newPassword};
+            let update = {email: this.$parent.current_user.epost, newPassword: this.newPassword};
             axios.put('http://localhost:9000/rest/changePassword', update).then(response => {
               if(response.data.updated){
                 alert('changed');
