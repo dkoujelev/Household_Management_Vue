@@ -16,11 +16,8 @@ server.post('rest/epost',function(req, res, next){
                     3:body
                   };
 
-    console.log('mailData= {' + mailData[0] + ',' + mailData[1] + ',' + mailData[2] + ',' + mailData[3] + '}');
+    //console.log('mailData= {' + mailData[0] + ',' + mailData[1] + ',' + mailData[2] + ',' + mailData[3] + '}');
     
     res.send(sendMailScript(mailData,next));
     next();
-    // console.log("myResult: " + myResult);
-    // console.log(myResult);
-    //return next();
   });

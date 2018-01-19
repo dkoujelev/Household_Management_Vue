@@ -157,3 +157,38 @@ server.post('rest/loggedIn',function(req,res,next){
 
 
 });
+
+//Check password
+server.post('rest/password',function(req,res,next){
+  connection.query("SELECT * FROM Bruker WHERE epost=?", [req.body.email], function(err, rows, fields){
+    if(err)
+      return next(err);
+    //  Check if there even is a user with this email
+    let password = [req.body.password] + ""; //               Load password from request (and force to proper string by adding + "")
+    let hashed_password = rows[0].hashed_passord; //          Get the hash returned from DB
+
+    (bcrypt.compareSync(password, hashed_password) ? res.send({valid: true}) : res.send({valid: false}));
+
+    return next;
+  });
+});
+
+//Change password
+server.put('rest/changePassword',function(req,res,next){
+  let isUpdated = true;
+  //Update the password
+  let passord = [req.body.newPassword] + ""; //            Get the clear text password from the request body. (The + "" is apparently needed for bcrypt to read the data as a proper string.)
+  let hash = bcrypt.hashSync(passord,10); //                  Hashing the password 10 times
+  req.body.hashed_passord=hash; //                            Re-inserting the hashed value into the request body
+  /*******INSERT CODE HERE*******/
+  connection.query('UPDATE Bruker SET hashed_passord=? WHERE epost=?', [reeq.body.newPassword, req.body.email], function (err,rows,field) {
+    if(err){
+      isUpdated = false;
+      return next(err);
+    }
+
+    //Return
+    res.send({updated: isUpdated});
+    return next();
+  });
+});

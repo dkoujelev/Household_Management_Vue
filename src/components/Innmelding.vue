@@ -8,17 +8,6 @@
               <img src="../img/logo_full.png" height="200" width="400"/>
               <p class="help is-danger">{{this.error}}</p>
 
-                
-                <p class="control has-icon">
-                <h1>Her kan du inntil videre simulere forskjellige brukere</h1>
-                    <select class="control" v-model="selected_bruker_id" v-on:change="getGroupsFor(selected_bruker_id)">
-                        <option v-for="option in options_bruker_id" v-bind:value="option.value">
-                        {{ option.text }}
-                        </option>
-                    </select>
-                </p>
-                <hr>
-
               <div v-if="showJoinSection===true">
                 
                 <p>Skriv inn navnet på kollektivet du ønsker å bli medlem av</p>
@@ -105,7 +94,7 @@
 
   export default {
     name: 'Innmelding',
-    //props: ['bruker_id'],
+    props: ['current_user'],
     data(){
         return {
             showJoinSection: true,
@@ -121,7 +110,7 @@
                 epost: '',
                 kollektiv_id: ''
             },
-            selected_bruker_id: 4, //bruker_id,
+            //selected_bruker_id: 4, //bruker_id,
             options_bruker_id: [
                 { text: 'One', value: '1' },
                 { text: 'Two', value: '2' },
@@ -145,11 +134,11 @@
       }
     },
     created: function() {
-        console.log('This is printed at each reload!');
-        console.log("I'm placing code here to simulate status logged-in user..."); // TODO: Fix this workaround!
-        this.bruker_id=this.selected_bruker_id;
-        console.log("Right now, I'm simulating user " + this.bruker_id);
-        this.getGroupsFor(this.bruker_id);
+        // console.log('This is printed at each reload!');
+        // console.log("I'm placing code here to simulate status logged-in user..."); // TODO: Fix this workaround!
+        // this.bruker_id=this.selected_bruker_id;
+        // console.log("Right now, I'm simulating user " + this.bruker_id);
+        this.getGroupsFor(this.current_user.bruker_id);
         
     },
     // mounted: function() {
@@ -297,7 +286,7 @@
                         console.log("Klar for innmelding!");
                         axios.post('http://localhost:9000/rest/innmelding', {
                             kollektiv_id: this.kollektiv_id,
-                            bruker_epost: 'static.until@login.works', 
+                            bruker_epost:  this.current_user.epost, 
                             status_admin:2,
                             status_bruker: '1',
                             dato_svar_admin: null,  

@@ -3,22 +3,40 @@ let connection = require("../connection");
 
 // Hent et bestemt gjoremal
 server.get('rest/gjoremal/:gjoremal_id',function(req, res, next){
-  connection.query("SELECT * FROM Gjoremal WHERE gjoremal_id=?", req.params.gjoremal_id, function(err, rows, fields){
+  connection.query("SELECT * FROM Gjoremal WHERE gjoremal_id=?", req.params.gjoremal_id, function(err, rows, field){
     if(err)
       return next(err);
 
     let gjoremal = rows[0];
 
     if('start' in gjoremal)
-      rows.start = new Date(rows.start);
+      gjoremal.start = new Date(gjoremal.start);
     if('frist' in gjoremal)
-      rows.frist = new Date(rows.frist);
+      gjoremal.frist = new Date(gjoremal.frist);
     if('ferdig' in gjoremal)
-      rows.ferdig = new Date(rows.ferdig);
+      gjoremal.ferdig = new Date(gjoremal.ferdig);
 
     res.send(gjoremal);
     return next();
   });
+});
+
+// Hent alle gjoremal i en liste
+server.get('rest/gjoremaler/:id', function (req,res,next) {
+  connection.query('SELECT * FROM Gjoremal WHERE liste_id=?', req.params.id, function (err,rows,field) {
+    if(err)
+      return next(err);
+    for(let gjoremal of rows){
+      if('start' in gjoremal)
+        gjoremal.start = new Date(gjoremal.start);
+      if('frist' in gjoremal)
+        gjoremal.frist = new Date(gjoremal.frist);
+      if('ferdig' in gjoremal)
+        gjoremal.ferdig = new Date(gjoremal.ferdig);
+    }
+    res.send(rows);
+    return next(rows);
+  })
 });
 
 // Opprette nytt gjoremal
