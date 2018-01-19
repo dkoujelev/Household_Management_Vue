@@ -80,6 +80,9 @@ module.exports = function(connection, server) {
 
 // Oppdater en bruker
   server.put('rest/bruker', function (req, res, next) {
+
+    req.body.hashed_passord = bcrypt.hashSync(req.body.hashed_passord+"", 10);
+
     connection.query("UPDATE Bruker SET ? WHERE bruker_id=?", [req.body, req.body.bruker_id], function (err, rows, fields) {
       res.send(err ? err : rows);
       return next();
@@ -181,9 +184,9 @@ module.exports = function(connection, server) {
     //Update the password
     let passord = [req.body.newPassword] + ""; //            Get the clear text password from the request body. (The + "" is apparently needed for bcrypt to read the data as a proper string.)
     let hash = bcrypt.hashSync(passord, 10); //                  Hashing the password 10 times
-    req.body.hashed_passord = hash; //                            Re-inserting the hashed value into the request body
     /*******INSERT CODE HERE*******/
-    connection.query('UPDATE Bruker SET hashed_passord=? WHERE epost=?', [reeq.body.newPassword, req.body.email], function (err, rows, field) {
+
+    connection.query('UPDATE Bruker SET hashed_passord=? WHERE epost=?', [hash, req.body.email], function (err, rows, field) {
       if (err) {
         isUpdated = false;
         return next(err);
@@ -191,6 +194,7 @@ module.exports = function(connection, server) {
 
       //Return
       res.send({updated: isUpdated});
+
       return next();
     });
   });

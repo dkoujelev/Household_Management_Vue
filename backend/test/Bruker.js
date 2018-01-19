@@ -1,6 +1,8 @@
 let expect = require('chai').expect;
 let axios = require('axios');
+let bcrypt = require('bcrypt');
 let clearDB = require('./clearDB');
+
 
 let testuser = {
   epost: 'test@test.com',
@@ -8,8 +10,10 @@ let testuser = {
   etternavn: 'Testesen',
   tlf: '12345678',
   adresse: 'Testveien 1',
-  hashed_passord: 'passord'
+  hashed_passord: 'passord',
 };
+
+let testuser1_oldpass = 'passord'; // stupid hack
 
 let testuser2 = {
   epost: 'test@test2.com',
@@ -56,6 +60,10 @@ describe('Bruker',() => {
 
     // Hent ut testuser og sammenlign
     axios.get('http://localhost:9100/rest/bruker/' + testuser.bruker_id).then(response => {
+
+      // Sjekk at passorded ble satt/hashet rett
+      expect(bcrypt.compareSync(testuser1_oldpass, response.data.hashed_passord)).to.be.true;
+
       delete response.data.hashed_passord;
 
       expect(response.data).to.deep.equal(testuser);
@@ -64,6 +72,7 @@ describe('Bruker',() => {
       done();
 
     }).catch(err => {
+      console.log("ERROR ERROR ERROR ERROR"); console.log(err);
       // Om axios gir feilmelding, sørger vi for at testen også feiler.
       done(new Error("error getting user from DB: " + err.response.data.sqlMessage));
     });
@@ -138,7 +147,70 @@ describe('Bruker',() => {
 
       done();
 
-    }).catch(err => { console.log("ERR"); done(new Error("error getting all users in collective: " + err.response.data.sqlMessage)); });;
+    }).catch(err => { console.log("ERR"); done(new Error("error getting all users in collective: " + err.response.data.sqlMessage)); });
+
+  });
+
+  it('Oppdater bruker', done => {
+
+    let old_user = {
+      epost: 'test2@test.com',
+      fornavn: 'Test',
+      etternavn: 'Testesen',
+      tlf: '12345678',
+      adresse: 'Testveien 1',
+      hashed_passord: 'passord'
+    };
+
+    let new_user = {
+      epost: 'nyepost@test.com',
+      fornavn: 'nyttnavn',
+      etternavn: 'nyttetternavn',
+      tlf: 'nytt nummer',
+      adresse: 'ny adresse'
+    };
+
+    axios.post('http://localhost:9100/rest/bruker', old_user).then(response => {
+      new_user.bruker_id = response.data.insertId;
+      axios.put('http://localhost:9100/rest/bruker', new_user).then(response => {
+        axios.get('http://localhost:9100/rest/bruker/' + new_user.bruker_id).then(response => {
+          delete response.data.hashed_passord;
+
+          expect(response.data).to.deep.equal(new_user);
+          done();
+
+        }).catch(err => { done(new Error("error updating from old_user to new_user: " + err.response.data.sqlMessage)); });;
+      }).catch(err => { done(new Error("error updating from old_user to new_user: " + err.response.data.sqlMessage)); });
+    }).catch(err => { done(new Error("error adding old_user: " + err.response.data.sqlMessage)); });
+  });
+
+  //Change password
+  it('Endre passord',done => {
+    let user = {
+      epost: 'test3@test.com',
+      fornavn: 'Test',
+      etternavn: 'Testesen',
+      tlf: '12345678',
+      adresse: 'Testveien 1',
+      hashed_passord: 'passord'
+    };
+
+    axios.post('http://localhost:9100/rest/bruker', user).then(response => {
+      user.bruker_id = response.data.insertId;
+
+      axios.put('http://localhost:9100/rest/changePassword', {
+        "email": user.epost,
+        "newPassword": "nyttpassord"
+      }).then(response => {
+        axios.get('http://localhost:9100/rest/bruker/'+user.bruker_id).then(response => {
+          expect(bcrypt.compareSync("nyttpassord", response.data.hashed_passord)).to.be.true;
+          expect(bcrypt.compareSync(user.hashed_passord, "blehhhhh")).to.be.false;
+
+          done();
+
+        }).catch(err => { done(new Error("error reading user: " + err.response.data.sqlMessage)); });
+      }).catch(err => { done(new Error("error setting new password for user: " + err.response.data.sqlMessage)); });
+    }).catch(err => { done(new Error("error adding user: " + err.response.data.sqlMessage)); });
 
   });
 
