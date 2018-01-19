@@ -1,5 +1,8 @@
+
+
 <script>
-  import { Line } from 'vue-chartjs'
+  /*
+  //import { Line } from 'vue-chartjs'
   export default Line.extend({
     props: {
       chartData: {
@@ -54,4 +57,5 @@
       }, this.options)
     }
   })
+  */
 </script>

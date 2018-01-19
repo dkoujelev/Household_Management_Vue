@@ -38,6 +38,7 @@
 </template>
 
 <script>
+  /*
   import axios from 'axios'
   import moment from 'moment'
   import Datepicker from 'vuejs-datepicker'
@@ -107,9 +108,10 @@
       }
     }
   }
+  */
 </script>
 
-<style lang="scss">
+<style lang="">
   /*
   @import "../assets/styles/_variables.scss";
   hr {
@@ -214,4 +216,5 @@
     }
   }
   */
+
 </style>
