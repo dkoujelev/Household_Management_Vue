@@ -1,5 +1,6 @@
 let server = require("../server");
 let connection = require("../connection");
+let util = require("../util");
 
 // Hent alle innmeldinger
 server.get('rest/innmelding/',function(req, res, next){
@@ -36,7 +37,6 @@ server.get('rest/innmelding/:kollektiv_id',function(req, res, next){
     };
 });
 
-
 // Legg til innmelding
 server.post('rest/innmelding/',function(req,res,next){
   connection.query("INSERT INTO Innmelding SET ?", req.body, function(err, rows, fields){
@@ -47,83 +47,44 @@ server.post('rest/innmelding/',function(req,res,next){
 
 // Oppdater en innmelding
 server.put('rest/innmelding/',function(req,res,next){
-console.log('Processing the PUT...');
-console.log(req.params);
-/* VB-pseudo code for funksjonalitet
+// console.log('Processing the PUT...');
+// console.log(req.params);
 
-if status_admin == 1 andalso status_bruker == 1 then
-    //Begge har sagt "ja".
-    -Legg til bruker
-    -Sett innmelding.active=false
-    -Sett riktige verdier på timestamp(s)
-elseif
-    //Minst én av partene har sagt "nei"
-    -Sett innmelding.active=false
-    -Sett riktige verdier på timestamp(s)
-end if
-*/
-//UPDATE `g_tdat2003_t01`.`Innmelding` SET `bruker_epost`='james.bond@mi6.co.uk' WHERE `kollektiv_id`='2' and`bruker_epost`='1';
-let minInnmelding = null;
-if(req.params.kollektiv_id){
-    connection.query("SELECT bruker_id FROM Bruker WHERE epost=?", [req.params.bruker_epost], function(err, rows, fields){
-        //console.log('rows=' + rows[0]);
-        req.params.bruker_id=rows[0].bruker_id;
-        // console.log('email=' + req.params.bruker_epost);
-        // console.log('bid=' + rows[0].bruker_id);
-        // console.log('kid=' + req.params.kollektiv_id);
-        connection.query("SELECT * FROM Innmelding WHERE bruker_epost=? AND kollektiv_id=?", [req.params.bruker_epost, req.params.kollektiv_id], function(err, rows1, fields){
-            //console.log('rows1=' + rows1);
-            minInnmelding=rows1[0];
+    let minInnmelding = null;
+    if(req.params.kollektiv_id){
+        connection.query("SELECT bruker_id FROM Bruker WHERE epost=?", [req.params.bruker_epost], function(err, rows, fields){
+            req.params.bruker_id=rows[0].bruker_id;
+            connection.query("SELECT * FROM Innmelding WHERE bruker_epost=? AND kollektiv_id=?", [req.params.bruker_epost, req.params.kollektiv_id], function(err, rows1, fields){
+                minInnmelding=rows1[0];
 
-            // console.log('Before: ' + minInnmelding.kollektiv_id);
-            // console.log('Before: ' + minInnmelding.bruker_epost);
-            // console.log('Before: ' + minInnmelding.status_admin);
-            // console.log('Before: ' + minInnmelding.status_bruker);
-            // console.log('Before: ' + minInnmelding.dato_svar_admin);
-            // console.log('Before: ' + minInnmelding.dato_svar_bruker);
-            // console.log('Before: ' + minInnmelding.aktiv);
-            // console.log('Before: ' + minInnmelding.notat_admin);
-            // console.log('Before: ' + minInnmelding.notat_bruker);
-            if(req.params.kollektiv_id != null){minInnmelding.kollektiv_id=req.params.kollektiv_id};
-            if(req.params.bruker_epost != null){minInnmelding.bruker_epost=req.params.bruker_epost};
-            if(req.params.status_admin != null){minInnmelding.status_admin=req.params.status_admin};
-            if(req.params.status_bruker != null){minInnmelding.status_bruker=req.params.status_bruker};
-            if(req.params.dato_svar_admin != null){minInnmelding.dato_svar_admin=req.params.dato_svar_admin}else{minInnmelding.dato_svar_admin=1234;};
-            if(req.params.dato_svar_bruker != null){minInnmelding.dato_svar_bruker=req.params.dato_svar_bruker};
-            if(req.params.aktiv != null){minInnmelding.aktiv=req.params.aktiv};
-            if(req.params.notat_admin != null){minInnmelding.notat_admin=req.params.notat_admin};
-            if(req.params.notat_bruker != null){minInnmelding.notat_bruker=req.params.notat_bruker};
-            // console.log('After: ' + minInnmelding.kollektiv_id);
-            // console.log('After: ' + minInnmelding.bruker_epost);
-            // console.log('After: ' + minInnmelding.status_admin);
-            // console.log('After: ' + minInnmelding.status_bruker);
-            // console.log('After: ' + minInnmelding.dato_svar_admin);
-            // console.log('After: ' + minInnmelding.dato_svar_bruker);
-            // console.log('After: ' + minInnmelding.aktiv);
-            // console.log('After: ' + minInnmelding.notat_admin);
-            // console.log('After: ' + minInnmelding.notat_bruker);
-
-        
-            if(req.params.kollektiv_id){
-                connection.query("UPDATE Innmelding SET ? WHERE kollektiv_id=? AND bruker_epost=?", [minInnmelding, req.body.kollektiv_id,minInnmelding.bruker_epost], function(err, rows2, fields){
-                    connection.query("INSERT INTO Bruker_Kollektiv SET kollektiv_id=?, bruker_id=?, er_admin=0", [req.body.kollektiv_id,req.params.bruker_id], function(err, rows3, fields){
-                    res.send(err ? err : rows3);
+                if(req.params.kollektiv_id != null){minInnmelding.kollektiv_id=req.params.kollektiv_id};
+                if(req.params.bruker_epost != null){minInnmelding.bruker_epost=req.params.bruker_epost};
+                if(req.params.status_admin != null){minInnmelding.status_admin=req.params.status_admin};
+                if(req.params.status_bruker != null){minInnmelding.status_bruker=req.params.status_bruker};
+                if(req.params.dato_svar_admin != null){minInnmelding.dato_svar_admin=req.params.dato_svar_admin}else{minInnmelding.dato_svar_admin=1234;};
+                if(req.params.dato_svar_bruker != null){minInnmelding.dato_svar_bruker=req.params.dato_svar_bruker};
+                if(req.params.aktiv != null){minInnmelding.aktiv=req.params.aktiv};
+                if(req.params.notat_admin != null){minInnmelding.notat_admin=req.params.notat_admin};
+                if(req.params.notat_bruker != null){minInnmelding.notat_bruker=req.params.notat_bruker};
+            
+                if(req.params.kollektiv_id){
+                    connection.query("UPDATE Innmelding SET ? WHERE kollektiv_id=? AND bruker_epost=?", [minInnmelding, req.body.kollektiv_id,minInnmelding.bruker_epost], function(err, rows2, fields){
+                        connection.query("INSERT INTO Bruker_Kollektiv SET kollektiv_id=?, bruker_id=?, er_admin=0", [req.body.kollektiv_id,req.params.bruker_id], function(err, rows3, fields){
+                        res.send(err ? err : rows3);
+                        return next();
+                        })
+                    });
+                }else{
+                    res.send(null);
                     return next();
-                    })
-                });
-            }else{
-                res.send(null);
-                return next();
-            };
+                };
+            });
         });
-    });
-}else{
-    console.log('Fant ingen innmelding for bruker ' + req.params.bruker_id + ' til kollektiv ' + req.params.kollektiv_id + '...');
-    res.send(null);
-    return next();
-};
-    
-
+    }else{
+        console.log('Fant ingen innmelding for bruker ' + req.params.bruker_id + ' til kollektiv ' + req.params.kollektiv_id + '...');
+        res.send(null);
+        return next();
+    };
 });
 
 // Oppdatere en innmelding via GET (for å kunne motta svar via klikk fra epost)
@@ -136,7 +97,7 @@ server.get('rest/invitasjon/:kollektiv_id',function(req, res, next){
         let myBruker_epost = req.params.bruker_epost;
         let myUndergruppe_id = ''; //                   SELECT undergruppe_id WHERE kollektiv_id=? AND default_gruppe=1
         let myBruker_id = ''; //                        SELECT bruker_id WHERE bruker_epost=? (OR CREATE THE USER IF MISSING FROM THE DATABASE!!!)
-        let currentDateAsEpoch = 1234;
+        let currentDateAsEpoch = util.getCurrentTimeAsEpoch();
 
         console.log(myKollektiv_id + ', ' + myBruker_epost +  ', ' + myBruker_id +  ', ' + myUndergruppe_id +  ', ' + currentDateAsEpoch);
 
