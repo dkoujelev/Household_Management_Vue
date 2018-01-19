@@ -23,7 +23,7 @@ import GjeldInn from '@/components/Gjeld/GjeldInn'
 import GjeldUt from '@/components/Gjeld/GjeldUt'
 import GjeldInnSpesifisert from '@/components/Gjeld/GjeldInnSpesifisert'
 import StatsOftenBoughtItems from '@/components/Charts/StatsOftenBoughtItems'
-import LineChart from '@/components/Charts/LineChart'
+
 
 Vue.use(Router);
 
@@ -147,11 +147,6 @@ export default new Router({
         name: 'StatsOftenBoughtItems',
         component: StatsOftenBoughtItems
       },
-      {
-        path: '/LineChart',
-        name: 'LineChart',
-        component: LineChart
-      }
     ]
   }
 )

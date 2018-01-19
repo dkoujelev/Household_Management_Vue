@@ -41,7 +41,7 @@
   import axios from 'axios'
   import moment from 'moment'
   import Datepicker from 'vuejs-datepicker'
-  import LineChart from '@/components/LineChart'
+  import LineChart from './LineChart'
   export default {
     components: {
       LineChart,

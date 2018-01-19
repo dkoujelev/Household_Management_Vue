@@ -1,7 +1,3 @@
-<template>
-
-</template>
-
 <script>
   import { Line } from 'vue-chartjs'
   export default Line.extend({
@@ -56,21 +52,6 @@
           }
         ]
       }, this.options)
-    },
-
-    data1: [
-      {day: "2017-04-18", downloads: 16280},
-      {day: "2017-04-19", downloads: 14280},
-      {day: "2017-04-20", downloads: 17280}
-    ]
+    }
   })
-
 </script>
-
-
-
-
-
-<style scoped>
-
-</style>
