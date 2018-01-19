@@ -81,9 +81,15 @@
               this.login_info.epost = "";
               this.login_info.passord = "";
               this.$parent.current_user = response.data;
-              this.$parent.current_user.kollektiv = [];
               this.$parent.loggedIn = true;
-              router.push('home');
+              axios.get('http://localhost:9000/rest/kollektivForBruker/' + response.data.bruker_id).then(response => {
+                let rows = response.data;
+                this.$parent.current_user.kollektiv = [];
+                for(let row of rows){
+                  this.$parent.current_user.kollektiv.push(row.kollektiv_id);
+                }
+                router.push('home');
+              });
             }
           }).catch(err => {
             console.log(err);
