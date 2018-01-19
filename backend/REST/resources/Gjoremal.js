@@ -3,16 +3,20 @@ let connection = require("../connection");
 
 // Hent et bestemt gjoremal
 server.get('rest/gjoremal/:gjoremal_id',function(req, res, next){
-  connection.query("SELECT * FROM Gjoremalsliste WHERE id=?", [req.params.gjoremal_id], function(err, rows, fields){
+  connection.query("SELECT * FROM Gjoremal WHERE gjoremal_id=?", req.params.gjoremal_id, function(err, rows, fields){
+    if(err)
+      return next(err);
 
-    if('start' in rows)
+    let gjoremal = rows[0];
+
+    if('start' in gjoremal)
       rows.start = new Date(rows.start);
-    if('frist' in rows)
+    if('frist' in gjoremal)
       rows.frist = new Date(rows.frist);
-    if('ferdig' in rows)
+    if('ferdig' in gjoremal)
       rows.ferdig = new Date(rows.ferdig);
 
-    res.send(err ? err : (rows.length == 1 ? rows[0] : null));
+    res.send(gjoremal);
     return next();
   });
 });
@@ -26,15 +30,18 @@ server.post('rest/gjoremal/',function(req, res, next){
   if('ferdig' in req.body)
     req.body.ferdig = new Date(req.body.ferdig).getTime();
 
-  connection.query("INSERT INTO Gjoremal SET ?", req.body, function(err, rows1, fields){
+  connection.query("INSERT INTO Gjoremal SET ?", req.body, function(err, rows, field){
     if(err)
-      res.send(err);
+      return next(err);
+    res.send(rows);
     return next();
   });
 });
 
 // Oppdatere et gjoremal
-server.put('rest/gjoremal',function(req,res,next){
+server.put('rest/gjoremal/',function(req,res,next){
+  let id = req.body.gjoremal_id;
+  //console.log(id);
   if('start' in req.body)
     req.body.start = new Date(req.body.start).getTime();
   if('frist' in req.body)
@@ -42,7 +49,7 @@ server.put('rest/gjoremal',function(req,res,next){
   if('ferdig' in req.body)
     req.body.ferdig = new Date(req.body.ferdig).getTime();
 
-  connection.query("UPDATE Gjoremal SET ? WHERE id=?", [req.body, req.body.id], function(err, rows, fields){
+  connection.query("UPDATE Gjoremal SET ? WHERE gjoremal_id=?", [req.body, id], function(err, rows, fields){
 
     res.send(err ? err : rows);
     return next();
@@ -51,7 +58,7 @@ server.put('rest/gjoremal',function(req,res,next){
 
 //Slett et gjøremål
 server.del('rest/gjoremal/:gjoremal_id',function(req,res,next){
-  connection.query("DELETE FROM Gjoremal WHERE id=?", [req.params.gjoremal_id], function(err,rows,fields){
+  connection.query("DELETE FROM Gjoremal WHERE gjoremal_id=?", [req.params.gjoremal_id], function(err,rows,fields){
     res.send(err ? err : rows);
     return next();
   });
