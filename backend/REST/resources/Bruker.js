@@ -157,3 +157,29 @@ server.post('rest/loggedIn',function(req,res,next){
 
 
 });
+
+//Check password
+server.post('rest/password',function(req,res,next){
+  connection.query("SELECT * FROM Bruker WHERE epost=?", [req.body.email], function(err, rows, fields){
+    //  Check if there even is a user with this email
+    let password = [req.body.password] + ""; //               Load password from request (and force to proper string by adding + "")
+    let hashed_password = rows[0].hashed_passord; //          Get the hash returned from DB
+
+    (bcrypt.compareSync(password, hashed_password) ? res.send({valid: true}) : res.send({valid: false}));
+
+    return next;
+  });
+});
+
+//Change password
+server.put('rest/changePassword',function(req,res,next){
+  let newPassword = req.body.newPassword;
+
+  //Update the password
+  /*******INSERT CODE HERE*******/
+  let isUpdated = true;
+
+  //Return
+  res.send({updated: isUpdated});
+  return next;
+});
