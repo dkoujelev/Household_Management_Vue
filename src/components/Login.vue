@@ -81,6 +81,7 @@
               this.login_info.epost = "";
               this.login_info.passord = "";
               this.$parent.current_user = response.data;
+              this.$parent.current_user.kollektiv = [];
               this.$parent.loggedIn = true;
               router.push('home');
             }

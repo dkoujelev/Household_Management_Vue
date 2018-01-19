@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
-import CreateGroup from '@/components/CreateGroup'
 import Task from '@/components/Task'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
@@ -22,6 +21,7 @@ import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
 import GjeldInn from '@/components/Gjeld/GjeldInn'
 import GjeldUt from '@/components/Gjeld/GjeldUt'
 import GjeldInnSpesifisert from '@/components/Gjeld/GjeldInnSpesifisert'
+import NewUser from '@/components/NewUser'
 
 Vue.use(Router);
 
@@ -139,6 +139,11 @@ export default new Router({
         path: '/TestMail',
         name: 'TestMail',
         component: TestMail
+      },
+      {
+        path: '/NewUser',
+        name: 'NewUser',
+        component: NewUser
       }
     ]
   }

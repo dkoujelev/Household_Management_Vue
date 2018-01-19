@@ -101,20 +101,22 @@ export default {
       return {
         loggedIn: false, //TODO: MAKE SECURE
         current_user: {
-          "bruker_id": 1,
-          "epost": "sj@apple.com",
-          "fornavn": "Steve ",
-          "etternavn": "Jobs",
-          "tlf": "12345678",
-          "adresse": "California",
-          "hashed_passord": ""
+          bruker_id: 1,
+          epost: "sj@apple.com",
+          fornavn: "Steve ",
+          etternavn: "Jobs",
+          tlf: "12345678",
+          adresse: "California",
+          hashed_passord: "",
+          kollektiv: [] //{id: 0, grupper: [0, 1]}
+
         },
         current_group:{
-          "navn": "Testkollektiv 1",
-          "beskrivelse": "test",
-          "undergruppe_id": 1,
-          "kollektiv_id": 1,
-          "default_gruppe": 1
+          navn: "Testkollektiv 1",
+          beskrivelse: "test",
+          undergruppe_id: 1,
+          kollektiv_id: 1,
+          default_gruppe: 1
         },
         addingCollective: false,
         addingGroup: false
