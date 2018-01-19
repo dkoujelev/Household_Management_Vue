@@ -27,8 +27,9 @@ server.post('rest/gjoremal/',function(req, res, next){
     req.body.ferdig = new Date(req.body.ferdig).getTime();
 
   connection.query("INSERT INTO Gjoremal SET ?", req.body, function(err, rows1, fields){
-
-    if(err){res.send(err); return next();}
+    if(err)
+      res.send(err);
+    return next();
   });
 });
 
