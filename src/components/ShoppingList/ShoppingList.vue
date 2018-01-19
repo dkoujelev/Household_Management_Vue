@@ -96,7 +96,7 @@
         }
       },
 
-      sendData(){
+      sendData() {
         let shoppinglist =
         {
           navn: this.name,
