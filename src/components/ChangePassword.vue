@@ -1,18 +1,30 @@
 <template>
-  <div>
-    <h1>Endring av passord</h1>
-    <br/>
-    <p class="help is-danger">{{this.error.all}}</p>
-    <p class="help is-danger">{{this.error.oldPassword}}</p>
-    <input type="password" placeholder="Gammelt passord" v-model="oldPassword"/>
-    <br/>
-    <p class="help is-danger">{{this.error.newPasswordMissmatch}}</p>
-    <input type="password" placeholder="Nytt passord" v-model="newPassword"/>
-    <br/>
-    <input type="password" placeholder="Gjenta nytt passord" v-model="newPasswordRepeat"/>
-    <br>
-    <button class="button" @click="changePassword">Bytt passord</button>
-  </div>
+  <section class="hero is-fullheight is-medium is-bold">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <article class="card is-rounded" style="background-color: azure">
+            <div class="card-content">
+              <h1>Endring av passord</h1>
+              <br/>
+              <p class="help is-danger">{{this.error.all}}</p>
+              <input type="password" class="input"  placeholder="Gammelt passord" v-model="oldPassword"/>
+              <br/>
+              <p class="help is-danger">{{this.error.oldPassword}}</p>
+              <input type="password" class="input" placeholder="Nytt passord" v-model="newPassword"/>
+              <br/>
+              <input type="password" class="input" placeholder="Gjenta nytt passord" v-model="newPasswordRepeat"/>
+              <br/>
+              <p class="help is-danger">{{this.error.newPasswordMissmatch}}</p>
+              <br/>
+              <button class="button is-primary" @click="changePassword">Bytt passord</button>
+              <br/>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
