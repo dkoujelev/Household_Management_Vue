@@ -1,7 +1,7 @@
 let fs = require('fs');
 let connection = require('../REST/connection_test');
 
-let sql_statements = fs.readFileSync('backend/test/testDB.sql','utf8');
+let sql_statements = fs.readFileSync('backend/test/clearDB.sql','utf8');
 
 before((done) => {
   require("../REST/runserver_test")(() => done());
