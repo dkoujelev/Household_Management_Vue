@@ -27,10 +27,12 @@
 
     export default {
       name: 'Home',
-      components: {Newsfeedhome,Taskhome,Shoppinglistshome,},
+      components: {Newsfeedhome,Taskhome,Shoppinglistshome,Todo},
       created(){
         if(!this.$parent.loggedIn){
           router.push('Login');
+        } else if(this.$parent.current_user.kollektiv.length === 0){
+          router.push('NewUser');
         }
       }
     }

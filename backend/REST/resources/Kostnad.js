@@ -57,14 +57,16 @@ server.get('rest/kostnaderForUndergruppe/:undergruppe_id', function (req,res,nex
 
 // Leg til en kostnad
 server.post('rest/kostnad/', function (req, res, next) {
-  console.log(req.body.bruker_id);
+  //console.log(req.body.bruker_id);
   let kostnad = Object.assign({}, req.body);
 
   if('opprettet' in kostnad)
     kostnad.opprettet = new Date(kostnad.opprettet).getTime();
 
   connection.query('INSERT INTO Kostnad SET ?', [kostnad], function (err, rows, fields) {
-  console.log(kostnad);
+    if(err)
+      return next(err);
+  //console.log(kostnad);
   connection.query('INSERT INTO Kostnad SET?', [kostnad], function (err, rows, fields) {
     if(err)
       return next(err);

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <nav class="navbar is-success is-active is-fixed-top" role="navigation" aria-label="main navigation">
+    <nav class="navbar is-dark is-active is-fixed-top" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/home" v-if="loggedIn">
           Hjem
-          <!--<img src="./img/logo_medium.png" alt="image not found" width="175"/>-->
+          <img src="./img/Minilogo.png" alt="image not found" width="45"/>
         </router-link>
       </div>
       <div class="navbar-menu">
@@ -15,8 +15,9 @@
           <router-link class="navbar-item" v-if="!loggedIn" to="/Register">Registrer deg</router-link>
           <router-link class="navbar-item" v-if="loggedIn" to="/Nyhetsfeed">Nyhet</router-link>
           <router-link class="navbar-item" v-if="loggedIn" to="/Shoppinglists">Handlelister</router-link>
-          <router-link class="navbar-item" v-if="loggedIn" to="/Utgifter">Utgifter</router-link>
           <router-link class="navbar-item" v-if="loggedIn" to="/ShowExpences">Utgifter</router-link>
+          <router-link class="navbar-item" v-if="loggedIn" to="/Innmelding">Innmelding</router-link>
+          <router-link class="navbar-item" v-if="loggedIn" to="/TestMail">TestMail</router-link>
           <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldInn', params: {current_user: current_user}}">Gjeld Inn</router-link>
           <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldUt', params: {current_user: current_user}}">Gjeld Ut</router-link>
           <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut">Logg Ut</a>
@@ -100,20 +101,22 @@ export default {
       return {
         loggedIn: false, //TODO: MAKE SECURE
         current_user: {
-          "bruker_id": 1,
-          "epost": "sj@apple.com",
-          "fornavn": "Steve ",
-          "etternavn": "Jobs",
-          "tlf": "12345678",
-          "adresse": "California",
-          "hashed_passord": ""
+          bruker_id: 1,
+          epost: "sj@apple.com",
+          fornavn: "Steve ",
+          etternavn: "Jobs",
+          tlf: "12345678",
+          adresse: "California",
+          hashed_passord: "",
+          kollektiv: [] //{id: 0, grupper: [0, 1]}
+
         },
         current_group:{
-          "navn": "Testkollektiv 1",
-          "beskrivelse": "test",
-          "undergruppe_id": 1,
-          "kollektiv_id": 1,
-          "default_gruppe": 1
+          navn: "Testkollektiv 1",
+          beskrivelse: "test",
+          undergruppe_id: 1,
+          kollektiv_id: 1,
+          default_gruppe: 1
         },
         addingCollective: false,
         addingGroup: false
