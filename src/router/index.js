@@ -22,6 +22,7 @@ import GjeldInn from '@/components/Gjeld/GjeldInn'
 import GjeldUt from '@/components/Gjeld/GjeldUt'
 import GjeldInnSpesifisert from '@/components/Gjeld/GjeldInnSpesifisert'
 import NewUser from '@/components/NewUser'
+import Grupper from '@/components/Grupper'
 
 Vue.use(Router);
 
@@ -136,9 +137,10 @@ export default new Router({
         component: Innmelding
       },
       {
-        path: '/TestMail',
-        name: 'TestMail',
-        component: TestMail
+        path: '/Grupper',
+        name: 'Grupper',
+        component: Grupper,
+        props: true
       },
       {
         path: '/NewUser',
