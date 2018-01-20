@@ -22,11 +22,8 @@ import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
 import GjeldInn from '@/components/Gjeld/GjeldInn'
 import GjeldUt from '@/components/Gjeld/GjeldUt'
 import GjeldInnSpesifisert from '@/components/Gjeld/GjeldInnSpesifisert'
-import StatsOftenBoughtItems from '@/components/Charts/StatsOftenBoughtItems'
-import ItemChart from '@/components/Charts/ItemChart'
-import testDato from '@/components/Charts/testDato'
-
-
+import NewUser from '@/components/NewUser'
+import ChangePassword from '@/components/ChangePassword'
 Vue.use(Router);
 
 export default new Router({
@@ -143,22 +140,7 @@ export default new Router({
         path: '/TestMail',
         name: 'TestMail',
         component: TestMail
-      },
-      {
-        path: '/StatsOftenBoughtItems',
-        name: 'StatsOftenBoughtItems',
-        component: StatsOftenBoughtItems
-      },
-      {
-        path: '/ItemChart',
-        name: 'ItemChart',
-        component: ItemChart
-      },
-      {
-        path: '/testDato',
-        name: 'testDato',
-        component: testDato
-      },
+      }
     ]
   }
 )

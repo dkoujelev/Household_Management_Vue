@@ -22,9 +22,5 @@ server.use(restify.plugins.bodyParser({
     mapParams: true
 }));
 
-server.listen(9000, function(){
-    console.log("STARTED rest server! :)");
-});
-
 module.exports = server;
 
