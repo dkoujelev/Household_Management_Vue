@@ -11,8 +11,10 @@
             <input v-model="titleText" type='text'>
           </div>
           <div class='field'>
-            <label>Dato</label>
-            <input v-model="date" type='text'>
+            <label>Frist</label>
+            <input v-model="date" type="date">
+           <!-- <testDato></testDato> -->
+            <!--<input v-model="date" type='text'> ,  -->
           </div>
           <label>Beskrivelse</label>
           <input v-model="beskrivelseText" type='text'>
@@ -30,13 +32,13 @@
 </template>
 
 <script>
-  import datepicker from 'vue-date-picker';
+  import testDato from '@/components/Charts/testDato'
   import axios from 'axios';
   export default {
     data() {
       return {
         components: {
-          datepicker
+          testDato,
         },
         titleText: "",
         date: "",
@@ -46,13 +48,49 @@
     },
     methods: {
       openForm() {
+        let edit = {
+          navn: "",
+          start: new Date(),
+          beskrivelse: "",
+          bruker_id: 4,
+          liste_id: 6,
+        };
+        console.dir(edit);
+        axios.put('http://localhost:9000/rest/gjoremal/', edit).then( response => {
+          alert('Gjøremål redigert/endret!');
+          this.$emit('edit-todo', edit);
+          console.log("1");
+          router.push('edit-todo');
+        }).catch(err => {
+          console.log(JSON.stringify(err));
+        });
+
+        if (this.titleText.length > 0  && this.beskrivelseText.length > 0) {
+          const title = this.titleText;
+          const date = this.date;
+          const beskrivelse = this.beskrivelse;
+          this.$emit('edit-todo', {
+            title,
+            date,
+            beskrivelse,
+            done: false,
+          });
+          this.titleText = '';
+          this.date = '';
+          this.beskrivelse = '';
+          this.isCreating = false;
+        }
+
+
         this.isCreating = true;
       },
+
+
       closeForm() {
         this.isCreating = false;
       },
-      sendForm() {
 
+      sendForm() {
         let todoList =
           {
             navn: "",

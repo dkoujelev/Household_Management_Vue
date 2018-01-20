@@ -23,9 +23,11 @@
 </template>
 
 <script>
+
   import swal from 'sweetalert';
   import Todo from './Todo';
   import CreateTodo from './CreateTodo';
+  import testDato from '@/components/Charts/testDato'
 
   export default {
     data() {
@@ -40,7 +42,7 @@
       },
 
     components: {
-      Todo, CreateTodo //html tag
+      Todo, CreateTodo, testDato, //html tag
     },
     methods: {
       deleteTodo(todo) {
