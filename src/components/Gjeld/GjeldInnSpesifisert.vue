@@ -11,11 +11,12 @@
 <script>
 
   import axios from 'axios';
+  import {store} from '../../store';
 
   export default {
-    props: ['current_user', 'user_owes'],
+    props: ['user_owes'],
     created(){
-      axios.post('http://localhost:9000/rest/gjeldSpesifisert', {skylder: this.user_owes.bruker_id , innkrever: this.current_user.bruker_id}).then(response => {
+      axios.post('http://localhost:9000/rest/gjeldSpesifisert', {skylder: this.user_owes.bruker_id , innkrever: store.state.current_user.bruker_id}).then(response => {
         this.debts = response.data;
       }).catch(err => {
         console.log(err);

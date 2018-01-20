@@ -16,7 +16,6 @@
   import {store} from '../store';
 
   export default {
-    props: ['current_user'],
       created(){
         this.loadGroups();
       },
@@ -24,11 +23,6 @@
           return {
               groups: [],
           };
-    },
-    watch:{
-      current_user: function(newVal, oldVal){
-          this.loadGroups();
-      }
     },
     methods:{
         loadGroups(){
