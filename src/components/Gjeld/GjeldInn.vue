@@ -29,7 +29,7 @@
     },
     methods:{
         selectUser(user){
-          router.push({name: 'GjeldInnSpesifisert', params: {current_user: store.state.current_user, user_owes: user}});
+          router.push('GjeldInnSpesifisert/' + user.bruker_id);
         }
     }
   };

@@ -13,7 +13,7 @@
       <a href="#" class="button is-primary" @click.prevent="addExpence">Legg til utgift</a>
       <br>
       <br>
-      <router-link class="button is-danger"to="/ShowExpences">Avbryt</router-link>
+      <a class="button is-danger" @click="$router.back()">Avbryt</a>
     </div>
   </div>
 </template>
