@@ -21,6 +21,7 @@
 <script>
   import axios from 'axios';
   import {store} from '../store';
+  import router from '../router';
 
   export default{
     name: 'AddExpence',
@@ -41,7 +42,7 @@
             newExpence.sum = this.expence.sum;
             newExpence.kvittering = this.expence.kvittering;
 
-            router.push('ShowExpenses');
+            router.push('ShowExpences');
 
             this.$emit('added-expence', newExpence);
           }).catch(err => {
