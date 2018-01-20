@@ -109,17 +109,7 @@ export default {
   data(){
       return {
         loggedIn: false, //TODO: MAKE SECURE
-        current_user: {
-          bruker_id: 1,
-          epost: "sj@apple.com",
-          fornavn: "Steve ",
-          etternavn: "Jobs",
-          tlf: "12345678",
-          adresse: "California",
-          hashed_passord: "",
-          kollektiv: [] //{id: 0, grupper: [0, 1]}
-
-        },
+        current_user: {},
         current_group:{
           navn: "Testkollektiv 1",
           beskrivelse: "test",
