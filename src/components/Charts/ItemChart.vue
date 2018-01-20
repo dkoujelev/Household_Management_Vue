@@ -2,6 +2,7 @@
   <div>
 
     <testDato></testDato>
+    <testDato><</testDato>
 
   <div class='chart'>
     <!-- import font awesome for legend icons -->
