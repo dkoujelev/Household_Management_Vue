@@ -62,6 +62,9 @@ module.exports = function(connection, server) {
 // Sjekke om en epost er registrert
   server.get('rest/brukerepost/:epost', function (req, res, next) {
     connection.query("SELECT * FROM Bruker WHERE epost=?", [req.params.epost], function (err, rows, fields) {
+      if(err)
+        return next(err);
+
       res.send({exists: rows.length == 1});
       return next();
     });
