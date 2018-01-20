@@ -63,6 +63,7 @@
   import AddCollective from '@/components/AddCollective';
   import AddGroup from '@/components/AddGroup';
   import router from '@/router/index.js';
+  import axios from 'axios';
 
 export default {
   name: 'dashboard',
@@ -81,10 +82,18 @@ export default {
     },
     logOut(){
         this.loggedIn=false;
+        axios.post('http://localhost:9000/rest/logout');
         router.push('Login');
     }
   },
   created(){
+      axios.post('http://localhost:9000/rest/loggedIn').then(response => {
+          if(response.data){
+            this.current_user = response.data;
+            this.loggedIn = true;
+          }
+      });
+
 //      window.current_group= {navn: 'test', undergruppe_id: 1};
 //      window.current_user = {
 //      "bruker_id": 1,

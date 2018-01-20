@@ -105,7 +105,7 @@ module.exports = function(connection, server) {
 
       let user = rows[0];
 
-      if ('sessionId' in req.cookies && req.cookies.sessionId != '') {
+      if ('sessionId'   in req.cookies && req.cookies.sessionId != '') {
         console.log("session cookie found");
         if (auth.hasSession(req.cookies.sessionId)) {
           // User already logged in!
@@ -116,7 +116,7 @@ module.exports = function(connection, server) {
         else {
           console.log("session forgotten");
           // User had sessionId cookie but server forgot about it. Kill the cookie.
-          res.setCookie('sessionId', '');
+          //res.setCookie('sessionId', '');
         }
       }
 
@@ -130,8 +130,7 @@ module.exports = function(connection, server) {
       if (bcrypt.compareSync(passord, hashed_passord)) { //    Compare the password to the hash
         // Passwords match
 
-        let session = auth.newSession(req.body);
-        console.log('adding session ' + session);
+        let session = auth.newSession(user);
         res.setCookie('sessionId', session);
         res.send(user); //                   Log in the user... (But for now, just tell the GUI it's all good!)
         return next();
@@ -142,6 +141,14 @@ module.exports = function(connection, server) {
         return next();
       }
     });
+  });
+
+  // Log out user.
+  server.post('rest/logout', (req,res,next) => {
+    auth.dropSession(req.cookies.sessionId);
+    res.setCookie('sessionId','');
+    res.send();
+    return next();
   });
 
 // Check if user is already logged in.
@@ -162,8 +169,6 @@ module.exports = function(connection, server) {
       res.send(null);
       return next();
     }
-
-
   });
 
 //Check password
