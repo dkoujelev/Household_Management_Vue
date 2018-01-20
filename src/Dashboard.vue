@@ -87,7 +87,7 @@ export default {
     }
   },
   created(){
-      axios.post('http://localhost:9000/rest/loggedIn').then(response => {
+      axios.get('http://localhost:9000/rest/loggedIn').then(response => {
           if(response.data){
             this.current_user = response.data;
             this.loggedIn = true;

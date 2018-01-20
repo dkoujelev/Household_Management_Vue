@@ -152,7 +152,7 @@ module.exports = function(connection, server) {
   });
 
 // Check if user is already logged in.
-  server.post('rest/loggedIn', function (req, res, next) {
+  server.get('rest/loggedIn', function (req, res, next) {
 
     if ('sessionId' in req.cookies && req.cookies.sessionId != '') {
       if (auth.hasSession(req.cookies.sessionId)) {
