@@ -155,9 +155,21 @@ module.exports = function(connection, server) {
   server.get('rest/loggedIn', function (req, res, next) {
 
     if ('sessionId' in req.cookies && req.cookies.sessionId != '') {
-      if (auth.hasSession(req.cookies.sessionId)) {
-        res.send(auth.getSession(req.cookies.sessionId));
-        return next();
+      let user = auth.getSession(req.cookies.sessionId);
+
+      if (user) {
+        connection.query("SELECT Kollektiv.* FROM Kollektiv INNER JOIN Bruker_Kollektiv " +
+          "ON Kollektiv.kollektiv_id=Bruker_Kollektiv.kollektiv_id " +
+          "WHERE Bruker_Kollektiv.bruker_id=?",[user.bruker_id], (err,rows,fields) => {
+
+          if(err)
+            return next(err);
+
+          user.kollektiv = JSON.parse(JSON.stringify(rows));
+
+          res.send(auth.getSession(req.cookies.sessionId));
+          return next();
+        });
       }
       else {
         res.setCookie('sessionId', '');
