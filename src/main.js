@@ -13,15 +13,18 @@ axios.defaults.withCredentials = true;
 
 router.beforeEach((to,from,next) => {
 
-  if(to.path === '/Login' || to.path === '/Registrer'){
+  console.log("router.beforeEach: intercepting route from " + from.path + " to " + to.path);
+
+  if(to.path === '/Login' || to.path === '/Register'){
     console.log("router.beforeEach: user is already on login/register page, no redirect");
-    next();
+    return next();
   }
+
 
 
   if(store.state.loggedIn){
     console.log("router.beforeEach: already logged in, don't redirect");
-    next();
+    return next();
   }
 
   axios.get('http://localhost:9000/rest/loggedIn').then(response => {
@@ -29,11 +32,11 @@ router.beforeEach((to,from,next) => {
       console.log("router.beforeEach: User is logged in, proceed with route");
       store.state.current_user = response.data;
       store.state.loggedIn = true;
-      next();
+      return next();
     }
     else{
       console.log("router.beforeEach: User isn't logged in! Sending user to Login");
-      next('Login');
+      return next('Login');
     }
 
   });

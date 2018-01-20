@@ -94,11 +94,11 @@ module.exports = function(connection, server) {
 
 // Login
   server.post('rest/login', function (req, res, next) {
-    console.log("login requested");
+
     connection.query("SELECT * FROM Bruker WHERE epost=?", [req.body.epost], function (err, rows, fields) {
-      console.log("in query");
 
       if (rows.length == 0) {
+        console.log('login denied for user ' + req.body.epost + ' (user not found)');
         res.send(null);
         return next();
       }
@@ -114,14 +114,11 @@ module.exports = function(connection, server) {
           return next();
         }
         else {
-          console.log("session forgotten");
+          console.log("session " + req.cookies.sessionId + " was not found on server!");
           // User had sessionId cookie but server forgot about it. Kill the cookie.
           //res.setCookie('sessionId', '');
         }
       }
-
-      console.log("past if");
-
 
       //  Check if there even is a user with this email
       let passord = [req.body.passord] + ""; //               Load password from request (and force to proper string by adding + "")
@@ -136,7 +133,7 @@ module.exports = function(connection, server) {
         return next();
       } else {
         // Passwords don't match
-        console.log('login denied');
+        console.log('login denied for user ' + req.body.epost);
         res.send(null); //                  Tell the GUI that the password was no good!
         return next();
       }
