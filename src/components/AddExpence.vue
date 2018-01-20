@@ -13,13 +13,14 @@
       <a href="#" class="button is-primary" @click.prevent="addExpence">Legg til utgift</a>
       <br>
       <br>
-      <router-link class="button is-danger" @click.prevent="$emit('cancel')" to="/SeeAccounting">Avbryt</router-link>
+      <router-link class="button is-danger"to="/ShowExpences">Avbryt</router-link>
     </div>
   </div>
 </template>
 
 <script>
   import axios from 'axios';
+  import {store} from '../store';
 
   export default{
     name: 'AddExpence',
@@ -30,11 +31,8 @@
     },
     methods: {
         addExpence(){
-
-
-
-            this.expence.bruker_id = window.current_user.bruker_id;
-            this.expence.undergruppe_id = window.current_group.undergruppe_id;
+            this.expence.bruker_id = store.state.current_user.bruker_id;
+            this.expence.undergruppe_id = store.state.current_group.undergruppe_id;
             this.expence.opprettet = new Date();
             console.log(JSON.stringify(this.expence));
           axios.post('http://localhost:9000/rest/kostnad',this.expence).then(response => {
@@ -42,6 +40,9 @@
             newExpence.tittel = this.expence.tittel;
             newExpence.sum = this.expence.sum;
             newExpence.kvittering = this.expence.kvittering;
+
+            router.push('ShowExpenses');
+
             this.$emit('added-expence', newExpence);
           }).catch(err => {
             console.log(JSON.stringify(err));
