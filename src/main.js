@@ -3,9 +3,12 @@
 import Vue from 'vue'
 import Dashboard from './Dashboard'
 import router from './router'
+import axios from 'axios'
 
 Vue.config.productionTip = false;
 window.Vue = Vue;
+
+axios.defaults.withCredentials = true;
 
 /* eslint-disable no-new */
 new Vue({
