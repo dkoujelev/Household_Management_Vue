@@ -32,7 +32,7 @@ module.exports = function(connection, server){
     });
   });
 
-
+// Hent undergruppene til en bruker
   server.get('rest/undergrupperForBruker/:bruker_id',function(req, res, next){
     connection.query("SELECT Undergruppe.*, Kollektiv.navn as kollektiv_navn FROM Undergruppe " +
       "INNER JOIN Bruker_Undergruppe ON Undergruppe.undergruppe_id=Bruker_Undergruppe.undergruppe_id " +
@@ -45,6 +45,7 @@ module.exports = function(connection, server){
     });
   });
 
+// Lag en undergruppe
   server.post('rest/undergruppe/:bruker_id',function(req, res, next){
     connection.query("INSERT INTO Undergruppe SET ?", req.body, function(err, rows1, fields){
       if(err){res.send(err); return next();}
@@ -56,9 +57,31 @@ module.exports = function(connection, server){
     });
   });
 
+// Oppdater en undergruppe
   server.put('rest/undergruppe/',function(req, res, next){
     connection.query("UPDATE Undergruppe SET ? WHERE undergruppe_id=?", [req.body, req.body.undergruppe_id], function(err, rows, fields){
       res.send(err ? err : rows);
+      return next();//
+    });
+  });
+
+// Favorittiser en handleliste
+  server.put('rest/favorittHandleliste/', function (req, res, next) {
+    //console.log(req.body.favoritt + " " + req.body.handleliste_id);
+    connection.query('UPDATE Handleliste SET favoritt=? WHERE handleliste_id=?', [req.body.favoritt, req.body.handleliste_id], function (err, rows, fields) {
+      if(err)
+        return next(err);
+      res.send(rows);
+      return next();
+    });
+  });
+
+// Favorittiser en gjoremalsliste
+  server.put('rest/favorittGjoremalsliste/', function (req, res, next) {
+    connection.query('UPDATE Gjoremalsliste SET favoritt=? WHERE id=?', [req.body.favoritt, req.body.id], function (err, rows, fields) {
+      if(err)
+        return next(err);
+      res.send(rows);
       return next();
     });
   });
