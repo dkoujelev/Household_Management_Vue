@@ -30,8 +30,8 @@ router.beforeEach((to,from,next) => {
   axios.get('http://localhost:9000/rest/loggedIn').then(response => {
     if(response.data !== null){
       //console.log("router.beforeEach: User is logged in, proceed with route");
-      store.state.current_user = response.data;
-      store.state.loggedIn = true;
+      store.commit('current_user',response.data);
+      store.commit('loggedIn',true);
       return next();
     }
     else{
