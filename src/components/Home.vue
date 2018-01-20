@@ -28,12 +28,7 @@
 
     export default {
       name: 'Home',
-      components: {Newsfeedhome,Taskhome,Shoppinglistshome,Todo},
-      created(){
-        if(   store.state.current_user.kollektiv.length === 0){
-          router.push('NewUser');
-        }
-      }
+      components: {Newsfeedhome,Taskhome,Shoppinglistshome,Todo}
     }
 </script>
 
