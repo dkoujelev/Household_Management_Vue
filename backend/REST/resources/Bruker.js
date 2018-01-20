@@ -201,5 +201,4 @@ module.exports = function(connection, server) {
       return next();
     });
   });
-
 };
