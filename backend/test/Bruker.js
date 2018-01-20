@@ -26,31 +26,62 @@ let testuser2 = {
 
 let test_kollektiv = {navn: 'testkollektiv', beskrivelse: ''};
 
+// Innholdet i denne funksjonen brukes ikke, men er her for å
+// demonstrere hvordan man chainer axios requests på en oversiktelig måte
+let axios_eksempel = function(){
+
+  return axios.get(url)
+  .then(response => {
+    // kode
+    return axios.get(url);
+  }).then(response => {
+    // kode
+    return axios.post(url, data);
+  }).then(response => {
+    // kode
+    return axios.get(url);
+  }).then(response => {
+    //koden her kjører kun etter alle axios requests er utført.
+    //Selve testingen legges typisk her, men kan komme tidligere.
+  });
+};
+
+
 describe('Bruker',() => {
 
+  // Legg inn et par testusers i basen. Begge testusers er medlem i test_kollektiv som også ligger i basen.
+  // Basen tømmes og dette innholdet legges inn på nytt før hver test kjøres.
+
   beforeEach(() => {
-    return clearDB()
+    // OBS: Vi må RETURNERE hele kjeden til testbiblioteket vårt, derfor return før clearDB.
+    return clearDB()      // Vi må først nullstille testbasen
     .then((response) => {
+      // Legg testuser inn i basen
       return axios.post('http://localhost:9100/rest/bruker', testuser);
     }).then(response => {
+      // Finn ut hvilken bruker_id testuser fikk, og legg til i testuser objektet vårt
       testuser.bruker_id = response.data.insertId;
+      // Vi bryr oss ikke om å sammenligne passord i denne testen, så passord fjernes før objektene sammenlignes
       delete testuser.hashed_passord;
+      // Legg testuser2 inn i basen
       return axios.post('http://localhost:9100/rest/bruker', testuser2);
     }).then(response => {
+        // Finn ut hvilken bruker_id testuser2 fikk, og legg til i testuser objektet vårt
       testuser2.bruker_id = response.data.insertId;
+      // Vi bryr oss ikke om å sammenligne passord i denne testen, så passord fjernes før objektene sammenlignes
       delete testuser2.hashed_passord;
-
+      // Legg in test_kollektiv i basen. testuser blir admin.
       return axios.post('http://localhost:9100/rest/kollektiv/' + testuser.bruker_id, test_kollektiv);
     }).then(response => {
       test_kollektiv.kollektiv_id = response.data.insertId;
 
-      // testuser ligger allerede inne i kollektivet pga han som "oppretta" det i before()
-      // Trenger kun å legge inn testuser2.
 
       let data = {
         bruker_id: testuser2.bruker_id,
         kollektiv_id: test_kollektiv.kollektiv_id
       };
+        // testuser ligger allerede inne i kollektivet pga han som "oppretta" det over.
+        // Trenger kun å legge inn testuser2 i testkollektivet.
       return axios.post('http://localhost:9100/rest/meldBrukerInnIKollektiv', data);
     });
   });
@@ -62,8 +93,10 @@ describe('Bruker',() => {
       // Sjekk at passorded ble satt/hashet rett
       expect(bcrypt.compareSync(testuser1_oldpass, response.data.hashed_passord)).to.be.true;
 
+      // Vi bryr oss ikke om å sammenligne passord i denne testen, så passord fjernes før objektene sammenlignes
       delete response.data.hashed_passord;
 
+      // Vi forventer nå at brukerobjektet fra basen er helt likt testuser-objektet vårt som vi la inn tidligere.
       expect(response.data).to.deep.equal(testuser);
 
     });
@@ -122,7 +155,7 @@ describe('Bruker',() => {
     });
   });
 
-  it.skip('Oppdater bruker', done => {
+  it('Oppdater bruker', () => {
 
     let old_user = {
       epost: 'test2@test.com',
@@ -141,22 +174,21 @@ describe('Bruker',() => {
       adresse: 'ny adresse'
     };
 
-    axios.post('http://localhost:9100/rest/bruker', old_user).then(response => {
+    return axios.post('http://localhost:9100/rest/bruker', old_user)
+    .then(response => {
       new_user.bruker_id = response.data.insertId;
-      axios.put('http://localhost:9100/rest/bruker', new_user).then(response => {
-        axios.get('http://localhost:9100/rest/bruker/' + new_user.bruker_id).then(response => {
-          delete response.data.hashed_passord;
+      return axios.put('http://localhost:9100/rest/bruker', new_user);
+    }).then(response => {
+      return axios.get('http://localhost:9100/rest/bruker/' + new_user.bruker_id);
+    }).then(response => {
+      delete response.data.hashed_passord;
 
-          expect(response.data).to.deep.equal(new_user);
-          done();
-
-        }).catch(err => { done(new Error("error updating from old_user to new_user: " + err.response.data.sqlMessage)); });;
-      }).catch(err => { done(new Error("error updating from old_user to new_user: " + err.response.data.sqlMessage)); });
-    }).catch(err => { done(new Error("error adding old_user: " + err.response.data.sqlMessage)); });
+      expect(response.data).to.deep.equal(new_user);
+    });
   });
 
   //Change password
-  it.skip('Endre passord',done => {
+  it('Endre passord',() => {
     let user = {
       epost: 'test3@test.com',
       fornavn: 'Test',
@@ -166,23 +198,22 @@ describe('Bruker',() => {
       hashed_passord: 'passord'
     };
 
-    axios.post('http://localhost:9100/rest/bruker', user).then(response => {
+    return axios.post('http://localhost:9100/rest/bruker', user)
+    .then(response => {
+
       user.bruker_id = response.data.insertId;
 
-      axios.put('http://localhost:9100/rest/changePassword', {
+      let data = {
         "email": user.epost,
         "newPassword": "nyttpassord"
-      }).then(response => {
-        axios.get('http://localhost:9100/rest/bruker/'+user.bruker_id).then(response => {
-          expect(bcrypt.compareSync("nyttpassord", response.data.hashed_passord)).to.be.true;
-          expect(bcrypt.compareSync(user.hashed_passord, "blehhhhh")).to.be.false;
+      };
 
-          done();
-
-        }).catch(err => { done(new Error("error reading user: " + err.response.data.sqlMessage)); });
-      }).catch(err => { done(new Error("error setting new password for user: " + err.response.data.sqlMessage)); });
-    }).catch(err => { done(new Error("error adding user: " + err.response.data.sqlMessage)); });
-
+      return axios.put('http://localhost:9100/rest/changePassword', data);
+    }).then(response => {
+      return axios.get('http://localhost:9100/rest/bruker/' + user.bruker_id);
+    }).then(response => {
+      expect(bcrypt.compareSync("nyttpassord", response.data.hashed_passord)).to.be.true;
+      expect(bcrypt.compareSync(user.hashed_passord, "blehhhhh")).to.be.false;
+    });
   });
-
 });
