@@ -72,7 +72,7 @@ export default {
   components: {SelectGroup, AddCollective, AddGroup},
   methods:{
       selectedGroup(group){
-          store.state.current_group = group;
+          store.commit('current_group',group);
       },
     addedGroup(group){
       this.$refs.SelectGroup.loadGroups();
@@ -91,7 +91,7 @@ export default {
   created(){
       axios.get('http://localhost:9000/rest/loggedIn').then(response => {
           if(response.data){
-            store.state.current_user = response.data;
+            store.commit('current_user',response.data);
             store.state.loggedIn = true;
           }
       });
