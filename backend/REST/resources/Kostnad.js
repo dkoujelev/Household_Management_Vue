@@ -56,45 +56,45 @@ module.exports = function(connection, server){
 
 // Leg til en kostnad
   server.post('rest/kostnad/', function (req, res, next) {
-    //console.log(req.body.bruker_id);
-    let kostnad = Object.assign({}, req.body);
+    let kostnad = req.body;
 
     if('opprettet' in kostnad)
       kostnad.opprettet = new Date(kostnad.opprettet).getTime();
 
-    connection.query('INSERT INTO Kostnad SET ?', [kostnad], function (err, rows, fields) {
+    connection.query('INSERT INTO Kostnad SET?', [kostnad], function (err, rows, fields) {
       if(err)
         return next(err);
-      //console.log(kostnad);
-      connection.query('INSERT INTO Kostnad SET?', [kostnad], function (err, rows, fields) {
+      kostnad.kostnad_id = rows.insertId;
+      connection.query('SELECT bruker_id FROM Bruker_Undergruppe WHERE undergruppe_id=?', req.body.undergruppe_id, function (err, rows, field) {
         if(err)
           return next(err);
-        kostnad.kostnad_id = rows.insertId;
-        connection.query('SELECT bruker_id FROM Bruker_Undergruppe WHERE undergruppe_id=?', req.body.undergruppe_id, function (err, rows, field) {
+
+        // Only self in group, no reason to share costs
+        if(rows.length <= 1){
+          res.send(null);
+          return null;
+        }
+
+        let sum = Math.round(kostnad.sum / rows.length);
+        let gjelder = [];
+
+        for(let bruker of rows){
+          if(!(bruker.bruker_id === req.body.bruker_id)){
+            let gjeld = [];
+            gjeld.push(sum);
+            gjeld.push(kostnad.opprettet);
+            gjeld.push(kostnad.tittel);
+            gjeld.push(bruker.bruker_id);
+            gjeld.push(kostnad.bruker_id);
+            gjeld.push(kostnad.kostnad_id);
+            gjelder.push(gjeld);
+          }
+        }
+
+        connection.query('INSERT INTO Gjeld (belop, opprettet, beskrivelse, bruker_skylder_id, bruker_innkrever_id, kostnad_id) VALUES ?', [gjelder], function (err, rows, field) {
           if(err)
             return next(err);
-
-          let sum = Math.round(kostnad.sum / rows.length);
-          let gjelder = [];
-
-          for(let bruker of rows){
-            if(!(bruker.bruker_id === req.body.bruker_id)){
-              let gjeld = [];
-              gjeld.push(sum);
-              gjeld.push(kostnad.opprettet);
-              gjeld.push(kostnad.tittel);
-              gjeld.push(bruker.bruker_id);
-              gjeld.push(kostnad.bruker_id);
-              gjeld.push(kostnad.kostnad_id);
-              gjelder.push(gjeld);
-            }
-          }
-
-          connection.query('INSERT INTO Gjeld (belop, opprettet, beskrivelse, bruker_skylder_id, bruker_innkrever_id, kostnad_id)VALUES ?', [gjelder], function (err, rows, field) {
-            if(err)
-              return next(err);
-            res.send(rows);
-          });
+          res.send(rows);
         });
       });
     });
