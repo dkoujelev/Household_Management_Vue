@@ -1,3 +1,5 @@
+let util = require('../util');
+
 module.exports = function(connection, server) {
 
 // Hent en bestemt liste
@@ -109,7 +111,7 @@ module.exports = function(connection, server) {
       delete liste.gjoremal;
     }
     if ('opprettet' in liste)
-      liste.opprettet = new Date(liste.opprettet).getTime();
+      liste.opprettet = util.getCurrentTimeAsEpoch();
 
     connection.query('INSERT INTO Gjoremalsliste SET ?', [liste], function (err, rows, field) {
       if (err)

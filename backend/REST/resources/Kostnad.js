@@ -1,3 +1,5 @@
+let util = require('../util');
+
 module.exports = function(connection, server){
 
 // Hente en kostnad
@@ -25,7 +27,6 @@ module.exports = function(connection, server){
         return next(err);
 
       for(let kostnad of rows){
-        if('opprettet' in kostnad)
           kostnad.opprettet = new Date(kostnad.opprettet);
       }
 
@@ -58,8 +59,7 @@ module.exports = function(connection, server){
   server.post('rest/kostnad/', function (req, res, next) {
     let kostnad = req.body;
 
-    if('opprettet' in kostnad)
-      kostnad.opprettet = new Date(kostnad.opprettet).getTime();
+    kostnad.opprettet = util.getCurrentTimeAsEpoch();
 
     connection.query('INSERT INTO Kostnad SET?', [kostnad], function (err, rows, fields) {
       if(err)
