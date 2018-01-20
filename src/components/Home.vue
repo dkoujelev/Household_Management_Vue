@@ -30,10 +30,6 @@
       name: 'Home',
       components: {Newsfeedhome,Taskhome,Shoppinglistshome,Todo},
       created(){
-
-          console.log("DEBUG:");
-          console.log(store.state.current_user);
-
         if(   store.state.current_user.kollektiv.length === 0){
           router.push('NewUser');
         }
