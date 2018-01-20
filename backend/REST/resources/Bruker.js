@@ -5,6 +5,7 @@ module.exports = function(connection, server) {
 
   // Hent en bestemt bruker
   server.get('rest/bruker/:bruker_id', function (req, res, next) {
+
     connection.query("SELECT * FROM Bruker WHERE bruker_id=?", [req.params.bruker_id], function (err, rows, fields) {
       res.send(err ? err : (rows.length == 1 ? rows[0] : null));
       return next();
@@ -13,6 +14,7 @@ module.exports = function(connection, server) {
 
 // Finn bruker med bestemt epost
   server.get('rest/brukerMedEpost/:epost', function (req, res, next) {
+
     connection.query("SELECT * FROM Bruker WHERE epost=?", [req.params.epost], function (err, rows, fields) {
       res.send(err ? err : (rows.length == 1 ? rows[0] : null));
       return next();
@@ -21,6 +23,7 @@ module.exports = function(connection, server) {
 
 // Legg til bruker
   server.post('rest/bruker/', function (req, res, next) {
+
 // console.log('---------------------------------------------------------------');
 // console.log('Hashing: "p@a55w0rD!"');
 // let testPass = 'p@a55w0rD!';
@@ -53,6 +56,7 @@ module.exports = function(connection, server) {
 
 // Hent alle brukere
   server.get('rest/bruker/', function (req, res, next) {
+
     connection.query("SELECT * FROM Bruker", function (err, rows, fields) {
       res.send(err ? err : rows);
       return next();
@@ -61,6 +65,8 @@ module.exports = function(connection, server) {
 
 // Sjekke om en epost er registrert
   server.get('rest/brukerepost/:epost', function (req, res, next) {
+
+
     connection.query("SELECT * FROM Bruker WHERE epost=?", [req.params.epost], function (err, rows, fields) {
       if(err)
         return next(err);
