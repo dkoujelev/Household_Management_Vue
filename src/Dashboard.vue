@@ -18,20 +18,20 @@
           <router-link class="navbar-item" v-if="loggedIn" to="/ShowExpences">Utgifter</router-link>
           <router-link class="navbar-item" v-if="loggedIn" to="/Innmelding">Innmelding</router-link>
           <router-link class="navbar-item" v-if="loggedIn" to="/TestMail">TestMail</router-link>
-          <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldInn', params: {current_user: current_user}}">Gjeld Inn</router-link>
-          <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldUt', params: {current_user: current_user}}">Gjeld Ut</router-link>
+          <router-link class="navbar-item" v-if="loggedIn" to="/GjeldInn">Gjeld Inn</router-link>
+          <router-link class="navbar-item" v-if="loggedIn" to="/GjeldUt">Gjeld Ut</router-link>
           <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut">Logg Ut</a>
 
         </div>
         <div class="navbar-end" v-if="loggedIn" >
-          <SelectGroup :current_user="current_user" @selected-group="selectedGroup" ref="SelectGroup"></SelectGroup>
+          <SelectGroup @selected-group="selectedGroup" ref="SelectGroup"></SelectGroup>
 
           <a href="" class="navbar-item" @click.prevent="addingCollective=true">
             <i class="fa fa-plus"></i>
           </a>
           <div class="modal" v-bind:class="{'is-active' : addingCollective}" transition="zoom">
             <div class="content has-text-centered">
-              <AddCollective :current_user="current_user" @cancel="addingCollective=false" @added-collective="addedCollective"></AddCollective>
+              <AddCollective @cancel="addingCollective=false" @added-collective="addedCollective"></AddCollective>
             </div>
           </div>
 
@@ -40,7 +40,7 @@
           </a>
           <div class="modal" v-bind:class="{'is-active' : addingGroup}" transition="zoom">
             <div class="content has-text-centered">
-              <addGroup :current_group="current_group" :current_user="current_user" @cancel="addingGroup=false" @added-group="addedGroup"></addGroup>
+              <addGroup @cancel="addingGroup=false" @added-group="addedGroup"></addGroup>
             </div>
           </div>
 
@@ -50,10 +50,11 @@
     <br/><br/><br/>
 
     <div class="container">
-      <p v-if="loggedIn">Innlogget bruker: {{current_user.epost}}</p>
-      <p v-if="loggedIn">Aktiv gruppe: {{current_group.navn}}</p>
+      <p v-if="loggedIn">Innlogget bruker: {{$store.state.current_user.epost}}</p>
+      <p v-if="loggedIn">Aktiv gruppe: {{$store.state.current_group.navn}}</p>
       <router-view/>
     </div>
+
   </div>
 </template>
 
@@ -64,13 +65,14 @@
   import AddGroup from '@/components/AddGroup';
   import router from '@/router/index.js';
   import axios from 'axios';
+  import {store} from './store';
 
 export default {
   name: 'dashboard',
   components: {SelectGroup, AddCollective, AddGroup},
   methods:{
       selectedGroup(group){
-          this.current_group = group;
+          store.state.current_group = group;
       },
     addedGroup(group){
       this.$refs.SelectGroup.loadGroups();
@@ -81,7 +83,7 @@ export default {
       this.addingCollective = false;
     },
     logOut(){
-        this.loggedIn=false;
+        store.state.loggedIn=false;
         axios.post('http://localhost:9000/rest/logout');
         router.push('Login');
     }
@@ -89,37 +91,21 @@ export default {
   created(){
       axios.get('http://localhost:9000/rest/loggedIn').then(response => {
           if(response.data){
-            this.current_user = response.data;
-            this.loggedIn = true;
+            store.state.current_user = response.data;
+            store.state.loggedIn = true;
           }
       });
-
-//      window.current_group= {navn: 'test', undergruppe_id: 1};
-//      window.current_user = {
-//      "bruker_id": 1,
-//        "epost": "sj@apple.com",
-//        "fornavn": "Steve ",
-//        "etternavn": "Jobs",
-//        "tlf": "12345678",
-//        "adresse": "California",
-//        "hashed_passord": "",
-//        "salt": ""
-//    };
   },
   data(){
       return {
-        loggedIn: false, //TODO: MAKE SECURE
-        current_user: {},
-        current_group:{
-          navn: "Testkollektiv 1",
-          beskrivelse: "test",
-          undergruppe_id: 1,
-          kollektiv_id: 1,
-          default_gruppe: 1
-        },
         addingCollective: false,
         addingGroup: false
       };
+  },
+  computed:{
+      loggedIn(){
+          return store.state.loggedIn;
+      }
   }
 }
 </script>

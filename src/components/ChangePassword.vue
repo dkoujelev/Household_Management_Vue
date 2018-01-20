@@ -18,6 +18,7 @@
 <script>
   import axios from 'axios'
   import router from '../router/index'
+  import {store} from '../store'
 
     export default {
         name: "change-password",
@@ -27,7 +28,7 @@
           newPassword: '',
           newPasswordRepeat: '',
           infoToValidate: {
-            email: this.$parent.current_user.epost
+            email: store.state.current_user.epost
           },
           error: {
             oldPassword: '',
@@ -75,7 +76,7 @@
         },
         changePassword(){
           if(this.validateInfo()){
-            let update = {email: this.$parent.current_user.epost, newPassword: this.newPassword};
+            let update = {email: store.state.current_user.epost, newPassword: this.newPassword};
             axios.put('http://localhost:9000/rest/changePassword', update).then(response => {
               if(response.data.updated){
                 alert('changed');

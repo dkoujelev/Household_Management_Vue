@@ -4,6 +4,7 @@ import Vue from 'vue'
 import Dashboard from './Dashboard'
 import router from './router'
 import axios from 'axios'
+import {store} from './store';
 
 Vue.config.productionTip = false;
 window.Vue = Vue;
@@ -15,5 +16,6 @@ new Vue({
   el: '#dashboard',
   router,
   template: '<Dashboard/>',
-  components: { Dashboard }
-})
+  components: { Dashboard },
+  store
+});

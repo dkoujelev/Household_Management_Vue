@@ -10,11 +10,12 @@
 <script>
 
   import axios from 'axios';
+  import {store} from '../../store'
 
   export default {
     props: ['current_user'],
     created(){
-      axios.get('http://localhost:9000/rest/gjeldBrukerErSkyldig/' + this.current_user.bruker_id).then(response => {
+      axios.get('http://localhost:9000/rest/gjeldBrukerErSkyldig/' + store.state.current_user.bruker_id).then(response => {
         this.users = response.data;
       }).catch(err => {
         console.log(err);
