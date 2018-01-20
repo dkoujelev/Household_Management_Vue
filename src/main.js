@@ -31,7 +31,7 @@ router.beforeEach((to,from,next) => {
     if(response.data !== null){
       //console.log("router.beforeEach: User is logged in, proceed with route");
       store.commit('current_user',response.data);
-      store.state.loggedIn = true;
+      store.commit('loggedIn',true);
       return next();
     }
     else{

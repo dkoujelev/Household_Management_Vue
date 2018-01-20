@@ -82,14 +82,13 @@
               this.login_info.epost = "";
               this.login_info.passord = "";
               store.commit('current_user',response.data);
-              store.state.loggedIn = true;
+              store.commit('loggedIn', true);
               axios.get('http://localhost:9000/rest/kollektivForBruker/' + response.data.bruker_id).then(response => {
-                let rows = response.data;
-                store.state.current_user.kollektiv = [];
-                for(let row of rows){
-                  store.state.current_user.kollektiv.push(row.kollektiv_id);
-                }
-                router.push('home');
+                  if(response.data.length === 0)
+                      router.push('NewUser');
+                  else
+                    router.push('home');
+
               });
             }
           }).catch(err => {

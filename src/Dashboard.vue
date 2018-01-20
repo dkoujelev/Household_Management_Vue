@@ -92,7 +92,7 @@ export default {
       axios.get('http://localhost:9000/rest/loggedIn').then(response => {
           if(response.data){
             store.commit('current_user',response.data);
-            store.state.loggedIn = true;
+            store.commit('loggedIn',true);
           }
       });
   },

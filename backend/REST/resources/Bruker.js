@@ -161,18 +161,9 @@ module.exports = function(connection, server) {
       let user = auth.getSession(req.cookies.sessionId);
 
       if (user) {
-        connection.query("SELECT Kollektiv.* FROM Kollektiv INNER JOIN Bruker_Kollektiv " +
-          "ON Kollektiv.kollektiv_id=Bruker_Kollektiv.kollektiv_id " +
-          "WHERE Bruker_Kollektiv.bruker_id=?",[user.bruker_id], (err,rows,fields) => {
+        res.send(user);
+        return next();
 
-          if(err)
-            return next(err);
-
-          user.kollektiv = JSON.parse(JSON.stringify(rows));
-
-          res.send(auth.getSession(req.cookies.sessionId));
-          return next();
-        });
       }
       else {
         res.setCookie('sessionId', '');
