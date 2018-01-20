@@ -29,6 +29,7 @@
     "restify-errors": "^5.0.0",
     "sweetalert": "^2.1.0",
     "vue": "^2.5.13",
+    "vue-async-computed": "^3.3.1",
     "vue-bulma-modal": "^1.0.1",
     "vue-date-picker": "^1.0.2",
     "vue-good-table": "^1.19.1",

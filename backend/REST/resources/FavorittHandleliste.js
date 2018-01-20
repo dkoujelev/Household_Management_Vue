@@ -31,7 +31,7 @@ server.post('rest/favoritthandleliste/', function (req,res,next) {
   let liste = req.body;
 
   if('opprettet' in liste)
-    liste.opprettet = new Date(liste.opprettet).getTime();
+    liste.opprettet = new Date(liste.opprettet)f.getTime();
   if('frist' in liste)
     liste.frist = new Date(liste.frist).getTime();
   if('handling_utfort' in liste)

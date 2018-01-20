@@ -1,3 +1,5 @@
+let util = require('../util');
+
 module.exports = function(connection, server){
 
 // Hent en fullstendig handleliste
@@ -36,8 +38,7 @@ module.exports = function(connection, server){
     if('varer' in handleliste)
       delete handleliste.varer;
 
-    if('opprettet' in handleliste)
-      handleliste.opprettet = new Date(handleliste.opprettet).getTime();
+      handleliste.opprettet = util.getCurrentTimeAsEpoch();
     if('frist' in handleliste)
       handleliste.frist = new Date(handleliste.frist).getTime();
     if('handling_utfort' in handleliste)
