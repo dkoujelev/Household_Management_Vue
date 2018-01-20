@@ -74,4 +74,17 @@ module.exports = function(connection, server){
       return next();
     });
   });
+
+  // Meld bruker inn i kollektiv
+  server.post('/rest/meldBrukerInnIKollektiv/', (req,res,next) => {
+    connection.query('INSERT INTO Bruker_Kollektiv SET ?', [req.body], (err,rows,fields) => {
+
+      if(err)
+        return next(err);
+
+      res.send(rows);
+      return next();
+    });
+  });
+
 };
