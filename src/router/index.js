@@ -24,6 +24,7 @@ import GjeldUt from '@/components/Gjeld/GjeldUt'
 import GjeldInnSpesifisert from '@/components/Gjeld/GjeldInnSpesifisert'
 import NewUser from '@/components/NewUser'
 import ChangePassword from '@/components/ChangePassword'
+import ItemChart from '@/components/Charts/ItemChart'
 Vue.use(Router);
 
 export default new Router({
@@ -140,6 +141,11 @@ export default new Router({
         path: '/TestMail',
         name: 'TestMail',
         component: TestMail
+      },
+      {
+        path: '/ItemChart',
+        name: 'ItemChart',
+        component: ItemChart
       }
     ]
   }
