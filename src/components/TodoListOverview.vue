@@ -51,7 +51,7 @@
           let group =
             {
               //rest/undergrupperForBruker/:bruker_id
-              
+
             }
 
         }
