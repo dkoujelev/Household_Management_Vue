@@ -1,5 +1,6 @@
 <template>
-  <div class="box">
+  <div class="columns">
+    <div class="column">
     <h1 class="title is-3">Oversikt over utgifter</h1>
     <table class="table is-striped is-bordered is-fullwidth is-hoverable">
       <thead>
@@ -24,6 +25,7 @@
     <br>
     <br>
     <router-link class="button" to="/AddExpence">Legg til utgift</router-link>
+  </div>
   </div>
 </template>
 
