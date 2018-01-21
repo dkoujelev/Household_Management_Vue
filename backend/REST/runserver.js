@@ -10,6 +10,7 @@ module.exports = function(connection,server){
   require("./resources/Gjoremalsliste")(connection,server);
   require("./resources/Gjeld")(connection,server);
   require("./resources/Kostnad")(connection,server);
+  require("./resources/Login")(connection,server);
 };
 
 

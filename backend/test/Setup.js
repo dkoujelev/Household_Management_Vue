@@ -1,18 +1,19 @@
 let clearDB = require('./clearDB');
+let clearLogins = require('./testutil').clearLogins;
 let axios = require('axios');
 let auth = require('../REST/auth');
 
+var chai = require("chai");
+var chaiAsPromised = require("chai-as-promised");
+chai.use(chaiAsPromised);
+
+axios.defaults.withCredentials = true;
+
 before((done) => {
-
-  // We have to FAKE LOGIN against REST, or most tests will produce 404.
-  // Extreme hack.
-
-  let sessionId = auth.newSession("fake user");
-  axios.defaults.headers.common['cookie'] = 'sessionId='+sessionId;
   require("../REST/runserver_test")(() => done());
 });
 
-after(done => {
-  clearDB();
-  done();
+after(() => {
+  clearLogins();
+  return clearDB();
 });

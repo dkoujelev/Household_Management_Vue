@@ -4,7 +4,7 @@ let auth = {
   sessions: {},
   newSession(user){
     let id = this.generate_sessionId();
-    console.log('adding session ' + id + ' for ' + user.epost);
+    //console.log('adding session ' + id + ' for ' + user.epost);
     this.sessions[id] = user;
     return id;
   },
@@ -23,13 +23,13 @@ let auth = {
   },
   dropSession(session_id){
     if(session_id in this.sessions){
-      console.log('deleting session ' + session_id + ' for ' + this.sessions[session_id].epost);
+      //console.log('deleting session ' + session_id + ' for ' + this.sessions[session_id].epost);
       delete this.sessions[session_id];
     }
   },
   checkThatSessionExists(req, res){
     if(!('sessionId' in req.cookies) || req.cookies.sessionId === '' || !this.hasSession(req.cookies.sessionId)){
-      console.log("REST access has been denied because user doesn't have session on server");
+      //console.log("REST access has been denied because user doesn't have session on server");
       res.send(403);
       return false;
     }
@@ -37,6 +37,9 @@ let auth = {
   },
   checkThatSessionHasUserId(req,res,next,id){
 
+  },
+  clearLogins(){
+    this.sessions = {};
   }
 };
 
