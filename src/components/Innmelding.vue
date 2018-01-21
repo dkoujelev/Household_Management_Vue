@@ -8,19 +8,8 @@
               <img src="../img/logo_full.png" height="200" width="400"/>
               <p class="help is-danger">{{this.error}}</p>
 
-                
-                <p class="control has-icon">
-                <h1>Her kan du inntil videre simulere forskjellige brukere</h1>
-                    <select class="control" v-model="selected_bruker_id" v-on:change="getGroupsFor(selected_bruker_id)">
-                        <option v-for="option in options_bruker_id" v-bind:value="option.value">
-                        {{ option.text }}
-                        </option>
-                    </select>
-                </p>
-                <hr>
-
               <div v-if="showJoinSection===true">
-                
+
                 <p>Skriv inn navnet på kollektivet du ønsker å bli medlem av</p>
                 <p class="control has-icon">
                     <input class="input" type="text" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
@@ -37,11 +26,11 @@
                 </p>
                 <hr>
               </div>
-              
-              <div v-if="showInviteSection===true">              
+
+              <div v-if="showInviteSection===true">
                 <p class="control has-icon">
                     <div v-if="showGroupSelect===true">
-                      <span>Du er administrator for flere kollektiv.<br>Nå administreres  
+                      <span>Du er administrator for flere kollektiv.<br>Nå administreres
                         <select class="control" v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
                             <option disabled value="">Velg kollektiv</option>
                             <option v-for="option in options_maingroup" v-bind:value="option.value">
@@ -53,7 +42,7 @@
                     </div>
                     <div>
                       <span>Her kan du invitere nye medlemmer til det aktuelle kollektivet. <!--til {{ selected_maingroup_name }}--></span>
-                      
+
                     </div>
             <!--    <select class="control" v-model="selected_subgroup">
                         <option disabled value="">Velg gruppe</option>
@@ -62,7 +51,7 @@
                         </option>
                     </select>           -->
                 </p>
-                
+
                 <p class="control has-icon">
                     <input class="input" type="email" placeholder="Email" v-model="innmelding.epost">
                     <span class="icon is-small">
@@ -102,10 +91,10 @@
 
   import axios from 'axios';
   import router from '../router/index'
+  import {store} from '../store'
 
   export default {
     name: 'Innmelding',
-    //props: ['bruker_id'],
     data(){
         return {
             showJoinSection: true,
@@ -121,7 +110,7 @@
                 epost: '',
                 kollektiv_id: ''
             },
-            selected_bruker_id: 4, //bruker_id,
+            //selected_bruker_id: 4, //bruker_id,
             options_bruker_id: [
                 { text: 'One', value: '1' },
                 { text: 'Two', value: '2' },
@@ -145,12 +134,12 @@
       }
     },
     created: function() {
-        console.log('This is printed at each reload!');
-        console.log("I'm placing code here to simulate status logged-in user..."); // TODO: Fix this workaround!
-        this.bruker_id=this.selected_bruker_id;
-        console.log("Right now, I'm simulating user " + this.bruker_id);
-        this.getGroupsFor(this.bruker_id);
-        
+        // console.log('This is printed at each reload!');
+        // console.log("I'm placing code here to simulate status logged-in user..."); // TODO: Fix this workaround!
+        // this.bruker_id=this.selected_bruker_id;
+        // console.log("Right now, I'm simulating user " + this.bruker_id);
+        this.getGroupsFor(store.state.current_user.bruker_id);
+
     },
     // mounted: function() {
     //     console.log('xThis is printed at each reload!');
@@ -215,7 +204,7 @@
 
                     //getApprovalsForGroup(kollektiv_id){
                         console.log("Henter alle søknader som skal godkjennes for kollektiv " + this.selected_subgroup.navn);
-                        
+
                         axios.get('http://localhost:9000/rest/innmeldingerForKollektiv/' + kollektiv_id).then(response => {
                         console.log('Response: ' + response.data);
                         this.approvals = response.data.map((item) => {
@@ -258,13 +247,13 @@
     //   },
 
 
-     
+
 
       approve(kollektiv,epost,status){
           console.log("epost=" + epost + '   ' + "kollektiv=" + kollektiv + '   ' + "status=" + status);
         axios.put('http://localhost:9000/rest/innmelding', {
             kollektiv_id: kollektiv,
-            bruker_epost: epost, 
+            bruker_epost: epost,
             status_admin:status,
             //status_bruker: '',
             dato_svar_admin: 1234,  // TODO: Replace with proper timestamp!
@@ -297,10 +286,10 @@
                         console.log("Klar for innmelding!");
                         axios.post('http://localhost:9000/rest/innmelding', {
                             kollektiv_id: this.kollektiv_id,
-                            bruker_epost: 'static.until@login.works', 
+                            bruker_epost:  store.state.current_user.epost,
                             status_admin:2,
                             status_bruker: '1',
-                            dato_svar_admin: null,  
+                            dato_svar_admin: null,
                             dato_svar_bruker: 1234, // TODO: Replace with proper timestamp!
                             aktiv: true,
                             notat_admin: null,
@@ -326,7 +315,7 @@
                  to: this.innmelding.epost,
                  from: 'test@team1.zzz',
                  subject: 'Invitasjon',
-                 body: 'Du har blitt invitert til å bli med i kollektivet "' + this.selected_maingroup_name + 
+                 body: 'Du har blitt invitert til å bli med i kollektivet "' + this.selected_maingroup_name +
                  ". Trykk på denne lenken for å godta invitasjonen: http://localhost:9000/rest/invitasjon/" + this.selected_maingroup + "?bruker_epost=" + this.innmelding.epost + "&bruker_svar=jatakk"
              }).then(response => {
                 axios.post('http://localhost:9000/rest/innmelding/', {
@@ -343,7 +332,7 @@
                 }).catch(err => {
                     console.log(err); // We assume that this suffers from the same issue(s) as response.data
                     this.sendResult = 'Epost IKKE sendt!';
-                });  
+                });
             }).catch(err => {
                 console.log(err); // We assume that this suffers from the same issue(s) as response.data
                 this.sendResult = 'Epost IKKE sendt!';
