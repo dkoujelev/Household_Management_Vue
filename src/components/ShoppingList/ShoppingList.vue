@@ -18,25 +18,25 @@
 
 
                 <div class="field-body">
+                  <button class="button is-danger" @click="removeRow(row)">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                  </button>
+                  <input class="input" name="" v-model="row.navn" type="text" placeholder="Text input" value="">
                   <button class="button is-danger" id="decrementButton" @click="decrement(row)">
                     <i class="fa fa-minus" id="minus" aria-hidden="true"></i>
                   </button>
-                  <input class="input" name="" v-model="row.navn" type="text" placeholder="Text input" value="">
                   <button class="button is-info" @click="row.antall++" id="incrementButton">
                   <i class="fa fa-plus" id="plus" aria-hidden="true" ></i>
                   </button>
-                    <button class="button is-danger" @click="removeRow(row)">
-                      <i class="fa fa-trash-o" aria-hidden="true"></i>
-                    </button>
                     <div>
-                      <button class="button is-success">{{row.antall}}</button>
+                      <button class="button is-light">{{row.antall}}</button>
                     </div>
                 </div>
               </div>
 
               <div class="field is-grouped">
                 <div class="control">
-                  <button class="button is-success" @click="addRow">Add</button>
+                  <button class="button is-success" @click="addRow">Ny vare</button>
                 </div>
               </div>
             </div>

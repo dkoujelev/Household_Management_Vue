@@ -1,19 +1,20 @@
 <template>
   <div>
-    <Newsfeedhome></Newsfeedhome>
     <br/>
-    <div class="columns">
-      <!-- left side -->
-      <div class="column">
-        <Shoppinglistshome></Shoppinglistshome>
-      </div>
+    <div class="tiles">
+      <div class="tile is-ancestor">
+        <div class="tile is-parent is-vertical">
+          <Newsfeedhome></Newsfeedhome>
+          <div>
+            <Shoppinglistshome></Shoppinglistshome>
+          </div>
+        </div>
+        <div class="tile is-child is-vertical is-4">
+          <Todo></Todo>
+        </div>
 
-      <!-- right side -->
-      <div class="column">
-        <Todo></Todo>
       </div>
     </div>
-
   </div>
 
 </template>

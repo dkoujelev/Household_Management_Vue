@@ -1,19 +1,18 @@
 <template>
-  <div class="box">
+  <div class="columns">
+    <div class="column">
     <h1 class="title is-3">Oversikt over utgifter</h1>
     <table class="table is-striped is-bordered is-fullwidth is-hoverable">
       <thead>
       <tr>
         <th>Tittel</th>
         <th>Sum</th>
-        <th>Kvittering</th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="row in rows">
         <th>{{row.tittel}}</th>
         <th>{{row.sum}}</th>
-        <th><button class="button">Se kvittering</button></th>
       </tr>
       </tbody>
       <tfoot>
@@ -26,6 +25,7 @@
     <br>
     <br>
     <router-link class="button" to="/AddExpence">Legg til utgift</router-link>
+  </div>
   </div>
 </template>
 
@@ -51,11 +51,6 @@
             type: 'number',
             html: false,
             sortable: true,
-            filterable: false
-          },
-          {
-            label: 'Kvittering',
-            field: 'kvittering',
             filterable: false
           }
         ],
