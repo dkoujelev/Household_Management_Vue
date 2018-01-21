@@ -1,52 +1,43 @@
 <template>
+
   <div>
-    <nav class="navbar is-dark is-active is-fixed-top" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <router-link class="navbar-item" to="/home" v-if="loggedIn">
-          Hjem
-          <img src="./img/Minilogo.png" alt="image not found" width="45"/>
-        </router-link>
-      </div>
-      <div class="navbar-menu">
-        <div class="navbar-start">
+    <!-- START NAV -->
+    <nav class="navbar is-dark is-fixed-top">
 
-          <router-link class="navbar-item" v-if="loggedIn" to="/TodoList">Gjøremål</router-link>
-          <router-link class="navbar-item" v-if="!loggedIn" to="/Login">Login</router-link>
-          <router-link class="navbar-item" v-if="!loggedIn" to="/Register">Registrer deg</router-link>
-          <router-link class="navbar-item" v-if="loggedIn" to="/Nyhetsfeed">Nyhet</router-link>
-          <router-link class="navbar-item" v-if="loggedIn" to="/Shoppinglists">Handlelister</router-link>
-          <router-link class="navbar-item" v-if="loggedIn" to="/ShowExpences">Utgifter</router-link>
-          <router-link class="navbar-item" v-if="loggedIn" to="/Innmelding">Innmelding</router-link>
-          <router-link class="navbar-item" v-if="loggedIn" to="/TestMail">TestMail</router-link>
-          <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldInn', params: {current_user: current_user}}">Gjeld Inn</router-link>
-          <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldUt', params: {current_user: current_user}}">Gjeld Ut</router-link>
-          <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut">Logg Ut</a>
+        <div class="navbar-brand">
 
+            <router-link class="navbar-item" v-if="loggedIn" to="/home">
+              <img src="./img/logo_small.png" alt="image not found" width="45"/>
+            </router-link>
+            <router-link class="navbar-item" v-if="!loggedIn" to="/home">
+              <img src="./img/logo_small.png" alt="image not found" width="45"/>
+            </router-link>
+
+          <div class="navbar-burger burger" @click="showNav = !showNav" v-bind:class="{'is-active' : showNav}" data-target="navMenu" v-if="loggedIn">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
         </div>
-        <div class="navbar-end" v-if="loggedIn" >
-          <SelectGroup :current_user="current_user" @selected-group="selectedGroup" ref="SelectGroup"></SelectGroup>
 
-          <a href="" class="navbar-item" @click.prevent="addingCollective=true">
-            <i class="fa fa-plus"></i>
-          </a>
-          <div class="modal" v-bind:class="{'is-active' : addingCollective}" transition="zoom">
-            <div class="content has-text-centered">
-              <AddCollective :current_user="current_user" @cancel="addingCollective=false" @added-collective="addedCollective"></AddCollective>
+          <div id="navMenu1" class="navbar-menu" v-bind:class="{'is-active': showNav}">
+            <div class="navbar-start" @click="showNav = !showNav">
+              <router-link class="navbar-item" v-if="loggedIn" to="/Nyhetsfeed">Nyhet</router-link>
+              <router-link class="navbar-item" v-if="loggedIn" to="/TodoList">Gjøremål</router-link>
+              <router-link class="navbar-item" v-if="loggedIn" to="/Shoppinglists">Handlelister</router-link>
+              <router-link class="navbar-item" v-if="loggedIn" to="/ShowExpences">Utgifter</router-link>
+              <router-link class="navbar-item" v-if="loggedIn" to="/Innmelding">Innmelding</router-link>
+              <router-link class="navbar-item" v-if="loggedIn" to="/TestMail">TestMail</router-link>
+              <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldInn', params: {current_user: current_user}}">Gjeld Inn</router-link>
+              <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldUt', params: {current_user: current_user}}">Gjeld Ut</router-link>
+            </div>
+            <div class="navbar-end" @click="showNav = !showNav">
+              <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut">Logg Ut</a>
             </div>
           </div>
-
-          <a href="" class="navbar-item" @click.prevent="addingGroup=true">
-            <i class="fa fa-plus"></i>
-          </a>
-          <div class="modal" v-bind:class="{'is-active' : addingGroup}" transition="zoom">
-            <div class="content has-text-centered">
-              <addGroup :current_group="current_group" :current_user="current_user" @cancel="addingGroup=false" @added-group="addedGroup"></addGroup>
-            </div>
-          </div>
-
-        </div>
-      </div>
     </nav>
+    <!-- END NAV -->
+
     <br/><br/><br/>
 
     <div class="container">
@@ -99,6 +90,7 @@ export default {
   },
   data(){
       return {
+        showNav: false,
         loggedIn: false, //TODO: MAKE SECURE
         current_user: {
           bruker_id: 1,
