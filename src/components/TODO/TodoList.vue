@@ -9,7 +9,7 @@
     </div>
     <!--<p class="tasks">Completed Tasks: {{this.todos.filter(todo => {return todo.done === true}).length}}</p>
     <p class="tasks">Pending Tasks: {{this.todos.filter(todo => {return todo.done === false}).length}}</p>-->
-    <Todo v-on:delete-todo="deleteTodo" v-on:undo-todo="undoTodo" v-on: v-on:complete-todo="completeTodo"  v-for="todo in todos" v-bind:todo="todo"></Todo>
+    <Todo v-on:delete-todo="deleteTodo" v-on:undo-todo="undoTodo" v-on: v-on:complete-todo="completeTodo"  v-for="todo in todos" :key="todo.gjoremal_id" v-bind:todo="todo"></Todo>
 
     <create-todo v-on:create-todo="createTodo"></create-todo>
 

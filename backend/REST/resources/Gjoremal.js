@@ -1,3 +1,5 @@
+let util = require('../util');
+
 module.exports = function(connection, server){
 
   // Hent et bestemt gjoremal
@@ -40,8 +42,8 @@ module.exports = function(connection, server){
 
   // Opprette nytt gjoremal
   server.post('rest/gjoremal/',function(req, res, next){
-    if('start' in req.body)
-      req.body.start = new Date(req.body.start).getTime();
+
+    req.body.start = util.getCurrentTimeAsEpoch();
     if('frist' in req.body)
       req.body.frist = new Date(req.body.frist).getTime();
     if('ferdig' in req.body)

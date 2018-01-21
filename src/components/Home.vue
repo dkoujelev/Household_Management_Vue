@@ -24,17 +24,11 @@
     import Shoppinglistshome from './home/Shoppinglistshome'
     import Todo from './TODO/TodoList';
     import router from '../router/index'
+    import {store} from '../store'
 
     export default {
       name: 'Home',
-      components: {Newsfeedhome,Taskhome,Shoppinglistshome,Todo},
-      created(){
-        if(!this.$parent.loggedIn){
-          router.push('Login');
-        } else if(this.$parent.current_user.kollektiv.length === 0){
-          router.push('NewUser');
-        }
-      }
+      components: {Newsfeedhome,Taskhome,Shoppinglistshome,Todo}
     }
 </script>
 
