@@ -26,8 +26,8 @@
               <router-link class="navbar-item" v-if="loggedIn" to="/ShowExpences">Utgifter</router-link>
               <router-link class="navbar-item" v-if="loggedIn" to="/Innmelding">Innmelding</router-link>
               <router-link class="navbar-item" v-if="loggedIn" to="/TestMail">TestMail</router-link>
-              <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldInn', params: {current_user: current_user}}">Gjeld Inn</router-link>
-              <router-link class="navbar-item" v-if="loggedIn" :to="{name: 'GjeldUt', params: {current_user: current_user}}">Gjeld Ut</router-link>
+              <router-link class="navbar-item" v-if="loggedIn" to="/GjeldInn">Gjeld Inn</router-link>
+              <router-link class="navbar-item" v-if="loggedIn" to="/GjeldUt">Gjeld Ut</router-link>
             </div>
 
             <div class="navbar-end" @click="showNav = false">
