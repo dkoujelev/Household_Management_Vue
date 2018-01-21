@@ -9,11 +9,9 @@
     </div>
 
     <div class="field">
-      <a href="#" class="button">Last opp kvittering</a>
+      <a class="button is-danger" @click="$router.back()">Avbryt</a>
       <a href="#" class="button is-primary" @click.prevent="addExpence">Legg til utgift</a>
-      <br>
-      <br>
-      <router-link class="button is-danger"to="/ShowExpences">Avbryt</router-link>
+
     </div>
   </div>
 </template>
