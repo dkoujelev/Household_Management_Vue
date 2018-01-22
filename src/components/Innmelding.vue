@@ -1,14 +1,47 @@
 <template>
   <section>
     <div v-if="showJoinSection===true">
-    Skriv inn navnet på kollektivet du ønsker å bli medlem av
+        Skriv inn navnet på kollektivet du ønsker å bli medlem av
         <input  type="text" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
         <button v-on:click="joinGroup(innmelding.kollektiv_navn)">
-        Søk medlemskap
+            Søk medlemskap
         </button>
         {{ joinResult }}
     </div>
+
+
+    <div v-if="showCreateMainGroupSection===true">
+        Skriv inn navnet på kollektivet du ønsker å opprette
+        <input  type="text" placeholder="Kollektivets navn" v-model="opprette.navn">
+        <input  type="text" placeholder="Beskrivelse" v-model="opprette.beskrivelse">
+        <button v-on:click="createMainGroup(opprette.navn)">
+            Opprett kollektiv
+        </button>
+        {{ createMainResult }}
+    </div>
     
+    <div v-if="showCreateSubGroupSection===true">
+        Skriv inn navnet på gruppen du ønsker å opprette
+        <input  type="text" placeholder="Gruppens navn" v-model="opprette.navn">
+        <input  type="text" placeholder="Beskrivelse" v-model="opprette.beskrivelse">
+        <button v-on:click="createSubGroup(opprette.navn)">
+            Opprett gruppe
+        </button>
+        {{ createSubResult }}
+    </div>
+    
+
+    <div v-if="showUsersGroups===true">
+        Du er medlem av følgende kollektiv og grupper:
+        <ul id="usersGroupsList">
+            <li v-for="option in options_usersgroups"  v-bind:key="option.uid">
+                {{ option.text }} {{ option.isDef }}
+                <button v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
+            </li>
+        </ul>
+        {{ leaveSubResult }}
+    </div>
+
     <div v-if="showInviteSection===true">              
         <div v-if="showGroupSelect===true">
             Du er administrator for flere kollektiv.
@@ -20,7 +53,7 @@
                 </option>
             </select>
         </div>
-        Her kan du invitere nye medlemmer til {{ selected_maingroup_name }}
+        Her kan du invitere nye medlemmer til {{ selected_maingroup.navn }}
             
     <input  type="email" placeholder="Email" v-model="innmelding.epost">
     <button v-on:click="doInvite">Send invitasjon</button>
@@ -28,16 +61,26 @@
     </div>
 
     <div v-if="showApproveSection===true">
-    Disse ønsker å bli med i {{ selected_subgroup.navn }}. Du kan godkjenne eller avvise søknaden(e).
-    <dl id="approvalsList">
-        <dt v-for="item in approvals"  v-bind:key="item.tid">
-            {{ item.bruker }}
-        </dt>
-        <dd v-for="item in approvals" v-bind:key="item.tid">
-            <button v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
-            <button v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
-        </dd>
-    </dl>
+        Disse ønsker å bli med i {{ selected_maingroup.navn }}. Du kan godkjenne eller avvise søknaden(e).
+        <dl id="approvalsList">
+            <dt v-for="item in approvals"  v-bind:key="item.tid">
+                {{ item.bruker }}
+            </dt>
+            <dd v-for="item in approvals" v-bind:key="item.tid">
+                <button v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
+                <button v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
+            </dd>
+        </dl>
+    </div>
+
+    <div v-if="showAvailableSubgroups===true">
+        Dette er alle gruppene som hører inn under {{ selected_maingroup.navn }}:
+        <ul id="availableSubGroupsList">
+            <li v-for="option in options_subgroup"  v-bind:key="option.uid">
+                {{ option.navn }} {{ option.uid }}
+                <button v-on:click="joinSubGroup(option.uid)">Bli med</button>
+            </li>
+        </ul>
     </div>
 
   </section>
@@ -53,19 +96,30 @@
     name: 'Innmelding',
     data(){
         return {
+            showCreateMainGroupSection: true,
+            showCreateSubGroupSection: true,
             showJoinSection: true,
-            showInviteSection: false,
-            showGroupSelect: false,
-            showSubGroupSelect: false,
-            showApproveSection: false,
-            current_user:this.$parent.current_user,
+            showInviteSection: true,
+            showGroupSelect: true,
+            showSubGroupSelect: true,
+            showUsersGroups: true,
+            showApproveSection: true,
+            showAvailableSubgroups:true,
+            current_user: store.state.current_user,
+            createMainResult: '',
+            createSubResult: '',
             joinResult: '',
+            leaveSubResult: '',
             mailResult: '',
             approvals: '',
-            selected_maingroup_name: '',
+            //selected_maingroup_name: '',
             innmelding: {
                 epost: '',
                 kollektiv_id: ''
+            },
+            opprette:{
+                navn: '',
+                beskrivelse: ''
             },
             options_bruker_id: [
                 { text: 'One', value: '1' },
@@ -81,48 +135,154 @@
                 { text: 'Two', value: 'B' },
                 { text: 'Three', value: 'C' }
             ],
+            selected_maingroup_nonadmin: '',
+            options_maingroup_nonadmin: [
+                { text: 'One', value: 'A' },
+                { text: 'Two', value: 'B' },
+                { text: 'Three', value: 'C' }
+            ],
             selected_subgroup: '',
-            options_subgroup: [
-                { text: 'subOne', value: 'sA' },
-                { text: 'subTwo', value: 'sB' },
-                { text: 'subThree', value: 'sC' }
-            ]
+            options_subgroup: '',
+            // options_subgroup: [
+            //     { text: 'subOne', value: 'sA' },
+            //     { text: 'subTwo', value: 'sB' },
+            //     { text: 'subThree', value: 'sC' }
+            // ],
+            // options_allgroups: [
+            //     { text: 'subOne', value: 'sA' },
+            //     { text: 'subTwo', value: 'sB' },
+            //     { text: 'subThree', value: 'sC' }
+            // ],
+            options_usersgroups: ''
       }
     },
     created: function() {
-
-    this.getGroupsFor(this.current_user.bruker_id);
+        this.getGroupsWhereAdminFor(this.current_user.bruker_id);
+        this.getAllGroupsFor(this.current_user.bruker_id);
 
     },
-    // mounted: function() {
-    //     console.log('xThis is printed at each reload!');
-    //     console.log("xI'm placing code here to simulate status logged-in user..."); // TODO: Fix this workaround!
-    //     //bruker_id=selected_bruker_id;
-    //     console.log("xRight now, I'm simulating user " + bruker_id);
-    //     this.getGroupsFor(bruker_id);
-    // },
     methods: {
     //   validateEmail(email){
     //     var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([status-zA-Z\-0-9]+\.)+[status-zA-Z]{2,}))$/;
     //     return regex.test(email);
     //   },
-      getGroupsFor(bruker_id){
-        console.log('Getting main group(s) for user ' + bruker_id);
+        selectGroup(theGroup){
+            console.log('DEBUG - selectGroup(' + theGroup + ')');
+            console.log('Henter hovedgruppen for kollektiv ' + theGroup.kollektiv_id);              
+            axios.get('http://localhost:9000/rest/hovedgruppenForKollektiv/' + theGroup.kollektiv_id).then(response => {
+                this.options_defaultgroup = response.data.map((item) => {
+                    return {
+                        text: item.navn,
+                        value: item.kollektiv_id,
+                        navn: item.navn,
+                        gid: item.kollektiv_id,
+                        uid: item.undergruppe_id
+                    };
+                });
+                this.selected_subgroup = this.options_subgroup[0];
+
+                console.log("Henter alle søknader som skal godkjennes for kollektiv " + this.selected_subgroup.navn);
+                axios.get('http://localhost:9000/rest/innmeldingerForKollektiv/' + theGroup.kollektiv_id).then(response => {
+                    this.approvals = response.data.map((item) => {
+                        return {
+                            bruker: item.bruker_epost,
+                            tid: item.dato_svar_admin,
+                            kollektiv: item.kollektiv_id,
+                            status_admin: item.status_admin,
+                            status_bruker: item.status_bruker
+                        };
+                    });
+                    if(this.approvals.length==0){
+                        this.showApproveSection=false;
+                    }
+                    //this.selected_subgroup = '';
+                }).catch(err => {
+                    console.log("selectGroup - Error");
+                    console.log(err);
+                });
+            }).catch(err => {
+                console.log("selectGroup - Error");
+                console.log(err);
+            });
+            // axios.get('http://localhost:9000/rest/undergrupperForKollektiv/' + theGroup.kollektiv_id).then(response => {
+            //     this.options_subgroups = response.data.map((item) => {
+            //         return {
+            //             text: item.navn,
+            //             value: item.kollektiv_id,
+            //             navn: item.navn,
+            //             gid: item.kollektiv_id,
+            //             uid: item.undergruppe_id
+            //         };
+            //     });
+            // });       
+            getSubGroupsFor(theGroup.kollektiv_id);
+      },
+
+      getAllGroupsFor(bruker_id){
+          console.log('DEBUG - getAllGroupsFor(' + bruker_id + ')');
+          console.log('Getting all groups for user ' + bruker_id);
+          axios.get('http://localhost:9000/rest/kollektivForBruker/' + bruker_id).then(response => {
+            this.options_maingroup_nonadmin = response.data.map((item) => {
+                return {
+                    text: item.navn,
+                    value: item.kollektiv_id
+                };
+            });
+            this.selected_maingroup_nonadmin = '';
+          });
+          axios.get('http://localhost:9000/rest/undergrupperForBruker/' + bruker_id).then(response => {
+            this.options_usersgroups = response.data.map((item) => {
+                //console.log('------------------------------------------------------------');
+                let tmpIsDef = '';
+                let tmpCanLeave = false;
+                //console.log("test: " + response.data);
+                //console.log("test: " + item.default_gruppe);
+                if(item.default_gruppe==1){
+                    tmpIsDef='(Kollektiv)';
+                    tmpCanLeave=false;
+                } else {
+                    tmpCanLeave=true;
+                };
+                return {
+                    text: item.navn,
+                    value: item.undergruppe_id,
+                    uid: item.undergruppe_id,
+                    kid: item.kollektiv_id,
+                    isDef: tmpIsDef,
+                    canLeave:tmpCanLeave
+                };
+            });
+            //console.log(this.options_usersgroups);
+          });
+      },
+      getGroupsWhereAdminFor(bruker_id){
+        console.log('DEBUG - getGroupsWhereAdminFor(' + bruker_id + ')');
+        console.log('Getting main group(s) where user ' + bruker_id + ' is admin');
         axios.get('http://localhost:9000/rest/kollektivForAdmin/' + bruker_id).then(response => {
+            //console.log('kollektivForAdmin:');
+            //console.log(response);
             this.options_maingroup = response.data.map((item) => {
                 return {
                     text: item.navn,
                     value: item.kollektiv_id
                 };
             });
-            this.selected_maingroup = '';
+            //this.selected_maingroup = '';
 
             if(response.data.length==0){ //User is admin of 0 groups. Inviting not allowed!
                 this.showInviteSection=false;
                 this.showApproveSection=false;
             }else if(response.data.length==1){ //User is admin of exactly 1 group. That group is automatically selected.
-                this.selected_maingroup = response.data[0].kollektiv_id;
-                this.selected_maingroup_name = response.data[0].navn;
+                console.log('User is admin of one:');
+                this.selected_maingroup = {
+                    navn: response.data[0].navn,
+                    kollektiv_id: response.data[0].kollektiv_id,
+                    undergruppe_id: 0
+                };
+                console.log('This one: ' + this.selected_maingroup);
+                this.selectGroup(this.selected_maingroup);
+                //this.selected_maingroup = response.data[0].kollektiv_id;
+                //this.selected_maingroup_name = response.data[0].navn;
                 this.showInviteSection=true;
                 this.showGroupSelect=false;
                 this.showApproveSection=true;
@@ -133,76 +293,42 @@
             };
 
           }).catch(err => {
+              console.log("getGroupsWhereAdminFor - Error:");
+              console.log(err);
+          });
+      },
+
+      
+
+      getSubGroupsFor(kollektiv_id){
+        console.log('DEBUG - getSubGroupsFor(' + kollektiv_id + ')');
+        console.log('Getting subgroup(s) for group ' + kollektiv_id);
+        axios.get('http://localhost:9000/rest/undergrupperForKollektiv/' + kollektiv_id).then(response => {
+            this.options_subgroup = response.data.map((item) => {
+                return {
+                    text: item.navn,
+                    value: item.kollektiv_id,
+                    navn: item.navn,
+                    gid: item.kollektiv_id,
+                    uid: item.undergruppe_id
+                };
+            });
+            if(options_subgroup.length < 2){
+                showAvailableSubgroups=false;
+            } else {
+                showAvailableSubgroups=true;
+            };
+            this.selected_subgroup = '';
+
+          }).catch(err => {
               console.log(err);
               console.log("Error!");
           });
       },
 
-      selectGroup(kollektiv_id){
-            console.log('Kollektiv ' + kollektiv_id + ' valgt...');
-            // getMainGroupFor(kollektiv_id){
-                //this.getApprovalsForGroup(kollektiv_id);
-                console.log('Getting subgroup(s) for group ' + kollektiv_id);
-                //this.selected_maingroup_name = kollektiv_navn
-                axios.get('http://localhost:9000/rest/hovedgruppenForKollektiv/' + kollektiv_id).then(response => {
-                    this.options_subgroup = response.data.map((item) => {
-                        return {
-                            text: item.navn,
-                            value: item.kollektiv_id
-                        };
-                    });
-                    this.selected_subgroup = this.options_subgroup[0]; //'';
-                    this.selected_subgroup.navn = this.options_subgroup[0].text;
-                    //console.log("Selected: " + this.selected_subgroup.value);
-
-                    //getApprovalsForGroup(kollektiv_id){
-                        console.log("Henter alle søknader som skal godkjennes for kollektiv " + this.selected_subgroup.navn);
-
-                        axios.get('http://localhost:9000/rest/innmeldingerForKollektiv/' + kollektiv_id).then(response => {
-                        //console.log('Response: ' + response.data);
-                        this.approvals = response.data.map((item) => {
-                            return {
-                                bruker: item.bruker_epost,
-                                tid: item.dato_svar_admin,
-                                kollektiv: item.kollektiv_id,
-                                status_admin: item.status_admin,
-                                status_bruker: item.status_bruker
-                            };
-                        });
-                        this.selected_subgroup = '';
-                        }).catch(err => {
-                            console.log(err);
-                            console.log("Error!");
-                        });
-                    //};
-                }).catch(err => {
-                    console.log(err);
-                    console.log("Error!");
-                });
-            //}
-      },
-
-    //   getSubGroupsFor(kollektiv_id){
-    //     console.log('Getting subgroup(s) for group ' + kollektiv_id);
-    //     axios.get('http://localhost:9000/rest/undergrupperForKollektiv/' + kollektiv_id).then(response => {
-    //         this.options_subgroup = response.data.map((item) => {
-    //             return {
-    //                 text: item.navn,
-    //                 value: item.kollektiv_id
-    //             };
-    //         });
-    //         this.selected_subgroup = '';
-
-    //       }).catch(err => {
-    //           console.log(err);
-    //           console.log("Error!");
-    //       });
-    //   },
-
-
-
 
       approve(kollektiv,epost,status){
+        console.log('DEBUG - approve(' + kollektiv + '.....etc)');
           //console.log("epost=" + epost + '   ' + "kollektiv=" + kollektiv + '   ' + "status=" + status);
           let tmpDate = new Date;
         axios.put('http://localhost:9000/rest/innmelding', {
@@ -224,7 +350,42 @@
           });
       },
 
+      createMainGroup(groupName){
+          console.log('DEBUG - createMainGroup(' + groupName + ')');
+          axios.post('http://localhost:9000/rest/kollektiv/' + this.current_user.bruker_id, {
+                navn: this.opprette.navn,
+                beskrivelse: this.opprette.beskrivelse
+            }).then(response => {
+                console.log(response);
+                this.createMainResult="Du har opprettet et kollektiv!";
+                //TODO: Hide the button / entire line / just add status green tick?
+            }).catch(err => {
+                this.createMainResult="Noe gikk galt!";
+                console.log(err);
+                console.log("Error!");
+            });
+      },
+
+    createSubGroup(groupName){
+        console.log('DEBUG - createSubGroup(' + groupName + ')');
+          axios.post('http://localhost:9000/rest/undergruppe/' + this.current_user.bruker_id, {
+                navn: this.opprette.navn,
+                beskrivelse: this.opprette.beskrivelse,
+                kollektiv_id: this.selected_maingroup.kollektiv_id,
+                default_gruppe: 0
+            }).then(response => {
+                console.log(response);
+                this.createSubResult="Du har opprettet en gruppe!";
+                //TODO: Hide the button / entire line / just add status green tick?
+            }).catch(err => {
+                this.createSubResult="Noe gikk galt!";
+                console.log(err);
+                console.log("Error!");
+            });
+      },
+
       joinGroup(groupName){
+          console.log('DEBUG - joinGroup(' + groupName + ')');
          axios.get('http://localhost:9000/rest/kollektivMedNavn/' + groupName).then(response => {
              //console.log(groupName + '=' + response.data);
                     if(response.data != null){
@@ -254,16 +415,43 @@
                         //No hit!
                         this.joinResult="Ukjent kollektiv!";
                     };
-      })
+         })
+      },
+      joinSubGroup(subGroupID){
+          console.log('DEBUG - joinSubGroup(' + subGroupID + ')');
+           axios.post('http://localhost:9000/rest/undergruppeLeggTilBruker/' + subGroupID, {
+                undergruppe_id: subGroupID,
+                bruker_id: this.current_user.bruker_id
+           }).then(response => {
+               // Report back to GUI
+               this.joinSubResult = 'Innmelding OK!';
+           }).catch(err => {
+               console.log(err);
+               this.joinSubResult = 'Innmelding IKKE OK!';
+           });
+      },
+      leaveSubGroup(subGroupID){
+          console.log('DEBUG - leaveSubGroup(' + subGroupID + ')');
+            axios.put('http://localhost:9000/rest/undergruppeFjernBruker/' + subGroupID, {
+                undergruppe_id: subGroupID,
+                bruker_id: this.current_user.bruker_id
+           }).then(response => {
+               // Report back to GUI
+               this.leaveSubResult = 'Fjerning OK!';
+           }).catch(err => {
+               console.log(err);
+               this.leaveSubResult = 'Fjerning IKKE OK!';
+           });
       },
       doInvite(){
+        console.log('DEBUG - doInvite()');
         //console.log('Doing invite stuff...');
         let tmpDate = new Date;
         axios.post('http://localhost:9000/rest/epost/', {
                  to: this.innmelding.epost,
                  from: 'test@team1.zzz',
                  subject: 'Invitasjon',
-                 body: 'Du har blitt invitert til å bli med i kollektivet "' + this.selected_maingroup_name +
+                 body: 'Du har blitt invitert til å bli med i kollektivet "' + this.selected_maingroup.navn +
                  ". Trykk på denne lenken for å godta invitasjonen: http://localhost:9000/rest/invitasjon/" + this.selected_maingroup + "?bruker_epost=" + this.innmelding.epost + "&bruker_svar=jatakk"
              }).then(response => {
                 axios.post('http://localhost:9000/rest/innmelding/', {
