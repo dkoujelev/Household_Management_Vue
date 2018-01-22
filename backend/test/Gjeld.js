@@ -35,7 +35,7 @@ let testgjeld2 = {
   bruker_innkrever_id: 2
 };
 
-describe('Bruker',() => {
+describe('Gjeld',() => {
 
   beforeEach(() => {
     // OBS: Vi må RETURNERE hele kjeden til testbiblioteket vårt, derfor return før clearDB.

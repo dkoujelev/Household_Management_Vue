@@ -16,7 +16,6 @@ let testuser = {
 
 let testGjoremal = {
   navn: "Vask",
-  start: null,
   beskrivelse: "Test",
   bruker_id: 1,
   liste_id: 1
@@ -24,7 +23,6 @@ let testGjoremal = {
 
 let testGjoremal2 = {
   navn: "Vask",
-  start: null,
   beskrivelse: "Test",
   bruker_id: 1,
   liste_id: 1
@@ -66,9 +64,7 @@ let axios_eksempel = function(){
 describe('Gjoremal',() => {
 
   // Legg inn et par testusers i basen. Begge testusers er medlem i test_kollektiv som også ligger i basen.
-  // Basen tømmes og dette innholdet legges inn på nytt før hver test kjøres.
-
-  before(() => fakeLogin());
+  // Basen tømmes og dette innholdet legges inn på nytt før hver test kjøres
 
   beforeEach(() => {
     // OBS: Vi må RETURNERE hele kjeden til testbiblioteket vårt, derfor return før clearDB.
@@ -101,7 +97,6 @@ describe('Gjoremal',() => {
         return axios.post('http://localhost:9100/rest/gjoremal/', testGjoremal);
       }).then(response => {
         testGjoremal.gjoremal_id = response.data.insertId;
-        testGjoremal.start = response.data.start;
 
         // Legg in testGjoremal2.
         return axios.post('http://localhost:9100/rest/gjoremal/', testGjoremal2);
@@ -122,43 +117,43 @@ describe('Gjoremal',() => {
     });
   });
 
-  it.skip('Hent gjoremal til en liste', () => {
+  it('Hent gjoremal til en liste', () => {
 
-    return axios.get('http://localhost:9100/rest/gjoremal' + testListe.id).then((response) => {
+    return axios.get('http://localhost:9100/rest/gjoremaler/' + testListe.id).then((response) => {
       let gjoremaler = response.data;
 
       // Sjekk at vi fikk ut like mange gjoremal som vi satte inn.
       expect(gjoremaler.length).to.equal(2);
 
       // Sjekk at brukerne som kom ut er identiske med de som ble satt inn.
-      expect(gjoremaler).to.have.deep.members([testGjoremal, testGjoremal2]);
+      expect(gjoremaler).to.containSubset([testGjoremal, testGjoremal2]);
     });
   });
 
-  it.skip('Oppdater gjoremal', () => {
+  it('Oppdater gjoremal', () => {
 
     let newGjoremal = {
       gjoremal_id: testGjoremal.gjoremal_id,
       navn: testGjoremal.navn,
-      beskrivelse: testGjoremal.beskrivelse,
-      start: testGjoremal.start,
-      frist: new Date(),
-      ferdig: null
+      beskrivelse: "Updated",
+      frist: new Date().toJSON()
     };
 
     return axios.put('http://localhost:9100/rest/gjoremal/', newGjoremal)
       .then(response => {
-        expect(response.data).to.deep.equal(newGjoremal);
+        return axios.get('http://localhost:9100/rest/gjoremal/' + newGjoremal.gjoremal_id).then(response => {
+          expect(response.data).to.containSubset(newGjoremal);
+        });
       });
   });
 
-  it.skip('Slett gjoremal',() => {
+  it('Slett gjoremal',() => {
 
     return axios.delete('http://localhost:9100/rest/gjoremal/' + testGjoremal2.gjoremal_id)
       .then(response => {
         return axios.get('http://localhost:9100/rest/gjoremal/' + testGjoremal2.gjoremal_id)
       }).then(response => {
-        expect(response.data).to.equal({});
+        expect(response.data).to.equal('');
       });
   });
 });
