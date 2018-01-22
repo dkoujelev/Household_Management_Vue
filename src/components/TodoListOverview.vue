@@ -24,39 +24,56 @@
 
     export default {
       name: 'TodoListOverview',
-      data(){
+      data() {
         return {
           columns: [
             {
-              label: 'Grupppe',
+              label: 'Gruppe',
               field: 'Tittel',
               filterable: false
             },
             {
               label: 'Tittel',
-              field: 'nyhet',
+              field: 'navn',
               filterable: false
             },
             {
               label: 'Dato',
-              field: 'nar',
-              filterable: false
-            }
-          ],
-          rows: []
-        };
-
-        getGroup(){
-
-          let group =
+              field: 'opprettet',
+              filterable: false,
+              type: 'date',
+              inputFormat: 'YYYYMMDD',
+              outputFormat: 'MMM Do YY',
+            },
             {
-              //rest/undergrupperForBruker/:bruker_id
-
-            }
-
+              label: 'Arkivere',
+              field: 'Arkiv',
+              filterable: false
+            },
+          ],
+          rows: [{navn: 'test', opprettet: new Date() }]
         }
-
       },
+// [{}] <- betyr at array inneholder et objekt
+
+      created() {
+          let userTodoList =
+            {
+              id: 1,
+              navn: "",
+              opprettet: new Date(),
+              undergruppe_id: "",
+              ferdig: null
+            };
+          console.dir(userTodoList);
+          axios.get('rest/gjoremalslisterBruker/:bruker_id', userTodoList).then(response => {
+            alert('Alle lister til bruker hentet');
+            console.log("1");
+            router.sort(userTodoList);
+          }).catch(err => {
+            console.log(JSON.stringify(err));
+          });
+        }
     }
 </script>
 

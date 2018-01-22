@@ -55,8 +55,8 @@
           bruker_id: 4,
           liste_id: 6,
         };
-        console.dir(edit);
-        axios.put('http://localhost:9000/rest/gjoremal/', edit).then( response => {
+          console.dir(edit);
+          axios.put('http://localhost:9000/rest/gjoremal/', edit).then( response => {
           alert('Gjøremål redigert/endret!');
           this.$emit('edit-todo', edit);
           console.log("1");
@@ -99,8 +99,8 @@
             bruker_id: 1,
             liste_id: 2,
           };
-        console.dir(todoList);
-        axios.post('http://localhost:9000/rest/gjoremal/', todoList).then( response => {
+          console.dir(todoList);
+          axios.post('http://localhost:9000/rest/gjoremal/', todoList).then( response => {
           alert('Legge til gjøremål ordnet!');
           this.$emit('create-todo', todoList);
           console.log("1");
@@ -125,8 +125,6 @@
           this.beskrivelse = '';
           this.isCreating = false;
         }
-
-
         /*
         axios.post('http://localhost:9000/rest/gjoremal/:id', this.todo, response => {
           //this.$emit('send-todo', this.todo); //gir beskjed til parrent komponent at "dette skjer"
