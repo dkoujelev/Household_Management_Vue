@@ -1,13 +1,17 @@
 <template>
-  <div>
-    <label>{{user_info.first_name}}</label>
-    <br/>
-    <label>{{user_info.last_name}}</label>
-    <br/>
-    <label>{{user_info.email}}</label>
-    <br/>
-    <router-link class="button" to="/ChangePassword">Endre passord</router-link>
+  <div class="is-ancestor">
+    <div class="is-parent tile box" style="background-color: azure">
+      <div class="is-child tile">
+        <div class="block">
+          <p>Fornavn: {{user_info.first_name}}</p>
+          <p>Etternavn: {{user_info.last_name}}</p>
+          <p>E-mail: {{user_info.email}}</p>
+          <router-link class="button is-dark" to="/ChangePassword">Endre passord</router-link>
+        </div>
+      </div>
+    </div>
   </div>
+
 </template>
 
 <script>
