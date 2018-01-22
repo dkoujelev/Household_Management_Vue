@@ -29,7 +29,12 @@
 
     export default {
       name: 'Home',
-      components: {Newsfeedhome,Taskhome,Shoppinglistshome,Todo}
+      components: {Newsfeedhome,Taskhome,Shoppinglistshome,Todo},
+      created(){
+        if(!store.state.isMember){
+          router.push('NewUser');
+        }
+      }
     }
 </script>
 

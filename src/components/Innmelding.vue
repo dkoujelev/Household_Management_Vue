@@ -1,89 +1,45 @@
 <template>
-  <section class="hero is-fullheight is-medium is-bold">
-    <div class="hero-body">
-      <div class="container">
-        <div class="columns is-centered">
-          <article class="card is-rounded">
-            <div class="card-content">
-              <img src="../img/logo_full.png" height="200" width="400"/>
-              <p class="help is-danger">{{this.error}}</p>
-
-              <div v-if="showJoinSection===true">
-
-                <p>Skriv inn navnet på kollektivet du ønsker å bli medlem av</p>
-                <p class="control has-icon">
-                    <input class="input" type="text" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
-                    <span class="icon is-small">
-                        <i class="fa fa-plus"></i>
-                    </span>
-                </p>
-                <p class="control">
-                  <button class="button is-primary is-medium is-fullwidth" v-on:click="joinGroup(innmelding.kollektiv_navn)">
-                    <i class="fa fa-user"></i>
-                    &nbsp Søk medlemskap
-                  </button>
-                  <span>{{ joinResult }}</span>
-                </p>
-                <hr>
-              </div>
-
-              <div v-if="showInviteSection===true">
-                <p class="control has-icon">
-                    <div v-if="showGroupSelect===true">
-                      <span>Du er administrator for flere kollektiv.<br>Nå administreres
-                        <select class="control" v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
-                            <option disabled value="">Velg kollektiv</option>
-                            <option v-for="option in options_maingroup" v-bind:value="option.value">
-                            {{ option.text }}
-                            </option>
-                        </select>
-                      </span>
-                      <hr>
-                    </div>
-                    <div>
-                      <span>Her kan du invitere nye medlemmer til det aktuelle kollektivet. <!--til {{ selected_maingroup_name }}--></span>
-
-                    </div>
-            <!--    <select class="control" v-model="selected_subgroup">
-                        <option disabled value="">Velg gruppe</option>
-                        <option v-for="option in options_subgroup" v-bind:value="option.value">
-                        {{ option.text }}
-                        </option>
-                    </select>           -->
-                </p>
-
-                <p class="control has-icon">
-                    <input class="input" type="email" placeholder="Email" v-model="innmelding.epost">
-                    <span class="icon is-small">
-                        <i class="fa fa-envelope"></i>
-                    </span>
-                </p>
-                <p class="control">
-                  <button class="button is-primary is-medium is-fullwidth" v-on:click="doInvite">
-                  <i class="fa fa-user"></i>
-                  &nbsp Inviter nytt medlem
-                  </button>
-                  <span>{{ mailResult }}</span>
-                </p>
-                <hr>
-              </div>
-
-              <div v-if="showApproveSection===true">
-                <span>Disse ønsker å bli med i {{ selected_subgroup.navn }}. Du kan godkjenne eller avvise søknaden(e).</span>
-                <ul id="approvalsList">
-                    <li v-for="item in approvals">
-                        <!-- {{ item.bruker }} søker medlemskap i {{ item.kollektiv }}. &nbsp; -->
-                        {{ item.bruker }}
-                        <button class="button" v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
-                        <button class="button" v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
-                    </li>
-                </ul>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
+  <section>
+    <div v-if="showJoinSection===true">
+    Skriv inn navnet på kollektivet du ønsker å bli medlem av
+        <input  type="text" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
+        <button v-on:click="joinGroup(innmelding.kollektiv_navn)">
+        Søk medlemskap
+        </button>
+        {{ joinResult }}
     </div>
+    
+    <div v-if="showInviteSection===true">              
+        <div v-if="showGroupSelect===true">
+            Du er administrator for flere kollektiv.
+            Nå administreres 
+            <select v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
+                <option disabled value="">Velg kollektiv</option>
+                <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
+                {{ option.text }}
+                </option>
+            </select>
+        </div>
+        Her kan du invitere nye medlemmer til {{ selected_maingroup_name }}
+            
+    <input  type="email" placeholder="Email" v-model="innmelding.epost">
+    <button v-on:click="doInvite">Send invitasjon</button>
+    {{ mailResult }}
+    </div>
+
+    <div v-if="showApproveSection===true">
+    Disse ønsker å bli med i {{ selected_subgroup.navn }}. Du kan godkjenne eller avvise søknaden(e).
+    <dl id="approvalsList">
+        <dt v-for="item in approvals"  v-bind:key="item.tid">
+            {{ item.bruker }}
+        </dt>
+        <dd v-for="item in approvals" v-bind:key="item.tid">
+            <button v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
+            <button v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
+        </dd>
+    </dl>
+    </div>
+
   </section>
 </template>
 
@@ -102,6 +58,7 @@
             showGroupSelect: false,
             showSubGroupSelect: false,
             showApproveSection: false,
+            current_user:this.$parent.current_user,
             joinResult: '',
             mailResult: '',
             approvals: '',
@@ -110,7 +67,6 @@
                 epost: '',
                 kollektiv_id: ''
             },
-            //selected_bruker_id: 4, //bruker_id,
             options_bruker_id: [
                 { text: 'One', value: '1' },
                 { text: 'Two', value: '2' },
@@ -134,11 +90,8 @@
       }
     },
     created: function() {
-        // console.log('This is printed at each reload!');
-        // console.log("I'm placing code here to simulate status logged-in user..."); // TODO: Fix this workaround!
-        // this.bruker_id=this.selected_bruker_id;
-        // console.log("Right now, I'm simulating user " + this.bruker_id);
-        this.getGroupsFor(store.state.current_user.bruker_id);
+
+    this.getGroupsFor(this.current_user.bruker_id);
 
     },
     // mounted: function() {
@@ -200,13 +153,13 @@
                     });
                     this.selected_subgroup = this.options_subgroup[0]; //'';
                     this.selected_subgroup.navn = this.options_subgroup[0].text;
-                    console.log("Selected: " + this.selected_subgroup.value);
+                    //console.log("Selected: " + this.selected_subgroup.value);
 
                     //getApprovalsForGroup(kollektiv_id){
                         console.log("Henter alle søknader som skal godkjennes for kollektiv " + this.selected_subgroup.navn);
 
                         axios.get('http://localhost:9000/rest/innmeldingerForKollektiv/' + kollektiv_id).then(response => {
-                        console.log('Response: ' + response.data);
+                        //console.log('Response: ' + response.data);
                         this.approvals = response.data.map((item) => {
                             return {
                                 bruker: item.bruker_epost,
@@ -250,13 +203,14 @@
 
 
       approve(kollektiv,epost,status){
-          console.log("epost=" + epost + '   ' + "kollektiv=" + kollektiv + '   ' + "status=" + status);
+          //console.log("epost=" + epost + '   ' + "kollektiv=" + kollektiv + '   ' + "status=" + status);
+          let tmpDate = new Date;
         axios.put('http://localhost:9000/rest/innmelding', {
             kollektiv_id: kollektiv,
             bruker_epost: epost,
             status_admin:status,
             //status_bruker: '',
-            dato_svar_admin: 1234,  // TODO: Replace with proper timestamp!
+            dato_svar_admin: tmpDate.getTime(),  // This is set server side
             //dato_svar_bruker: '',
             aktiv: false,
             //notat_admin: '',
@@ -271,26 +225,19 @@
       },
 
       joinGroup(groupName){
-        //innmelding.kollektiv_navn
          axios.get('http://localhost:9000/rest/kollektivMedNavn/' + groupName).then(response => {
-            //  let myArray = response.data.map((item) => {
-            //                 return {
-            //                     navn: item.navn,
-            //                     id: item.kollektiv_id
-            //                 };
-            //             });
-            //kollektiv_id=myArray[0].id;
-             console.log(groupName + '=' + response.data);
+             //console.log(groupName + '=' + response.data);
                     if(response.data != null){
                         this.kollektiv_id=response.data.kollektiv_id;
-                        console.log("Klar for innmelding!");
+                        //console.log("Klar for innmelding!");
+                        let tmpDate=new Date;
                         axios.post('http://localhost:9000/rest/innmelding', {
                             kollektiv_id: this.kollektiv_id,
                             bruker_epost:  store.state.current_user.epost,
                             status_admin:2,
                             status_bruker: '1',
-                            dato_svar_admin: null,
-                            dato_svar_bruker: 1234, // TODO: Replace with proper timestamp!
+                            dato_svar_admin: null,  
+                            dato_svar_bruker: tmpDate.getTime(),
                             aktiv: true,
                             notat_admin: null,
                             notat_bruker: null
@@ -310,7 +257,8 @@
       })
       },
       doInvite(){
-        console.log('Doing invite stuff...');
+        //console.log('Doing invite stuff...');
+        let tmpDate = new Date;
         axios.post('http://localhost:9000/rest/epost/', {
                  to: this.innmelding.epost,
                  from: 'test@team1.zzz',
@@ -322,7 +270,7 @@
                     kollektiv_id: this.selected_maingroup,
                     bruker_epost: this.innmelding.epost,
                     status_admin: 1,
-                    dato_svar_admin: 1234, // TODO: Epoch time!
+                    dato_svar_admin: tmpDate.getTime,
                     aktiv: true
                 }).then(response => {
                     this.mailResult = "Invitasjon er sendt!";
