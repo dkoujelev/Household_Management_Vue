@@ -2,8 +2,6 @@ let expect = require('chai').expect;
 let axios = require('axios');
 let bcrypt = require('bcrypt');
 let clearDB = require('./testutil').clearDB;
-let fakeLogin = require('./testutil').fakeLogin;
-
 
 let testuser = {
   epost: 'test@test.com',
@@ -52,8 +50,6 @@ describe('Bruker',() => {
 
   // Legg inn et par testusers i basen. Begge testusers er medlem i test_kollektiv som også ligger i basen.
   // Basen tømmes og dette innholdet legges inn på nytt før hver test kjøres.
-
-  before(() => fakeLogin());
 
   beforeEach(() => {
     // OBS: Vi må RETURNERE hele kjeden til testbiblioteket vårt, derfor return før clearDB.

@@ -1,46 +1,51 @@
 <template>
-  <section>
-    <div v-if="showJoinSection===true">
-    Skriv inn navnet på kollektivet du ønsker å bli medlem av
-        <input  type="text" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
-        <button v-on:click="joinGroup(innmelding.kollektiv_navn)">
-        Søk medlemskap
-        </button>
-        {{ joinResult }}
-    </div>
-    
-    <div v-if="showInviteSection===true">              
-        <div v-if="showGroupSelect===true">
-            Du er administrator for flere kollektiv.
-            Nå administreres 
-            <select v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
-                <option disabled value="">Velg kollektiv</option>
-                <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
-                {{ option.text }}
-                </option>
-            </select>
-        </div>
-        Her kan du invitere nye medlemmer til {{ selected_maingroup_name }}
-            
-    <input  type="email" placeholder="Email" v-model="innmelding.epost">
-    <button v-on:click="doInvite">Send invitasjon</button>
-    {{ mailResult }}
-    </div>
+ <div class="is-ancestor">
+   <div class="is-parent tile box" style="background-color: azure">
+     <div class="child tile">
+       <div v-if="showJoinSection===true">
+         <div class="content">Skriv inn navnet på kollektivet du ønsker å bli medlem av
+         </div>
+         <div>
+           <input class="input" type="text" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn"/>
+           <button class="button is-dark" v-on:click="joinGroup(innmelding.kollektiv_navn)">Søk medlemskap</button>
+         </div>
 
-    <div v-if="showApproveSection===true">
-    Disse ønsker å bli med i {{ selected_subgroup.navn }}. Du kan godkjenne eller avvise søknaden(e).
-    <dl id="approvalsList">
-        <dt v-for="item in approvals"  v-bind:key="item.tid">
-            {{ item.bruker }}
-        </dt>
-        <dd v-for="item in approvals" v-bind:key="item.tid">
-            <button v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
-            <button v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
-        </dd>
-    </dl>
-    </div>
+       {{ joinResult }}
+       </div>
 
-  </section>
+       <div v-if="showInviteSection===true">
+         <div v-if="showGroupSelect===true">
+           Du er administrator for flere kollektiv.
+           Nå administreres
+           <select v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
+             <option disabled value="">Velg kollektiv</option>
+             <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
+               {{ option.text }}
+             </option>
+           </select>
+         </div>
+         Her kan du invitere nye medlemmer til {{ selected_maingroup_name }}
+
+         <input  type="email" placeholder="Email" v-model="innmelding.epost">
+         <button v-on:click="doInvite">Send invitasjon</button>
+         {{ mailResult }}
+       </div>
+
+       <div v-if="showApproveSection===true">
+         Disse ønsker å bli med i {{ selected_subgroup.navn }}. Du kan godkjenne eller avvise søknaden(e).
+         <dl id="approvalsList">
+           <dt v-for="item in approvals"  v-bind:key="item.tid">
+             {{ item.bruker }}
+           </dt>
+           <dd v-for="item in approvals" v-bind:key="item.tid">
+             <button v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
+             <button v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
+           </dd>
+         </dl>
+       </div>
+     </div>
+   </div>
+ </div>
 </template>
 
 <script>
@@ -236,7 +241,7 @@
                             bruker_epost:  store.state.current_user.epost,
                             status_admin:2,
                             status_bruker: '1',
-                            dato_svar_admin: null,  
+                            dato_svar_admin: null,
                             dato_svar_bruker: tmpDate.getTime(),
                             aktiv: true,
                             notat_admin: null,
