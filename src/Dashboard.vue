@@ -102,4 +102,8 @@ export default {
 </script>
 
 <style>
+  body {
+    background-color: whitesmoke;
+    height: 100vh;
+  }
 </style>
