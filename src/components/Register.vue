@@ -50,6 +50,8 @@
                   &nbsp Lag bruker
                 </button>
               </p>
+
+              <router-link class="is-ink" to="/Login">Login. Jeg har allerde en bruker.</router-link>
             </div>
           </article>
         </div>

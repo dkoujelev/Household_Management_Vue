@@ -1,5 +1,6 @@
 let restify = require("restify");
 let CookieParser = require('restify-cookies');
+let auth = require('./auth');
 
 let server = restify.createServer();
 server.use(CookieParser.parse);
@@ -22,8 +23,13 @@ server.use(restify.plugins.bodyParser({
     mapParams: true
 }));
 
-server.listen(9000, function(){
-    console.log("STARTED rest server! :)");
+server.use((req, res, next) => {
+  let approved = ['/rest/login','/rest/loggedIn','/rest/logout'];
+  if(!approved.includes(req.getPath()) && !auth.checkThatSessionExists(req,res)){
+    next(false);
+  }
+  else
+    next();
 });
 
 module.exports = server;
