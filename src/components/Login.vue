@@ -62,33 +62,33 @@
         var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return regex.test(email);
       },
-      login(){
+      login: function () {
 
         this.error = '';
-        if(!this.validateEmail(this.login_info.epost)){
+        if (!this.validateEmail(this.login_info.epost)) {
           this.login_info.epost = "";
           this.login_info.passord = "";
           this.error = 'Ugyldig epost';
-        } else{
+        } else {
           axios.post('http://localhost:9000/rest/login', this.login_info).then(response => {
             this.$emit('logging_in', this.login_info);
             console.log("Logging in...");
 
-            if(response.data == null){
+            if (response.data == null) {
               this.login_info.epost = "";
               this.login_info.passord = "";
               this.error = "Ukjent brukernavn eller passord!"; //this.error="Bruker med denne eposten finnes ikke";
-            } else{
+            } else {
               this.login_info.epost = "";
               this.login_info.passord = "";
-              store.commit('current_user',response.data);
+              store.commit('current_user', response.data);
               store.commit('loggedIn', true);
               axios.get('http://localhost:9000/rest/kollektivForBruker/' + response.data.bruker_id).then(response => {
-                  if(response.data.length === 0)
-                      router.push('NewUser');
-                  else
-                    router.push('home');
-
+                store.commit('isMember', response.data.length > 0);
+                if (response.data.length === 0)
+                  router.push('NewUser');
+                else
+                  router.push('home');
               });
             }
           }).catch(err => {

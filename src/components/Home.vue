@@ -29,7 +29,7 @@
 
     export default {
       name: 'Home',
-      components: {Newsfeedhome,Taskhome,Shoppinglistshome,Todo}
+      components: {Newsfeedhome,Taskhome,Shoppinglistshome,Todo},
     }
 </script>
 
