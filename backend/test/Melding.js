@@ -41,7 +41,6 @@ describe('Melding',() => {
       test_kollektiv.kollektiv_id = response.insertId;
       return axios.post('http://localhost:9100/rest/melding', test_melding);
     }).then(response => {
-      console.log("RESPONSE:::" + response.data.insertId);
       test_melding.melding_id = response.data.insertId;
     });
   });

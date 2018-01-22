@@ -68,8 +68,6 @@ module.exports = function(connection, server){
           melding.sendt = new Date(melding.sendt);
       }
 
-      console.log("returnerer " + rows.length + " meldinger for kollektiv + " + req.params.sendt_til_kollektiv + ".");
-
       res.send(rows);
       return next();
     });
