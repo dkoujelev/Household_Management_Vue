@@ -41,9 +41,17 @@ router.beforeEach((to,from,next) => {
       //console.log("router.beforeEach: User isn't logged in! Sending user to Login");
       return next('Login');
     }
-
   });
 
+  if(store.state.loggedIn) {
+    axios.get('http://localhost:9000/rest/kollektivForBruker/' + store.state.current_user.bruker_id).then(response => {
+      store.commit('isMember', response.data.length > 0);
+      if (response.data.length === 0)
+        router.push('NewUser');
+      else
+        router.push('home');
+    });
+  }
 });
 
 /* eslint-disable no-new */
