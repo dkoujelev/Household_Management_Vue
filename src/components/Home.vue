@@ -1,5 +1,5 @@
 <template>
-      <div class="tile is-ancestor">
+      <div class="tile is-ancestor box" style="background-color: deeppink">
         <div class="tile is-parent  box" style="background-color: skyblue">
           <div class="child tile is-6 box" style="background-color: palevioletred">
             <Newsfeedhome></Newsfeedhome>

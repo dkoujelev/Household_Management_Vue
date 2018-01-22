@@ -1,18 +1,25 @@
 <template>
-  <div>
-    <vue-good-table
-      title="Nyhets-feed"
-      :columns="columns"
-      :rows="rows"
-      :paginate="true"
-      per-page=5
-      next-text="Neste"
-      prev-text="Forrige"
-      rows-per-page-text="Antall rader"
-      of-text="av"
+  <div class="is-ancestor box" style="background-color: green">
+    <div class="is-parent box" style="background-color: peru">
+      <div class="is-child box" style="background-color:lightblue">
+        <div>
+          <vue-good-table
+            title="Nyhets-feed"
+            :columns="columns"
+            :rows="rows"
+            :paginate="true"
+            per-page=5
+          next-text="Neste"
+          prev-text="Forrige"
+          rows-per-page-text="Antall rader"
+          of-text="av"
 
-    />
-    <router-link class="button" to="/Addnews">Lag nyhet</router-link>
+          />
+          <br>
+          <router-link class="button is-dark" to="/Addnews">Lag nyhet</router-link>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
