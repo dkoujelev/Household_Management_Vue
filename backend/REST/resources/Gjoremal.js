@@ -9,7 +9,7 @@ module.exports = function(connection, server){
         return next(err);
 
       let gjoremal = rows[0];
-
+      console.log(gjoremal.start);
       if('start' in gjoremal)
         gjoremal.start = new Date(gjoremal.start);
       if('frist' in gjoremal)
@@ -82,5 +82,4 @@ module.exports = function(connection, server){
       return next();
     });
   });
-
 };

@@ -106,6 +106,9 @@ module.exports = function(connection, server) {
 // Opprett ny liste
   server.post('rest/gjoremalsliste/:undergruppe_id', function (req, res, next) {
     let liste = Object.assign({}, req.body);
+    liste.opprettet = util.getCurrentTimeAsEpoch();
+    /*
+    let liste = Object.assign({}, req.body);
     let gjoremaler = [];
     if ('gjoremal' in liste) {
       //gjoremal = Object.assign({}, liste.gjoremal);
@@ -113,6 +116,8 @@ module.exports = function(connection, server) {
     }
     if ('opprettet' in liste)
       liste.opprettet = util.getCurrentTimeAsEpoch();
+    */
+
 
     connection.query('INSERT INTO Gjoremalsliste SET ?', [liste], function (err, rows, field) {
       if (err)
