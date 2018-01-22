@@ -64,26 +64,4 @@ module.exports = function(connection, server){
       return next();//
     });
   });
-
-// Favorittiser en handleliste
-  server.put('rest/favorittHandleliste/', function (req, res, next) {
-    //console.log(req.body.favoritt + " " + req.body.handleliste_id);
-    connection.query('UPDATE Handleliste SET favoritt=? WHERE handleliste_id=?', [req.body.favoritt, req.body.handleliste_id], function (err, rows, fields) {
-      if(err)
-        return next(err);
-      res.send(rows);
-      return next();
-    });
-  });
-
-// Favorittiser en gjoremalsliste
-  server.put('rest/favorittGjoremalsliste/', function (req, res, next) {
-    connection.query('UPDATE Gjoremalsliste SET favoritt=? WHERE id=?', [req.body.favoritt, req.body.id], function (err, rows, fields) {
-      if(err)
-        return next(err);
-      res.send(rows);
-      return next();
-    });
-  });
-
 };
