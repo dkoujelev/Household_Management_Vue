@@ -22,6 +22,7 @@ module.exports = function(connection, server){
     });
   });
 
+  // Hent gjeld-objekt fra basen
   server.get('rest/gjeld/:gjeld_id', (req,res,next) => {
     connection.query('SELECT * FROM Gjeld where gjeld_id=?',[req.params.gjeld_id], (err,rows,fields) => {
       if(err)
@@ -31,8 +32,12 @@ module.exports = function(connection, server){
         console.log("Sending null for id " + req.params.gjeld_id);
         res.send(null);
       }
-      else
+      else{
+        if('betalt' in rows[0])
+          rows[0].betalt = new Date(rows[0].betalt);
         res.send(rows[0]);
+      }
+
 
       return next();
     });
@@ -83,7 +88,6 @@ module.exports = function(connection, server){
       return next();
     });
   });
-
   // Sett gjeldsposteringer til betalt
   // Om du ønsker å slette kun en postering, sett i parameter gjeld_id
   // Om du ønsker å slette flere samtidig, sett inn id'er i request body slik:

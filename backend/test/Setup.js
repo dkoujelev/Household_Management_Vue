@@ -11,6 +11,9 @@ let chaiSubset = require('chai-subset');
 let server = require("../REST/server");
 chai.use(chaiSubset);
 
+let chaiDateString = require('chai-date-string');
+chai.use(chaiDateString);
+
 axios.defaults.withCredentials = true;
 
 before((done) => {
