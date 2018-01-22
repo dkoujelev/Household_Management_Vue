@@ -1,21 +1,16 @@
 <template>
-  <div>
-    <br/>
-    <div class="tiles">
-      <div class="tile is-ancestor">
-        <div class="tile is-parent is-vertical">
-          <Newsfeedhome></Newsfeedhome>
-          <div>
+      <div class="tile is-ancestor box" style="background-color: deeppink">
+        <div class="tile is-parent  box" style="background-color: skyblue">
+          <div class="child tile is-6 box" style="background-color: palevioletred">
+            <Newsfeedhome></Newsfeedhome>
+          </div>
+          <div class="child tile is-6 box" style="background-color: grey">
             <Shoppinglistshome></Shoppinglistshome>
           </div>
         </div>
-        <div class="tile is-child is-vertical is-4">
-          <Todo></Todo>
-        </div>
-
       </div>
-    </div>
-  </div>
+
+
 
 </template>
 

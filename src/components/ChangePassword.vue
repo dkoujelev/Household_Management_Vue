@@ -1,17 +1,30 @@
 <template>
-  <div>
-    <h1>Endring av passord</h1>
-    <br/>
-    <p class="help is-danger">{{this.error.all}}</p>
-    <p class="help is-danger">{{this.error.oldPassword}}</p>
-    <input type="password" placeholder="Gammelt passord" v-model="oldPassword"/>
-    <br/>
-    <p class="help is-danger">{{this.error.newPasswordMissmatch}}</p>
-    <input type="password" placeholder="Nytt passord" v-model="newPassword"/>
-    <br/>
-    <input type="password" placeholder="Gjenta nytt passord" v-model="newPasswordRepeat"/>
-    <br>
-    <button class="button" @click="changePassword">Bytt passord</button>
+  <div class="is-ancestor">
+
+    <div class="is-parent tile box" style="background-color: azure">
+      <div class="is-child tile is-3 is-block-desktop-only">
+        <h1>Endring av passord</h1>
+        <div>
+          <p class="help is-danger">{{this.error.all}}</p>
+          <br>
+          <input type="password" class="input"  placeholder="Gammelt passord" v-model="oldPassword"/>
+        </div>
+        <div>
+          <p class="help is-danger">{{this.error.oldPassword}}</p>
+          <br>
+          <input type="password" class="input" placeholder="Nytt passord" v-model="newPassword"/>
+          <br/>
+          <input type="password" class="input" placeholder="Gjenta nytt passord" v-model="newPasswordRepeat"/>
+        </div>
+        <div>
+          <p class="help is-danger">{{this.error.newPasswordMissmatch}}</p>
+          <br/>
+          <button class="button is-primary" @click="changePassword">Bytt passord</button>
+        </div>
+    </div>
+
+    </div>
+
   </div>
 </template>
 
