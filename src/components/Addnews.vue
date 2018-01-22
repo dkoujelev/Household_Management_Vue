@@ -38,17 +38,17 @@
 <script>
   import axios from 'axios';
   import router from '../router/index'
+  import {store} from '../store'
 
   export default {
     name: 'Addnews',
-    props: ['current_user', 'current_group'],
     data() {
       return {
         melding: {
           overskrift: '',
           tekst: '',
-          skrevet_av_bruker: this.current_user.bruker_id,
-          sendt_til_kollektiv: this.current_group.undergruppe_id
+          skrevet_av_bruker: store.state.current_user.bruker_id,
+          sendt_til_kollektiv: store.state.current_group.kollektiv_id
         },
         errorMessages: {
           overskrift: '',

@@ -1,25 +1,24 @@
 <template>
-  <div class="box">
+  <div class="columns">
+    <div class="column">
     <h1 class="title is-3">Oversikt over utgifter</h1>
     <table class="table is-striped is-bordered is-fullwidth is-hoverable">
       <thead>
       <tr>
         <th>Tittel</th>
         <th>Sum</th>
-        <th>Kvittering</th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="row in rows">
-        <th>{{row.tittel}}</th>
-        <th>{{row.sum}}</th>
-        <th><button class="button">Se kvittering</button></th>
+        <td>{{row.tittel}}</td>
+        <td>{{row.sum}}</td>
       </tr>
       </tbody>
       <tfoot>
       <tr>
-        <th>Total</th>
-        <th>{{totalsum}}</th>
+        <td>Total</td>
+        <td>{{totalsum}}</td>
       </tr>
       </tfoot>
     </table>
@@ -27,15 +26,16 @@
     <br>
     <router-link class="button" to="/AddExpence">Legg til utgift</router-link>
   </div>
+  </div>
 </template>
 
 <script>
 
   import axios from 'axios';
+  import {store} from '../store';
 
   export default {
     name: 'ShowExpences',
-
     data(){
       return {
         columns: [
@@ -52,37 +52,23 @@
             html: false,
             sortable: true,
             filterable: false
-          },
-          {
-            label: 'Kvittering',
-            field: 'kvittering',
-            filterable: false
           }
-        ],
-        rows: []
+        ]
       };
     },
-    mounted(){
-      this.fillRows();
-      console.log(window.test);
-    },
-    methods: {
-      fillRows(){
-        axios.get('http://localhost:9000/rest/kostnaderForUndergruppe/1').then(response => {
-          this.rows = response.data;
-        }).catch(err => {
-          console.log(err);
-        });
+    asyncComputed: {
+      rows(){
+          console.log("COMPUTING ROWS");
+        //Returner en tom liste hvis vi mottar null fra serveren.
+        return axios.get('http://localhost:9000/rest/kostnaderForUndergruppe/' + store.state.current_group.undergruppe_id)
+          .then(response  => (response.data === null ? [] : response.data));
+      },
+      totalsum(){
+        if(this.rows === null || this.rows.length === 0)
+          return 0;
+        else
+          return this.rows.map(row => row.sum).reduce((prev, next) => prev + next);
       }
-    },
-    computed:{
-        totalsum(){
-            let sum = 0;
-            for(let row of this.rows){
-                sum += row.sum;
-            }
-            return sum;
-        }
     }
   }
 </script>

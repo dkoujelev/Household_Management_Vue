@@ -47,10 +47,10 @@
 
   import axios from 'axios';
   import router from '../router/index'
+  import {store} from '../store'
 
   export default {
     name: 'Innmelding',
-    //props: ['current_user'],
     data(){
         return {
             showJoinSection: true,
@@ -90,8 +90,9 @@
       }
     },
     created: function() {
-        this.getGroupsFor(this.current_user.bruker_id);
-        
+
+    this.getGroupsFor(this.current_user.bruker_id);
+
     },
     // mounted: function() {
     //     console.log('xThis is printed at each reload!');
@@ -156,7 +157,7 @@
 
                     //getApprovalsForGroup(kollektiv_id){
                         console.log("Henter alle søknader som skal godkjennes for kollektiv " + this.selected_subgroup.navn);
-                        
+
                         axios.get('http://localhost:9000/rest/innmeldingerForKollektiv/' + kollektiv_id).then(response => {
                         //console.log('Response: ' + response.data);
                         this.approvals = response.data.map((item) => {
@@ -199,14 +200,14 @@
     //   },
 
 
-     
+
 
       approve(kollektiv,epost,status){
           //console.log("epost=" + epost + '   ' + "kollektiv=" + kollektiv + '   ' + "status=" + status);
           let tmpDate = new Date;
         axios.put('http://localhost:9000/rest/innmelding', {
             kollektiv_id: kollektiv,
-            bruker_epost: epost, 
+            bruker_epost: epost,
             status_admin:status,
             //status_bruker: '',
             dato_svar_admin: tmpDate.getTime(),  // This is set server side
@@ -232,7 +233,7 @@
                         let tmpDate=new Date;
                         axios.post('http://localhost:9000/rest/innmelding', {
                             kollektiv_id: this.kollektiv_id,
-                            bruker_epost:  this.current_user.epost, 
+                            bruker_epost:  store.state.current_user.epost,
                             status_admin:2,
                             status_bruker: '1',
                             dato_svar_admin: null,  
@@ -262,7 +263,7 @@
                  to: this.innmelding.epost,
                  from: 'test@team1.zzz',
                  subject: 'Invitasjon',
-                 body: 'Du har blitt invitert til å bli med i kollektivet "' + this.selected_maingroup_name + 
+                 body: 'Du har blitt invitert til å bli med i kollektivet "' + this.selected_maingroup_name +
                  ". Trykk på denne lenken for å godta invitasjonen: http://localhost:9000/rest/invitasjon/" + this.selected_maingroup + "?bruker_epost=" + this.innmelding.epost + "&bruker_svar=jatakk"
              }).then(response => {
                 axios.post('http://localhost:9000/rest/innmelding/', {
@@ -279,7 +280,7 @@
                 }).catch(err => {
                     console.log(err); // We assume that this suffers from the same issue(s) as response.data
                     this.sendResult = 'Epost IKKE sendt!';
-                });  
+                });
             }).catch(err => {
                 console.log(err); // We assume that this suffers from the same issue(s) as response.data
                 this.sendResult = 'Epost IKKE sendt!';

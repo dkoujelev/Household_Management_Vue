@@ -4,7 +4,7 @@
       <div class="field">
         <label for="name" class="label">Navn</label>
         <div class="control">
-          <input type="text" class="input" v-model="collective.navn" id="name" placeholder="Navn på nytt kollektiv">
+          <input type="text" class="input" v-model="collective.navn" placeholder="Navn på nytt kollektiv">
         </div>
       </div>
     <div class="field">
@@ -21,10 +21,10 @@
 </template>
 <script>
   import axios from 'axios';
+  import {store} from '../store';
 
   export default {
       name: 'AddCollective',
-      props: ['current_user'],
       data(){
           return {
               collectives:[],
@@ -40,7 +40,7 @@
     },
     methods: {
       addCollective(){
-        axios.post('http://localhost:9000/rest/kollektiv/' + this.current_user.bruker_id,this.collective).then(response => {
+        axios.post('http://localhost:9000/rest/kollektiv/' + store.state.current_user.bruker_id,this.collective).then(response => {
             let newCollective = {};
             newCollective.navn = this.collective.navn;
             newCollective.beskrivelse = this.collective.beskrivelse;

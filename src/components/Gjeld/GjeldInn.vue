@@ -12,11 +12,11 @@
 
   import axios from 'axios';
   import router from '@/router/index'
+  import {store} from '../../store'
 
   export default {
-    props: ['current_user'],
     created(){
-      axios.get('http://localhost:9000/rest/gjeldBrukerKreverInn/' + this.current_user.bruker_id).then(response => {
+      axios.get('http://localhost:9000/rest/gjeldBrukerKreverInn/' + store.state.current_user.bruker_id).then(response => {
         this.users = response.data;
       }).catch(err => {
         console.log(err);
@@ -29,7 +29,7 @@
     },
     methods:{
         selectUser(user){
-          router.push({name: 'GjeldInnSpesifisert', params: {current_user: this.current_user, user_owes: user}});
+          router.push('GjeldInnSpesifisert/' + user.bruker_id);
         }
     }
   };

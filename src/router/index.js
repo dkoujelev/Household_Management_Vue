@@ -22,7 +22,9 @@ import GjeldInn from '@/components/Gjeld/GjeldInn'
 import GjeldUt from '@/components/Gjeld/GjeldUt'
 import GjeldInnSpesifisert from '@/components/Gjeld/GjeldInnSpesifisert'
 import NewUser from '@/components/NewUser'
+import ChangePassword from '@/components/ChangePassword'
 import Grupper from '@/components/Grupper'
+
 
 Vue.use(Router);
 
@@ -116,20 +118,17 @@ export default new Router({
       {
         path: '/GjeldInn',
         name: 'GjeldInn',
-        component: GjeldInn,
-        props: true
+        component: GjeldInn
       },
       {
         path: '/GjeldUt',
         name: 'GjeldUt',
-        component: GjeldUt,
-        props: true
+        component: GjeldUt
       },
       {
-        path: '/GjeldInnSpesifisert',
+        path: '/GjeldInnSpesifisert/:bruker_skylder_id',
         name: 'GjeldInnSpesifisert',
-        component: GjeldInnSpesifisert,
-        props: true
+        component: GjeldInnSpesifisert
       },
       {
         path: '/Innmelding',
@@ -146,6 +145,11 @@ export default new Router({
         path: '/NewUser',
         name: 'NewUser',
         component: NewUser
+      },
+      {
+        path: '/ChangePassword',
+        name: 'ChangePassword',
+        component: ChangePassword
       }
     ]
   }
