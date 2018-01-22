@@ -23,13 +23,16 @@ server.use(restify.plugins.bodyParser({
     mapParams: true
 }));
 
+server.loginEnabled = true;
+
 server.use((req, res, next) => {
-  let approved = ['/rest/login','/rest/loggedIn','/rest/logout'];
-  if(!approved.includes(req.getPath()) && !auth.checkThatSessionExists(req,res)){
-    next(false);
+  if(server.loginEnabled){
+    let approved = ['/rest/login','/rest/loggedIn','/rest/logout'];
+    if(!approved.includes(req.getPath()) && !auth.checkThatSessionExists(req,res)){
+      return next(false);
+    }
   }
-  else
-    next();
+  return next();
 });
 
 module.exports = server;
