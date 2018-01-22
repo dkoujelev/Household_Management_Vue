@@ -15,7 +15,7 @@
             <span></span>
           </div>
         </div>
-          <div id="navMenu1" class="navbar-menu" v-bind:class="{'is-active': showNav}">
+          <div id="navMenu1" class="navbar-menu" v-bind:class="{'is-active': showBurger}">
             <div class="navbar-start" @click="showBurger = false">
               <router-link class="navbar-item" v-if="showNav" to="/Nyhetsfeed">Nyhet</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/TodoList">Gjøremål</router-link>
@@ -58,9 +58,9 @@ export default {
   name: 'dashboard',
   components: {SelectGroup, AddCollective, AddGroup},
   methods:{
-      selectedGroup(group){
-          store.commit('current_group',group);
-      },
+    selectedGroup(group){
+      store.commit('current_group',group);
+    },
     addedGroup(group){
       this.$refs.SelectGroup.loadGroups();
       this.addingGroup = false;
@@ -76,12 +76,12 @@ export default {
     }
   },
   created(){
-      axios.get('http://localhost:9000/rest/loggedIn').then(response => {
-          if(response.data){
-            store.commit('current_user',response.data);
-            store.commit('loggedIn',true);
-          }
-      });
+    axios.get('http://localhost:9000/rest/loggedIn').then(response => {
+      if(response.data){
+        store.commit('current_user',response.data);
+        store.commit('loggedIn',true);
+      }
+    });
   },
   data(){
       return {
@@ -91,9 +91,9 @@ export default {
       };
   },
   computed:{
-      showNav(){
-        return store.state.loggedIn && store.state.isMember;
-      },
+    showNav(){
+      return store.state.loggedIn && store.state.isMember;
+    },
     loggedIn(){
       return store.state.loggedIn;
     }

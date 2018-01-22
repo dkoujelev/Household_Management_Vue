@@ -1,11 +1,8 @@
 <template>
   <div class="is-ancestor">
 
-    <div class="is-parent tile  box" style="background-color: azure">
-      <div class="is-parent tile is is-4 is-block-desktop-only">
-
-    </div>
-      <div class="is-child tile is is-vertical">
+    <div class="is-parent tile box" style="background-color: azure">
+      <div class="is-child tile is-3 is-block-desktop-only">
         <h1>Endring av passord</h1>
         <div>
           <p class="help is-danger">{{this.error.all}}</p>
@@ -25,10 +22,9 @@
           <button class="button is-primary" @click="changePassword">Bytt passord</button>
         </div>
     </div>
-      <div class="is-parent tile is is-4 is-block-desktop-only">
 
-      </div>
     </div>
+
   </div>
 </template>
 
