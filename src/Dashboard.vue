@@ -92,6 +92,7 @@ export default {
   },
   computed:{
       showNav(){
+        //console.log(store.state.loggedIn + " " + store.state.isMember);
         return store.state.loggedIn && store.state.isMember;
       },
     loggedIn(){
