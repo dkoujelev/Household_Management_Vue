@@ -25,6 +25,7 @@
               <router-link class="navbar-item" v-if="showNav" to="/TestMail">TestMail</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/GjeldInn">Gjeld Inn</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/GjeldUt">Gjeld Ut</router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/UserInfo">Profil</router-link>
             </div>
 
             <div class="navbar-end" @click="showBurger = false">
