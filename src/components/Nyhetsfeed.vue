@@ -1,18 +1,19 @@
 <template>
   <div>
-    <vue-good-table
-      title="Nyhets-feed"
-      :columns="columns"
-      :rows="rows"
-      :onClick="deleteNews"
-      :paginate="true"
-      per-page=5
-      next-text="Neste"
-      prev-text="Forrige"
-      rows-per-page-text="Antall rader"
-      of-text="av"
-
-    />
+    <table>
+      <thead>
+        <th>Tittel</th>
+        <th>Nyhet</th>
+        <th>Når</th>
+        <th></th>
+      </thead>
+      <tr v-for="row in rows">
+        <td>{{row.hvem}}</td>
+        <td>{{row.nyhet}}</td>
+        <td>{{row.nar}}</td>
+        <td v-if="row.knapper"><button class="button is-danger" @click="deleteNews(row)">Slett</button></td>
+      </tr>
+    </table>
     <router-link class="button" to="/Addnews">Lag nyhet</router-link>
   </div>
 </template>
@@ -21,39 +22,13 @@
 
   import axios from 'axios';
   import Vue from 'vue'
-  import VueGoodTable from 'vue-good-table';
   import {store} from '@/store'
-  Vue.use(VueGoodTable);
 
   export default {
     name: 'Nyhetsfeed',
     data(){
       return {
-        columns: [
-          {
-            label: 'Hvem',
-            field: 'hvem',
-            filterable: false
-          },
-          {
-            label: 'Nyhet',
-            field: 'nyhet',
-            filterable: false
-          },
-          {
-            label: 'Når',
-            field: 'nar',
-            filterable: false
-          },
-          {
-            label: '',
-            field: 'knapper',
-            filterable: false,
-            html: true
-          }
-        ],
-        rows: [],
-        news_id: []
+        rows: []
       };
     },
     mounted(){
@@ -64,9 +39,13 @@
         return raw.substring(8, 10) + " " + raw.substring(5, 7) + " " + raw.substring(0,4)
           + " kl: " + raw.substring(11, 16);
       },
-      deleteNews(row, index){
-        let id = this.news_id[row.originalIndex];
-        
+      deleteNews(row){
+        let id = row.melding_id;
+        axios.delete('http://localhost:9000/rest/melding/' + id).then(response => {
+          alert('Nyhet slettet');
+          this.rows = [];
+          this.fillRows();
+        });
       },
       fillRows(){
         axios.get('http://localhost:9000/rest/melding/motta/kollektiv/' + store.state.current_group.undergruppe_id).then(response => {
@@ -74,9 +53,8 @@
           console.log(resRows[0].sendt);
           for(let i = 0; i < resRows.length; i++){
             let date = this.formateDate(resRows[i].sendt);
-            let obj = {hvem: resRows[i].overskrift, nyhet: resRows[i].tekst, nar: date,
-              knapper: (resRows[i].skrevet_av_bruker === store.state.current_user.bruker_id ? "<button class='button is-danger' @click='deleteNews'>Slett</button>" : '')};
-            this.news_id.push(resRows[i].melding_id);
+            let obj = {melding_id: resRows[i].melding_id, hvem: resRows[i].overskrift, nyhet: resRows[i].tekst, nar: date,
+              knapper: (resRows[i].skrevet_av_bruker === store.state.current_user.bruker_id)};
             this.rows.push(obj);
           }
           }).catch(err => {
