@@ -57,7 +57,7 @@
         };
           console.dir(edit);
           axios.put('http://localhost:9000/rest/gjoremal/', edit).then( response => {
-          alert('Gjøremål redigert/endret!');
+          //alert('Gjøremål redigert/endret!');
           this.$emit('edit-todo', edit);
           console.log("1");
           router.push('edit-todo');
@@ -101,7 +101,8 @@
           };
           console.dir(todoList);
           axios.post('http://localhost:9000/rest/gjoremal/', todoList).then( response => {
-          alert('Legge til gjøremål ordnet!');
+            let todoList = response.data;
+          //alert('Legge til gjøremål ordnet!');
           this.$emit('create-todo', todoList);
           console.log("1");
           router.push('todoList');

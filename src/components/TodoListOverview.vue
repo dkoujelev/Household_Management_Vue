@@ -1,9 +1,10 @@
 <template>
   <div>
     <vue-good-table
-      title="TodoListOverview"
+      title="Gjøremål liste"
       :columns="columns"
       :rows="rows"
+      :onClick="fillRows"
       :paginate="true"
       per-page=5
       next-text="Neste"
@@ -13,10 +14,12 @@
 
     />
   <!--  <router-link class="button" to="/Addnews">Lag nyhet</router-link> -->
+    <!-- row, index -->
   </div>
 </template>
 
 <script>
+  import TodoList from '@/components/TODO/TodoList'
   import axios from 'axios';
   import Vue from 'vue'
   import VueGoodTable from 'vue-good-table';
@@ -29,52 +32,72 @@
           columns: [
             {
               label: 'Gruppe',
-              field: 'Tittel',
+              field: 'brukerListe',
               filterable: false
             },
             {
               label: 'Tittel',
-              field: 'navn',
+              field: 'tittel',
               filterable: false
             },
             {
               label: 'Dato',
-              field: 'opprettet',
+              field: 'date',
               filterable: false,
               type: 'date',
               inputFormat: 'YYYYMMDD',
               outputFormat: 'MMM Do YY',
             },
             {
-              label: 'Arkivere',
-              field: 'Arkiv',
+              label: 'Status',
+              field: 'status',
               filterable: false
             },
           ],
-          rows: [{navn: 'test', opprettet: new Date() }]
+          rows: []
         }
       },
+      mounted(){
+      this.fillRows()
+  },
+
 // [{}] <- betyr at array inneholder et objekt
 
+     // methods: {
       created() {
-          let userTodoList =
-            {
-              id: 1,
-              navn: "",
-              opprettet: new Date(),
-              undergruppe_id: "",
-              ferdig: null
-            };
-          console.dir(userTodoList);
-          axios.get('rest/gjoremalslisterBruker/:bruker_id', userTodoList).then(response => {
-            alert('Alle lister til bruker hentet');
-            console.log("1");
-            router.sort(userTodoList);
+         // fillRows(){
+          axios.get('http://localhost:9000/rest/gjoremalslisterBruker/1').then(response => {
+            //alert('Alle lister til bruker hentet');
+            let resRows = response.data;
+            console.log(resRows);
+            for(let i = 0; i < resRows.length; i++) {
+              let obj = {brukerListe: resRows[i].undergruppe, tittel: resRows[i].navn,  date: resRows[0].opprettet};
+              this.rows.push(obj);
+            }
           }).catch(err => {
             console.log(JSON.stringify(err));
           });
+        },
+    //  }
+
+      methods: {
+
+        fillRows(){
+          axios.get('http://localhost:9000/rest/gjoremalslisterUndergruppe/1').then(response => {
+            //alert('Alle lister til bruker hentet');
+            let resRows = response.data;
+            for(let i = 0; i < resRows.length; i++){
+              let obj = {undergruppeListe: resRows[i].undergruppe_id, navnTodo: resRows[i].navn, opprettet: resRows[i].opprettet};
+              this.rows.push(obj);
+            }
+          }).catch(err => {
+            console.log(JSON.stringify(err));
+          });
+          }
         }
-    }
+
+      }
+
 </script>
 
 <style scoped>

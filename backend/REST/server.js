@@ -23,6 +23,7 @@ server.use(restify.plugins.bodyParser({
     mapParams: true
 }));
 
+//Dette må kommenteres ut
 server.use((req, res, next) => {
   let approved = ['/rest/login','/rest/loggedIn','/rest/logout'];
   if(!approved.includes(req.getPath()) && !auth.checkThatSessionExists(req,res)){
