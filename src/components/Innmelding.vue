@@ -77,10 +77,11 @@
         Dette er alle gruppene som hører inn under {{ selected_maingroup.navn }}:
         <ul id="availableSubGroupsList">
             <li v-for="option in options_subgroup"  v-bind:key="option.uid">
-                {{ option.navn }} {{ option.uid }}
+                {{ option.navn }}
                 <button v-on:click="joinSubGroup(option.uid)">Bli med</button>
             </li>
         </ul>
+        {{ joinSubResult }}
     </div>
 
   </section>
@@ -109,10 +110,11 @@
             createMainResult: '',
             createSubResult: '',
             joinResult: '',
+            joinSubResult: '',
             leaveSubResult: '',
             mailResult: '',
             approvals: '',
-            //selected_maingroup_name: '',
+            selected_maingroup_object: '',
             innmelding: {
                 epost: '',
                 kollektiv_id: ''
@@ -169,6 +171,7 @@
         selectGroup(theGroup){
             console.log('DEBUG - selectGroup(' + theGroup + ')');
             console.log('Henter hovedgruppen for kollektiv ' + theGroup.kollektiv_id);              
+            this.selected_maingroup_object=theGroup;
             axios.get('http://localhost:9000/rest/hovedgruppenForKollektiv/' + theGroup.kollektiv_id).then(response => {
                 this.options_defaultgroup = response.data.map((item) => {
                     return {
@@ -179,7 +182,7 @@
                         uid: item.undergruppe_id
                     };
                 });
-                this.selected_subgroup = this.options_subgroup[0];
+                this.selected_subgroup = this.options_defaultgroup[0];
 
                 console.log("Henter alle søknader som skal godkjennes for kollektiv " + this.selected_subgroup.navn);
                 axios.get('http://localhost:9000/rest/innmeldingerForKollektiv/' + theGroup.kollektiv_id).then(response => {
@@ -215,7 +218,7 @@
             //         };
             //     });
             // });       
-            getSubGroupsFor(theGroup.kollektiv_id);
+            this.getSubGroupsFor(theGroup.kollektiv_id);
       },
 
       getAllGroupsFor(bruker_id){
@@ -274,13 +277,13 @@
                 this.showApproveSection=false;
             }else if(response.data.length==1){ //User is admin of exactly 1 group. That group is automatically selected.
                 console.log('User is admin of one:');
-                this.selected_maingroup = {
+                this.selected_maingroup_object = {
                     navn: response.data[0].navn,
                     kollektiv_id: response.data[0].kollektiv_id,
                     undergruppe_id: 0
                 };
-                console.log('This one: ' + this.selected_maingroup);
-                this.selectGroup(this.selected_maingroup);
+                console.log('This one: ' + this.selected_maingroup_object);
+                this.selectGroup(this.selected_maingroup_object);
                 //this.selected_maingroup = response.data[0].kollektiv_id;
                 //this.selected_maingroup_name = response.data[0].navn;
                 this.showInviteSection=true;
@@ -313,10 +316,10 @@
                     uid: item.undergruppe_id
                 };
             });
-            if(options_subgroup.length < 2){
-                showAvailableSubgroups=false;
+            if(this.options_subgroup.length < 2){
+                this.showAvailableSubgroups=false;
             } else {
-                showAvailableSubgroups=true;
+                this.showAvailableSubgroups=true;
             };
             this.selected_subgroup = '';
 
