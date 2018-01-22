@@ -1,5 +1,5 @@
 <template>
-      <div class="tile is-ancestor">
+      <div class="tile is-ancestor box" style="background-color: deeppink">
         <div class="tile is-parent  box" style="background-color: skyblue">
           <div class="child tile is-6 box" style="background-color: palevioletred">
             <Newsfeedhome></Newsfeedhome>
@@ -25,11 +25,6 @@
     export default {
       name: 'Home',
       components: {Newsfeedhome,Taskhome,Shoppinglistshome,Todo},
-      created(){
-        if(!store.state.isMember){
-          router.push('NewUser');
-        }
-      }
     }
 </script>
 

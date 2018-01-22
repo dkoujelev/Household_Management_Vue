@@ -25,9 +25,11 @@
               <router-link class="navbar-item" v-if="showNav" to="/TestMail">TestMail</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/GjeldInn">Gjeld Inn</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/GjeldUt">Gjeld Ut</router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/UserInfo">Min Side</router-link>
             </div>
 
             <div class="navbar-end" @click="showBurger = false">
+              <SelectGroup :current_user="current_user" @selected-group="selectedGroup" ref="SelectGroup"></SelectGroup>
               <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut">Logg Ut</a>
             </div>
           </div>
@@ -92,6 +94,7 @@ export default {
   },
   computed:{
     showNav(){
+      //console.log(store.state.loggedIn + " " + store.state.isMember);
       return store.state.loggedIn && store.state.isMember;
     },
     loggedIn(){
