@@ -118,20 +118,17 @@ export default new Router({
       {
         path: '/GjeldInn',
         name: 'GjeldInn',
-        component: GjeldInn,
-        props: true
+        component: GjeldInn
       },
       {
         path: '/GjeldUt',
         name: 'GjeldUt',
-        component: GjeldUt,
-        props: true
+        component: GjeldUt
       },
       {
-        path: '/GjeldInnSpesifisert',
+        path: '/GjeldInnSpesifisert/:bruker_skylder_id',
         name: 'GjeldInnSpesifisert',
-        component: GjeldInnSpesifisert,
-        props: true
+        component: GjeldInnSpesifisert
       },
       {
         path: '/Innmelding',
