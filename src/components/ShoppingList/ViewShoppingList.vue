@@ -1,12 +1,16 @@
 <template>
   <div>
-
-    <vue-good-table
-      title="Handlelister"
-      :columns="columns"
-      :rows="rows"
-    ></vue-good-table>
-  </br>
+    <div class="is-ancestor">
+      <div class="is-parent">
+        <div class="is-child box">
+          <vue-good-table
+            title="Handleliste"
+            :columns="columns"
+            :rows="rows"
+          ></vue-good-table>
+        </div>
+      </div>
+    </div>
     <button class="button is-danger">Slett liste</button>
 
   </div>

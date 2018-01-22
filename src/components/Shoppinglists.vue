@@ -1,19 +1,24 @@
 <template>
   <div>
+    <div class="is-ancestor">
+      <div class="is-parent">
+        <div class="is-child box">
+          <vue-good-table
+            title="Handlelister"
+            :columns="columns"
+            :rows="rows"
+            :paginate="true"
+            :onClick="click"
+            per-page=5
+            next-text="Neste"
+            prev-text="Forrige"
+            rows-per-page-text="Antall rader"
+            of-text="av"
 
-    <vue-good-table
-      title="Handlelister"
-      :columns="columns"
-      :rows="rows"
-      :paginate="true"
-      :onClick="click"
-      per-page=5
-    next-text="Neste"
-    prev-text="Forrige"
-    rows-per-page-text="Antall rader"
-    of-text="av"
-
-    />
+          />
+        </div>
+      </div>
+    </div>
     <router-link class="button" to="/ShoppingList">Lag handleliste</router-link>
 
   </div>
