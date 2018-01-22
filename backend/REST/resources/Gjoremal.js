@@ -9,14 +9,14 @@ module.exports = function(connection, server){
         return next(err);
 
       let gjoremal = rows[0];
-
-      if('start' in gjoremal)
-        gjoremal.start = new Date(gjoremal.start);
-      if('frist' in gjoremal)
-        gjoremal.frist = new Date(gjoremal.frist);
-      if('ferdig' in gjoremal)
-        gjoremal.ferdig = new Date(gjoremal.ferdig);
-
+      if(typeof gjoremal !== 'undefined') {
+        if ('start' in gjoremal)
+          gjoremal.start = new Date(gjoremal.start);
+        if ('frist' in gjoremal)
+          gjoremal.frist = new Date(gjoremal.frist);
+        if ('ferdig' in gjoremal)
+          gjoremal.ferdig = new Date(gjoremal.ferdig);
+      }
       res.send(gjoremal);
       return next();
     });
@@ -82,5 +82,4 @@ module.exports = function(connection, server){
       return next();
     });
   });
-
 };

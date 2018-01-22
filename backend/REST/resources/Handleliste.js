@@ -5,8 +5,13 @@ module.exports = function(connection, server){
 // Hent en fullstendig handleliste
   server.get('rest/handleliste/:handleliste_id',function(req, res, next){
     connection.query("SELECT * FROM Handleliste WHERE handleliste_id=?", [req.params.handleliste_id], function(err, rows, fields){
-      if(err || rows.length != 1)
+
+      if(err)
         return next(err);
+      else if(rows.length != 1) {
+        res.send("Shoppinglist not found!");
+        return next();
+      }
 
       let handleliste = rows[0];
 
@@ -38,7 +43,7 @@ module.exports = function(connection, server){
     if('varer' in handleliste)
       delete handleliste.varer;
 
-      handleliste.opprettet = util.getCurrentTimeAsEpoch();
+    handleliste.opprettet = util.getCurrentTimeAsEpoch();
     if('frist' in handleliste)
       handleliste.frist = new Date(handleliste.frist).getTime();
     if('handling_utfort' in handleliste)
@@ -109,6 +114,87 @@ module.exports = function(connection, server){
       }
 
       res.send(err ? err : rows);
+      return next();
+    });
+  });
+
+// Oppdater en handleliste
+  server.put('res/handleliste/', function (req,res,next) {
+    /*
+    let varer;
+    if('varer' in req){
+      varer = req.body.varer;
+      req.delete('varer')
+    }
+    */
+    if('opprettet' in req)
+      req.opprettet = new Date(req.opprettet).getTime();
+    if('frist' in req)
+      req.frist = new Date(req.frist).getTime();
+    if('handling_utfort' in req)
+      req.handling_utfort = new Date(req.handling_utfort).getTime();
+
+    connection.query('UPDATE Handleliste SET ? WHERE handleliste_id=?', [req.body, req.body.handleliste_id], function (err,rows,fields) {
+      if(err)
+        return next(err);
+      res.send(rows);
+      return next();
+      /*
+      connection.query('SELECT * FROM Vare WHERE handleliste_id=?', req.body.handleliste_id, function (err, rows, fields) {
+        if(err)
+          return next(err);
+        let varerDelete = [];
+        let varerUpdate = [];
+        let varerNew = [];
+        let vareId = [];
+        for(vare of varer){
+          if('vare_id' in vare){
+            for(row of rows) {
+              if (vare.vare_id === row.vare_id) {
+                varerUpdate.push(vare);
+                vareId.push(vare.vare_id);
+                rows.delete(row);
+              }
+            }
+          } else {
+            varerNew.push(vare);
+          }
+        }
+        for(row of rows){
+          varerDelete.push(row);
+        }
+        connection.query('UPDATE Vare SET ? WHERE ?', [varerUpdate, varerId], function (err, rows, fields) {
+          if(err)
+            return next(err);
+          res.send(rows);
+          return next();
+        });
+      });
+      */
+    });
+  });
+
+// Slett en liste
+  server.del('rest/handleliste/:handleliste_id', function (req ,res, next) {
+    connection.query('DELETE FROM Vare WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
+      if(err)
+        return next(err);
+      connection.query('DELETE FROM Handleliste WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
+        if(err)
+          return next(err);
+        res.send(rows);
+        return next();
+      });
+    });
+  });
+
+// Favorittiser en handleliste
+  server.put('rest/favorittHandleliste/', function (req, res, next) {
+    //console.log(req.body.favoritt + " " + req.body.handleliste_id);
+    connection.query('UPDATE Handleliste SET favoritt=? WHERE handleliste_id=?', [req.body.favoritt, req.body.handleliste_id], function (err, rows, fields) {
+      if(err)
+        return next(err);
+      res.send(rows);
       return next();
     });
   });
