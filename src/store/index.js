@@ -7,12 +7,14 @@ export const store = new Vuex.Store({
   state:{
     current_user:{},
     current_group:{},
-    loggedIn: false
+    loggedIn: false,
+    isMember: false
   },
   mutations: {
     current_user(state, new_user){ state.current_user = new_user; },
     current_group(state, new_group){ state.current_group = new_group; },
-    loggedIn(state, logged_in){ state.loggedIn = logged_in; }
+    loggedIn(state, logged_in){ state.loggedIn = logged_in; },
+    isMember(state, is_member){ state.isMember = is_member; }
   }
 });
 

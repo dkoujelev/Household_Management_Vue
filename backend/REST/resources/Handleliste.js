@@ -53,6 +53,12 @@ module.exports = function(connection, server){
       if(err)
         return next(err);
 
+      // Trenger ikke å legge inn varer.
+      if(!('varer' in req.body) || req.body.varer.length == 0){
+        res.send(rows);
+        return next();
+      }
+
       let varer = [];
       for(let vare of req.body.varer){
         let varen = [];

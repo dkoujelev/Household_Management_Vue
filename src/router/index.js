@@ -16,7 +16,6 @@ import Addnews from '@/components/Addnews'
 import ShowExpences from '@/components/ShowExpences'
 import ShoppingList from '@/components/ShoppingList/ShoppingList'
 import Innmelding from  '@/components/Innmelding'
-import TestMail from  '@/components/TestMail'
 import TodoList from '@/components/TODO/TodoList'
 import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
 import GjeldInn from '@/components/Gjeld/GjeldInn'
@@ -24,6 +23,10 @@ import GjeldUt from '@/components/Gjeld/GjeldUt'
 import GjeldInnSpesifisert from '@/components/Gjeld/GjeldInnSpesifisert'
 import NewUser from '@/components/NewUser'
 import ChangePassword from '@/components/ChangePassword'
+import Grupper from '@/components/Grupper'
+import UserInfo from '@/components/UserInfo'
+
+
 import ItemChart from '@/components/Charts/ItemChart'
 import TodoListOverview from '@/components/TodoListOverview'
 Vue.use(Router);
@@ -136,19 +139,20 @@ export default new Router({
         component: Innmelding
       },
       {
-        path: '/TestMail',
-        name: 'TestMail',
-        component: TestMail
+        path: '/Grupper',
+        name: 'Grupper',
+        component: Grupper,
+        props: true
       },
       {
-        path: '/ItemChart',
-        name: 'ItemChart',
-        component: ItemChart
+        path: '/NewUser',
+        name: 'NewUser',
+        component: NewUser
       },
       {
-        path: '/TodoListOverview',
-        name: 'TodoListOverview',
-        component: TodoListOverview
+        path: '/ChangePassword',
+        name: 'ChangePassword',
+        component: ChangePassword
       }
     ]
   }

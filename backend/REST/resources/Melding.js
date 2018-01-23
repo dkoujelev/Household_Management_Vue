@@ -1,3 +1,5 @@
+let util = require('../util');
+
 module.exports = function(connection, server){
 
   /*
@@ -16,12 +18,14 @@ module.exports = function(connection, server){
 
 // Sende melding til bruker eller kollektiv
   server.post('rest/melding',function(req,res,next){
-    let melding = Object.assign({}, req.body);
-    if('sendt' in melding)
-      melding.sendt = new Date(melding.sendt).getTime();
 
-    connection.query("INSERT INTO Melding SET ?", [melding], function(err, rows, fields){
-      res.send(err ? err : rows);
+    req.body.sendt = util.getCurrentTimeAsEpoch();
+
+    connection.query("INSERT INTO Melding SET ?", [req.body], function(err, rows, fields){
+      if(err)
+        return next(err);
+
+      res.send(rows);
       return next();
     });
   });
@@ -29,19 +33,26 @@ module.exports = function(connection, server){
 // Hent meldinger skrevet av en bruker
   server.get('rest/melding/sendt/bruker/:skrevet_av_bruker',function(req, res, next){
     connection.query("SELECT * FROM Melding WHERE skrevet_av_bruker=?", [req.params.skrevet_av_bruker], function(err, rows, fields){
+      if(err)
+        return next(err);
+
       for(let melding of rows){
         if('sendt' in melding)
           melding.sendt = new Date(melding.sendt);
       }
-      res.send(err ? err : rows);
+
+      res.send(rows);
       return next();
     });
   });
 
-// Hent meldinger til en bruker
+// Hent meldinger til en bruker (brukes ikke)
   server.get('rest/melding/motta/bruker/:sendt_til_bruker',function(req, res, next){
     connection.query("SELECT * FROM Melding WHERE sendt_til_bruker=?", [req.params.sendt_til_bruker], function(err, rows, fields){
-      res.send(err ? err : rows);
+      if(err)
+        return next(err);
+
+      res.send(rows);
       return next();
     });
   });
@@ -49,14 +60,30 @@ module.exports = function(connection, server){
 // Hente meldinger til et kollektiv
   server.get('rest/melding/motta/kollektiv/:sendt_til_kollektiv',function(req, res, next){
     connection.query("SELECT * FROM Melding WHERE sendt_til_kollektiv=? ORDER BY sendt DESC", [req.params.sendt_til_kollektiv], function(err, rows, fields){
+      if(err)
+        return next(err);
+
       for(let melding of rows){
         if('sendt' in melding)
           melding.sendt = new Date(melding.sendt);
       }
-      res.send(err ? err : rows);
+
+      res.send(rows);
       return next();
     });
   });
-//Slette en melding
+
+  // Slett en melding
+  server.del('rest/melding/:melding_id', (req,res,next) => {
+    connection.query('DELETE FROM Melding WHERE melding_id=?', [req.params.melding_id], (err,rows,fields) => {
+      if(err)
+        return next(err);
+
+      res.send(rows);
+      return next();
+    });
+  });
+
+  // Oppdatere melding - TRENGER IKKE
 
 };
