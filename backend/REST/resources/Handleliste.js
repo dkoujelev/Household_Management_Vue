@@ -68,7 +68,7 @@ module.exports = function(connection, server){
         varer.push(varen);
       }
 
-      console.log(JSON.stringify(varer));
+      //console.log(JSON.stringify(varer));
 
       connection.query('INSERT INTO Vare (navn, handleliste_id, antall) VALUES ?', [varer], function(err,rows,fields){
         if(err)

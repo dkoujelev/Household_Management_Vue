@@ -127,7 +127,7 @@ module.exports = function(connection, server){
       if(err){res.send(err); return next();}
 
       connection.query('INSERT INTO Bruker_Undergruppe SET bruker_id=?, undergruppe_id=?',[req.params.bruker_id, rows1.insertId], function(err,rows2,fields){
-        res.send(err ? err : rows2);
+        res.send(err ? err : rows1);
         return next();
       });
     });

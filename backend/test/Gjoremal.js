@@ -1,6 +1,5 @@
 let expect = require('chai').expect;
 let axios = require('axios');
-let bcrypt = require('bcrypt');
 let clearDB = require('./testutil').clearDB;
 
 
