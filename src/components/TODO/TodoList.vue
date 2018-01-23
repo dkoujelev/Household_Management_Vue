@@ -45,7 +45,7 @@
       Todo, CreateTodo, testDato, //html tag
     },
     methods: {
-      deleteTodo(todo) {
+      deleteTodo() {
         swal({
             title: 'Er du sikker?',
             text: 'Todo vil bli slettet!',
@@ -55,7 +55,7 @@
             confirmButtonText: 'ja, jeg bekrefter sletting!',
             closeOnConfirm: false,
           },
-
+          //this.todos.splice(this.todos.indexOf(todo), 1)
           /*
           () => {
             const todoIndex = this.todos.indexOf(todo);

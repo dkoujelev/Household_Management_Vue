@@ -40,6 +40,7 @@
         components: {
           testDato,
         },
+
         titleText: "",
         date: "",
         beskrivelseText: '',
@@ -49,11 +50,10 @@
     methods: {
       openForm() {
         let edit = {
-          navn: "",
-          start: new Date(),
-          beskrivelse: "",
-          bruker_id: 4,
-          liste_id: 6,
+          navn: this.titleText,
+          beskrivelse: this.beskrivelseText,
+          bruker_id: 1,
+          liste_id: 2,
         };
           console.dir(edit);
           axios.put('http://localhost:9000/rest/gjoremal/', edit).then( response => {
@@ -85,7 +85,6 @@
         this.isCreating = true;
       },
 
-
       closeForm() {
         this.isCreating = false;
       },
@@ -93,32 +92,16 @@
       sendForm() {
         let todoList =
           {
-            navn: "",
-            start: new Date(),
-            beskrivelse: "",
+            navn: this.titleText,
+            beskrivelse: this.beskrivelseText,
             bruker_id: 1,
             liste_id: 2,
           };
-          console.dir(todoList);
-          axios.post('http://localhost:9000/rest/gjoremal/', todoList).then( response => {
-            let todoList = response.data;
-          //alert('Legge til gjøremål ordnet!');
-          this.$emit('create-todo', todoList);
-          console.log("1");
-          router.push('todoList');
-        }).catch(err => {
-          console.log(JSON.stringify(err));
-        });
-
 
         if (this.titleText.length > 0  && this.beskrivelseText.length > 0) {
-          const title = this.titleText;
-          const date = this.date;
-          const beskrivelse = this.beskrivelse;
-          this.$emit('create-todo', {
-            title,
-            date,
-            beskrivelse,
+          this.$emit('edit-todo', {
+            navn: this.titleText,
+            beskrivelse: this.beskrivelse,
             done: false,
           });
           this.titleText = '';
@@ -126,6 +109,17 @@
           this.beskrivelse = '';
           this.isCreating = false;
         }
+
+        console.dir(todoList);
+        axios.post('http://localhost:9000/rest/gjoremal/', todoList).then( response => {
+          //alert('Legge til gjøremål ordnet!');
+          this.$emit('create-todo', todoList);
+          console.log("todoList");
+          router.push('todoList');
+        }).catch(err => {
+          console.log(JSON.stringify(err));
+        });
+
         /*
         axios.post('http://localhost:9000/rest/gjoremal/:id', this.todo, response => {
           //this.$emit('send-todo', this.todo); //gir beskjed til parrent komponent at "dette skjer"
