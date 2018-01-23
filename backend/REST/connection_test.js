@@ -1,13 +1,14 @@
 let mysql = require("mysql");
 
-let connection = mysql.createConnection({
-  host: 'mysql.stud.iie.ntnu.no',
-  user: 'oddbjool',
-  password: 'kYVZd1cK',
-  database: 'oddbjool',
-  multipleStatements: true
-});
-
-connection.connect();
+let connection_test = {
+  connection_cfg: {
+    host: 'mysql.stud.iie.ntnu.no',
+    user: 'oddbjool',
+    password: 'kYVZd1cK',
+    database: 'oddbjool',
+    multipleStatements: true
+  },
+  connection: null
+};
 
 module.exports = connection;

@@ -1,6 +1,8 @@
 let restify = require("restify");
 let CookieParser = require('restify-cookies');
 let auth = require('./auth');
+let connection_prod = require('./connection_prod');
+let mysql = require('mysql');
 
 let server = restify.createServer();
 server.use(CookieParser.parse);
@@ -26,6 +28,9 @@ server.use(restify.plugins.bodyParser({
 server.loginEnabled = true;
 
 server.use((req, res, next) => {
+  connection_prod.connection = mysql.createConnection(connection_prod.connection_cfg);
+  connection_prod.connection.connect();
+  console.log("creating connection");
   if(server.loginEnabled){
     let approved = ['/rest/login','/rest/loggedIn','/rest/logout'];
     if(!approved.includes(req.getPath()) && !auth.checkThatSessionExists(req,res)){
@@ -34,6 +39,13 @@ server.use((req, res, next) => {
   }
   return next();
 });
+
+server.on('after',(req,res) => {
+  console.log("destroying connection");
+  connection_prod.connection.destroy();
+});
+
+
 
 module.exports = server;
 
