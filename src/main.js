@@ -42,6 +42,9 @@ router.beforeEach((to,from,next) => {
         store.commit('isMember', response.data.length > 0);
         console.log('updated');
         if (response.data.length === 0) router.push('NewUser');
+        else{
+          store.commit('current_group', response.data[0]);
+        }
         return next();
       });
     }
