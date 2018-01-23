@@ -43,7 +43,7 @@ module.exports = function(connection){
 
   server.on('after',(req,res) => {
     //console.log("destroying connection");
-    connection.connection.destroy();
+    connection.connection.end(err => {}); // ignore errors
   });
 
   return server;
