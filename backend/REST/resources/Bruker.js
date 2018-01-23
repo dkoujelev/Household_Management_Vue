@@ -55,7 +55,6 @@ module.exports = function(connection, server) {
 
 // Hent alle brukere
   server.get('rest/bruker/', function (req, res, next) {
-
     connection.query("SELECT * FROM Bruker", function (err, rows, fields) {
       res.send(err ? err : rows);
       return next();
