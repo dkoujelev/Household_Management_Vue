@@ -39,6 +39,9 @@
 </template>
 
   <!-- <template>
+
+  <div class="box">
+
   <div>
     <table>
       <thead>
