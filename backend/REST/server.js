@@ -3,34 +3,30 @@ let CookieParser = require('restify-cookies');
 let auth = require('./auth');
 let mysql = require('mysql');
 
-module.exports = function(connection){
+let server = restify.createServer();
+server.use(CookieParser.parse);
 
-  let server = restify.createServer();
-  server.use(CookieParser.parse);
+const corsMiddleware = require('restify-cors-middleware');
 
-  const corsMiddleware = require('restify-cors-middleware');
+const cors = corsMiddleware({
+  origins: ['http://localhost:*'],
+  allowHeaders: ['API-Token', 'sessionId'],
+  exposeHeaders: ['API-Token-Expiry', 'sessionId'],
+  credentials: true
+});
 
-  const cors = corsMiddleware({
-    origins: ['http://localhost:*'],
-    allowHeaders: ['API-Token', 'sessionId'],
-    exposeHeaders: ['API-Token-Expiry', 'sessionId'],
-    credentials: true
-  });
+server.pre(cors.preflight);
+server.use(cors.actual);
+server.use(restify.plugins.queryParser({
+  mapParams: true
+}));
+server.use(restify.plugins.bodyParser({
+  mapParams: true
+}));
 
-  server.pre(cors.preflight);
-  server.use(cors.actual);
-  server.use(restify.plugins.queryParser({
-    mapParams: true
-  }));
-  server.use(restify.plugins.bodyParser({
-    mapParams: true
-  }));
+server.loginEnabled = false;
 
-  server.loginEnabled = false;
-
-  server.use((req, res, next) => {
-    connection.connection = mysql.createConnection(connection.connection_cfg);
-    connection.connection.connect();
+server.use((req, res, next) => {
     //console.log("creating connection");
     if(server.loginEnabled){
       let approved = ['/rest/login','/rest/loggedIn','/rest/logout'];
@@ -39,13 +35,10 @@ module.exports = function(connection){
       }
     }
     return next();
-  });
+});
 
-  server.on('after',(req,res) => {
-    //console.log("destroying connection");
-    connection.connection.end(err => {}); // ignore errors
-  });
+// server.on('after',(req,res) => {
+// });
 
-  return server;
-};
+module.exports = server;
 
