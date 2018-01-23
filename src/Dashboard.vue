@@ -17,18 +17,20 @@
         </div>
           <div id="navMenu1" class="navbar-menu" v-bind:class="{'is-active': showBurger}">
             <div class="navbar-start" @click="showBurger = false">
-              <router-link class="navbar-item" v-if="showNav" to="/Nyhetsfeed">Nyhet<span class="icon"><i class="fa fa-newspaper-o"></i></span></router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/TodoList">Gjøremål<span class="icon"><i class="fa fa-tasks"></i></span></router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/Shoppinglists">Handlelister<span class="icon"><i class="fa fa-shopping-cart"></i></span></router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/ShowExpences">Utgifter</router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/Nyhetsfeed"><span class="icon"><i class="fa fa-envelope-open fa-lg"></i></span> &nbsp Nyheter &nbsp </router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/TodoList"><span class="icon"><i class="fa fa-bell fa-lg"></i></span> &nbsp Gjøremål &nbsp </router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/Shoppinglists"><span class="icon"><i class="fa fa-shopping-cart fa-lg"></i></span> &nbsp Handlelister &nbsp </router-link>
+              <!-- <router-link class="navbar-item" v-if="showNav" to="/ShowExpences">Utgifter</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/Innmelding">Innmelding</router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/TestMail">TestMail</router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/ShowAccounting"> Regnskap </router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/UserInfo">Min Side<span class="icon"><i class="fa fa-user"></i></span></router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/TestMail">TestMail</router-link> -->
+              <router-link class="navbar-item" v-if="showNav" to="/ShowAccounting"> <span class="icon"><i class="fa fa-calculator fa-lg" > </i>   </span> &nbsp Regnskap &nbsp </router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/UserInfo"><span class="icon"><i class="fa fa-user fa-lg"></i></span> &nbsp Min Side </router-link>
+
+
             </div>
             <div class="navbar-end" @click="showBurger = false">
-              <SelectGroup v-if="showNav" @selected-group="selectedGroup" ref="SelectGroup"></SelectGroup>
-              <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut">Logg Ut</a>
+              <SelectGroup v-if="showNav" @selected-group="selectedGroup" ref="SelectGroup"> </SelectGroup>
+              <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut"> <span class="icon"><i class="fa fa-user-times fa-lg"></i></span>  &nbsp Logg Ut</a>
             </div>
           </div>
     </nav>
@@ -107,4 +109,6 @@ export default {
     background-color: lightcyan;
     height: 100vh;
   }
+
+
 </style>

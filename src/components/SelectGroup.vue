@@ -1,10 +1,10 @@
 <template>
   <div class="navbar-item has-dropdown is-hoverable">
     <a class="navbar-link">
-      Mine grupper
+      <span class="icon"><i class="fa fa-users fa-lg"></i></span> &nbsp Mine grupper
     </a>
     <div class="navbar-dropdown">
-      <div v-for="group in groups" class="navbar-item" @click="$emit('selected-group',group)">
+      <div v-for="group in groups" class="navbar-item" @click="$emit('selected-group',group) ">
         <h3 v-if="group.default_gruppe">{{group.kollektiv_navn}}</h3>
         <p v-else>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{group.navn}} </p>
       </div>
