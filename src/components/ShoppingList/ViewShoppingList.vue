@@ -10,7 +10,7 @@
         <td>{{row.vare}}</td>
         <td>{{row.antall}}</td>
         <td><input type="checkbox" class="checkbox"/></td>
-        <td><button class="button">Fjern vare</button></td>
+        <td><button class="button" @click="deleteItem(row)">Fjern vare</button></td>
       </tr>
     </table>
 
@@ -36,18 +36,21 @@
     <br/>
     <button class="button" v-if="!addItem" @click="addItem = true">Legg til vare</button>
     <br/>
+    <button class="button is-success" @click="completeList">Utfør handleliste</button>
     <button class="button is-danger" @click="deleteList">Slett handleliste</button>
   </div>
 </template>
 
 <script>
   import axios from 'axios';
+  import router from '@/router'
 
   export default {
     name: 'Shoppinglists',
 
     data(){
       return {
+        id: Number.parseInt(this.$route.params.shoppinglist_id),
         rows: [],
         addItem: false,
         newItem: {
@@ -71,28 +74,48 @@
       decrement(){
         if(this.newItem.count > 1) this.newItem.count--;
       },
+      deleteItem(row){
+        axios.delete('http://localhost:9000/rest/vare/' + row.item_id).then(response => {
+          this.$emit('ItemRemoved');
+          this.rows.splice(row, 1);
+        });
+      },
       updateList(){
         let obj = {
-          handleliste_id: Number.parseInt(this.$route.params.shoppinglist_id),
+          handleliste_id: this.id,
           navn: this.newItem.name,
           antall: this.newItem.count
         };
-
         axios.post('http://localhost:9000/rest/vare', obj).then(response => {
           this.$emit('ItemAdded', obj);
           this.rows.push({vare: this.newItem.name, antall: this.newItem.count});
           this.hide();
         });
       },
+      completeList(){
+        let obj = {
+          handling_utfort: new Date().getTime()
+        };
+        axios.put('http://localhost:9000/rest/handleliste/' + this.id, obj).then(response => {
+          this.$emit('listCompleted', obj);
+          this.hide();
+          router.push('/Shoppinglists');
+        });
+      },
       deleteList(){
-
+        axios.delete('http://localhost:9000/rest/handleliste/' + this.id).then(response => {
+          this.$emit('Shoppinglist deleted');
+          this.hide();
+          alert('Handleliste slettet');
+          router.push('/Shoppinglists');
+        });
       },
       fillRows(){
-        axios.get('http://localhost:9000/rest/handleliste/' + this.$route.params.shoppinglist_id).then(response => {
+        axios.get('http://localhost:9000/rest/handleliste/' + this.id).then(response => {
           console.log(response.data);
           let resRows = response.data.varer;
           for(let i = 0; i < resRows.length; i++){
-            let obj = {vare: resRows[i].navn, antall: resRows[i].antall};
+            let obj = {item_id: resRows[i].vare_id, vare: resRows[i].navn, antall: resRows[i].antall};
             this.rows.push(obj);
           }
         }).catch(err => {
