@@ -1,8 +1,6 @@
 let expect = require('chai').expect;
 let axios = require('axios');
-let bcrypt = require('bcrypt');
 let clearDB = require('./testutil').clearDB;
-let fakeLogin = require('./testutil').fakeLogin;
 
 
 let testuser = {
@@ -22,8 +20,8 @@ let testGjoremal = {
 };
 
 let testGjoremal2 = {
-  navn: "Vask",
-  beskrivelse: "Test",
+  navn: 'Vask',
+  beskrivelse: 'Test',
   bruker_id: 1,
   liste_id: 1
 };
@@ -37,7 +35,7 @@ let testUndergruppe = {
 };
 
 let testListe = {
-  navn: "TestVask"
+  navn: 'TestVask'
 };
 
 // Innholdet i denne funksjonen brukes ikke, men er her for å
@@ -153,7 +151,7 @@ describe.skip('Gjoremal',() => {
       .then(response => {
         return axios.get('http://localhost:9100/rest/gjoremal/' + testGjoremal2.gjoremal_id)
       }).then(response => {
-        expect(response.data).to.equal('');
+        expect(response.data).to.equal('Gjoremal not found!');
       });
   });
 });

@@ -1,8 +1,6 @@
 let expect = require('chai').expect;
 let axios = require('axios');
-let bcrypt = require('bcrypt');
 let clearDB = require('./testutil').clearDB;
-let fakeLogin = require('./testutil').fakeLogin;
 
 
 let testuser = {
@@ -183,12 +181,11 @@ describe.skip('Gjoremalsliste',() => {
   });
 
   it('Slett gjoremalsliste',() => {
-
     return axios.delete('http://localhost:9100/rest/gjoremalsliste/' + testListe.id)
       .then(response => {
         return axios.get('http://localhost:9100/rest/gjoremalsliste/' + testListe.id)
       }).then(response => {
-        expect(response.data).to.equal('');
+        expect(response.data).to.equal('Gjoremalsliste not found!');
       });
   });
 });

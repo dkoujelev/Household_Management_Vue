@@ -7,7 +7,10 @@ module.exports = function(connection, server){
     connection.query("SELECT * FROM Gjoremal WHERE gjoremal_id=?", req.params.gjoremal_id, function(err, rows, field){
       if(err)
         return next(err);
-
+      if(rows.length !== 1){
+        res.send('Gjoremal not found!');
+        return next();
+      }
       let gjoremal = rows[0];
       if(typeof gjoremal !== 'undefined') {
         if ('start' in gjoremal)
