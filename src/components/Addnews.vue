@@ -48,7 +48,7 @@
           overskrift: '',
           tekst: '',
           skrevet_av_bruker: store.state.current_user.bruker_id,
-          sendt_til_kollektiv: store.state.current_group.kollektiv_id
+          sendt_til_kollektiv: store.state.current_group.undergruppe_id
         },
         errorMessages: {
           overskrift: '',
@@ -58,9 +58,9 @@
     },
     methods: {
       addNews() {
+        this.melding.sendt = new Date();
         axios.post('http://localhost:9000/rest/melding', this.melding).then(response => {
           this.$emit('added-news', this.melding);
-          this.melding.sendt = new Date();
           this.melding.tekst = "";
           this.melding.overskrift = "";
           alert("denne meldingen er sendt");

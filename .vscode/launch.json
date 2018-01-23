@@ -7,20 +7,11 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceRoot}/compiled/app.js",
-            "cwd": "${workspaceRoot}",
-            "outFiles": "${workspaceRoot}/compiled",
-            "sourceMaps": true
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch REST via NPM",
+            "name": "Launch all via NPM",
             "runtimeExecutable": "npm",
             "runtimeArgs": [
                 "run-script",
-                "rest"
+                "start"
             ],
             "port": 9000
         },
@@ -28,7 +19,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome",
-            "url": "http://localhost:8080",
+            "url": "http://localhost:8081",
             "webRoot": "${workspaceFolder}"
         },
         {
@@ -39,7 +30,7 @@
             "runtimeArgs": [
                 "run-script", "dev"
             ],
-            "port": 8080
+            "port": 8081
         }
     ]
 }

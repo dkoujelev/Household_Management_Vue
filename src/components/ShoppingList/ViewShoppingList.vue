@@ -6,7 +6,7 @@
       :columns="columns"
       :rows="rows"
     ></vue-good-table>
-  </br>
+    <br />
     <button class="button is-danger">Slett liste</button>
 
   </div>

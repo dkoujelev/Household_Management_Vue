@@ -1,3 +1,5 @@
+let util = require('../util');
+
 module.exports = function(connection, server){
 
   /*
@@ -16,8 +18,8 @@ module.exports = function(connection, server){
 
 // Sende melding til bruker eller kollektiv
   server.post('rest/melding',function(req,res,next){
-    if('sendt' in req.body)
-      req.body.sendt = new Date(req.body.sendt).getTime();
+
+    req.body.sendt = util.getCurrentTimeAsEpoch();
 
     connection.query("INSERT INTO Melding SET ?", [req.body], function(err, rows, fields){
       if(err)
