@@ -64,7 +64,7 @@
             <div v-if="showGroupSelect===true">
               Du er administrator for flere kollektiv.
               Nå administreres
-              <select class="dropdown" v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
+              <select class="dropdown" v-model="selected_maingroup" v-on:change="selectGroup(makeMainGrpObj(value,text,''))">
                 <option disabled value="">Velg kollektiv</option>
                 <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
                   {{ option.text }}
@@ -123,13 +123,13 @@
     name: 'Innmelding',
     data(){
         return {
-            showCreateMainGroupSection: false,
+            showCreateMainGroupSection: true,
             showCreateSubGroupSection: false,
             showJoinSection: true,
             showInviteSection: false,
-            showGroupSelect: false,
+            showGroupSelect: true,
             showSubGroupSelect: false,
-            showUsersGroups: false,
+            showUsersGroups: true,
             showApproveSection: false,
             showAvailableSubgroups:false,
             current_user: store.state.current_user,
@@ -198,6 +198,15 @@
     //     var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([status-zA-Z\-0-9]+\.)+[status-zA-Z]{2,}))$/;
     //     return regex.test(email);
     //   },
+
+        makeMainGrpObj(kid,name,desc){
+            return this.selected_maingroup={
+                kollektiv_id:kid,
+                navn: name,
+                beskrivelse: desc
+                };
+        },
+
         selectGroup(theGroup){
            // console.log('DEBUG - selectGroup(' + theGroup + ')');
             console.log('Henter hovedgruppen for kollektiv ' + theGroup.kollektiv_id);
@@ -258,7 +267,9 @@
             this.options_maingroup_nonadmin = response.data.map((item) => {
                 return {
                     text: item.navn,
-                    value: item.kollektiv_id
+                    value: item.kollektiv_id,
+                    navn: item.navn,
+                    kid: item.kollektiv_id
                 };
             });
             this.selected_maingroup_nonadmin = '';
@@ -298,7 +309,9 @@
             this.options_maingroup = response.data.map((item) => {
                 return {
                     text: item.navn,
-                    value: item.kollektiv_id
+                    value: item.kollektiv_id,
+                    navn: item.navn,
+                    kid: item.kollektiv_id
                 };
             });
             //this.selected_maingroup = '';
