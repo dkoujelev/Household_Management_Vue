@@ -123,15 +123,15 @@
     name: 'Innmelding',
     data(){
         return {
-            showCreateMainGroupSection: true,
-            showCreateSubGroupSection: true,
+            showCreateMainGroupSection: false,
+            showCreateSubGroupSection: false,
             showJoinSection: true,
-            showInviteSection: true,
-            showGroupSelect: true,
-            showSubGroupSelect: true,
-            showUsersGroups: true,
-            showApproveSection: true,
-            showAvailableSubgroups:true,
+            showInviteSection: false,
+            showGroupSelect: false,
+            showSubGroupSelect: false,
+            showUsersGroups: false,
+            showApproveSection: false,
+            showAvailableSubgroups:false,
             current_user: store.state.current_user,
             createMainResult: '',
             createSubResult: '',
@@ -318,11 +318,11 @@
                 //this.selected_maingroup_name = response.data[0].navn;
                 this.showInviteSection=true;
                 this.showGroupSelect=false;
-                this.showApproveSection=true;
+                //this.showApproveSection=true;
             }else{ //User is admin of several groups. Group must be selected in order to invite.
                 this.showInviteSection=true;
                 this.showGroupSelect=true;
-                this.showApproveSection=true;
+                //this.showApproveSection=true;
             };
 
           }).catch(err => {
