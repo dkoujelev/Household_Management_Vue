@@ -1,54 +1,52 @@
 <template>
   <section>
-    <div class="is-ancestor">
-      <div class="is-parent tile box" style="background-color: azure">
-        <div class="is-child tile">
+    <div class="is-ancestor box" style="background-color: azure">
+      <h3 class="title is-3">Administrere grupper og kollektiv</h3>
+      <div class="is-parent tile">
+        <br>
+        <div class="is-child tile box" style="background-color: azure">
           <div v-if="showJoinSection===true">
             Skriv inn navnet på kollektivet du ønsker å bli medlem av
             <br>
             <div class="field-body">
               <div class="field">
                 <input  type="text" class="input" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
-              </div>
               <button class="button" v-on:click="joinGroup(innmelding.kollektiv_navn)">
                 Søk medlemskap
               </button>
             </div>
-
+            </div>
             {{ joinResult }}
           </div>
-
-
+          <br>
           <div v-if="showCreateMainGroupSection===true">
             Skriv inn navnet på kollektivet du ønsker å opprette
             <br>
             <div class="field-body">
               <div class="field">
                 <input  type="text" class="input" placeholder="Kollektivets navn" v-model="oppretteMain.navn">
-              </div>
-              <div class="field">
                 <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
+                <button class="button" v-on:click="createMainGroup(oppretteMain.navn)">
+                  Opprett kollektiv
+                </button>
               </div>
             </div>
-            <button v-on:click="createMainGroup(oppretteMain.navn)">
-              Opprett kollektiv
-            </button>
             {{ createMainResult }}
           </div>
-
+          <br>
           <div v-if="showCreateSubGroupSection===true">
             Skriv inn navnet på gruppen du ønsker å opprette
             <br>
-            <input  type="text" placeholder="Gruppens navn" v-model="oppretteSub.navn">
-            <input  type="text" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
-            <button v-on:click="createSubGroup(oppretteSub.navn)">
+            <input  type="text" class="input" placeholder="Gruppens navn" v-model="oppretteSub.navn">
+            <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
+            <button class="button" v-on:click="createSubGroup(oppretteSub.navn)">
               Opprett gruppe
             </button>
             {{ createSubResult }}
           </div>
         </div>
       </div>
-      <div class="is-parent tile box" style="background-color: azure">
+      <div class="is-parent tile" style="background-color: azure">
         <div class="is-child tile box" style="background-color: azure">
           <div v-if="showUsersGroups===true">
             Du er medlem av følgende kollektiv og grupper:
@@ -61,25 +59,31 @@
             {{ leaveSubResult }}
           </div>
         </div>
-        <div class="is-child tile box" style="background-color: azure">
+        <div class="is-child tile box is-7" style="background-color: azure">
           <div v-if="showInviteSection===true">
             <div v-if="showGroupSelect===true">
               Du er administrator for flere kollektiv.
               Nå administreres
-              <select v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
+              <select class="dropdown" v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
                 <option disabled value="">Velg kollektiv</option>
                 <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
                   {{ option.text }}
                 </option>
               </select>
             </div>
+
+            <br>
             Her kan du invitere nye medlemmer til {{ selected_maingroup.navn }}
 
-            <input  type="email" placeholder="Email" v-model="innmelding.epost">
-            <button v-on:click="doInvite">Send invitasjon</button>
+            <div class="field-body">
+              <div class="field">
+                <input class="input" type="email" placeholder="Email" v-model="innmelding.epost">
+                <button class="button" v-on:click="doInvite">Send invitasjon</button>
+              </div>
+            </div>
             {{ mailResult }}
           </div>
-
+          <br>
           <div v-if="showApproveSection===true">
             Disse ønsker å bli med i {{ selected_maingroup.navn }}. Du kan godkjenne eller avvise søknaden(e).
             <dl id="approvalsList">
@@ -92,7 +96,7 @@
               </dd>
             </dl>
           </div>
-
+          <br>
           <div v-if="showAvailableSubgroups===true">
             Dette er alle gruppene som hører inn under {{ selected_maingroup.navn }}:
             <ul id="availableSubGroupsList">
