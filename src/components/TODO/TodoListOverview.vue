@@ -1,40 +1,44 @@
 <template>
-  <div>
-<div class="column is-half-desktop is-full-mobile">
-  <section class="panel">
-    <p class="panel-heading">
-      Gjøremålliste
-    </p>
-    <div class="panel-block">
-      <table class="table">
-        <thead>
-        <tr>
-          <th>Gruppenavn</th>
-          <th>f</th>
-          <th>Status</th>
-          <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="row in rows">
-          <td @click="selectGroup(group)">{{row.gruppenavn}} </td>
-          <td>Bass Guitar</td>
-          <td class="is-icon">
-            <a href="#">
-              <i class="fa fa-twitter"></i>
-            </a>
-          </td>
-          <td class="is-icon">
-            <a href="#">
-              <i class="fa fa-instagram"></i>
-            </a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+  <div class="column">
+    <div class="columns is-one-quarter">
+      <div class="column is-half">
+        <div class="table is-striped">
+          <section class="panel">
+            <p class="panel-heading">
+              Gruppenes gjøremål
+            </p>
+            <div class="panel-block">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th>Gruppenavn</th>
+                  <th>Gruppe id</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="row in rows">
+                  <td @click="selectGroup(group)"> {{row.gruppenavn}} </td>
+                  <td>Kommer</td>
+                  <td class="is-icon">
+                    <a href="#">
+                      <i class="fa fa-twitter"></i>
+                    </a>
+                  </td>
+                  <td class="is-icon">
+                    <a href="#">
+                      <i class="fa fa-instagram"></i>
+                    </a>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
     </div>
-  </section>
-</div>
   </div>
 </template>
 
@@ -82,7 +86,7 @@
       methods: {
 
           selectGroup(group){
-            router.push('GjeldInnSpesifisert/' + user.bruker_id);
+            router.push('TodoListOverview2/' + user.bruker_id);
           },
 
           fillRows() {
@@ -125,6 +129,13 @@
 <style scoped>
   columns {
     color: black;
+  }
+
+  section.panel{
+
+  }
+
+  div.panel-block{
 
   }
 </style>

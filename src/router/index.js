@@ -26,7 +26,8 @@ import ChangePassword from '@/components/ChangePassword'
 import Grupper from '@/components/Grupper'
 import UserInfo from '@/components/UserInfo'
 import ItemChart from '@/components/Charts/ItemChart'
-import TodoListOverview from '@/components/TodoListOverview'
+import TodoListOverview from '@/components/TODO/TodoListOverview'
+import TodoListOverview2 from '@/components/TODO/TodoListOverview2'
 Vue.use(Router);
 
 export default new Router({
@@ -112,7 +113,7 @@ export default new Router({
         component: TodoList
       },
       {
-        path: '/ViewShoppingList',
+        path: '/ViewShoppingList/:shoppinglist_id',
         name: 'ViewShoppingList',
         component: ViewShoppingList
       },
@@ -156,6 +157,11 @@ export default new Router({
         path: '/TodoListOverview',
         name: 'TodoListOverview',
         component: TodoListOverview
+      },
+      {
+        path: '/TodoListOverview2',
+        name: 'TodoListOverview2',
+        component: TodoListOverview2
       }
     ]
   }
