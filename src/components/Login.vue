@@ -89,7 +89,6 @@
                 console.log(store.state.isMember);
                 if(response.data.length > 0) {
                   store.commit('current_group', response.data[0]);
-                  console.log(store.state.current_group);
                 }
                 if (response.data.length === 0)
                   router.push('NewUser');

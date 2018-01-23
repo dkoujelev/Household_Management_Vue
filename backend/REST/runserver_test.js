@@ -1,5 +1,5 @@
 let connection_test = require("./connection_test");
-let server = require("./server")(connection_test);
+let server = require("./server");
 
 module.exports = function(callback){
   server.listen(9100, function(){

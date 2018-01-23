@@ -7,12 +7,14 @@
       <div class="child tile" style="background-color:lightgray">
         <table>
           <thead>
+          <th scope="col">Hvem</th>
           <th scope="col">Tittel</th>
           <th scope="col">Nyhet</th>
           <th scope="col">Når</th>
           <th scope="col"></th>
           </thead>
           <tr v-for="row in rows">
+            <td data-label="Hvem">{{row.fornavn}} {{row.etternavn}}</td>
             <td data-label="Tittel">{{row.overskrift}}</td>
             <td data-label="Nyhet">{{row.nyhet}}</td>
             <td data-label="Når">{{row.nar}}</td>
@@ -22,30 +24,11 @@
         </table>
 
       </div>
-        <div class="child tile" style="background-color: lightgrey">
-          <router-link class="button" to="/Addnews">Lag nyhet</router-link>
-        </div>
-
+      <div class="child tile" style="background-color: lightgrey">
+        <router-link class="button" to="/Addnews">Lag nyhet</router-link>
       </div>
+
     </div>
-  <div>
-    <table>
-      <thead>
-        <th>Hvem</th>
-        <th>Tittel</th>
-        <th>Nyhet</th>
-        <th>Når</th>
-        <th></th>
-      </thead>
-      <tr v-for="row in rows">
-        <td>{{row.hvem.fornavn}} {{row.hvem.etternavn}}</td>
-        <td>{{row.overskrift}}</td>
-        <td>{{row.nyhet}}</td>
-        <td>{{row.nar}}</td>
-        <td v-if="row.knapper"><button class="button is-danger" @click="deleteNews(row)">Slett</button></td>
-      </tr>
-    </table>
-    <router-link class="button" to="/Addnews">Lag nyhet</router-link>
   </div>
 </template>
 
@@ -81,13 +64,6 @@
       fillRows(){
         axios.get('http://localhost:9000/rest/melding/motta/kollektiv/' + store.state.current_group.undergruppe_id).then(response => {
           let resRows = response.data;
-          console.log(resRows[0].sendt);
-          for(let i = 0; i < resRows.length; i++){
-            let date = this.formateDate(resRows[i].sendt);
-            let obj = {melding_id: resRows[i].melding_id, overskrift: resRows[i].overskrift, nyhet: resRows[i].tekst, nar: date,
-              knapper: (resRows[i].skrevet_av_bruker === store.state.current_user.bruker_id)};
-            this.rows.push(obj);
-          }
           let brukere;
           axios.get('http://localhost:9000/rest/bruker').then(res => {
             brukere = res.data;
