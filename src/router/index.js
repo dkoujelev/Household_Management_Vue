@@ -112,7 +112,7 @@ export default new Router({
         component: TodoList
       },
       {
-        path: '/ViewShoppingList',
+        path: '/ViewShoppingList/:shoppinglist_id',
         name: 'ViewShoppingList',
         component: ViewShoppingList
       },

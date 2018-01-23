@@ -29,7 +29,7 @@
               <router-link class="navbar-item" v-if="showNav" to="/UserInfo">Min Side</router-link>
             </div>
             <div class="navbar-end" @click="showBurger = false">
-              <SelectGroup v-if="loggedIn" :current_user="current_user" @selected-group="selectedGroup" ref="SelectGroup"></SelectGroup>
+              <SelectGroup v-if="loggedIn" @selected-group="selectedGroup" ref="SelectGroup"></SelectGroup>
               <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut">Logg Ut</a>
             </div>
           </div>
