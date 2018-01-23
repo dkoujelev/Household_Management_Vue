@@ -72,7 +72,7 @@
             <div v-if="showGroupSelect===true">
               Du er administrator for flere kollektiv.
               Nå administreres
-              <select class="dropdown" v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
+              <select class="dropdown" v-model="selected_maingroup" v-on:change="makeMainGrpObj(selected_maingroup)">
                 <option disabled value="">Velg kollektiv</option>
                 <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
                   {{ option.text }}
@@ -131,13 +131,13 @@
     name: 'Innmelding',
     data(){
         return {
-            showCreateMainGroupSection: false,
+            showCreateMainGroupSection: true,
             showCreateSubGroupSection: false,
             showJoinSection: false,
             showInviteSection: false,
-            showGroupSelect: false,
+            showGroupSelect: true,
             showSubGroupSelect: false,
-            showUsersGroups: false,
+            showUsersGroups: true,
             showApproveSection: false,
             showAvailableSubgroups:false,
             current_user: store.state.current_user,
@@ -206,6 +206,29 @@
     //     var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([status-zA-Z\-0-9]+\.)+[status-zA-Z]{2,}))$/;
     //     return regex.test(email);
     //   },
+
+        makeMainGrpObj(kid){
+            axios.get('http://localhost:9000/rest/kollektiv/' + kid).then(response => {
+                console.log(response);
+                let tmpObj = {
+                    kollektiv_id: response.data.kollektiv_id,
+                    navn: response.data.navn,
+                    beskrivelse: response.data.beskrivelse
+                };
+                
+                // let tmpObj = response.data.map((item) => {
+                //     return {
+                //         text: item.navn,
+                //         value: item.kollektiv_id,
+                //         navn: item.navn,
+                //         gid: item.kollektiv_id,
+                //         uid: item.undergruppe_id
+                //     };
+                    this.selectGroup(tmpObj);
+                });
+            // });
+        },
+
         selectGroup(theGroup){
            // console.log('DEBUG - selectGroup(' + theGroup + ')');
             console.log('Henter hovedgruppen for kollektiv ' + theGroup.kollektiv_id);
@@ -245,17 +268,6 @@
                 console.log("selectGroup - Error");
                 console.log(err);
             });
-            // axios.get('http://localhost:9000/rest/undergrupperForKollektiv/' + theGroup.kollektiv_id).then(response => {
-            //     this.options_subgroups = response.data.map((item) => {
-            //         return {
-            //             text: item.navn,
-            //             value: item.kollektiv_id,
-            //             navn: item.navn,
-            //             gid: item.kollektiv_id,
-            //             uid: item.undergruppe_id
-            //         };
-            //     });
-            // });
             this.getSubGroupsFor(theGroup.kollektiv_id);
       },
 
@@ -266,7 +278,9 @@
             this.options_maingroup_nonadmin = response.data.map((item) => {
                 return {
                     text: item.navn,
-                    value: item.kollektiv_id
+                    value: item.kollektiv_id,
+                    navn: item.navn,
+                    kid: item.kollektiv_id
                 };
             });
             this.selected_maingroup_nonadmin = '';
@@ -306,7 +320,9 @@
             this.options_maingroup = response.data.map((item) => {
                 return {
                     text: item.navn,
-                    value: item.kollektiv_id
+                    value: item.kollektiv_id,
+                    navn: item.navn,
+                    kid: item.kollektiv_id
                 };
             });
             //this.selected_maingroup = '';
