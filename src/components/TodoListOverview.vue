@@ -1,27 +1,64 @@
 <template>
   <div>
-    <table>
-      <thead>
-      <th>Gruppenavn</th>
-      <th>Nyhet</th>
-      <th>Når</th>
-      <th></th>
-      </thead>
-      <tr v-for="row in rows">
-        <td>{{row.gruppenavn}}</td>
-        <td>{{}}</td>
-        <td>{{}}</td>
-       <!-- <td v-if="row.knapper"><button class="button is-danger" @click="deleteNews(row)">Slett</button></td> -->
-      </tr>
-    </table>
-   <!-- <router-link class="button" to="/Addnews">Lag nyhet</router-link> -->
+<div class="column is-half-desktop is-full-mobile">
+  <section class="panel">
+    <p class="panel-heading">
+      Gjøremålliste
+    </p>
+    <div class="panel-block">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Gruppenavn</th>
+          <th>f</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="row in rows">
+          <td @click="selectGroup(group)">{{row.gruppenavn}} </td>
+          <td>Bass Guitar</td>
+          <td class="is-icon">
+            <a href="#">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </td>
+          <td class="is-icon">
+            <a href="#">
+              <i class="fa fa-instagram"></i>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
   </div>
 </template>
 
+  <!-- <template>
+  <div>
+    <table>
+      <thead>
+      <th>Gruppenavn</th>
+      <th></th>
+      <th>Status</th>
+      <th></th>
+      </thead>
+      <tr v-for="row in rows">
+        <a @click="selectGroup(group)">{{row.gruppenavn}}  <label></label></a>
+        <td>kommer</td>
+        <td>Status</td>
+      </tr>
+    </table>
+  </div>
+</template> -->
+
+
 <script>
-
-
-  import TodoList from '@/components/TODO/TodoList'
+  //import TodoList from '@/components/TODO/TodoList'
   import axios from 'axios';
   import {store} from '@/store'
   import Vue from 'vue'
@@ -41,13 +78,17 @@
 
       methods: {
 
+          selectGroup(group){
+            router.push('GjeldInnSpesifisert/' + user.bruker_id);
+          },
+
           fillRows() {
-            axios.get('rest/undergrupperForBruker/:bruker_id').then(response => {
+            axios.get('http://localhost:9000/rest/undergrupperForBruker/9').then(response => {
               //alert('Alle lister til bruker hentet');
               let resRows = response.data;
               console.log(resRows);
               for (let i = 0; i < resRows.length; i++) {
-                let obj = {gruppenavn: resRows[i].undergruppe, gruppe: resRows[i].navn, date: resRows[0].opprettet};
+                let obj = {gruppenavn: resRows[i].navn , gruppe: resRows[i].navn, date: resRows[0].opprettet};
                 this.rows.push(obj);
               }
             }).catch(err => {

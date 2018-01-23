@@ -25,7 +25,7 @@ server.use(restify.plugins.bodyParser({
     mapParams: true
 }));
 
-server.loginEnabled = true;
+server.loginEnabled = true; //true / false husk å bytt
 
 server.use((req, res, next) => {
   connection_prod.connection = mysql.createConnection(connection_prod.connection_cfg);
