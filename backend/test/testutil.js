@@ -12,14 +12,9 @@ module.exports = {
     // Det kan være at prod-basen er valgt ved en feil.
     return new Promise((resolve, reject) => {
       //if (connection.connection_cfg.database === 'oddbjool') {
-
-        connection.connection = mysql.createConnection(connection.connection_cfg);
-        connection.connection.connect();
-        connection.connection.query(sql_statements, [], (err, rows, fields) => {
-          connection.connection.destroy();
+        connection.query(sql_statements, [], (err, rows, fields) => {
           resolve();
-        //});
-      });
+        });
       //else
         //reject("Kan ikke cleare database " + connection.connection_cfg.database );
     });
