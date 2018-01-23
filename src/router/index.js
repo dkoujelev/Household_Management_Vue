@@ -25,8 +25,6 @@ import NewUser from '@/components/NewUser'
 import ChangePassword from '@/components/ChangePassword'
 import Grupper from '@/components/Grupper'
 import UserInfo from '@/components/UserInfo'
-
-
 import ItemChart from '@/components/Charts/ItemChart'
 import TodoListOverview from '@/components/TodoListOverview'
 Vue.use(Router);
@@ -153,6 +151,11 @@ export default new Router({
         path: '/ChangePassword',
         name: 'ChangePassword',
         component: ChangePassword
+      },
+      {
+        path: '/TodoListOverview',
+        name: 'TodoListOverview',
+        component: TodoListOverview
       }
     ]
   }
