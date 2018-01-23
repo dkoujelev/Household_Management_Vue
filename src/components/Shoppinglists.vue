@@ -1,18 +1,26 @@
 <template>
-  <div>
-    <table>
-      <thead>
-      <th>Handleliste</th>
-      <th>Frist</th>
-      <th></th>
-      </thead>
-      <tr v-for="row in rows">
-        <td>{{row.navn}}</td>
-        <td>{{row.frist}}</td>
-        <td><button class="button is-warning" @click="selectList(row.handleliste_id)">Se handleliste</button></td>
-      </tr>
-    </table>
-    <router-link class="button" to="/ShoppingList">Lag handleliste</router-link>
+  <div class="is-ancestor">
+    <div class="is-parent">
+      <div class="tile is-child box is-6">
+        <h3>Handlelister</h3>
+      </div>
+      <div class="tile is-child box is-6">
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+          <thead>
+          <th>Handleliste</th>
+          <th>Frist</th>
+          <th></th>
+          </thead>
+          <tr v-for="row in rows">
+            <td>{{row.navn}}</td>
+            <td>{{row.frist}}</td>
+            <td><button class="button is-warning" @click="selectList(row.handleliste_id)">Se handleliste</button></td>
+          </tr>
+        </table>
+        <br>
+        <router-link class="button is-link" to="/ShoppingList">Lag handleliste</router-link>
+      </div>
+    </div>
   </div>
 </template>
 

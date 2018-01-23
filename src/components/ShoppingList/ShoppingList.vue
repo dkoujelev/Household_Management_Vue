@@ -1,52 +1,59 @@
 <template>
-  <div class="tile is-ancestor" id="ancestor">
-    <div class="tile is-vertical is-8">
-      <div class="tile">
-        <div class="tile is-parent is-vertical">
-          <article class="tile is-child notification">
-            <div class="container is-fluid">
-              <div class="field">
-                <label class="label">Navn å handleliste</label>
-                <p class="help is-danger">{{this.errorMessages.overskrift}}</p>
-                <div class="control">
-                  <input class="input" type="text" placeholder="Text input" v-model="name">
-                </div>
-              </div>
-
-              <label class="label">Skriv inn varer</label>
-
-              <div class="field" v-for="row in rows">
-                <div class="field-body">
-                  <button class="button is-danger" @click="removeRow(row)">
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                  </button>
-                  <input class="input" name="" v-model="row.navn" type="text" placeholder="Text input" value="">
-                  <button class="button is-danger" id="decrementButton" @click="decrement(row)">
-                    <i class="fa fa-minus" id="minus" aria-hidden="true"></i>
-                  </button>
-                  <div>
-                    <button class="button is-light">{{row.antall}}</button>
-                  </div>
-                  <button class="button is-info" @click="increment(row)" id="incrementButton">
-                  <i class="fa fa-plus" id="plus" aria-hidden="true" ></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="field is-grouped">
-                <div class="control">
-                  <button class="button is-success" @click="addRow">Ny vare</button>
-                </div>
-              </div>
+  <div class="is-ancestor">
+    <div class="is-parent">
+      <div class="tile is-child box is-6">
+        <h3>Lag din handleliste</h3>
+      </div>
+      <div class="tile is-child box is-6">
+        <label class="label">Navn å handleliste</label>
+        <p class="help is-danger">{{this.errorMessages.overskrift}}</p>
+        <div class="control">
+          <input class="input" type="text" placeholder="Navn på handleliste" v-model="name">
+        </div>
+        <br>
+        <div>
+          <label class="label">Skriv inn varer</label>
+        </div>
+        <div class="field" v-for="row in rows">
+          <div class="field-body">
+            <button class="button is-danger" @click="removeRow(row)">
+              <i class="fa fa-trash-o" aria-hidden="true"></i>
+            </button>
+            <input class="input" name="" v-model="row.navn" type="text" placeholder="Text input" value="">
+            <button class="button is-danger" id="decrementButton" @click="decrement(row)">
+              <i class="fa fa-minus" id="minus" aria-hidden="true"></i>
+            </button>
+            <div>
+              <button class="button is-light">{{row.antall}}</button>
             </div>
-            <div class="field">
-            </div>
-            <div class="control">
+            <button class="button is-info" @click="increment(row)" id="incrementButton">
+              <i class="fa fa-plus" id="plus" aria-hidden="true" ></i>
+            </button>
+          </div>
+        </div>
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-success" @click="addRow">Legg til ny vare</button>
+          </div>
+        </div>
+        <br>
+        <div class="block">
+          <nav class="level">
+            <!-- left side -->
+            <div class="level-left">
               <button class="button is-link" @click="checkInput">Godkjenn</button>
-              <button class="button is-danger"  @click="deleteList">Slett handleliste</button>
-              <router-link class="button" to="/Shoppinglists">Avbrytt</router-link>
             </div>
-          </article>
+
+            <!-- right side -->
+            <div class="level-right">
+              <div class="level-item">
+                <p class="level-item">
+                  <router-link class="button is-danger" to="/Shoppinglists">Avbrytt</router-link>
+                </p>
+
+              </div>
+            </div>
+          </nav>
         </div>
       </div>
     </div>

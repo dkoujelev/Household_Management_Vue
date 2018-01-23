@@ -64,7 +64,7 @@
             <div v-if="showGroupSelect===true">
               Du er administrator for flere kollektiv.
               Nå administreres
-              <select class="dropdown" v-model="selected_maingroup" v-on:change="selectGroup(makeMainGrpObj(value,text,''))">
+              <select class="dropdown" v-model="selected_maingroup" v-on:change="makeMainGrpObj(selected_maingroup)">
                 <option disabled value="">Velg kollektiv</option>
                 <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
                   {{ option.text }}
@@ -199,12 +199,26 @@
     //     return regex.test(email);
     //   },
 
-        makeMainGrpObj(kid,name,desc){
-            return this.selected_maingroup={
-                kollektiv_id:kid,
-                navn: name,
-                beskrivelse: desc
+        makeMainGrpObj(kid){
+            axios.get('http://localhost:9000/rest/kollektiv/' + kid).then(response => {
+                console.log(response);
+                let tmpObj = {
+                    kollektiv_id: response.data.kollektiv_id,
+                    navn: response.data.navn,
+                    beskrivelse: response.data.beskrivelse
                 };
+                
+                // let tmpObj = response.data.map((item) => {
+                //     return {
+                //         text: item.navn,
+                //         value: item.kollektiv_id,
+                //         navn: item.navn,
+                //         gid: item.kollektiv_id,
+                //         uid: item.undergruppe_id
+                //     };
+                    this.selectGroup(tmpObj);
+                });
+            // });
         },
 
         selectGroup(theGroup){
@@ -246,17 +260,6 @@
                 console.log("selectGroup - Error");
                 console.log(err);
             });
-            // axios.get('http://localhost:9000/rest/undergrupperForKollektiv/' + theGroup.kollektiv_id).then(response => {
-            //     this.options_subgroups = response.data.map((item) => {
-            //         return {
-            //             text: item.navn,
-            //             value: item.kollektiv_id,
-            //             navn: item.navn,
-            //             gid: item.kollektiv_id,
-            //             uid: item.undergruppe_id
-            //         };
-            //     });
-            // });
             this.getSubGroupsFor(theGroup.kollektiv_id);
       },
 
