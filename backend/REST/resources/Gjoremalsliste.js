@@ -89,7 +89,8 @@ module.exports = function(connection, server) {
 
 // Hent alle lister til en bruker
   server.get('rest/gjoremalslisterBruker/:bruker_id', function (req, res, next) {
-    connection.query("SELECT DISTINCT Gjoremalsliste.* FROM `Gjoremalsliste` INNER JOIN Gjoremal WHERE bruker_id=?", req.params.bruker_id, function (err, rows, field) {
+    connection.query("SELECT DISTINCT Undergruppe.navn AS undergruppe, Gjoremalsliste.* FROM `Gjoremalsliste` INNER JOIN Gjoremal " +
+      "INNER JOIN Undergruppe ON Undergruppe.undergruppe_id = Gjoremalsliste.undergruppe_id WHERE bruker_id=?", req.params.bruker_id, function (err, rows, field) {
       if (err)
         return next(err);
       for (liste of rows) {
@@ -105,6 +106,9 @@ module.exports = function(connection, server) {
 // Opprett ny liste
   server.post('rest/gjoremalsliste/:undergruppe_id', function (req, res, next) {
     let liste = Object.assign({}, req.body);
+    liste.opprettet = util.getCurrentTimeAsEpoch();
+    /*
+    let liste = Object.assign({}, req.body);
     let gjoremaler = [];
     if ('gjoremal' in liste) {
       //gjoremal = Object.assign({}, liste.gjoremal);
@@ -112,6 +116,8 @@ module.exports = function(connection, server) {
     }
     if ('opprettet' in liste)
       liste.opprettet = util.getCurrentTimeAsEpoch();
+    */
+
 
     connection.query('INSERT INTO Gjoremalsliste SET ?', [liste], function (err, rows, field) {
       if (err)
@@ -198,6 +204,16 @@ module.exports = function(connection, server) {
         res.send(rows);
         return next();
       });
+    });
+  });
+
+// Favorittiser en gjoremalsliste
+  server.put('rest/favorittGjoremalsliste/', function (req, res, next) {
+    connection.query('UPDATE Gjoremalsliste SET favoritt=? WHERE id=?', [req.body.favoritt, req.body.id], function (err, rows, fields) {
+      if(err)
+        return next(err);
+      res.send(rows);
+      return next();
     });
   });
 };

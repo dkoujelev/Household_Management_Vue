@@ -5,8 +5,12 @@ module.exports = function(connection, server){
 // Hente en kostnad
   server.get('rest/kostnad/:kostnad_id', function (req,res,next) {
     connection.query('SELECT * FROM Kostnad WHERE kostnad_id=?', req.params.kostnad_id , function (err,rows,fields) {
-      if(err || rows.length != 1)
+      if(err)
         return next(err);
+      else if(rows.length !== 1){
+        res.send(null);
+        return next();
+      }
 
       let kostnad = rows[0];
 
@@ -20,7 +24,7 @@ module.exports = function(connection, server){
     });
   });
 
-// Hent kostnader ti ei handleliste
+// Hent kostnader til ei handleliste
   server.get('rest/kostnaderForHandleliste/:handleliste_id', function (req,res,next) {
     connection.query('SELECT * FROM Kostnad WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, field) {
       if(err)
@@ -55,7 +59,7 @@ module.exports = function(connection, server){
     });
   });
 
-// Leg til en kostnad
+// Legg til en kostnad
   server.post('rest/kostnad/', function (req, res, next) {
     let kostnad = req.body;
 
@@ -97,6 +101,24 @@ module.exports = function(connection, server){
           res.send(rows);
         });
       });
+    });
+  });
+
+  //Slett en kostnad
+  // NEI! Er kobla for tett sammen med gjeld til å slette.
+
+
+  server.put('rest/kostnad/',(req,res,next) => {
+    // Ingen grunn for at klient skal ønske å endre denne.
+    if('opprettet' in req.body)
+      delete req.body.opprettet;
+
+    connection.query('UPDATE Kostnad SET ? WHERE kostnad_id=?',[req.body, req.body.kostnad_id],(err,rows,fields) => {
+      if(err)
+        return next(err);
+
+      res.send(rows);
+      return next();
     });
   });
 };

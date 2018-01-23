@@ -14,7 +14,6 @@
         <router-link class="button is-dark" to="">Opprett kollektiv</router-link> <!--To create new collectiv page when ready-->
       </div>
     </div>
-    <div></div>
   </div>
 
 

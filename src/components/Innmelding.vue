@@ -19,7 +19,7 @@
         </button>
         {{ createMainResult }}
     </div>
-    
+
     <div v-if="showCreateSubGroupSection===true">
         Skriv inn navnet på gruppen du ønsker å opprette
         <input  type="text" placeholder="Gruppens navn" v-model="oppretteSub.navn">
@@ -29,7 +29,7 @@
         </button>
         {{ createSubResult }}
     </div>
-    
+
 
     <div v-if="showUsersGroups===true">
         Du er medlem av følgende kollektiv og grupper:
@@ -42,10 +42,10 @@
         {{ leaveSubResult }}
     </div>
 
-    <div v-if="showInviteSection===true">              
+    <div v-if="showInviteSection===true">
         <div v-if="showGroupSelect===true">
             Du er administrator for flere kollektiv.
-            Nå administreres 
+            Nå administreres
             <select v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
                 <option disabled value="">Velg kollektiv</option>
                 <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
@@ -54,7 +54,7 @@
             </select>
         </div>
         Her kan du invitere nye medlemmer til {{ selected_maingroup.navn }}
-            
+
     <input  type="email" placeholder="Email" v-model="innmelding.epost">
     <button v-on:click="doInvite">Send invitasjon</button>
     {{ mailResult }}
@@ -83,7 +83,6 @@
         </ul>
         {{ joinSubResult }}
     </div>
-
   </section>
 </template>
 
@@ -174,7 +173,7 @@
     //   },
         selectGroup(theGroup){
             console.log('DEBUG - selectGroup(' + theGroup + ')');
-            console.log('Henter hovedgruppen for kollektiv ' + theGroup.kollektiv_id);              
+            console.log('Henter hovedgruppen for kollektiv ' + theGroup.kollektiv_id);
             this.selected_maingroup_object=theGroup;
             axios.get('http://localhost:9000/rest/hovedgruppenForKollektiv/' + theGroup.kollektiv_id).then(response => {
                 this.options_defaultgroup = response.data.map((item) => {
@@ -221,7 +220,7 @@
             //             uid: item.undergruppe_id
             //         };
             //     });
-            // });       
+            // });
             this.getSubGroupsFor(theGroup.kollektiv_id);
       },
 
@@ -305,7 +304,7 @@
           });
       },
 
-      
+
 
       getSubGroupsFor(kollektiv_id){
         console.log('DEBUG - getSubGroupsFor(' + kollektiv_id + ')');
@@ -404,7 +403,7 @@
                             bruker_epost:  store.state.current_user.epost,
                             status_admin:2,
                             status_bruker: '1',
-                            dato_svar_admin: null,  
+                            dato_svar_admin: null,
                             dato_svar_bruker: tmpDate.getTime(),
                             aktiv: true,
                             notat_admin: null,

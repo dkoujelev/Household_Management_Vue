@@ -15,7 +15,6 @@ import Addnews from '@/components/Addnews'
 import ShowExpences from '@/components/ShowExpences'
 import ShoppingList from '@/components/ShoppingList/ShoppingList'
 import Innmelding from  '@/components/Innmelding'
-import TestMail from  '@/components/TestMail'
 import TodoList from '@/components/TODO/TodoList'
 import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
 import GjeldInn from '@/components/Gjeld/GjeldInn'
@@ -24,6 +23,7 @@ import GjeldInnSpesifisert from '@/components/Gjeld/GjeldInnSpesifisert'
 import NewUser from '@/components/NewUser'
 import ChangePassword from '@/components/ChangePassword'
 import Grupper from '@/components/Grupper'
+import UserInfo from '@/components/UserInfo'
 
 
 Vue.use(Router);
@@ -150,6 +150,11 @@ export default new Router({
         path: '/ChangePassword',
         name: 'ChangePassword',
         component: ChangePassword
+      },
+      {
+        path: '/UserInfo',
+        name: 'UserInfo',
+        component: UserInfo
       }
     ]
   }
