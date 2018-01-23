@@ -1,10 +1,11 @@
 let util = require('../util');
+let connection_prod = require('../connection_prod');
 
-module.exports = function(connection, server){
+module.exports = function(asdf, server){
 
   // Hent et bestemt gjoremal
   server.get('rest/gjoremal/:gjoremal_id',function(req, res, next){
-    connection.query("SELECT * FROM Gjoremal WHERE gjoremal_id=?", req.params.gjoremal_id, function(err, rows, field){
+    connection_prod.connection.query("SELECT * FROM Gjoremal WHERE gjoremal_id=?", req.params.gjoremal_id, function(err, rows, field){
       if(err)
         return next(err);
 
@@ -24,7 +25,7 @@ module.exports = function(connection, server){
 
   // Hent alle gjoremal i en liste
   server.get('rest/gjoremaler/:id', function (req,res,next) {
-    connection.query('SELECT * FROM Gjoremal WHERE liste_id=?', req.params.id, function (err,rows,field) {
+    connection_prod.connection.query('SELECT * FROM Gjoremal WHERE liste_id=?', req.params.id, function (err,rows,field) {
       if(err)
         return next(err);
       for(let gjoremal of rows){
@@ -49,7 +50,7 @@ module.exports = function(connection, server){
     if('ferdig' in req.body)
       req.body.ferdig = new Date(req.body.ferdig).getTime();
 
-    connection.query("INSERT INTO Gjoremal SET ?", req.body, function(err, rows, field){
+    connection_prod.connection.query("INSERT INTO Gjoremal SET ?", req.body, function(err, rows, field){
       if(err)
         return next(err);
       res.send(rows);
@@ -68,7 +69,7 @@ module.exports = function(connection, server){
     if('ferdig' in req.body)
       req.body.ferdig = new Date(req.body.ferdig).getTime();
 
-    connection.query("UPDATE Gjoremal SET ? WHERE gjoremal_id=?", [req.body, id], function(err, rows, fields){
+    connection_prod.connection.query("UPDATE Gjoremal SET ? WHERE gjoremal_id=?", [req.body, id], function(err, rows, fields){
 
       res.send(err ? err : rows);
       return next();
@@ -77,7 +78,7 @@ module.exports = function(connection, server){
 
   //Slett et gjøremål
   server.del('rest/gjoremal/:gjoremal_id',function(req,res,next){
-    connection.query("DELETE FROM Gjoremal WHERE gjoremal_id=?", [req.params.gjoremal_id], function(err,rows,fields){
+    connection_prod.connection.query("DELETE FROM Gjoremal WHERE gjoremal_id=?", [req.params.gjoremal_id], function(err,rows,fields){
       res.send(err ? err : rows);
       return next();
     });

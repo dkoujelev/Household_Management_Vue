@@ -1,7 +1,7 @@
 let server = require("../server");
 let sendMailScript = require('../../SendMail.js');
 
-module.exports = function(connection, server){
+module.exports = function(asdf, server){
 
 // Opprett nytt kollektiv
 server.post('rest/epost',function(req, res, next){

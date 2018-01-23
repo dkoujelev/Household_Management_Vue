@@ -1,10 +1,11 @@
 let util = require('../util');
+let connection_prod = require('../connection_prod');
 
-module.exports = function(connection, server) {
+module.exports = function(asdf, server) {
 
 // Hent en bestemt liste
   server.get('rest/gjoremalsliste/:id', function (req, res, next) {
-    connection.query("SELECT * FROM Gjoremalsliste WHERE id=?", [req.params.id], function (err, rows, fields) {
+    connection_prod.connection.query("SELECT * FROM Gjoremalsliste WHERE id=?", [req.params.id], function (err, rows, fields) {
       if (err || rows.length != 1)
         return next(err);
 
@@ -13,7 +14,7 @@ module.exports = function(connection, server) {
       if ('opprettet' in liste)
         liste.opprettet = new Date(liste.opprettet);
 
-      connection.query("SELECT Gjoremal.* FROM Gjoremal " +
+      connection_prod.connection.query("SELECT Gjoremal.* FROM Gjoremal " +
         "INNER JOIN Gjoremalsliste ON Gjoremalsliste.id = Gjoremal.liste_id WHERE Gjoremalsliste.id=?", [req.params.id], function (err, rows, fields) {
         if (err)
           return next(err);
@@ -35,7 +36,7 @@ module.exports = function(connection, server) {
 
 // Hent alle lister i en undergruppe
   server.get('rest/gjoremalslisterUndergruppe/:undergruppe_id', function (req, res, next) {
-    connection.query("SELECT * FROM Gjoremalsliste WHERE undergruppe_id=?", [req.params.undergruppe_id], function (err, rows, fields) {
+    connection_prod.connection.query("SELECT * FROM Gjoremalsliste WHERE undergruppe_id=?", [req.params.undergruppe_id], function (err, rows, fields) {
       if (err)
         return next(err);
 
@@ -47,7 +48,7 @@ module.exports = function(connection, server) {
       res.send(liste);
       return next();
       /*
-      connection.query("SELECT Gjoremalsliste.*, Gjoremal.navn as gjoremal, Gjoremal.start, Gjoremal.frist, Gjoremal.ferdig," +
+      connection_prod.connection.query("SELECT Gjoremalsliste.*, Gjoremal.navn as gjoremal, Gjoremal.start, Gjoremal.frist, Gjoremal.ferdig," +
         "Bruker.fornavn, Bruker.etternavn FROM Gjoremalsliste " +
         "INNER JOIN Gjoremal ON Gjoremalsliste.id = Gjoremal.liste_id " +
         "INNER JOIN Bruker", req.params.undergruppe_id, function(err, rows, fields){
@@ -74,7 +75,7 @@ module.exports = function(connection, server) {
 
 // Hent alle lister i et kollektiv
   server.get('rest/gjoremalslisterKollektiv/:kollektiv_id', function (req, res, next) {
-    connection.query("SELECT DISTINCT Gjoremalsliste.* FROM `Gjoremalsliste` INNER JOIN Undergruppe WHERE kollektiv_id=?", req.params.kollektiv_id, function (err, rows, field) {
+    connection_prod.connection.query("SELECT DISTINCT Gjoremalsliste.* FROM `Gjoremalsliste` INNER JOIN Undergruppe WHERE kollektiv_id=?", req.params.kollektiv_id, function (err, rows, field) {
       if (err)
         return next(err);
       for (liste of rows) {
@@ -89,7 +90,7 @@ module.exports = function(connection, server) {
 
 // Hent alle lister til en bruker
   server.get('rest/gjoremalslisterBruker/:bruker_id', function (req, res, next) {
-    connection.query("SELECT DISTINCT Undergruppe.navn AS undergruppe, Gjoremalsliste.* FROM `Gjoremalsliste` INNER JOIN Gjoremal " +
+    connection_prod.connection.query("SELECT DISTINCT Undergruppe.navn AS undergruppe, Gjoremalsliste.* FROM `Gjoremalsliste` INNER JOIN Gjoremal " +
       "INNER JOIN Undergruppe ON Undergruppe.undergruppe_id = Gjoremalsliste.undergruppe_id WHERE bruker_id=?", req.params.bruker_id, function (err, rows, field) {
       if (err)
         return next(err);
@@ -119,7 +120,7 @@ module.exports = function(connection, server) {
     */
 
 
-    connection.query('INSERT INTO Gjoremalsliste SET ?', [liste], function (err, rows, field) {
+    connection_prod.connection.query('INSERT INTO Gjoremalsliste SET ?', [liste], function (err, rows, field) {
       if (err)
         return next(err);
       /*
@@ -139,7 +140,7 @@ module.exports = function(connection, server) {
 
       //console.log(JSON.stringify(gjoremaler));
 
-      connection.query('INSERT INTO Gjoremal (navn, start, frist, ferdig, beskrivelse, bruker_id, liste_id) VALUES ?', [gjoremaler], function(err,rows,field){
+      connection_prod.connection.query('INSERT INTO Gjoremal (navn, start, frist, ferdig, beskrivelse, bruker_id, liste_id) VALUES ?', [gjoremaler], function(err,rows,field){
         if(err)
           return next(err);
         res.send(rows);
@@ -157,11 +158,11 @@ module.exports = function(connection, server) {
     if ('opprettet' in liste)
       liste.opprettet = new Date(liste.opprettet).getTime();
 
-    connection.query("UPDATE Gjoremalsliste SET ? WHERE id=?", [req.body, req.body.id], function (err, rows, field) {
+    connection_prod.connection.query("UPDATE Gjoremalsliste SET ? WHERE id=?", [req.body, req.body.id], function (err, rows, field) {
       if (err)
         return next(err);
       /*
-      connection.query('SELECT * FROM Gjoremal WHERE liste_id=?', req.body.id, function (err, rows, field) {
+      connection_prod.connection.query('SELECT * FROM Gjoremal WHERE liste_id=?', req.body.id, function (err, rows, field) {
         if(err)
           return next(err);
         let gjoremaler = [];
@@ -179,7 +180,7 @@ module.exports = function(connection, server) {
           gjoremalen.push(rows.insertId);
           gjoremaler.push(gjoremalen);
         }
-        connection.query('UPDATE Gjoremal SET ?', [req.body.gjoremal], function (err,rows,field) {
+        connection_prod.connection.query('UPDATE Gjoremal SET ?', [req.body.gjoremal], function (err,rows,field) {
           if(err)
             return next(err);
 
@@ -194,11 +195,11 @@ module.exports = function(connection, server) {
 
 // Slett en liste
   server.del('rest/gjoremalsliste/', function (req, res, next) {
-    connection.query('DELETE FROM Gjoremal WHERE liste_id=?', req.body.id, function (err, rows, field) {
+    connection_prod.connection.query('DELETE FROM Gjoremal WHERE liste_id=?', req.body.id, function (err, rows, field) {
       if (err)
         return next(err);
       //let info = rows;
-      connection.query('DELETE FROM Gjoremalsliste WHERE id=?', req.body.id, function (err, rows, field) {
+      connection_prod.connection.query('DELETE FROM Gjoremalsliste WHERE id=?', req.body.id, function (err, rows, field) {
         if (err)
           return next(err);
         res.send(rows);
@@ -209,7 +210,7 @@ module.exports = function(connection, server) {
 
 // Favorittiser en gjoremalsliste
   server.put('rest/favorittGjoremalsliste/', function (req, res, next) {
-    connection.query('UPDATE Gjoremalsliste SET favoritt=? WHERE id=?', [req.body.favoritt, req.body.id], function (err, rows, fields) {
+    connection_prod.connection.query('UPDATE Gjoremalsliste SET favoritt=? WHERE id=?', [req.body.favoritt, req.body.id], function (err, rows, fields) {
       if(err)
         return next(err);
       res.send(rows);
