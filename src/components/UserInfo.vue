@@ -1,7 +1,7 @@
 <template>
   <div class="is-ancestor">
     <div class="is-parent tile box" style="background-color: azure">
-      <div class="is-child tile">
+      <div class="is-child tile is-2">
         <div class="block">
           <p>Fornavn: {{user_info.first_name}}</p>
           <p>Etternavn: {{user_info.last_name}}</p>
