@@ -1,7 +1,8 @@
 let util = require("../util");
 let mysql = require("mysql");
+let connection_prod = require('../connection_prod');
 
-module.exports = function(connection, server){
+module.exports = function(asdf, server){
 
   // Opprett et gjeld-objekt i basen.
   // Send inn belop, beskrivelse, bruker_skylder_id og bruker_innkrever_id
@@ -13,7 +14,7 @@ module.exports = function(connection, server){
     if('betalt' in req.body)
       req.body.betalt = new Date(req.body.betalt).getTime();
 
-    connection.query('INSERT INTO Gjeld SET ?', [req.body], (err,rows,fields) => {
+    connection_prod.connection.query('INSERT INTO Gjeld SET ?', [req.body], (err,rows,fields) => {
       if(err)
         return next(err);
 
@@ -24,7 +25,7 @@ module.exports = function(connection, server){
 
   // Hent gjeld-objekt fra basen
   server.get('rest/gjeld/:gjeld_id', (req,res,next) => {
-    connection.query('SELECT * FROM Gjeld where gjeld_id=?',[req.params.gjeld_id], (err,rows,fields) => {
+    connection_prod.connection.query('SELECT * FROM Gjeld where gjeld_id=?',[req.params.gjeld_id], (err,rows,fields) => {
       if(err)
         return next(err);
 
@@ -45,7 +46,7 @@ module.exports = function(connection, server){
 
   // Returnerer brukerobjekter med tilhørende sum for hver bruker som skylder penger til bruker_id brukeren
   server.get('rest/gjeldBrukerErSkyldig/:bruker_id',function(req,res,next) {
-    connection.query('SELECT SUM(Gjeld.belop) AS sum, Bruker.* FROM Gjeld INNER JOIN Bruker ' +
+    connection_prod.connection.query('SELECT SUM(Gjeld.belop) AS sum, Bruker.* FROM Gjeld INNER JOIN Bruker ' +
       'ON Bruker.bruker_id=Gjeld.bruker_innkrever_id WHERE ' +
       'Gjeld.bruker_skylder_id=? GROUP BY Gjeld.bruker_innkrever_id', [req.params.bruker_id],function(err, rows, fields){
       for(row of rows)
@@ -61,7 +62,7 @@ module.exports = function(connection, server){
 
   // Returnerer brukerobjekter med tilhørende sum for hver bruker som bruker_id-brukeren skylder penger
   server.get('rest/gjeldBrukerKreverInn/:bruker_id',function(req,res,next) {
-    connection.query('SELECT SUM(Gjeld.belop) AS sum, Bruker.* FROM Gjeld INNER JOIN Bruker ' +
+    connection_prod.connection.query('SELECT SUM(Gjeld.belop) AS sum, Bruker.* FROM Gjeld INNER JOIN Bruker ' +
       'ON Bruker.bruker_id=Gjeld.bruker_skylder_id WHERE ' +
       'Gjeld.bruker_innkrever_id=? GROUP BY Gjeld.bruker_skylder_id', [req.params.bruker_id],function(err, rows, fields){
       for(row of rows)
@@ -79,7 +80,7 @@ module.exports = function(connection, server){
 // For å hente all gjeld fra bruker 1 til bruker 2, send følgende i request body:
 // {skylder: 1, innkrever: 2}
   server.post('rest/gjeldSpesifisert', function(req,res,next) {
-    connection.query('SELECT * FROM Gjeld WHERE Gjeld.bruker_skylder_id=? ' +
+    connection_prod.connection.query('SELECT * FROM Gjeld WHERE Gjeld.bruker_skylder_id=? ' +
       'AND Gjeld.bruker_innkrever_id=?', [req.body.skylder, req.body.innkrever], function (err, rows, fields) {
       if (err)
         return next(err);
@@ -96,7 +97,7 @@ module.exports = function(connection, server){
   server.post('rest/settGjeldSomBetalt/:gjeld_id', (req,res,next) => {
     let now = util.getCurrentTimeAsEpoch();
 
-    connection.query('UPDATE Gjeld SET betalt = ? WHERE gjeld_id=?', [now, req.params.gjeld_id],(err,rows,fields) => {
+    connection_prod.connection.query('UPDATE Gjeld SET betalt = ? WHERE gjeld_id=?', [now, req.params.gjeld_id],(err,rows,fields) => {
       if(err)
         return next(err);
 
@@ -115,7 +116,7 @@ module.exports = function(connection, server){
     for(id of req.body.ids)
       sql += mysql.format('UPDATE Gjeld SET betalt = ? WHERE gjeld_id=?', [now, id]) + "; ";
 
-    connection.query(sql, (err, rows, fields) => {
+    connection_prod.connection.query(sql, (err, rows, fields) => {
       if(err)
         return next(err);
 
