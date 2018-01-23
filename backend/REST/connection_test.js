@@ -1,5 +1,3 @@
-let mysql = require("mysql");
-
 let connection_test = {
   connection_cfg: {
     host: 'mysql.stud.iie.ntnu.no',
@@ -11,4 +9,4 @@ let connection_test = {
   connection: null
 };
 
-module.exports = connection;
+module.exports = connection_test;
