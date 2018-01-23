@@ -26,7 +26,7 @@
                 </label>
               </p>
               <p class="control">
-                <button class="button is-primary is-medium is-fullwidth" v-on:click="login">
+                <button class="button is-link is-medium is-fullwidth" v-on:click="login">
                   <i class="fa fa-user"></i>
                   &nbsp Login
                 </button>

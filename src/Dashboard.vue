@@ -2,7 +2,7 @@
 
   <div>
     <!-- START NAV -->
-    <nav class="navbar is-light is-fixed-top">
+    <nav class="navbar is-link is-fixed-top">
         <div class="navbar-brand">
 
             <router-link class="navbar-item" to="/home">
@@ -17,15 +17,15 @@
         </div>
           <div id="navMenu1" class="navbar-menu" v-bind:class="{'is-active': showBurger}">
             <div class="navbar-start" @click="showBurger = false">
-              <router-link class="navbar-item" v-if="showNav" to="/Nyhetsfeed"><i class="fas fa-home"></i>Nyhet</router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/TodoList">Gjøremål</router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/Shoppinglists">Handlelister</router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/Nyhetsfeed">Nyhet<span class="icon"><i class="fa fa-newspaper-o"></i></span></router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/TodoList">Gjøremål<span class="icon"><i class="fa fa-tasks"></i></span></router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/Shoppinglists">Handlelister<span class="icon"><i class="fa fa-shopping-cart"></i></span></router-link>
               <router-link class="navbar-item" v-if="showNav" to="/ShowExpences">Utgifter</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/Innmelding">Innmelding</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/TestMail">TestMail</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/GjeldInn">Gjeld Inn</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/GjeldUt">Gjeld Ut</router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/UserInfo">Min Side</router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/UserInfo">Min Side<span class="icon"><i class="fa fa-user"></i></span></router-link>
             </div>
 
             <div class="navbar-end" @click="showBurger = false">
@@ -106,10 +106,7 @@ export default {
 
 <style>
   body {
-    background-color: green;
+    background-color: lightcyan;
     height: 100vh;
-  }
-  navbar{
-    background-color: transparent;
   }
 </style>

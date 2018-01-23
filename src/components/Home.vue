@@ -1,14 +1,27 @@
 <template>
-      <div class="tile is-ancestor box" style="background-color: deeppink">
-        <div class="tile is-parent  box" style="background-color: skyblue">
-          <div class="child tile is-6 box" style="background-color: palevioletred">
-            <Newsfeedhome></Newsfeedhome>
-          </div>
-          <div class="child tile is-6 box" style="background-color: grey">
-            <Shoppinglistshome></Shoppinglistshome>
-          </div>
+  <div class="tile is-vertical">
+    <div class="tile is-ancestor">
+      <div class=" tile is-parent">
+        <div class="tile is-child box" style="background-color: lightskyblue">
+          <Newsfeedhome></Newsfeedhome>
         </div>
       </div>
+    </div>
+    <div class="tile is-ancestor">
+      <div class="tile is-parent">
+        <div class="tile is-child box is-half" style="background-color: lightskyblue">
+          <Shoppinglistshome></Shoppinglistshome>
+        </div>
+      </div>
+      <div class="tile is-parent">
+        <div class="tile is-child box is-half" style="background-color: lightskyblue">
+          <Shoppinglistshome></Shoppinglistshome>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 
 
 

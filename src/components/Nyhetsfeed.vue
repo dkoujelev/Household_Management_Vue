@@ -22,10 +22,8 @@
         </table>
 
       </div>
-        <div class="child tile" style="background-color: lightgrey">
-          <router-link class="button" to="/Addnews">Lag nyhet</router-link>
-        </div>
-
+      <div class="child tile" style="background-color: lightgrey">
+        <router-link class="button" to="/Addnews">Lag nyhet</router-link>
       </div>
     </div>
   </div>
