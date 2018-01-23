@@ -71,7 +71,7 @@ let axios_eksempel = function(){
 };
 
 
-describe.skip('Vare',() => {
+describe('Vare',() => {
 
   // Legg inn et par testusers i basen. Begge testusers er medlem i test_kollektiv som også ligger i basen.
   // Basen tømmes og dette innholdet legges inn på nytt før hver test kjøres
@@ -140,7 +140,6 @@ describe.skip('Vare',() => {
   it('Hent en vare med id', () => {
     // Hent ut testuser og sammenlign
     return axios.get('http://localhost:9100/rest/vare/' + testVare1.vare_id).then((response) => {
-      console.log(response.data.length);
       // Vi forventer nå at brukerobjektet fra basen er helt likt testuser-objektet vårt som vi la inn tidligere.
       expect(response.data).to.containSubset([testVare1]);
 
@@ -178,7 +177,7 @@ describe.skip('Vare',() => {
       });
   });
 
-  it.skip('Slett vare',() => {
+  it('Slett vare',() => {
 
     return axios.delete('http://localhost:9100/rest/vare/' + testVare1.vare_id)
       .then(response => {

@@ -46,7 +46,7 @@ let test_kostnad2 = {
   kostnad_id: 1
 };
 
-describe.skip('Kostnad', () => {
+describe('Kostnad', () => {
 
   beforeEach(() => {
     // OBS: Vi må RETURNERE hele kjeden til testbiblioteket vårt, derfor return før clearDB.

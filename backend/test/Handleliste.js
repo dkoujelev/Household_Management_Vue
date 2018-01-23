@@ -71,7 +71,7 @@ let axios_eksempel = function(){
 };
 
 
-describe.skip('Handeliste',() => {
+describe('Handeliste',() => {
 
   // Legg inn et par testusers i basen. Begge testusers er medlem i test_kollektiv som også ligger i basen.
   // Basen tømmes og dette innholdet legges inn på nytt før hver test kjøres
@@ -172,7 +172,7 @@ describe.skip('Handeliste',() => {
       beskrivelse: "Denne listen er oppdatert"
     };
 
-    return axios.put('http://localhost:9100/rest/handleliste/', newImfo)
+    return axios.put('http://localhost:9100/rest/handleliste/' + newImfo.handleliste_id, newImfo)
       .then(response => {
         return axios.get('http://localhost:9100/rest/handleliste/' + newImfo.handleliste_id).then(response => {
           expect(response.data).to.containSubset(newImfo);
