@@ -11,6 +11,13 @@
         </div>
       </div>
     </div>
+
+    <vue-good-table
+      title="Handlelister"
+      :columns="columns"
+      :rows="rows"
+    ></vue-good-table>
+    <br />
     <button class="button is-danger">Slett liste</button>
 
   </div>
