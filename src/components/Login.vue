@@ -83,13 +83,12 @@
               this.login_info.passord = "";
               store.commit('current_user', response.data);
 
-              // FOR TESTING, REMOVE WHEN SOLUTION READY
-              store.commit('current_group', {undergruppe_id: 1});
-              // REMOVE ME WHEN DONE
-
               store.commit('loggedIn', true);
               axios.get('http://localhost:9000/rest/kollektivForBruker/' + response.data.bruker_id).then(response => {
                 store.commit('isMember', response.data.length > 0);
+                if(response.data.length > 0) {
+                  store.commit('current_group', response.data[0]);
+                }
                 if (response.data.length === 0)
                   router.push('NewUser');
                 else
