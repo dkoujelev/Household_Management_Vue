@@ -1,5 +1,5 @@
 let server = require("../server");
-let connection = require("../connection");
+let connection_prod = require('../connection_prod');
 
 
 /*
@@ -8,7 +8,7 @@ BRUKES IKKE
 
 // Get favorite shoppinglist list
 server.get('rest/favoritthandleliste/:bruker_id', function (req,res,next) {
-  connection.query('SELECT Handleliste.* FROM Handleliste ' +
+  connection_prod.connection.query('SELECT Handleliste.* FROM Handleliste ' +
     'INNER JOIN Bruker_Handleliste WHERE bruker_id=?', req.params.bruker_id, function (err, rows, fields) {
     if(err)
       return next(err);
@@ -37,7 +37,7 @@ server.post('rest/favoritthandleliste/', function (req,res,next) {
   if('handling_utfort' in liste)
     liste.handling_utfort = new Date(liste.handling_utfort).getTime();
 
-  connection.query('INSERT INTO Bruker_Handleliste SET ?', req.body, function (err,rows,fields) {
+  connection_prod.connection.query('INSERT INTO Bruker_Handleliste SET ?', req.body, function (err,rows,fields) {
     if(err)
       return next(err);
     res.send(rows);
@@ -53,7 +53,7 @@ server.put('rest/favoritthandleliste/', function (req,res,next) {
 
 // Delete favorite shoppinglist
 server.del('rest/favoritthandleliste/', function (req,res,next) {
-  connection.query('DELETE FROM Bruker_Handleliste WHERE VALUE=?', req.body, function (err,rows,fields) {
+  connection_prod.connection.query('DELETE FROM Bruker_Handleliste WHERE VALUE=?', req.body, function (err,rows,fields) {
     if(err)
       return next(err);
     res.send(rows);

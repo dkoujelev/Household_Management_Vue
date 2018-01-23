@@ -1,10 +1,11 @@
 let util = require('../util');
+let connection_prod = require('../connection_prod');
 
-module.exports = function(connection, server){
+module.exports = function(asdf, server){
 
 // Hente en kostnad
   server.get('rest/kostnad/:kostnad_id', function (req,res,next) {
-    connection.query('SELECT * FROM Kostnad WHERE kostnad_id=?', req.params.kostnad_id , function (err,rows,fields) {
+    connection_prod.connection.query('SELECT * FROM Kostnad WHERE kostnad_id=?', req.params.kostnad_id , function (err,rows,fields) {
       if(err)
         return next(err);
       else if(rows.length !== 1){
@@ -26,7 +27,7 @@ module.exports = function(connection, server){
 
 // Hent kostnader til ei handleliste
   server.get('rest/kostnaderForHandleliste/:handleliste_id', function (req,res,next) {
-    connection.query('SELECT * FROM Kostnad WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, field) {
+    connection_prod.connection.query('SELECT * FROM Kostnad WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, field) {
       if(err)
         return next(err);
 
@@ -43,7 +44,7 @@ module.exports = function(connection, server){
 
 // Hent kostnader til en undergruppe
   server.get('rest/kostnaderForUndergruppe/:undergruppe_id', function (req,res,next) {
-    connection.query('SELECT * FROM Kostnad WHERE undergruppe_id=?', req.params.undergruppe_id , function (err, rows, field) {
+    connection_prod.connection.query('SELECT * FROM Kostnad WHERE undergruppe_id=?', req.params.undergruppe_id , function (err, rows, field) {
       if(err)
         return next(err);
 
@@ -65,11 +66,11 @@ module.exports = function(connection, server){
 
     kostnad.opprettet = util.getCurrentTimeAsEpoch();
 
-    connection.query('INSERT INTO Kostnad SET?', [kostnad], function (err, rows, fields) {
+    connection_prod.connection.query('INSERT INTO Kostnad SET?', [kostnad], function (err, rows, fields) {
       if(err)
         return next(err);
       kostnad.kostnad_id = rows.insertId;
-      connection.query('SELECT bruker_id FROM Bruker_Undergruppe WHERE undergruppe_id=?', req.body.undergruppe_id, function (err, rows, field) {
+      connection_prod.connection.query('SELECT bruker_id FROM Bruker_Undergruppe WHERE undergruppe_id=?', req.body.undergruppe_id, function (err, rows, field) {
         if(err)
           return next(err);
 
@@ -95,7 +96,7 @@ module.exports = function(connection, server){
           }
         }
 
-        connection.query('INSERT INTO Gjeld (belop, opprettet, beskrivelse, bruker_skylder_id, bruker_innkrever_id, kostnad_id) VALUES ?', [gjelder], function (err, rows, field) {
+        connection_prod.connection.query('INSERT INTO Gjeld (belop, opprettet, beskrivelse, bruker_skylder_id, bruker_innkrever_id, kostnad_id) VALUES ?', [gjelder], function (err, rows, field) {
           if(err)
             return next(err);
           res.send(rows);
@@ -113,7 +114,7 @@ module.exports = function(connection, server){
     if('opprettet' in req.body)
       delete req.body.opprettet;
 
-    connection.query('UPDATE Kostnad SET ? WHERE kostnad_id=?',[req.body, req.body.kostnad_id],(err,rows,fields) => {
+    connection_prod.connection.query('UPDATE Kostnad SET ? WHERE kostnad_id=?',[req.body, req.body.kostnad_id],(err,rows,fields) => {
       if(err)
         return next(err);
 
