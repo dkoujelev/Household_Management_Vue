@@ -1,11 +1,10 @@
 let bcrypt = require('bcrypt');
 let auth = require('../auth.js');
-let connection_prod = require('../connection_prod');
 
-module.exports = function(asdf, server) {
+module.exports = function(connection, server) {
 // Login
   server.post('rest/login', function (req, res, next) {
-    connection_prod.connection.query("SELECT * FROM Bruker WHERE epost=?", [req.body.epost], function (err, rows, fields) {
+    connection.query("SELECT * FROM Bruker WHERE epost=?", [req.body.epost], function (err, rows, fields) {
 
       if (rows.length == 0) {
         console.log('login denied for user ' + req.body.epost + ' (user not found)');

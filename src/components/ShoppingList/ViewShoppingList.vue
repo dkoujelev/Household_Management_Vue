@@ -1,41 +1,32 @@
 <template>
   <div>
-
-    <vue-good-table
-      title="Handlelister"
-      :columns="columns"
-      :rows="rows"
-    ></vue-good-table>
+    <table>
+      <thead>
+      <th>Handleliste</th>
+      <th>Frist</th>
+      <th></th>
+      </thead>
+      <tr v-for="row in rows">
+        <td>{{row.vare}}</td>
+        <td>{{row.antall}}</td>
+        <td><input type="checkbox" class="checkbox"/></td>
+        <td><button class="button">Fjern vare</button></td>
+      </tr>
+    </table>
     <br />
+    <button class="button">Legg til vare</button>
     <button class="button is-danger">Slett liste</button>
-
   </div>
 </template>
 
 <script>
   import axios from 'axios';
-  import Vue from 'vue'
-  import VueGoodTable from 'vue-good-table';
-  Vue.use(VueGoodTable);
-
 
   export default {
     name: 'Shoppinglists',
 
     data(){
       return {
-        columns: [
-          {
-            label: 'Vare',
-            field: 'vare',
-            filterable: false
-          },
-          {
-            label: 'Antall',
-            field: 'antall',
-            filterable: false
-          },
-        ],
         rows: []
       };
     },
@@ -45,8 +36,7 @@
     methods: {
 
       fillRows(){
-        console.log(this.$root.$data.handleliste_id);
-        axios.get('http://localhost:9000/rest/handleliste/' + this.$root.$data.handleliste_id).then(response => {
+        axios.get('http://localhost:9000/rest/handleliste/' + this.$route.params.shoppinglist_id).then(response => {
           console.log(response.data);
           let resRows = response.data.varer;
           for(let i = 0; i < resRows.length; i++){

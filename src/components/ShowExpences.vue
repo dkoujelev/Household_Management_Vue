@@ -1,31 +1,27 @@
 <template>
-  <div class="columns">
-    <div class="column">
-    <h1 class="title is-3">Oversikt over utgifter</h1>
-    <table class="table is-striped is-bordered is-fullwidth is-hoverable">
-      <thead>
-      <tr>
-        <th>Tittel</th>
-        <th>Sum</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="row in rows">
-        <td>{{row.tittel}}</td>
-        <td>{{row.sum}}</td>
-      </tr>
-      </tbody>
-      <tfoot>
-      <tr>
-        <td>Total</td>
-        <td>{{totalsum}}</td>
-      </tr>
-      </tfoot>
+  <div>
+    <div class="is-ancestor">
+      <div class="is-parent">
+        <div class="is-child box">
+          <vue-good-table
+            title="Utgifter"
+            :columns="columns"
+            :rows="rows"
+            :paginate="true"
+            :onClick="click"
+            per-page=5
+            next-text="Neste"
+            prev-text="Forrige"
+            rows-per-page-text="Antall rader"
+            of-text="av"
+          />
+        </div>
+      </div>
+    </div>
     </table>
     <br>
     <br>
     <router-link class="button" to="/AddExpence">Legg til utgift</router-link>
-  </div>
   </div>
 </template>
 
@@ -42,7 +38,7 @@
           {
             label: 'Tittel',
             field: 'tittel',
-            filterable: true,
+            filterable: false,
             placeholder: "Søk"
           },
           {

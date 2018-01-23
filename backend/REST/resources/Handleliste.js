@@ -1,11 +1,10 @@
 let util = require('../util');
-let connection_prod = require('../connection_prod');
 
-module.exports = function(asdf, server){
+module.exports = function(connection, server){
 
 // Hent en fullstendig handleliste
   server.get('rest/handleliste/:handleliste_id',function(req, res, next){
-    connection_prod.connection.query("SELECT * FROM Handleliste WHERE handleliste_id=?", [req.params.handleliste_id], function(err, rows, fields){
+    connection.query("SELECT * FROM Handleliste WHERE handleliste_id=?", [req.params.handleliste_id], function(err, rows, fields){
 
       if(err)
         return next(err);
@@ -23,7 +22,7 @@ module.exports = function(asdf, server){
       if('handling_utfort' in handleliste)
         handleliste.handling_utfort = new Date(handleliste.handling_utfort);
 
-      connection_prod.connection.query("SELECT Vare.* FROM Vare " +
+      connection.query("SELECT Vare.* FROM Vare " +
         "INNER JOIN Handleliste ON Vare.handleliste_Id=Handleliste.handleliste_id WHERE Handleliste.handleliste_id=?", req.params.handleliste_id, function(err, rows, fields){
         if(err)
           return next(err);
@@ -50,7 +49,7 @@ module.exports = function(asdf, server){
     if('handling_utfort' in handleliste)
       handleliste.handling_utfort = new Date(handleliste.handling_utfort).getTime();
 
-    connection_prod.connection.query('INSERT INTO Handleliste SET ?', [handleliste], function(err,rows,fields){
+    connection.query('INSERT INTO Handleliste SET ?', [handleliste], function(err,rows,fields){
       if(err)
         return next(err);
 
@@ -71,7 +70,7 @@ module.exports = function(asdf, server){
 
       console.log(JSON.stringify(varer));
 
-      connection_prod.connection.query('INSERT INTO Vare (navn, handleliste_id, antall) VALUES ?', [varer], function(err,rows,fields){
+      connection.query('INSERT INTO Vare (navn, handleliste_id, antall) VALUES ?', [varer], function(err,rows,fields){
         if(err)
           return next(err);
         res.send(rows);
@@ -82,7 +81,7 @@ module.exports = function(asdf, server){
 
 // Hent handlelister for en bestemt undergruppe
   server.get('rest/handlelisteForUndergruppe/:undergruppe_id',function(req, res, next) {
-    connection_prod.connection.query("SELECT * FROM Handleliste WHERE undergruppe_id=?", [req.params.undergruppe_id], function (err, rows, fields) {
+    connection.query("SELECT * FROM Handleliste WHERE undergruppe_id=?", [req.params.undergruppe_id], function (err, rows, fields) {
 
       for(let handleliste of rows){
         if('opprettet' in handleliste)
@@ -100,7 +99,7 @@ module.exports = function(asdf, server){
 
 // Hent alle handlelister som en bestemt bruker har tilgang til
   server.get('rest/handlelisteForBruker/:bruker_id',function(req, res, next){
-    connection_prod.connection.query("SELECT Handleliste.* FROM Handleliste " +
+    connection.query("SELECT Handleliste.* FROM Handleliste " +
       "INNER JOIN Undergruppe ON Handleliste.undergruppe_id=Undergruppe.undergruppe_id " +
       "INNER JOIN Bruker_Undergruppe ON Undergruppe.undergruppe_id=Bruker_Undergruppe.undergruppe_id " +
       "WHERE bruker_id=?", [req.params.bruker_id], function(err, rows, fields){
@@ -135,13 +134,13 @@ module.exports = function(asdf, server){
     if('handling_utfort' in req)
       req.handling_utfort = new Date(req.handling_utfort).getTime();
 
-    connection_prod.connection.query('UPDATE Handleliste SET ? WHERE handleliste_id=?', [req.body, req.body.handleliste_id], function (err,rows,fields) {
+    connection.query('UPDATE Handleliste SET ? WHERE handleliste_id=?', [req.body, req.body.handleliste_id], function (err,rows,fields) {
       if(err)
         return next(err);
       res.send(rows);
       return next();
       /*
-      connection_prod.connection.query('SELECT * FROM Vare WHERE handleliste_id=?', req.body.handleliste_id, function (err, rows, fields) {
+      connection.query('SELECT * FROM Vare WHERE handleliste_id=?', req.body.handleliste_id, function (err, rows, fields) {
         if(err)
           return next(err);
         let varerDelete = [];
@@ -164,7 +163,7 @@ module.exports = function(asdf, server){
         for(row of rows){
           varerDelete.push(row);
         }
-        connection_prod.connection.query('UPDATE Vare SET ? WHERE ?', [varerUpdate, varerId], function (err, rows, fields) {
+        connection.query('UPDATE Vare SET ? WHERE ?', [varerUpdate, varerId], function (err, rows, fields) {
           if(err)
             return next(err);
           res.send(rows);
@@ -177,10 +176,10 @@ module.exports = function(asdf, server){
 
 // Slett en liste
   server.del('rest/handleliste/:handleliste_id', function (req ,res, next) {
-    connection_prod.connection.query('DELETE FROM Vare WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
+    connection.query('DELETE FROM Vare WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
       if(err)
         return next(err);
-      connection_prod.connection.query('DELETE FROM Handleliste WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
+      connection.query('DELETE FROM Handleliste WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
         if(err)
           return next(err);
         res.send(rows);
@@ -192,7 +191,7 @@ module.exports = function(asdf, server){
 // Favorittiser en handleliste
   server.put('rest/favorittHandleliste/', function (req, res, next) {
     //console.log(req.body.favoritt + " " + req.body.handleliste_id);
-    connection_prod.connection.query('UPDATE Handleliste SET favoritt=? WHERE handleliste_id=?', [req.body.favoritt, req.body.handleliste_id], function (err, rows, fields) {
+    connection.query('UPDATE Handleliste SET favoritt=? WHERE handleliste_id=?', [req.body.favoritt, req.body.handleliste_id], function (err, rows, fields) {
       if(err)
         return next(err);
       res.send(rows);

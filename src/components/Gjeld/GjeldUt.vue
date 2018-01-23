@@ -1,11 +1,29 @@
 <template>
   <div class="box">
-    <div class="title">Brukere du skylder penger</div>
-    <div class="level" v-for="user in users">
-      <a>{{user.fornavn + " " + user.etternavn + " ( " + user.sum + " kr )"}}</a>
-    </div>
+    <div class="title is-size-5">Brukere jeg skylder penger</div>
+      <div>
+        <table>
+          <thead>
+           <th scope="col" > Navn  </th>
+           <th scope="col" > Sum  </th>
+           
+           <!-- <th scope="col" > Dato Lagt til</th> -->
+          </thead>
 
+          <tbody>
+            <a @click="selectUser(user)" v-for="user in users">
+            <tr >
+              <td data-label="Navn"> {{user.fornavn + " " + user.etternavn + " " }} </td>
+              <td data-label="Sum"> {{user.sum + " kr"}} </td>
+            </tr>
+            </a>
+          </tbody>
+        </table>
+
+        <!-- <a>{{user.fornavn + " " + user.etternavn + " ( " + user.sum + " kr )"}}</a> -->
+      </div>
   </div>
+
 </template>
 <script>
 
