@@ -83,36 +83,6 @@
         </ul>
         {{ joinSubResult }}
     </div>
-     <div v-if="showInviteSection===true">
-       <div v-if="showGroupSelect===true">
-         Du er administrator for flere kollektiv.
-         Nå administreres
-         <select v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
-           <option disabled value="">Velg kollektiv</option>
-           <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
-             {{ option.text }}
-           </option>
-         </select>
-       </div>
-       Her kan du invitere nye medlemmer til {{ selected_maingroup_name }}
-
-       <input  type="email" placeholder="Email" v-model="innmelding.epost">
-       <button v-on:click="doInvite">Send invitasjon</button>
-       {{ mailResult }}
-     </div>
-
-     <div v-if="showApproveSection===true">
-       Disse ønsker å bli med i {{ selected_subgroup.navn }}. Du kan godkjenne eller avvise søknaden(e).
-       <dl id="approvalsList">
-         <dt v-for="item in approvals"  v-bind:key="item.tid">
-           {{ item.bruker }}
-         </dt>
-         <dd v-for="item in approvals" v-bind:key="item.tid">
-           <button v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
-           <button v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
-         </dd>
-       </dl>
-     </div>
   </section>
 </template>
 
