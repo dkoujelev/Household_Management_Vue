@@ -30,13 +30,13 @@
           };
     },
     methods:{
-        loadGroups(){
-          console.log('loading groups for user ' + store.state.current_user.epost);
-          axios.get('http://localhost:9000/rest/undergrupperForBruker/' + store.state.current_user.bruker_id).then(response => {
-            this.groups = response.data;
-          }).catch(err => {
-          });
-        }
+      loadGroups(){
+        console.log('loading groups for user ' + store.state.current_user.epost);
+        axios.get('http://localhost:9000/rest/undergrupperForBruker/' + store.state.current_user.bruker_id).then(response => {
+          this.groups = response.data;
+        }).catch(err => {
+        });
+      }
     }
   };
 </script>
