@@ -1,7 +1,6 @@
 let util = require('../util');
-let connection_prod = require('../connection_prod');
 
-module.exports = function(asdf, server){
+module.exports = function(connection, server){
 
   /*
    Melding{
@@ -22,7 +21,7 @@ module.exports = function(asdf, server){
 
     req.body.sendt = util.getCurrentTimeAsEpoch();
 
-    connection_prod.connection.query("INSERT INTO Melding SET ?", [req.body], function(err, rows, fields){
+    connection.connection.query("INSERT INTO Melding SET ?", [req.body], function(err, rows, fields){
       if(err)
         return next(err);
 
@@ -33,7 +32,7 @@ module.exports = function(asdf, server){
 
 // Hent meldinger skrevet av en bruker
   server.get('rest/melding/sendt/bruker/:skrevet_av_bruker',function(req, res, next){
-    connection_prod.connection.query("SELECT * FROM Melding WHERE skrevet_av_bruker=?", [req.params.skrevet_av_bruker], function(err, rows, fields){
+    connection.connection.query("SELECT * FROM Melding WHERE skrevet_av_bruker=?", [req.params.skrevet_av_bruker], function(err, rows, fields){
       if(err)
         return next(err);
 
@@ -49,7 +48,7 @@ module.exports = function(asdf, server){
 
 // Hent meldinger til en bruker (brukes ikke)
   server.get('rest/melding/motta/bruker/:sendt_til_bruker',function(req, res, next){
-    connection_prod.connection.query("SELECT * FROM Melding WHERE sendt_til_bruker=?", [req.params.sendt_til_bruker], function(err, rows, fields){
+    connection.connection.query("SELECT * FROM Melding WHERE sendt_til_bruker=?", [req.params.sendt_til_bruker], function(err, rows, fields){
       if(err)
         return next(err);
 
@@ -60,7 +59,7 @@ module.exports = function(asdf, server){
 
 // Hente meldinger til et kollektiv
   server.get('rest/melding/motta/kollektiv/:sendt_til_kollektiv',function(req, res, next){
-    connection_prod.connection.query("SELECT * FROM Melding WHERE sendt_til_kollektiv=? ORDER BY sendt DESC", [req.params.sendt_til_kollektiv], function(err, rows, fields){
+    connection.connection.query("SELECT * FROM Melding WHERE sendt_til_kollektiv=? ORDER BY sendt DESC", [req.params.sendt_til_kollektiv], function(err, rows, fields){
       if(err)
         return next(err);
 
@@ -76,7 +75,7 @@ module.exports = function(asdf, server){
 
   // Slett en melding
   server.del('rest/melding/:melding_id', (req,res,next) => {
-    connection_prod.connection.query('DELETE FROM Melding WHERE melding_id=?', [req.params.melding_id], (err,rows,fields) => {
+    connection.connection.query('DELETE FROM Melding WHERE melding_id=?', [req.params.melding_id], (err,rows,fields) => {
       if(err)
         return next(err);
 
