@@ -12,9 +12,9 @@
 
     <div v-if="showCreateMainGroupSection===true">
         Skriv inn navnet på kollektivet du ønsker å opprette
-        <input  type="text" placeholder="Kollektivets navn" v-model="opprette.navn">
-        <input  type="text" placeholder="Beskrivelse" v-model="opprette.beskrivelse">
-        <button v-on:click="createMainGroup(opprette.navn)">
+        <input  type="text" placeholder="Kollektivets navn" v-model="oppretteMain.navn">
+        <input  type="text" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
+        <button v-on:click="createMainGroup(oppretteMain.navn)">
             Opprett kollektiv
         </button>
         {{ createMainResult }}
@@ -22,9 +22,9 @@
 
     <div v-if="showCreateSubGroupSection===true">
         Skriv inn navnet på gruppen du ønsker å opprette
-        <input  type="text" placeholder="Gruppens navn" v-model="opprette.navn">
-        <input  type="text" placeholder="Beskrivelse" v-model="opprette.beskrivelse">
-        <button v-on:click="createSubGroup(opprette.navn)">
+        <input  type="text" placeholder="Gruppens navn" v-model="oppretteSub.navn">
+        <input  type="text" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
+        <button v-on:click="createSubGroup(oppretteSub.navn)">
             Opprett gruppe
         </button>
         {{ createSubResult }}
@@ -83,36 +83,6 @@
         </ul>
         {{ joinSubResult }}
     </div>
-     <div v-if="showInviteSection===true">
-       <div v-if="showGroupSelect===true">
-         Du er administrator for flere kollektiv.
-         Nå administreres
-         <select v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
-           <option disabled value="">Velg kollektiv</option>
-           <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
-             {{ option.text }}
-           </option>
-         </select>
-       </div>
-       Her kan du invitere nye medlemmer til {{ selected_maingroup_name }}
-
-       <input  type="email" placeholder="Email" v-model="innmelding.epost">
-       <button v-on:click="doInvite">Send invitasjon</button>
-       {{ mailResult }}
-     </div>
-
-     <div v-if="showApproveSection===true">
-       Disse ønsker å bli med i {{ selected_subgroup.navn }}. Du kan godkjenne eller avvise søknaden(e).
-       <dl id="approvalsList">
-         <dt v-for="item in approvals"  v-bind:key="item.tid">
-           {{ item.bruker }}
-         </dt>
-         <dd v-for="item in approvals" v-bind:key="item.tid">
-           <button v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
-           <button v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
-         </dd>
-       </dl>
-     </div>
   </section>
 </template>
 
@@ -148,7 +118,11 @@
                 epost: '',
                 kollektiv_id: ''
             },
-            opprette:{
+            oppretteMain:{
+                navn: '',
+                beskrivelse: ''
+            },
+            oppretteSub:{
                 navn: '',
                 beskrivelse: ''
             },
@@ -385,8 +359,8 @@
       createMainGroup(groupName){
           console.log('DEBUG - createMainGroup(' + groupName + ')');
           axios.post('http://localhost:9000/rest/kollektiv/' + this.current_user.bruker_id, {
-                navn: this.opprette.navn,
-                beskrivelse: this.opprette.beskrivelse
+                navn: this.oppretteMain.navn,
+                beskrivelse: this.oppretteMain.beskrivelse
             }).then(response => {
                 console.log(response);
                 this.createMainResult="Du har opprettet et kollektiv!";
@@ -401,9 +375,9 @@
     createSubGroup(groupName){
         console.log('DEBUG - createSubGroup(' + groupName + ')');
           axios.post('http://localhost:9000/rest/undergruppe/' + this.current_user.bruker_id, {
-                navn: this.opprette.navn,
-                beskrivelse: this.opprette.beskrivelse,
-                kollektiv_id: this.selected_maingroup.kollektiv_id,
+                navn: this.oppretteSub.navn,
+                beskrivelse: this.oppretteSub.beskrivelse,
+                kollektiv_id: this.selected_subgroup.kollektiv_id,
                 default_gruppe: 0
             }).then(response => {
                 console.log(response);
