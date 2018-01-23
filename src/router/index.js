@@ -159,7 +159,7 @@ export default new Router({
         component: TodoListOverview
       },
       {
-        path: '/TodoListOverview2',
+        path: '/TodoListOverview2/:undergruppe_id',
         name: 'TodoListOverview2',
         component: TodoListOverview2
       }

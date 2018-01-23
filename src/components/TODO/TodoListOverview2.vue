@@ -4,14 +4,14 @@
     <div class="column is-half">
   <div class="table is-striped">
     <section class="panel">
-      <p class="panel-heading"> {{gruppe}}
-        Gjøremålliste
+      <p class="panel-heading">
+        Gjøremålliste for {{$store.state.current_group.navn}}
       </p>
       <div class="panel-block">
         <table class="table">
           <thead>
           <tr>
-            <th>tittel</th>
+            <th>Tittel</th>
             <th>Gruppenavn</th>
             <th>Status</th>
             <th>Dato</th>
@@ -20,8 +20,10 @@
           </thead>
           <tbody>
           <tr v-for="row in rows">
-            <td @click="selectGroup(group)"> {{row.tittel}},{{row.dato}} </td>
+            <td @click="selectGroup(group)"> {{row.tittel}} </td>
             <td>Kommer</td>
+            <td>Kommer</td>
+            <td>{{row.dato}}</td>
             <td class="is-icon">
               <a href="#">
                 <i class="fa fa-twitter"></i>
@@ -46,27 +48,36 @@
 <script>
   import axios from 'axios';
   import {store} from '@/store'
+  import router from '@/router/index'
 
 
     export default {
       name: "todo-list-overview2",
       data() {
         return {
-          rows: []
+          rows: [],
+         //g: {},
         };
       },
       mounted() {
-        this.fillRows()
+        this.fillRows();
+        //this.visGruppe();
       },
+
+      /*
+      mounted() {
+        this.visGruppe();
+      },
+*/
 
 // [{}] <- betyr at array inneholder et objekt
 
       methods: {
-
+        /*
         selectGroup(group) {
           router.push('TodoListOverview2/' + user.bruker_id);
         },
-
+*/
         fillRows() {
           axios.get('http://localhost:9000/rest/gjoremalslisterUndergruppe/1').then(response => {
             //alert('Alle lister til bruker hentet');
@@ -79,23 +90,22 @@
           }).catch(err => {
             console.log(JSON.stringify(err));
           });
-
-          settGruppe(g)
-          {
-            axios.get('http://localhost:9000/http://localhost:9000/rest/undergrupperForBruker/9').then(response => {
+        },
+/*
+          visGruppe(){
+            axios.get('http://localhost:9000/rest/undergrupperForBruker/' + store.state.current_user.bruker_id).then(response => {
               //alert('Alle lister til bruker hentet');
-              let resRows = response.data;
+              let g = response.data;
               console.log(g);
               let obj = {gruppe: g.navn};
-              this.rows.push(obj);
+              this.g.push(obj);
 
             }).catch(err => {
               console.log(JSON.stringify(err));
             });
 
           }
-        }
-
+          */
       }
     }
 

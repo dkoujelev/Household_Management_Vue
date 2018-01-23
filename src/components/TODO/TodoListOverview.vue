@@ -19,7 +19,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="row in rows">
-                  <td @click="selectGroup(group)"> {{row.gruppenavn}} </td>
+                  <td><a @click=" selectGroup(row.undergruppe_id)"> {{row.gruppenavn}}</a></td>
                   <td>Kommer</td>
                   <td class="is-icon">
                     <a href="#">
@@ -42,87 +42,50 @@
   </div>
 </template>
 
-  <!-- <template>
-
-  <div class="box">
-
-  <div>
-    <table>
-      <thead>
-      <th>Gruppenavn</th>
-      <th></th>
-      <th>Status</th>
-      <th></th>
-      </thead>
-      <tr v-for="row in rows">
-        <a @click="selectGroup(group)">{{row.gruppenavn}}  <label></label></a>
-        <td>kommer</td>
-        <td>Status</td>
-      </tr>
-    </table>
-  </div>
-</template> -->
-
 
 <script>
   //import TodoList from '@/components/TODO/TodoList'
   import axios from 'axios';
   import {store} from '@/store'
   import Vue from 'vue'
+  import router from '@/router/index'
 
     export default {
       name: 'TodoListOverview',
-      data(){
+      data() {
         return {
           rows: []
         };
       },
-      mounted(){
-      this.fillRows()
-  },
+      mounted() {
+        this.fillRows()
+      },
 
 // [{}] <- betyr at array inneholder et objekt
 
       methods: {
 
-          selectGroup(group){
-            router.push('TodoListOverview2/' + user.bruker_id);
-          },
+        selectGroup(group) {
+          router.push('/TodoListOverview2/' + group);
+        },
 
-          fillRows() {
-            axios.get('http://localhost:9000/rest/undergrupperForBruker/9').then(response => {
-              //alert('Alle lister til bruker hentet');
-              let resRows = response.data;
-              console.log(resRows);
-              for (let i = 0; i < resRows.length; i++) {
-                let obj = {gruppenavn: resRows[i].navn , gruppe: resRows[i].navn, date: resRows[0].opprettet};
-                this.rows.push(obj);
-              }
-            }).catch(err => {
-              console.log(JSON.stringify(err));
-            });
-          }
-      }
-
-
-      /*
-      methods: {
-
-        fillRows(){
-          axios.get('http://localhost:9000/rest/gjoremalslisterUndergruppe/1').then(response => {
+        fillRows() {
+          axios.get('http://localhost:9000/rest/undergrupperForBruker/' + store.state.current_user.bruker_id).then(response => {
             //alert('Alle lister til bruker hentet');
             let resRows = response.data;
-            for(let i = 0; i < resRows.length; i++){
-              let obj = {undergruppeListe: resRows[i].undergruppe_id, navnTodo: resRows[i].navn, dato: resRows[i].opprettet};
+            console.log(resRows);
+            for (let i = 0; i < resRows.length; i++) {
+              let obj = {undergruppe_id: resRows[i].undergruppe_id, gruppenavn: resRows[i].navn, gruppe: resRows[i].navn, date: resRows[0].opprettet};
               this.rows.push(obj);
             }
           }).catch(err => {
             console.log(JSON.stringify(err));
           });
-          }
         }
-*/
       }
+    }
+
+
 
 </script>
 
