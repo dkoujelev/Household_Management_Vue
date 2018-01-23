@@ -318,11 +318,11 @@
                 //this.selected_maingroup_name = response.data[0].navn;
                 this.showInviteSection=true;
                 this.showGroupSelect=false;
-                this.showApproveSection=true;
+                //this.showApproveSection=true;
             }else{ //User is admin of several groups. Group must be selected in order to invite.
                 this.showInviteSection=true;
                 this.showGroupSelect=true;
-                this.showApproveSection=true;
+                //this.showApproveSection=true;
             };
 
           }).catch(err => {
