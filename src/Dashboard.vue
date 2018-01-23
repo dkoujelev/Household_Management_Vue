@@ -2,7 +2,7 @@
 
   <div>
     <!-- START NAV -->
-    <nav class="navbar is-dark is-fixed-top">
+    <nav class="navbar is-light is-fixed-top">
         <div class="navbar-brand">
 
             <router-link class="navbar-item" to="/home">
@@ -17,7 +17,7 @@
         </div>
           <div id="navMenu1" class="navbar-menu" v-bind:class="{'is-active': showBurger}">
             <div class="navbar-start" @click="showBurger = false">
-              <router-link class="navbar-item" v-if="showNav" to="/Nyhetsfeed">Nyhet</router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/Nyhetsfeed"><i class="fas fa-home"></i>Nyhet</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/TodoList">Gjøremål</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/Shoppinglists">Handlelister</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/ShowExpences">Utgifter</router-link>
@@ -106,7 +106,10 @@ export default {
 
 <style>
   body {
-    background-color: whitesmoke;
+    background-color: green;
     height: 100vh;
+  }
+  navbar{
+    background-color: transparent;
   }
 </style>
