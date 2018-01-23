@@ -1,18 +1,16 @@
-let connection_prod = require('../connection_prod');
-
 module.exports = function(connection, asdf){
 
 // Denne filen brukes ikke
 
 // Hente et bestemt regnskap
   server.get('rest/regnskap/:regnskap_id', function(req,res,next){
-    connection_prod.connection.query('SELECT * FROM Regnskap WHERE regnskap_id=?', [req.params.regnskap_id], function(err,rows,fields){
+    connection.connection.query('SELECT * FROM Regnskap WHERE regnskap_id=?', [req.params.regnskap_id], function(err,rows,fields){
       if(err || rows.length != 1)
         next(err);
 
       let regnskap = rows[0];
 
-      connection_prod.connection.query('SELECT Kostnad* FROM Kostnad WHERE regnskap_id=?', [req.params.regnskap_id], function(err,rows,fields){
+      connection.connection.query('SELECT Kostnad* FROM Kostnad WHERE regnskap_id=?', [req.params.regnskap_id], function(err,rows,fields){
         if(err)
           return next(err);
 
@@ -31,7 +29,7 @@ module.exports = function(connection, asdf){
   /*
    // Hente regnskap for en undergruppe
    server.get('rest/regnskap/:undergtuppe_id', function(req,res,next){
-   connection_prod.connection.query('SELECT * FROM Regnskap WHERE undergruppe_id=?', [req.params.undergruppe_id], function (err,rows,fields) {
+   connection.connection.query('SELECT * FROM Regnskap WHERE undergruppe_id=?', [req.params.undergruppe_id], function (err,rows,fields) {
    if (err)
    return next(err);
    let regnskaper = [rows.length];
@@ -39,7 +37,7 @@ module.exports = function(connection, asdf){
    if('opprettet' in regnskap)
    regnskap.opprettet = new Date(regnskap.opprettet);
    }
-   connection_prod.connection.query('',[req.params.undergruppe_id, function (err,rows,fields) {
+   connection.connection.query('',[req.params.undergruppe_id, function (err,rows,fields) {
    let regnskaper = [rows.length];
    for(let i = 0; i < rows.length; i++){
    if('opprettet' in regnskaper[i])
