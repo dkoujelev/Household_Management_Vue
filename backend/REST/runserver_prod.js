@@ -1,9 +1,8 @@
-let mysql = require("mysql");
 let connection_prod = require('./connection_prod');
-let server = require("./server");
+let server = require("./server")(connection_prod);
 
 server.listen(9000, function(){
   console.log("STARTED PROD rest server! :)");
 });
 
-require("./runserver.js")(connection_prod.connection, server);
+require("./runserver.js")(connection_prod, server);
