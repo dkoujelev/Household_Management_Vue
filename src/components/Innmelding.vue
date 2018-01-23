@@ -11,10 +11,10 @@
             <div class="field-body">
               <div class="field">
                 <input  type="text" class="input" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
-              <button class="button" v-on:click="joinGroup(innmelding.kollektiv_navn)">
-                Søk medlemskap
-              </button>
-            </div>
+                <button class="button" v-on:click="joinGroup(innmelding.kollektiv_navn)">
+                  Søk medlemskap
+                </button>
+              </div>
             </div>
             {{ joinResult }}
           </div>
@@ -25,11 +25,13 @@
             <div class="field-body">
               <div class="field">
                 <input  type="text" class="input" placeholder="Kollektivets navn" v-model="oppretteMain.navn">
-                <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
-                <button class="button" v-on:click="createMainGroup(oppretteMain.navn)">
-                  Opprett kollektiv
-                </button>
               </div>
+              <div class="field-body">
+                <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
+              </div>
+              <button class="button" v-on:click="createMainGroup(oppretteMain.navn)">
+                Opprett kollektiv
+              </button>
             </div>
             {{ createMainResult }}
           </div>
@@ -37,11 +39,17 @@
           <div v-if="showCreateSubGroupSection===true">
             Skriv inn navnet på gruppen du ønsker å opprette
             <br>
-            <input  type="text" class="input" placeholder="Gruppens navn" v-model="oppretteSub.navn">
-            <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
-            <button class="button" v-on:click="createSubGroup(oppretteSub.navn)">
-              Opprett gruppe
-            </button>
+            <div class="field-body">
+              <div class="field">
+                <input  type="text" class="input" placeholder="Gruppens navn" v-model="oppretteSub.navn">
+              </div>
+              <div class="field-body">
+                <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
+              </div>
+              <button class="button" v-on:click="createSubGroup(oppretteSub.navn)">
+                Opprett gruppe
+              </button>
+            </div>
             {{ createSubResult }}
           </div>
         </div>
