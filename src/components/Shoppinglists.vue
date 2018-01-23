@@ -1,74 +1,51 @@
 <template>
   <div>
-
-    <vue-good-table
-      title="Handlelister"
-      :columns="columns"
-      :rows="rows"
-      :paginate="true"
-      :onClick="click"
-      per-page=5
-    next-text="Neste"
-    prev-text="Forrige"
-    rows-per-page-text="Antall rader"
-    of-text="av"
-
-    />
+    <table>
+      <thead>
+      <th>Handleliste</th>
+      <th>Frist</th>
+      <th></th>
+      </thead>
+      <tr v-for="row in rows">
+        <td>{{row.navn}}</td>
+        <td>{{row.frist}}</td>
+        <td><button class="button is-warning" @click="selectList(row.handleliste_id)">Se handleliste</button></td>
+      </tr>
+    </table>
     <router-link class="button" to="/ShoppingList">Lag handleliste</router-link>
-
   </div>
 </template>
 
 <script>
   import axios from 'axios';
-  import Vue from 'vue'
-  import VueGoodTable from 'vue-good-table';
-  Vue.use(VueGoodTable);
-  import Shoppinglist from './ShoppingList/ShoppingList'
-  import router from "../router/index"
+  import router from '@/router'
+  import {store} from '@/store'
 
   export default {
     name: 'Shoppinglists',
-    components: {Shoppinglist},
 
     data(){
       return {
-        columns: [
-          {
-            label: 'Navn',
-            field: 'navn',
-            filterable: false
-          },
-          {
-            label: 'Frist',
-            field: 'frist ',
-            filterable: false
-          },
-        ],
-        rows: [],
-        handleliste_id: []
+        rows: []
       };
     },
     mounted(){
       this.fillRows();
     },
     methods: {
-      click(row, index){
-        let id = this.handleliste_id[row.originalIndex];
-        this.$root.$data.handleliste_id = id;
-        router.push("ViewShoppingList");
+      selectList(id){
+        router.push("/ViewShoppingList/" + id);
       },
       formateDate(raw){
         return raw.substring(8, 10) + " " + raw.substring(5, 7) + " " + raw.substring(0,4)
           + " kl: " + raw.substring(11, 16);
       },
       fillRows(){
-        axios.get('http://localhost:9000/rest/handlelisteForUndergruppe/2').then(response => {
+        axios.get('http://localhost:9000/rest/handlelisteForUndergruppe/' + store.state.current_group.undergruppe_id).then(response => {
           let resRows = response.data;
           for(let i = 0; i < resRows.length; i++){
             let date = this.formateDate(resRows[i].frist);
-            let obj = {navn: resRows[i].navn, Frist: date};
-            this.handleliste_id.push(resRows[i].handleliste_id);
+            let obj = {handleliste_id: resRows[i].handleliste_id, navn: resRows[i].navn, frist: date};
             this.rows.push(obj);
           }
         }).catch(err => {

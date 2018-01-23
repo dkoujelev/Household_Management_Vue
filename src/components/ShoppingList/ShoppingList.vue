@@ -14,9 +14,8 @@
               </div>
 
               <label class="label">Skriv inn varer</label>
+
               <div class="field" v-for="row in rows">
-
-
                 <div class="field-body">
                   <button class="button is-danger" @click="removeRow(row)">
                     <i class="fa fa-trash-o" aria-hidden="true"></i>
@@ -25,12 +24,12 @@
                   <button class="button is-danger" id="decrementButton" @click="decrement(row)">
                     <i class="fa fa-minus" id="minus" aria-hidden="true"></i>
                   </button>
-                  <button class="button is-info" @click="row.antall++" id="incrementButton">
+                  <div>
+                    <button class="button is-light">{{row.antall}}</button>
+                  </div>
+                  <button class="button is-info" @click="increment(row)" id="incrementButton">
                   <i class="fa fa-plus" id="plus" aria-hidden="true" ></i>
                   </button>
-                    <div>
-                      <button class="button is-light">{{row.antall}}</button>
-                    </div>
                 </div>
               </div>
 
@@ -43,29 +42,24 @@
             <div class="field">
             </div>
             <div class="control">
-              <button class="button is-link" v-on:click="checkInput">Godkjenn</button>
-              <button class="button is-danger"  @click="">Slett handleliste</button>
+              <button class="button is-link" @click="checkInput">Godkjenn</button>
+              <button class="button is-danger"  @click="deleteList">Slett handleliste</button>
               <router-link class="button" to="/Shoppinglists">Avbrytt</router-link>
-
             </div>
           </article>
         </div>
       </div>
     </div>
   </div>
-
-
 </template>
 
 
 
 
 <script>
-  //metode som inneholder et objekt som returnern data
-
   import axios from 'axios';
-  import router from '../../router/index'
-  import Shoppinglists from '../Shoppinglists';
+  import router from '@/router'
+  import {store} from '@/store'
 
   export default {
 
@@ -83,34 +77,34 @@
       }
     },
     methods: {
-      addRow: function () {
+      deleteList(){
+        router.push('shoppinglists');
+      },
+      addRow() {
         this.rows.push({navn: "", antall: 1});
       },
       removeRow: function (row) {
-        //console.log(row);
         this.rows.splice(row, 1);
       },
-      decrement(row){
-        if(row.antall > 1){
-          row.antall--;
-        }
+      increment(row){
+        row.antall++;
       },
-
+      decrement(row){
+        if(row.antall > 1) row.antall--;
+      },
       sendData(){
         let shoppinglist =
         {
           navn: this.name,
           opprettet: new Date(),
           beskrivelse: "",
-          undergruppe_id: 2, //Må leses inn fra komponent (foreldre som inneholder)
+          undergruppe_id: store.state.current_group.undergruppe_id,
           varer: this.rows
         };
-        console.dir(shoppinglist);
 
         axios.post('http://localhost:9000/rest/handleliste', shoppinglist).then( response => {
           alert('handleliste lagt inn!');
           this.$emit('added-shoppinglist', shoppinglist);
-          console.log("1");
           router.push('Shoppinglists');
         }).catch(err => {
           console.log(JSON.stringify(err));
@@ -121,7 +115,6 @@
         let noErrors = true;
         this.errorMessages.name = '';
         if (this.name === "") {
-          console.log("1");
           this.errorMessages.overskrift = 'Meldingen må ha en overskift';
           noErrors = false;
         }
