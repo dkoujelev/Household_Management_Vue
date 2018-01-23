@@ -73,7 +73,7 @@
             </div>
 
             <br>
-            Her kan du invitere nye medlemmer til {{ selected_maingroup.navn }}
+            Her kan du invitere nye medlemmer til {{ selected_maingroup_object.navn }}
 
             <div class="field-body">
               <div class="field">
@@ -85,7 +85,7 @@
           </div>
           <br>
           <div v-if="showApproveSection===true">
-            Disse ønsker å bli med i {{ selected_maingroup.navn }}. Du kan godkjenne eller avvise søknaden(e).
+            Disse ønsker å bli med i {{ selected_maingroup_object.navn }}. Du kan godkjenne eller avvise søknaden(e).
             <dl id="approvalsList">
               <dt v-for="item in approvals"  v-bind:key="item.tid">
                 {{ item.bruker }}
@@ -98,7 +98,7 @@
           </div>
           <br>
           <div v-if="showAvailableSubgroups===true">
-            Dette er alle gruppene som hører inn under {{ selected_maingroup.navn }}:
+            Dette er alle gruppene som hører inn under {{ selected_maingroup_object.navn }}:
             <ul id="availableSubGroupsList">
               <li v-for="option in options_subgroup"  v-bind:key="option.uid">
                 {{ option.navn }}
@@ -199,7 +199,7 @@
     //     return regex.test(email);
     //   },
         selectGroup(theGroup){
-            console.log('DEBUG - selectGroup(' + theGroup + ')');
+           // console.log('DEBUG - selectGroup(' + theGroup + ')');
             console.log('Henter hovedgruppen for kollektiv ' + theGroup.kollektiv_id);
             this.selected_maingroup_object=theGroup;
             axios.get('http://localhost:9000/rest/hovedgruppenForKollektiv/' + theGroup.kollektiv_id).then(response => {
@@ -252,7 +252,7 @@
       },
 
       getAllGroupsFor(bruker_id){
-          console.log('DEBUG - getAllGroupsFor(' + bruker_id + ')');
+         // console.log('DEBUG - getAllGroupsFor(' + bruker_id + ')');
           console.log('Getting all groups for user ' + bruker_id);
           axios.get('http://localhost:9000/rest/kollektivForBruker/' + bruker_id).then(response => {
             this.options_maingroup_nonadmin = response.data.map((item) => {
@@ -287,9 +287,10 @@
             });
             //console.log(this.options_usersgroups);
           });
+          this.showUsersGroups=true;
       },
       getGroupsWhereAdminFor(bruker_id){
-        console.log('DEBUG - getGroupsWhereAdminFor(' + bruker_id + ')');
+       // console.log('DEBUG - getGroupsWhereAdminFor(' + bruker_id + ')');
         console.log('Getting main group(s) where user ' + bruker_id + ' is admin');
         axios.get('http://localhost:9000/rest/kollektivForAdmin/' + bruker_id).then(response => {
             //console.log('kollektivForAdmin:');
@@ -334,7 +335,7 @@
 
 
       getSubGroupsFor(kollektiv_id){
-        console.log('DEBUG - getSubGroupsFor(' + kollektiv_id + ')');
+       // console.log('DEBUG - getSubGroupsFor(' + kollektiv_id + ')');
         console.log('Getting subgroup(s) for group ' + kollektiv_id);
         axios.get('http://localhost:9000/rest/undergrupperForKollektiv/' + kollektiv_id).then(response => {
             this.options_subgroup = response.data.map((item) => {
@@ -361,7 +362,7 @@
 
 
       approve(kollektiv,epost,status){
-        console.log('DEBUG - approve(' + kollektiv + '.....etc)');
+       // console.log('DEBUG - approve(' + kollektiv + '.....etc)');
           //console.log("epost=" + epost + '   ' + "kollektiv=" + kollektiv + '   ' + "status=" + status);
           let tmpDate = new Date;
         axios.put('http://localhost:9000/rest/innmelding', {
@@ -384,7 +385,7 @@
       },
 
       createMainGroup(groupName){
-          console.log('DEBUG - createMainGroup(' + groupName + ')');
+         // console.log('DEBUG - createMainGroup(' + groupName + ')');
           axios.post('http://localhost:9000/rest/kollektiv/' + this.current_user.bruker_id, {
                 navn: this.oppretteMain.navn,
                 beskrivelse: this.oppretteMain.beskrivelse
@@ -400,7 +401,7 @@
       },
 
     createSubGroup(groupName){
-        console.log('DEBUG - createSubGroup(' + groupName + ')');
+       // console.log('DEBUG - createSubGroup(' + groupName + ')');
           axios.post('http://localhost:9000/rest/undergruppe/' + this.current_user.bruker_id, {
                 navn: this.oppretteSub.navn,
                 beskrivelse: this.oppretteSub.beskrivelse,
@@ -418,7 +419,7 @@
       },
 
       joinGroup(groupName){
-          console.log('DEBUG - joinGroup(' + groupName + ')');
+         // console.log('DEBUG - joinGroup(' + groupName + ')');
          axios.get('http://localhost:9000/rest/kollektivMedNavn/' + groupName).then(response => {
              //console.log(groupName + '=' + response.data);
                     if(response.data != null){
@@ -451,7 +452,7 @@
          })
       },
       joinSubGroup(subGroupID){
-          console.log('DEBUG - joinSubGroup(' + subGroupID + ')');
+         // console.log('DEBUG - joinSubGroup(' + subGroupID + ')');
            axios.post('http://localhost:9000/rest/undergruppeLeggTilBruker/' + subGroupID, {
                 undergruppe_id: subGroupID,
                 bruker_id: this.current_user.bruker_id
@@ -464,7 +465,7 @@
            });
       },
       leaveSubGroup(subGroupID){
-          console.log('DEBUG - leaveSubGroup(' + subGroupID + ')');
+         // console.log('DEBUG - leaveSubGroup(' + subGroupID + ')');
             axios.put('http://localhost:9000/rest/undergruppeFjernBruker/' + subGroupID, {
                 undergruppe_id: subGroupID,
                 bruker_id: this.current_user.bruker_id
@@ -477,7 +478,7 @@
            });
       },
       doInvite(){
-        console.log('DEBUG - doInvite()');
+       // console.log('DEBUG - doInvite()');
         //console.log('Doing invite stuff...');
         let tmpDate = new Date;
         axios.post('http://localhost:9000/rest/epost/', {
