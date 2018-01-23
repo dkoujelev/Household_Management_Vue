@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="is-ancestor box" style="background-color: azure">
+    <div class="is-ancestor">
       <h3 class="title is-3">Administrere grupper og kollektiv</h3>
       <div class="is-parent tile">
         <br>
@@ -46,7 +46,7 @@
           </div>
         </div>
       </div>
-      <div class="is-parent tile" style="background-color: azure">
+      <div class="is-parent tile">
         <div class="is-child tile box" style="background-color: azure">
           <div v-if="showUsersGroups===true">
             Du er medlem av følgende kollektiv og grupper:
@@ -123,15 +123,15 @@
     name: 'Innmelding',
     data(){
         return {
-            showCreateMainGroupSection: true,
-            showCreateSubGroupSection: true,
-            showJoinSection: true,
-            showInviteSection: true,
-            showGroupSelect: true,
-            showSubGroupSelect: true,
-            showUsersGroups: true,
-            showApproveSection: true,
-            showAvailableSubgroups:true,
+            showCreateMainGroupSection: false,
+            showCreateSubGroupSection: false,
+            showJoinSection: false,
+            showInviteSection: false,
+            showGroupSelect: false,
+            showSubGroupSelect: false,
+            showUsersGroups: false,
+            showApproveSection: false,
+            showAvailableSubgroups:false,
             current_user: store.state.current_user,
             createMainResult: '',
             createSubResult: '',
