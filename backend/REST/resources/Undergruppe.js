@@ -1,3 +1,4 @@
+
 module.exports = function(connection, server){
 
 // Hent en spesifikk undergruppe
@@ -5,6 +6,58 @@ module.exports = function(connection, server){
     console.log('DEBUG - rest/undergruppe/:undergruppe_id');
     connection.query("SELECT * FROM Undergruppe WHERE undergruppe_id=?", [req.params.undergruppe_id], function(err, rows, fields){
       res.send(err ? err : (rows.length == 1 ? rows[0] : null));
+      return next();
+    });
+  });
+
+  // Oppdater medlemsskap i undergruppe
+  // Send f.eks. inn dette for å ha brukere 4,5 og 6 meldt inn (og kun dem):
+  // {undergruppe_id: 1, brukere: [4,5,6]}
+  server.post('rest/oppdaterMedlemsskapIUndergruppe', (req,res,next) => {
+
+    // let brukere_i_basen = rows.map(row => row.bruker_id);
+    // let brukere_fra_request = req.body.brukere;
+    //
+    //
+    // let row_slett = [];
+    // let row_opprett = [];
+    //
+    // for(let bruker_i_basen of brukere_i_basen){
+    //   if(!req.body.brukere.includes(bruker_i_basen))
+    //     row_slett.push([bruker_i_basen, req.body.undergruppe_id]);
+    // }
+    // for(let bruker_fra_request of brukere_fra_request){
+    //   if(!brukere_i_basen.includes(bruker_fra_request))
+    //     row_opprett.push([bruker_fra_request, req.body.undergruppe_id]);
+
+    let opprett_brukere = [];
+    for(bruker of req.body.brukere)
+      opprett_brukere.push([bruker, req.body.undergruppe_id]);
+
+    connection.query('DELETE FROM Bruker_Undergruppe WHERE undergruppe_id=?', [req.body.undergruppe_id], (err,rows,fields) => {
+      if(err) //TODO: Transactions
+        return next(err);
+
+      connection.query('INSERT INTO Bruker_Undergruppe (bruker_id, undergruppe_id) VALUES ?', [opprett_brukere], (err,rows,fields) => {
+        if(err)
+          return next(err);
+
+        res.send(rows);
+        return next();
+      });
+    });
+  });
+
+  // Hent alle medlemmer i en undergruppe
+  server.get('rest/medlemmerIUndergruppe/:undergruppe_id', (req,res,next) => {
+    connection.query('SELECT Bruker.* FROM Undergruppe ' +
+      'INNER JOIN Bruker_Undergruppe ON Undergruppe.undergruppe_id=Bruker_Undergruppe.undergruppe_id ' +
+      'INNER JOIN Bruker ON Bruker_Undergruppe.bruker_id=Bruker.bruker_id ' +
+      'WHERE Undergruppe.undergruppe_id = ?', req.params.undergruppe_id, (err,rows,fields) => {
+      if(err)
+        return next(err);
+
+      res.send(rows);
       return next();
     });
   });

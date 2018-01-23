@@ -19,7 +19,7 @@
         </button>
         {{ createMainResult }}
     </div>
-    
+
     <div v-if="showCreateSubGroupSection===true">
         Skriv inn navnet på gruppen du ønsker å opprette
         <input  type="text" placeholder="Gruppens navn" v-model="opprette.navn">
@@ -29,7 +29,7 @@
         </button>
         {{ createSubResult }}
     </div>
-    
+
 
     <div v-if="showUsersGroups===true">
         Du er medlem av følgende kollektiv og grupper:
@@ -42,10 +42,10 @@
         {{ leaveSubResult }}
     </div>
 
-    <div v-if="showInviteSection===true">              
+    <div v-if="showInviteSection===true">
         <div v-if="showGroupSelect===true">
             Du er administrator for flere kollektiv.
-            Nå administreres 
+            Nå administreres
             <select v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
                 <option disabled value="">Velg kollektiv</option>
                 <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
@@ -54,7 +54,7 @@
             </select>
         </div>
         Her kan du invitere nye medlemmer til {{ selected_maingroup.navn }}
-            
+
     <input  type="email" placeholder="Email" v-model="innmelding.epost">
     <button v-on:click="doInvite">Send invitasjon</button>
     {{ mailResult }}
@@ -83,39 +83,37 @@
         </ul>
         {{ joinSubResult }}
     </div>
-       <div v-if="showInviteSection===true">
-         <div v-if="showGroupSelect===true">
-           Du er administrator for flere kollektiv.
-           Nå administreres
-           <select v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
-             <option disabled value="">Velg kollektiv</option>
-             <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
-               {{ option.text }}
-             </option>
-           </select>
-         </div>
-         Her kan du invitere nye medlemmer til {{ selected_maingroup_name }}
-
-         <input  type="email" placeholder="Email" v-model="innmelding.epost">
-         <button v-on:click="doInvite">Send invitasjon</button>
-         {{ mailResult }}
+     <div v-if="showInviteSection===true">
+       <div v-if="showGroupSelect===true">
+         Du er administrator for flere kollektiv.
+         Nå administreres
+         <select v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
+           <option disabled value="">Velg kollektiv</option>
+           <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
+             {{ option.text }}
+           </option>
+         </select>
        </div>
+       Her kan du invitere nye medlemmer til {{ selected_maingroup_name }}
 
-       <div v-if="showApproveSection===true">
-         Disse ønsker å bli med i {{ selected_subgroup.navn }}. Du kan godkjenne eller avvise søknaden(e).
-         <dl id="approvalsList">
-           <dt v-for="item in approvals"  v-bind:key="item.tid">
-             {{ item.bruker }}
-           </dt>
-           <dd v-for="item in approvals" v-bind:key="item.tid">
-             <button v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
-             <button v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
-           </dd>
-         </dl>
-       </div>
+       <input  type="email" placeholder="Email" v-model="innmelding.epost">
+       <button v-on:click="doInvite">Send invitasjon</button>
+       {{ mailResult }}
      </div>
-   </div>
- </div>
+
+     <div v-if="showApproveSection===true">
+       Disse ønsker å bli med i {{ selected_subgroup.navn }}. Du kan godkjenne eller avvise søknaden(e).
+       <dl id="approvalsList">
+         <dt v-for="item in approvals"  v-bind:key="item.tid">
+           {{ item.bruker }}
+         </dt>
+         <dd v-for="item in approvals" v-bind:key="item.tid">
+           <button v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
+           <button v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
+         </dd>
+       </dl>
+     </div>
+  </section>
 </template>
 
 <script>
@@ -201,7 +199,7 @@
     //   },
         selectGroup(theGroup){
             console.log('DEBUG - selectGroup(' + theGroup + ')');
-            console.log('Henter hovedgruppen for kollektiv ' + theGroup.kollektiv_id);              
+            console.log('Henter hovedgruppen for kollektiv ' + theGroup.kollektiv_id);
             this.selected_maingroup_object=theGroup;
             axios.get('http://localhost:9000/rest/hovedgruppenForKollektiv/' + theGroup.kollektiv_id).then(response => {
                 this.options_defaultgroup = response.data.map((item) => {
@@ -248,7 +246,7 @@
             //             uid: item.undergruppe_id
             //         };
             //     });
-            // });       
+            // });
             this.getSubGroupsFor(theGroup.kollektiv_id);
       },
 
@@ -332,7 +330,7 @@
           });
       },
 
-      
+
 
       getSubGroupsFor(kollektiv_id){
         console.log('DEBUG - getSubGroupsFor(' + kollektiv_id + ')');
