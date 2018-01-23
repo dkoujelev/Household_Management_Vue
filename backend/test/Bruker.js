@@ -46,7 +46,7 @@ let axios_eksempel = function(){
 };
 
 
-describe.skip('Bruker',() => {
+describe('Bruker',() => {
 
   // Legg inn et par testusers i basen. Begge testusers er medlem i test_kollektiv som også ligger i basen.
   // Basen tømmes og dette innholdet legges inn på nytt før hver test kjøres.
