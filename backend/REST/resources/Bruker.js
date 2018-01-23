@@ -5,7 +5,7 @@ module.exports = function(connection, server) {
 
   // Hent en bestemt bruker
   server.get('rest/bruker/:bruker_id', function (req, res, next) {
-    connection.connection.query("SELECT * FROM Bruker WHERE bruker_id=?", [req.params.bruker_id], function (err, rows, fields) {
+    connection.query("SELECT * FROM Bruker WHERE bruker_id=?", [req.params.bruker_id], function (err, rows, fields) {
       res.send(err ? err : (rows.length == 1 ? rows[0] : null));
       return next();
     });
@@ -14,7 +14,7 @@ module.exports = function(connection, server) {
 // Finn bruker med bestemt epost
   server.get('rest/brukerMedEpost/:epost', function (req, res, next) {
 
-    connection.connection.query("SELECT * FROM Bruker WHERE epost=?", [req.params.epost], function (err, rows, fields) {
+    connection.query("SELECT * FROM Bruker WHERE epost=?", [req.params.epost], function (err, rows, fields) {
       res.send(err ? err : (rows.length == 1 ? rows[0] : null));
       return next();
     });
@@ -43,7 +43,7 @@ module.exports = function(connection, server) {
     let hash = bcrypt.hashSync(passord, 10); //                  Hashing the password 10 times
     req.body.hashed_passord = hash; //                            Re-inserting the hashed value into the request body
 
-    connection.connection.query("INSERT INTO Bruker SET ?", req.body, function (err, rows, fields) {
+    connection.query("INSERT INTO Bruker SET ?", req.body, function (err, rows, fields) {
 
       if(err)
         return next(err);
@@ -56,7 +56,7 @@ module.exports = function(connection, server) {
 // Hent alle brukere
   server.get('rest/bruker/', function (req, res, next) {
 
-    connection.connection.query("SELECT * FROM Bruker", function (err, rows, fields) {
+    connection.query("SELECT * FROM Bruker", function (err, rows, fields) {
       res.send(err ? err : rows);
       return next();
     });
@@ -66,7 +66,7 @@ module.exports = function(connection, server) {
   server.get('rest/brukerepost/:epost', function (req, res, next) {
 
 
-    connection.connection.query("SELECT * FROM Bruker WHERE epost=?", [req.params.epost], function (err, rows, fields) {
+    connection.query("SELECT * FROM Bruker WHERE epost=?", [req.params.epost], function (err, rows, fields) {
       if(err)
         return next(err);
 
@@ -77,7 +77,7 @@ module.exports = function(connection, server) {
 
 // Hent alle brukere i et bestemt kollektiv
   server.get('rest/brukereIKollektiv/:kollektiv_id', function (req, res, next) {
-    connection.connection.query("SELECT Bruker.* FROM Bruker " +
+    connection.query("SELECT Bruker.* FROM Bruker " +
       "INNER JOIN Bruker_Kollektiv ON Bruker.bruker_id = Bruker_Kollektiv.bruker_id " +
       "INNER JOIN Kollektiv ON Bruker_Kollektiv.kollektiv_id = Kollektiv.kollektiv_id " +
       "WHERE Kollektiv.kollektiv_id = ?", req.params.kollektiv_id, function (err, rows, fields) {
@@ -91,7 +91,7 @@ module.exports = function(connection, server) {
 
     req.body.hashed_passord = bcrypt.hashSync(req.body.hashed_passord+"", 10);
 
-    connection.connection.query("UPDATE Bruker SET ? WHERE bruker_id=?", [req.body, req.body.bruker_id], function (err, rows, fields) {
+    connection.query("UPDATE Bruker SET ? WHERE bruker_id=?", [req.body, req.body.bruker_id], function (err, rows, fields) {
       res.send(err ? err : rows);
       return next();
     });
@@ -99,7 +99,7 @@ module.exports = function(connection, server) {
 
 //Check password
   server.post('rest/password', function (req, res, next) {
-    connection.connection.query("SELECT * FROM Bruker WHERE epost=?", [req.body.email], function (err, rows, fields) {
+    connection.query("SELECT * FROM Bruker WHERE epost=?", [req.body.email], function (err, rows, fields) {
       if (err)
         return next(err);
       //  Check if there even is a user with this email
@@ -120,7 +120,7 @@ module.exports = function(connection, server) {
     let hash = bcrypt.hashSync(passord, 10); //                  Hashing the password 10 times
     /*******INSERT CODE HERE*******/
 
-    connection.connection.query('UPDATE Bruker SET hashed_passord=? WHERE epost=?', [hash, req.body.email], function (err, rows, field) {
+    connection.query('UPDATE Bruker SET hashed_passord=? WHERE epost=?', [hash, req.body.email], function (err, rows, field) {
       if (err) {
         isUpdated = false;
         return next(err);
