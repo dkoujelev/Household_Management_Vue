@@ -12,9 +12,9 @@
 
     <div v-if="showCreateMainGroupSection===true">
         Skriv inn navnet på kollektivet du ønsker å opprette
-        <input  type="text" placeholder="Kollektivets navn" v-model="opprette.navn">
-        <input  type="text" placeholder="Beskrivelse" v-model="opprette.beskrivelse">
-        <button v-on:click="createMainGroup(opprette.navn)">
+        <input  type="text" placeholder="Kollektivets navn" v-model="oppretteMain.navn">
+        <input  type="text" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
+        <button v-on:click="createMainGroup(oppretteMain.navn)">
             Opprett kollektiv
         </button>
         {{ createMainResult }}
@@ -22,9 +22,9 @@
 
     <div v-if="showCreateSubGroupSection===true">
         Skriv inn navnet på gruppen du ønsker å opprette
-        <input  type="text" placeholder="Gruppens navn" v-model="opprette.navn">
-        <input  type="text" placeholder="Beskrivelse" v-model="opprette.beskrivelse">
-        <button v-on:click="createSubGroup(opprette.navn)">
+        <input  type="text" placeholder="Gruppens navn" v-model="oppretteSub.navn">
+        <input  type="text" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
+        <button v-on:click="createSubGroup(oppretteSub.navn)">
             Opprett gruppe
         </button>
         {{ createSubResult }}
@@ -148,7 +148,11 @@
                 epost: '',
                 kollektiv_id: ''
             },
-            opprette:{
+            oppretteMain:{
+                navn: '',
+                beskrivelse: ''
+            },
+            oppretteSub:{
                 navn: '',
                 beskrivelse: ''
             },
@@ -385,8 +389,8 @@
       createMainGroup(groupName){
           console.log('DEBUG - createMainGroup(' + groupName + ')');
           axios.post('http://localhost:9000/rest/kollektiv/' + this.current_user.bruker_id, {
-                navn: this.opprette.navn,
-                beskrivelse: this.opprette.beskrivelse
+                navn: this.oppretteMain.navn,
+                beskrivelse: this.oppretteMain.beskrivelse
             }).then(response => {
                 console.log(response);
                 this.createMainResult="Du har opprettet et kollektiv!";
@@ -401,9 +405,9 @@
     createSubGroup(groupName){
         console.log('DEBUG - createSubGroup(' + groupName + ')');
           axios.post('http://localhost:9000/rest/undergruppe/' + this.current_user.bruker_id, {
-                navn: this.opprette.navn,
-                beskrivelse: this.opprette.beskrivelse,
-                kollektiv_id: this.selected_maingroup.kollektiv_id,
+                navn: this.oppretteSub.navn,
+                beskrivelse: this.oppretteSub.beskrivelse,
+                kollektiv_id: this.selected_subgroup.kollektiv_id,
                 default_gruppe: 0
             }).then(response => {
                 console.log(response);
