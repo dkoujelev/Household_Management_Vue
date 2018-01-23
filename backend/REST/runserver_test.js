@@ -9,4 +9,4 @@ module.exports = function(callback){
   });
 };
 
-require("./runserver.js")(connection, server);
+require("./runserver.js")(connection.connection, server);

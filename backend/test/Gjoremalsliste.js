@@ -14,6 +14,20 @@ let testuser = {
   hashed_passord: 'passord',
 };
 
+let testGjoremal = {
+  navn: "Vask",
+  beskrivelse: "Test",
+  bruker_id: 1,
+  liste_id: 1
+};
+
+let testGjoremal2 = {
+  navn: "Vask",
+  beskrivelse: "Test",
+  bruker_id: 1,
+  liste_id: 1
+};
+
 let test_kollektiv = {navn: 'testkollektiv', beskrivelse: ''};
 
 let testUndergruppe = {
@@ -93,7 +107,7 @@ describe.skip('Gjoremalsliste',() => {
       });
   });
 
-  it('Hent et kollletiv med bestemt id', () => {
+  it('Hent gjoremalsliste med bestemt id', () => {
     // Hent ut testuser og sammenlign
     return axios.get('http://localhost:9100/rest/gjoremalsliste/' + testListe.id).then(response => {
 
@@ -103,7 +117,7 @@ describe.skip('Gjoremalsliste',() => {
     });
   });
 
-  it('Hent et kollektiv med navn', () => {
+  it('Hent gjoremalsliste til en undergruppe', () => {
 
     return axios.get('http://localhost:9100/rest/gjoremalslisterUndergruppe/' + testUndergruppe.undergruppe_id).then((response) => {
       let gjoremaler = response.data;
@@ -116,20 +130,7 @@ describe.skip('Gjoremalsliste',() => {
     });
   });
 
-  it('Hent alle kollektiv', () => {
-
-    return axios.get('http://localhost:9100/rest/gjoremalslisterUndergruppe/' + testUndergruppe.undergruppe_id).then((response) => {
-      let gjoremaler = response.data;
-
-      // Sjekk at vi fikk ut like mange gjoremal som vi satte inn.
-      expect(gjoremaler.length).to.equal(1);
-
-      // Sjekk at brukerne som kom ut er identiske med de som ble satt inn.
-      expect(gjoremaler).to.containSubset([testListe]);
-    });
-  });
-
-  it('Hent alle kollektiv til en bruker', () => {
+  it('Hent gjoremalsliste til et kollektiv', () => {
 
     return axios.get('http://localhost:9100/rest/gjoremalslisterKollektiv/' + test_kollektiv.kollektiv_id).then((response) => {
       let gjoremaler = response.data;
@@ -142,7 +143,7 @@ describe.skip('Gjoremalsliste',() => {
     });
   });
 
-  it('Hent alle kollektiv til en bruker hvor han er admin', () => {
+  it('Hent gjoremalsliste til en bruker', () => {
 
     return axios.get('http://localhost:9100/rest/gjoremalslisterBruker/' + testuser.bruker_id).then((response) => {
       let gjoremaler = response.data;
@@ -155,7 +156,7 @@ describe.skip('Gjoremalsliste',() => {
     });
   });
 
-  it('Oppdater kollektiv', () => {
+  it('Oppdater gjoremalsliste', () => {
 
     let newListe = {
       id: testListe.id,
@@ -167,6 +168,17 @@ describe.skip('Gjoremalsliste',() => {
         return axios.get('http://localhost:9100/rest/gjoremalsliste/' + newListe.id).then(response => {
           expect(response.data).to.containSubset(newListe);
         });
+      });
+  });
+
+  it('Favorittiser gjoremalsliste', () => {
+
+    testListe.favoritt = 1;
+    return axios.put('http://localhost:9100/rest/favorittGjoremalsliste/', testListe)
+      .then(response => {
+        return axios.get('http://localhost:9100/rest/gjoremalsliste/' + testListe.id)
+      }).then(response => {
+        expect(response.data.favoritt).to.equal(testListe.favoritt);
       });
   });
 
