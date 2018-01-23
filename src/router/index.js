@@ -24,6 +24,8 @@ import NewUser from '@/components/NewUser'
 import ChangePassword from '@/components/ChangePassword'
 import Grupper from '@/components/Grupper'
 import UserInfo from '@/components/UserInfo'
+import ShowAccounting from '@/components/ShowAccounting.vue'
+import GjeldUtSpesifisert from '@/components/Gjeld/GjeldUtSpesifisert.vue'
 
 
 Vue.use(Router);
@@ -155,6 +157,16 @@ export default new Router({
         path: '/UserInfo',
         name: 'UserInfo',
         component: UserInfo
+      },
+      {
+        path: '/ShowAccounting',
+        name: 'ShowAccounting',
+        component: ShowAccounting
+      },
+      {
+        path: '/GjeldUtSpesifisert/:bruker_skylder_id',
+        name: 'GjeldUtSpesifisert',
+        component: GjeldUtSpesifisert
       }
     ]
   }

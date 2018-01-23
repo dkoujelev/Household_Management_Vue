@@ -45,7 +45,7 @@
               </p>
               <p class="control">
                 <br/>
-                <button class="button is-primary is-medium is-fullwidth" v-on:click="passMatch">
+                <button class="button is-link is-medium is-fullwidth" v-on:click="passMatch">
                   <i class="fa fa-user"></i>
                   &nbsp Lag bruker
                 </button>

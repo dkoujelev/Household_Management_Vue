@@ -3,7 +3,7 @@ let util = require('../util');
 module.exports = function(connection, server) {
   // Legg til en ny vare
   server.post('rest/vare/', function (req, res, next) {
-    connection.query('INSERT INTO Vare VALUE ?', req.body, function (err, rows, fields) {
+    connection.query('INSERT INTO Vare SET ?', req.body, function (err, rows, fields) {
       if(err)
         return next(err);
       res.send(rows);
