@@ -18,10 +18,8 @@
 
 <script>
   import axios from 'axios';
-  import Vue from 'vue'
-  import VueGoodTable from 'vue-good-table';
   import router from '@/router'
-  Vue.use(VueGoodTable);
+  import {store} from '@/store'
 
   export default {
     name: 'Shoppinglists',
@@ -43,7 +41,7 @@
           + " kl: " + raw.substring(11, 16);
       },
       fillRows(){
-        axios.get('http://localhost:9000/rest/handlelisteForUndergruppe/2').then(response => {
+        axios.get('http://localhost:9000/rest/handlelisteForUndergruppe/' + store.state.current_group.undergruppe_id).then(response => {
           let resRows = response.data;
           for(let i = 0; i < resRows.length; i++){
             let date = this.formateDate(resRows[i].frist);

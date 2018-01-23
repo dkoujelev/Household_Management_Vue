@@ -41,10 +41,7 @@ router.beforeEach((to,from,next) => {
       axios.get('http://localhost:9000/rest/kollektivForBruker/' + store.state.current_user.bruker_id).then(response => {
         store.commit('isMember', response.data.length > 0);
         console.log('updated');
-        if (response.data.length === 0) router.push('NewUser');
-        else{
-          store.commit('current_group', response.data[0]);
-        }
+        if (store.state.isMember && store.state.loggedIn) router.push('NewUser');
         return next();
       });
     }

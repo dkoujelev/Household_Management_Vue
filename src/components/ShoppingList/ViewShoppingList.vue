@@ -10,9 +10,11 @@
         <td>{{row.vare}}</td>
         <td>{{row.antall}}</td>
         <td><input type="checkbox" class="checkbox"/></td>
+        <td><button class="button">Fjern vare</button></td>
       </tr>
     </table>
     <br />
+    <button class="button">Legg til vare</button>
     <button class="button is-danger">Slett liste</button>
   </div>
 </template>
