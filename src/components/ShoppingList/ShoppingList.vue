@@ -43,8 +43,8 @@
             <div class="field">
             </div>
             <div class="control">
-              <button class="button is-link" v-on:click="checkInput">Godkjenn</button>
-              <button class="button is-danger"  @click="">Slett handleliste</button>
+              <button class="button is-link" @click="checkInput">Godkjenn</button>
+              <button class="button is-danger"  @click="deleteList">Slett handleliste</button>
               <router-link class="button" to="/Shoppinglists">Avbrytt</router-link>
 
             </div>
@@ -53,8 +53,6 @@
       </div>
     </div>
   </div>
-
-
 </template>
 
 
@@ -83,6 +81,9 @@
       }
     },
     methods: {
+      deleteList(){
+        router.push('shoppinglists');
+      },
       addRow: function () {
         this.rows.push({navn: "", antall: 1});
       },
