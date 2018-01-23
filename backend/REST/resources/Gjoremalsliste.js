@@ -8,30 +8,28 @@ module.exports = function(connection, server) {
       if (err)
         return next(err);
       let liste = rows[0];
-      if(typeof liste !== 'undefined' && rows.length === 1) {
-        if ('opprettet' in liste)
-          liste.opprettet = new Date(liste.opprettet);
-        connection.query("SELECT Gjoremal.* FROM Gjoremal " +
-          "INNER JOIN Gjoremalsliste ON Gjoremalsliste.id = Gjoremal.liste_id WHERE Gjoremalsliste.id=?", [req.params.id], function (err, rows, fields) {
-          if (err)
-            return next(err);
-          for (let gjoremal of rows) {
-            if ('start' in gjoremal)
-              gjoremal.start = new Date(gjoremal.start);
-            if ('frist' in gjoremal)
-              gjoremal.frist = new Date(gjoremal.frist);
-            if ('ferdig' in gjoremal)
-              gjoremal.ferdig = new Date(gjoremal.ferdig);
-          }
-          liste.gjoremal = JSON.parse(JSON.stringify(rows));
-          /*
-          res.send(liste);
-          return next();
-          */
-        });
+      if(rows.length !== 1){
+        res.send('Gjoremalsliste not found!');
+        return next();
       }
-      res.send(liste);
-      return next();
+      if ('opprettet' in liste)
+        liste.opprettet = new Date(liste.opprettet);
+      connection.query("SELECT Gjoremal.* FROM Gjoremal " +
+        "INNER JOIN Gjoremalsliste ON Gjoremalsliste.id = Gjoremal.liste_id WHERE Gjoremalsliste.id=?", [req.params.id], function (err, rows, fields) {
+        if (err)
+          return next(err);
+        for (let gjoremal of rows) {
+          if ('start' in gjoremal)
+            gjoremal.start = new Date(gjoremal.start);
+          if ('frist' in gjoremal)
+            gjoremal.frist = new Date(gjoremal.frist);
+          if ('ferdig' in gjoremal)
+            gjoremal.ferdig = new Date(gjoremal.ferdig);
+        }
+        liste.gjoremal = JSON.parse(JSON.stringify(rows));
+        res.send(liste);
+        return next();
+      });
     });
   });
 

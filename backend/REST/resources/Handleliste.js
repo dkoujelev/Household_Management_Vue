@@ -119,7 +119,7 @@ module.exports = function(connection, server){
   });
 
 // Oppdater en handleliste
-  server.put('res/handleliste/', function (req,res,next) {
+  server.put('rest/handleliste/', function (req,res,next) {
     /*
     let varer;
     if('varer' in req){

@@ -5,7 +5,7 @@ module.exports = function(connection, server){
   server.get('rest/kollektiv/:kollektiv_id',function(req, res, next){
     //console.log('DEBUG - rest/kollektiv/:kollektiv_id');
     connection.query("SELECT * FROM Kollektiv WHERE kollektiv_id=?", [req.params.kollektiv_id], function(err, rows, fields){
-      res.send(err ? err : (rows.length == 1 ? rows[0] : null));
+      res.send(err ? err : (rows.length == 1 ? rows[0] : 'Kollektiv not found!'));
       return next();
     });
   });
@@ -20,13 +20,11 @@ module.exports = function(connection, server){
   });
 
 // Hent alle kollektiv
-  server.get('rest/kollektiv/',function(req, res, next){
-    console.log('DEBUG - rest/kollektiv/');
+  server.get('rest/kollektiv',function(req, res, next){
+    //console.log('DEBUG - rest/kollektiv/');
     connection.query("SELECT * FROM Kollektiv", function(err, rows, fields){
-      console.log('DEBUG - rest/kollektiv/YELLO!');
       if(err)
         return next(err);
-      console.log('DEBUG - rest/kollektiv/' + rows.length);
       res.send(rows);
       return next();
     });
@@ -46,11 +44,10 @@ module.exports = function(connection, server){
 
 // Hent alle kollektiv hvor en spesifikk bruker er admin
   server.get('rest/kollektivForAdmin/:bruker_id',function(req, res, next){
-    console.log('DEBUG - rest/kollektivForAdmin/:bruker_id');
+    //console.log('DEBUG - rest/kollektivForAdmin/:bruker_id');
     connection.query("SELECT Kollektiv.* FROM Bruker_Kollektiv " +
     "INNER JOIN Kollektiv ON Bruker_Kollektiv.kollektiv_id = Kollektiv.kollektiv_id " +
     "WHERE bruker_id=? AND er_admin=1",req.params.bruker_id, function(err, rows, fields){
-      console.log('DEBUG - rest/kollektivForAdmin/:bruker_id');
       res.send(err ? err : rows);
       return next();
     });
@@ -59,7 +56,7 @@ module.exports = function(connection, server){
 // Opprett nytt kollektiv
   server.post('rest/kollektiv/:bruker_id',function(req, res, next){
     //console.log('DEBUG - rest/kollektiv/:bruker_id');
-    connection.query("INSERT INTO Kollektiv SET ?", req.body, function(err, rows1, fields){
+    connection.query("INSERT INTO Kollektiv SET ?", [req.body], function(err, rows1, fields){
       if(err) return next(err);
 
       connection.query("INSERT INTO Bruker_Kollektiv SET bruker_id=?, kollektiv_id=?, er_admin=1", [req.params.bruker_id, rows1.insertId], function(err,rows2,fields){
@@ -101,5 +98,4 @@ module.exports = function(connection, server){
       return next();
     });
   });
-
 };
