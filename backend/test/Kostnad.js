@@ -100,9 +100,18 @@ describe('Kostnad', () => {
 
   // Vi forventer ett gjeld-objekt i basen
   // 50kr skal betales fra bruker 2 til bruker 1
-  // it('Sjekk at gjeld fordeles rett fra kostnad', () => {
-  //   return axios.
-  // });
+  it('Sjekk at gjeld fordeles rett fra kostnad', () => {
+    return axios.get('http://localhost:9100/rest/gjeld/1')
+      .then(response => {
+        expect(response.data).to.containSubset({
+          gjeld_id: 1,
+          belop: 50,
+          beskrivelse: 'test kostnad',
+          bruker_innkrever_id: 1,
+          bruker_skylder_id: 2
+        });
+      });
+  });
 
 
 });
