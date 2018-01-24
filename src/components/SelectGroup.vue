@@ -3,8 +3,8 @@
       <div class="select is-rounded">
         <select v-model="currentGroup">
           <option v-for="group in groups" :value="group">
-            <h3 v-if="group.default_gruppe">{{group.kollektiv_navn}}</h3>
-            <b v-else>{{group.kollektiv_navn + " - " + group.navn}}</b>
+            <template v-if="group.default_gruppe">{{group.kollektiv_navn}}</template>
+            <template v-else>{{group.kollektiv_navn + " - " + group.navn}}</template>
           </option>
         </select>
       </div>
