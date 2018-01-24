@@ -49,8 +49,6 @@ module.exports = function(connection, server){
     if('handling_utfort' in handleliste)
       handleliste.handling_utfort = new Date(handleliste.handling_utfort).getTime();
 
-    console.log(handleliste);
-
     connection.query('INSERT INTO Handleliste SET ?', [handleliste], function(err,rows,fields){
       if(err)
         return next(err);
@@ -70,7 +68,7 @@ module.exports = function(connection, server){
         varer.push(varen);
       }
 
-      console.log(JSON.stringify(varer));
+      //console.log(JSON.stringify(varer));
 
       connection.query('INSERT INTO Vare (navn, handleliste_id, antall) VALUES ?', [varer], function(err,rows,fields){
         if(err)
