@@ -35,7 +35,7 @@ module.exports = function(connection, server) {
 
 // Hent alle lister i en undergruppe
   server.get('rest/gjoremalslisterUndergruppe/:undergruppe_id', function (req, res, next) {
-    connection.query("SELECT * FROM Gjoremalsliste WHERE undergruppe_id=?", [req.params.undergruppe_id], function (err, rows, fields) {
+    connection.query("SELECT * FROM Gjoremalsliste WHERE undergruppe_id=? ORDER BY (favoritt IS FALSE), opprettet ASC", [req.params.undergruppe_id], function (err, rows, fields) {
       if (err)
         return next(err);
 
@@ -74,7 +74,7 @@ module.exports = function(connection, server) {
 
 // Hent alle lister i et kollektiv
   server.get('rest/gjoremalslisterKollektiv/:kollektiv_id', function (req, res, next) {
-    connection.query("SELECT DISTINCT Gjoremalsliste.* FROM `Gjoremalsliste` INNER JOIN Undergruppe WHERE kollektiv_id=?", req.params.kollektiv_id, function (err, rows, field) {
+    connection.query("SELECT DISTINCT Gjoremalsliste.* FROM `Gjoremalsliste` INNER JOIN Undergruppe WHERE kollektiv_id=? ORDER BY (favoritt IS FALSE), opprettet ASC", req.params.kollektiv_id, function (err, rows, field) {
       if (err)
         return next(err);
       for (liste of rows) {
@@ -90,7 +90,7 @@ module.exports = function(connection, server) {
 // Hent alle lister til en bruker
   server.get('rest/gjoremalslisterBruker/:bruker_id', function (req, res, next) {
     connection.query("SELECT DISTINCT Undergruppe.navn AS undergruppe, Gjoremalsliste.* FROM `Gjoremalsliste` INNER JOIN Gjoremal " +
-      "INNER JOIN Undergruppe ON Undergruppe.undergruppe_id = Gjoremalsliste.undergruppe_id WHERE bruker_id=?", req.params.bruker_id, function (err, rows, field) {
+      "INNER JOIN Undergruppe ON Undergruppe.undergruppe_id = Gjoremalsliste.undergruppe_id WHERE bruker_id=? ORDER BY (favoritt IS FALSE), opprettet ASC", req.params.bruker_id, function (err, rows, field) {
       if (err)
         return next(err);
       for (liste of rows) {
