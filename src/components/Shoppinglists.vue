@@ -1,10 +1,10 @@
 <template>
   <div class="is-ancestor">
     <div class="is-parent">
-      <div class="tile is-child box is-6">
-        <h3>Handlelister</h3>
+      <div class="tile is-child box is-6" style="background-color: lightskyblue">
+        <h1>Handlelister</h1>
       </div>
-      <div class="tile is-child box is-6">
+      <div class="tile is-child box is-6" style="background-color: lightskyblue">
         <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
           <thead>
           <th>Handleliste</th>
@@ -67,7 +67,6 @@
 
               if(cap > 0){
                 cap -= 1;
-                console.log(cap);
               }
               if(cap === 0){
                 break;
