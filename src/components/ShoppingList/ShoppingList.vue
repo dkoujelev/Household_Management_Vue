@@ -1,10 +1,10 @@
 <template>
   <div class="is-ancestor">
     <div class="is-parent">
-      <div class="tile is-child box is-6">
+      <div class="tile is-child box is-6" style="background-color: lightskyblue">
         <h3>Lag din handleliste</h3>
       </div>
-      <div class="tile is-child box is-6">
+      <div class="tile is-child box is-6" style="background-color: lightskyblue">
         <label class="label">Navn å handleliste</label>
         <p class="help is-danger">{{this.errorMessages.overskrift}}</p>
         <div class="control">
@@ -91,7 +91,12 @@
         this.rows.push({navn: "", antall: 1});
       },
       removeRow: function (row) {
-        this.rows.splice(row, 1);
+        for(let i = 0; i < this.rows.length; i++){
+          if(this.rows[i] === row){
+            this.rows.splice(i, 1);
+            break;
+          }
+        }
       },
       increment(row){
         row.antall++;
