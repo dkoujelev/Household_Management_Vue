@@ -1,5 +1,13 @@
 <template>
   <div class="is-ancestor">
+    <Modal :modalVisible.sync="showShoppingList" @modalClosing="closeShoppingList">
+      <h2 slot="title">{{list.name}}</h2>
+      <ViewShoppingList :id.sync="list.id" slot="content" @closingShoppingList="closeShoppingList" @deleteShoppingList="update" @listCompleted="update"/>
+    </Modal>
+    <Modal :modalVisible.sync="showAddShoppingList" @modalClosing="closeAddShoppingList">
+      <h2 slot="title">Lag ny handleliste</h2>
+      <ShoppingList slot="content" @closingAddShoppingList="closeAddShoppingList" @addedShoppingList="update"/>
+    </Modal>
     <div class="is-parent">
       <div class="tile is-child box is-6" style="background-color: lightskyblue">
         <h1>Handlelister</h1>
@@ -14,11 +22,11 @@
           <tr v-for="row in rows">
             <td>{{row.navn}}</td>
             <td>{{row.frist}}</td>
-            <td><button class="button is-warning" @click="selectList(row.handleliste_id)">Se handleliste</button></td>
+            <td><button class="button is-warning" @click="selectList(row)">Se handleliste</button></td>
           </tr>
         </table>
         <br v-if="len === -1">
-        <router-link class="button is-link" to="/ShoppingList" v-if="len === -1">Lag handleliste</router-link>
+        <button class="button is-link" @click="openAddShoppingList" v-if="len === -1">Lag handleliste</button>
       </div>
     </div>
   </div>
@@ -28,11 +36,19 @@
   import axios from 'axios';
   import router from '@/router'
   import {store} from '@/store'
+  import Modal from '@/components/Modal'
+  import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
+  import ShoppingList from '@/components/ShoppingList/ShoppingList'
 
   export default {
     name: 'Shoppinglists',
     props: [ 'value' ],
-
+    components: { Modal, ViewShoppingList, ShoppingList },
+    computed: {
+      len: function () {
+        return (isNaN(Number.parseInt(this.value)) ? -1 : this.value);
+      }
+    },
     asyncComputed:{
         rows(){
           let rows = [];
@@ -62,22 +78,44 @@
           });
         }
     },
-    computed: {
-      len: function () {
-        return (isNaN(Number.parseInt(this.value)) ? -1 : this.value);
-      }
-    },
-
     data(){
-      return {};
+      return {
+        list: {},
+        showShoppingList: false,
+        showAddShoppingList: false
+      };
+    },
+    mounted(){
+      this.update();
     },
     methods: {
-      selectList(id){
-        router.push("/ViewShoppingList/" + id);
+      update(){
+        this.fillRows();
+        this.closeAddShoppingList();
+        this.closeShoppingList();
+      },
+      openShoppingList(){
+        this.showShoppingList = true;
+      },
+      closeShoppingList(){
+        this.showShoppingList = false;
+      },
+      openAddShoppingList(){
+        this.showAddShoppingList = true;
+      },
+      closeAddShoppingList(){
+        this.showAddShoppingList = false;
+      },
+      selectList(row){
+        this.list.name =  row.navn;
+        this.list.id = row.handleliste_id;
+        this.openShoppingList();
       },
       formateDate(raw){
         return raw.substring(8, 10) + " " + raw.substring(5, 7) + " " + raw.substring(0,4)
           + " kl: " + raw.substring(11, 16);
+      },
+      fillRows(){
       }
     }
   }
