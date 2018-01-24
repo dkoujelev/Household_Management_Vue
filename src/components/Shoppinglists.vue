@@ -31,6 +31,13 @@
 
   export default {
     name: 'Shoppinglists',
+    props: [ 'value' ],
+
+    computed: {
+      len: function () {
+        return (isNaN(Number.parseInt(this.value)) ? -1 : this.value);
+      }
+    },
 
     data(){
       return {
@@ -51,11 +58,20 @@
       fillRows(){
         axios.get('http://localhost:9000/rest/handlelisteForUndergruppe/' + store.state.current_group.undergruppe_id).then(response => {
           let resRows = response.data;
+          let cap = this.len;
           for(let i = 0; i < resRows.length; i++){
             if(resRows[i].handling_utfort === "1970-01-01T00:00:00.000Z") {
               let date = this.formateDate(resRows[i].frist);
               let obj = {handleliste_id: resRows[i].handleliste_id, navn: resRows[i].navn, frist: date};
               this.rows.push(obj);
+
+              if(cap > 0){
+                cap -= 1;
+                console.log(cap);
+              }
+              if(cap === 0){
+                break;
+              }
             }
           }
         }).catch(err => {
@@ -63,7 +79,6 @@
         });
       }
     }
-
   }
 </script>
 

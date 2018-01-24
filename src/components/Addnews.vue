@@ -42,6 +42,7 @@
 
   export default {
     name: 'Addnews',
+    props: [ '' ],
     data() {
       return {
         melding: {

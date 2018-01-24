@@ -42,13 +42,18 @@
 </template>
 
 <script>
-
   import axios from 'axios';
   import Vue from 'vue'
   import {store} from '@/store'
 
   export default {
     name: 'Nyhetsfeed',
+    props: [ 'value' ],
+    computed: {
+      len: function () {
+        return (isNaN(Number.parseInt(this.value)) ? -1 : this.value);
+      }
+    },
     data(){
       return {
         rows: []
@@ -76,12 +81,19 @@
           let brukere;
           axios.get('http://localhost:9000/rest/bruker').then(res => {
             brukere = res.data;
-            console.log(resRows[0].sendt);
+            let cap = this.len;
             for(let i = 0; i < resRows.length; i++){
               let date = this.formateDate(resRows[i].sendt);
               let obj = {hvem: brukere[resRows[i].skrevet_av_bruker],melding_id: resRows[i].melding_id, overskrift: resRows[i].overskrift, nyhet: resRows[i].tekst, nar: date,
                 knapper: (resRows[i].skrevet_av_bruker === store.state.current_user.bruker_id)};
               this.rows.push(obj);
+              console.log(cap);
+              if(cap > 0){
+                cap -= 1;
+              }
+              if(cap === 0){
+                break;
+              }
             }
           });
           }).catch(err => {
