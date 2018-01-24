@@ -13,16 +13,19 @@
             <th scope="col">Utgift for:</th>
             <th scope="col">Dato:</th>
             <th scope="col">Delsum per handletur:</th>
-            <th scope="col">Status: </th>
+            <th scope="col">Handleliste </th>
 
             </thead>
 
             <tbody>
-              <tr v-for="debt in debts" @click="selectUser(user_owes)">
+              <tr v-for="debt in debts"">
                 <td data-label="Utgift for:">  Handletur  </td>
                 <td data-label="Dato:" Dato> 22.01.18 </td>
                 <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
-                <td data-label="Status:" style="color: red"> Ubetalt </td>
+                <td data-label="Tilknyttet handleliste">
+                  <a v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</a>
+                  <p v-else>Ingen handleliste</p>
+                </td>
               </tr>
             </tbody>
 
@@ -73,11 +76,12 @@
 
   import axios from 'axios';
   import {store} from '../../store';
+  import router from '@/router';
 
   export default {
     created(){
-      axios.post('http://localhost:9000/rest/gjeldSpesifisert', {skylder: this.$route.params.bruker_skylder_id ,
-        innkrever: store.state.current_user.bruker_id})
+      axios.post('http://localhost:9000/rest/gjeldSpesifisert', {skylder: store.state.current_user.bruker_id ,
+        innkrever: this.$route.params.bruker_skylder_id})
         .then(response => {
           this.debts = response.data;
           return axios.get('http://localhost:9000/rest/bruker/' + this.$route.params.bruker_skylder_id);
@@ -89,9 +93,13 @@
     data(){
       return {
         user_owes: {fornavn: '', etternavn: ''},
-        debts: [],
-        users: []
+        debts: []
       };
+    },
+    methods:{
+      showShoppingList(debt){
+        router.push('ViewShoppingList/' + debt.handleliste_id);
+      }
     }
   };
 </script>

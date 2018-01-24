@@ -24,7 +24,7 @@ server.use(restify.plugins.bodyParser({
   mapParams: true
 }));
 
-server.loginEnabled = false;
+server.loginEnabled = true;
 
 server.use((req, res, next) => {
     //console.log("creating connection");

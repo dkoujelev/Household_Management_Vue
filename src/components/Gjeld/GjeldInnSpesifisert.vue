@@ -9,23 +9,29 @@
         <div class="child tile" style="background-color:white">
           <table class="table">
             <thead>
-            <th scope="col">Utgift for:</th>
+            <th scope="col">Beskrivelse</th>
             <th scope="col">Dato:</th>
             <th scope="col">Delsum per handletur:</th>
-            <th scope="col">Status: </th>
+            <th scope="col">Slett gjeld? </th>
+            <th scope="col">Tilknyttet handleliste</th>
             </thead>
 
             <tbody>
-            <tr v-for="debt in debts" @click="selectUser(user_owes)">
-              <td data-label="Utgift for:">  Handletur  </td>
-              <td data-label="Dato:" Dato> 22.01.18 </td>
+            <tr v-for="debt in debts">
+              <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
+              <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
               <td data-label="delsum:">  {{debt.belop + " kr" }}  </td>
-              <td data-label="Status:"> <input type="checkbox"> </td>
+              <td data-label="Status:"> <input type="checkbox" v-model="debt.delete"> </td>
+              <td data-label="Tilknyttet handleliste">
+                <a v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</a>
+                <p v-else>Ingen handleliste</p>
+              </td>
             </tr>
             </tbody>
           </table>
 
         </div>
+        <a class="button" @click="deleteDebt">Slett valgt gjeld</a>
 
         <div class="box" style="background-color: white">
           <div class="columns">
@@ -35,7 +41,6 @@
         </div> <br>
 
         <button @click="$router.back()">Tilbake</button>
-        <button>Fjern valgt gjeld</button>
       </div>
     </div>
   </div>
@@ -94,18 +99,11 @@
 
   import axios from 'axios';
   import {store} from '../../store';
+  import router from '@/router'
 
   export default {
     created(){
-      axios.post('http://localhost:9000/rest/gjeldSpesifisert', {skylder: this.$route.params.bruker_skylder_id ,
-        innkrever: store.state.current_user.bruker_id})
-      .then(response => {
-        this.debts = response.data;
-        return axios.get('http://localhost:9000/rest/bruker/' + this.$route.params.bruker_skylder_id);
-      }).then(response => this.user_owes = response.data)
-      .catch(err => {
-        console.log(err);
-      });
+      this.loadDebt();
     },
     data(){
       return {
@@ -113,6 +111,36 @@
         debts: [],
         users: []
       };
+    },
+    methods:{
+      loadDebt(){
+        axios.post('http://localhost:9000/rest/gjeldSpesifisert', {skylder: this.$route.params.bruker_skylder_id ,
+          innkrever: store.state.current_user.bruker_id})
+          .then(response => {
+            this.debts = response.data;
+            return axios.get('http://localhost:9000/rest/bruker/' + this.$route.params.bruker_skylder_id);
+          }).then(response => this.user_owes = response.data)
+          .catch(err => {
+            console.log(err);
+          });
+      },
+      deleteDebt(){
+        let debts_to_be_deleted=[];
+        for(let debt of this.debts)
+          if('delete' in debt && debt.delete)
+            debts_to_be_deleted.push(debt.gjeld_id);
+
+        console.log("deleting debts:");
+        console.log(debts_to_be_deleted);
+
+        axios.post('http://localhost:9000/rest/settFlereGjeldSomBetalt',{ids: debts_to_be_deleted})
+          .then(response => {
+            this.loadDebt();
+          }).catch(err => console.log(err));
+      },
+      showShoppingList(debt){
+        router.push('ViewShoppingList/' + debt.handleliste_id);
+      }
     }
   };
 </script>
