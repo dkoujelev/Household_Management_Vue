@@ -27,21 +27,24 @@ router.beforeEach((to,from,next) => {
 
   if(store.state.loggedIn){
     //console.log("router.beforeEach: already logged in, don't redirect");
+    console.log('not updating');
     return next();
   }
 
   axios.get('http://localhost:9000/rest/loggedIn').then(response => {
     if(response.data !== null){
       //console.log("router.beforeEach: User is logged in, proceed with route");
-      store.commit('current_user',response.data);
-      store.commit('loggedIn',true);
+      store.commit('current_user', response.data);
+      store.commit('loggedIn', true);
 
-      //console.log('updated');
+      console.log('updated login');
       //console.log(store.state.current_user.bruker_id);
-      axios.get('http://localhost:9000/rest/kollektivForBruker/' + store.state.current_user.bruker_id).then(response => {
+      axios.get('http://localhost:9000/rest/undergrupperForBruker/' + response.data.bruker_id).then(response => {
         store.commit('isMember', response.data.length > 0);
-        console.log('updated');
-        if (response.data.length === 0) router.push('NewUser');
+        console.log(response.data[0]);
+        console.log('updated groups');
+        store.commit('current_group', response.data[0]);
+        if (!store.state.isMember && store.state.loggedIn) router.push('NewUser');
         return next();
       });
     }

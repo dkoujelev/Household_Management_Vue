@@ -1,32 +1,42 @@
 <template>
-  <div class="is-ancestor" style="background-color: white">
-    <div class=" is-parent is-vertical " style="background-color: saddlebrown">
-      <div class="child tile " style="background-color: lightgray">
-        <h3>Nyhetsfeed</h3>
-      </div>
-      <div class="child tile" style="background-color:lightgray">
-        <table>
-          <thead>
-          <th scope="col">Tittel</th>
-          <th scope="col">Nyhet</th>
-          <th scope="col">Når</th>
-          <th scope="col"></th>
-          </thead>
-          <tr v-for="row in rows">
-            <td data-label="Tittel">{{row.overskrift}}</td>
-            <td data-label="Nyhet">{{row.nyhet}}</td>
-            <td data-label="Når">{{row.nar}}</td>
-            <td v-if="row.knapper"><button class="button is-danger" @click="deleteNews(row)">Slett</button></td>
-            <td v-else></td>
-          </tr>
-        </table>
+  <div class="is-ancestor">
+    <div class=" is-parent is-vertical ">
+      <h2 class="subtitle is-2">Nyheter</h2>
+      <div class="child tile is-vertical">
+        <article class="message is-link" v-for="row in rows">
+          <div class="message-header">
+            <h2>{{row.overskrift}}</h2>
+            <a v-if="row.knapper" @click="deleteNews(row)">Slett</a>
+          </div>
+          <div class="message-body">
+            <h3>{{row.nyhet}}</h3>
 
-      </div>
-        <div class="child tile" style="background-color: lightgrey">
-          <router-link class="button" to="/Addnews">Lag nyhet</router-link>
-        </div>
+            <div class="block">
+              <nav class="level">
+                <!-- left side -->
+                <div class="level-left">
+                  <p class="has-text-grey">{{row.hvem.fornavn}} {{row.hvem.etternavn}}</p>
+                </div>
 
+                <!-- right side -->
+                <div class="level-right">
+                  <div class="level-item">
+                    <p class="has-text-grey">{{row.nar}}</p>
+                  </div>
+                </div>
+              </nav>
+            </div>
+
+
+          </div>
+
+        </article>
       </div>
+      <div class="child box" style="background-color: azure">
+        <router-link class="button is-link" to="/Addnews">Lag nyhet</router-link>
+      </div>
+
+
     </div>
   </div>
 </template>
@@ -63,13 +73,17 @@
       fillRows(){
         axios.get('http://localhost:9000/rest/melding/motta/kollektiv/' + store.state.current_group.undergruppe_id).then(response => {
           let resRows = response.data;
-          console.log(resRows[0].sendt);
-          for(let i = 0; i < resRows.length; i++){
-            let date = this.formateDate(resRows[i].sendt);
-            let obj = {melding_id: resRows[i].melding_id, overskrift: resRows[i].overskrift, nyhet: resRows[i].tekst, nar: date,
-              knapper: (resRows[i].skrevet_av_bruker === store.state.current_user.bruker_id)};
-            this.rows.push(obj);
-          }
+          let brukere;
+          axios.get('http://localhost:9000/rest/bruker').then(res => {
+            brukere = res.data;
+            console.log(resRows[0].sendt);
+            for(let i = 0; i < resRows.length; i++){
+              let date = this.formateDate(resRows[i].sendt);
+              let obj = {hvem: brukere[resRows[i].skrevet_av_bruker],melding_id: resRows[i].melding_id, overskrift: resRows[i].overskrift, nyhet: resRows[i].tekst, nar: date,
+                knapper: (resRows[i].skrevet_av_bruker === store.state.current_user.bruker_id)};
+              this.rows.push(obj);
+            }
+          });
           }).catch(err => {
             console.log(err);
           });
@@ -80,7 +94,16 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  tbody {
+    height: 200px;
+    display: inline-block;
+    width: 100%;
+    overflow: auto;
+  }
   body {
+    height: 230px;
+    overflow-x: auto;
+    overflow-y: auto;
     font-family: "Open Sans", sans-serif;
     line-height: 2.25;
   }

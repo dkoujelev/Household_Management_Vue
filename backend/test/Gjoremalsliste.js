@@ -20,8 +20,8 @@ let testGjoremal = {
 };
 
 let testGjoremal2 = {
-  navn: 'Vask',
-  beskrivelse: 'Test',
+  navn: "Vask",
+  beskrivelse: "Test",
   bruker_id: 1,
   liste_id: 1
 };
@@ -35,7 +35,7 @@ let testUndergruppe = {
 };
 
 let testListe = {
-  navn: 'TestVask'
+  navn: "TestVask"
 };
 
 // Innholdet i denne funksjonen brukes ikke, men er her for å
@@ -59,7 +59,7 @@ let axios_eksempel = function(){
 };
 
 
-describe('Gjoremal',() => {
+describe('Gjoremalsliste',() => {
 
   // Legg inn et par testusers i basen. Begge testusers er medlem i test_kollektiv som også ligger i basen.
   // Basen tømmes og dette innholdet legges inn på nytt før hver test kjøres
@@ -105,53 +105,87 @@ describe('Gjoremal',() => {
       });
   });
 
-  it('Hent gjoremal med bestemt id', () => {
+  it('Hent gjoremalsliste med bestemt id', () => {
     // Hent ut testuser og sammenlign
-    return axios.get('http://localhost:9100/rest/gjoremal/' + testGjoremal.gjoremal_id).then(response => {
+    return axios.get('http://localhost:9100/rest/gjoremalsliste/' + testListe.id).then(response => {
 
       // Vi forventer nå at brukerobjektet fra basen er helt likt testuser-objektet vårt som vi la inn tidligere.
-      expect(response.data).to.containSubset(testGjoremal);
+      expect(response.data).to.containSubset(testListe);
 
     });
   });
 
-  it('Hent gjoremal til en liste', () => {
+  it('Hent gjoremalsliste til en undergruppe', () => {
 
-    return axios.get('http://localhost:9100/rest/gjoremaler/' + testListe.id).then((response) => {
+    return axios.get('http://localhost:9100/rest/gjoremalslisterUndergruppe/' + testUndergruppe.undergruppe_id).then((response) => {
       let gjoremaler = response.data;
 
       // Sjekk at vi fikk ut like mange gjoremal som vi satte inn.
-      expect(gjoremaler.length).to.equal(2);
+      expect(gjoremaler.length).to.equal(1);
 
       // Sjekk at brukerne som kom ut er identiske med de som ble satt inn.
-      expect(gjoremaler).to.containSubset([testGjoremal, testGjoremal2]);
+      expect(gjoremaler).to.containSubset([testListe]);
     });
   });
 
-  it('Oppdater gjoremal', () => {
+  it('Hent gjoremalsliste til et kollektiv', () => {
 
-    let newGjoremal = {
-      gjoremal_id: testGjoremal.gjoremal_id,
-      navn: testGjoremal.navn,
-      beskrivelse: "Updated",
-      frist: new Date().toJSON()
+    return axios.get('http://localhost:9100/rest/gjoremalslisterKollektiv/' + test_kollektiv.kollektiv_id).then((response) => {
+      let gjoremaler = response.data;
+
+      // Sjekk at vi fikk ut like mange gjoremal som vi satte inn.
+      expect(gjoremaler.length).to.equal(1);
+
+      // Sjekk at brukerne som kom ut er identiske med de som ble satt inn.
+      expect(gjoremaler).to.containSubset([testListe]);
+    });
+  });
+
+  it('Hent gjoremalsliste til en bruker', () => {
+
+    return axios.get('http://localhost:9100/rest/gjoremalslisterBruker/' + testuser.bruker_id).then((response) => {
+      let gjoremaler = response.data;
+
+      // Sjekk at vi fikk ut like mange gjoremal som vi satte inn.
+      expect(gjoremaler.length).to.equal(1);
+
+      // Sjekk at brukerne som kom ut er identiske med de som ble satt inn.
+      expect(gjoremaler).to.containSubset([testListe]);
+    });
+  });
+
+  it('Oppdater gjoremalsliste', () => {
+
+    let newListe = {
+      id: testListe.id,
+      navn: "Updated"
     };
 
-    return axios.put('http://localhost:9100/rest/gjoremal/', newGjoremal)
+    return axios.put('http://localhost:9100/rest/gjoremalsliste/', newListe)
       .then(response => {
-        return axios.get('http://localhost:9100/rest/gjoremal/' + newGjoremal.gjoremal_id).then(response => {
-          expect(response.data).to.containSubset(newGjoremal);
+        return axios.get('http://localhost:9100/rest/gjoremalsliste/' + newListe.id).then(response => {
+          expect(response.data).to.containSubset(newListe);
         });
       });
   });
 
-  it('Slett gjoremal',() => {
+  it('Favorittiser gjoremalsliste', () => {
 
-    return axios.delete('http://localhost:9100/rest/gjoremal/' + testGjoremal2.gjoremal_id)
+    testListe.favoritt = 1;
+    return axios.put('http://localhost:9100/rest/favorittGjoremalsliste/', testListe)
       .then(response => {
-        return axios.get('http://localhost:9100/rest/gjoremal/' + testGjoremal2.gjoremal_id)
+        return axios.get('http://localhost:9100/rest/gjoremalsliste/' + testListe.id)
       }).then(response => {
-        expect(response.data).to.equal('Gjoremal not found!');
+        expect(response.data.favoritt).to.equal(testListe.favoritt);
+      });
+  });
+
+  it('Slett gjoremalsliste',() => {
+    return axios.delete('http://localhost:9100/rest/gjoremalsliste/' + testListe.id)
+      .then(response => {
+        return axios.get('http://localhost:9100/rest/gjoremalsliste/' + testListe.id)
+      }).then(response => {
+        expect(response.data).to.equal('Gjoremalsliste not found!');
       });
   });
 });

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
-import CreateGroup from '@/components/CreateGroup'
 import Task from '@/components/Task'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
@@ -25,8 +24,10 @@ import NewUser from '@/components/NewUser'
 import ChangePassword from '@/components/ChangePassword'
 import Grupper from '@/components/Grupper'
 import UserInfo from '@/components/UserInfo'
-import ItemChart from '@/components/Charts/ItemChart'
-import TodoListOverview from '@/components/TodoListOverview'
+import ShowAccounting from '@/components/ShowAccounting.vue'
+import GjeldUtSpesifisert from '@/components/Gjeld/GjeldUtSpesifisert.vue'
+
+
 Vue.use(Router);
 
 export default new Router({
@@ -112,7 +113,7 @@ export default new Router({
         component: TodoList
       },
       {
-        path: '/ViewShoppingList',
+        path: '/ViewShoppingList/:shoppinglist_id',
         name: 'ViewShoppingList',
         component: ViewShoppingList
       },
@@ -153,9 +154,19 @@ export default new Router({
         component: ChangePassword
       },
       {
-        path: '/TodoListOverview',
-        name: 'TodoListOverview',
-        component: TodoListOverview
+        path: '/UserInfo',
+        name: 'UserInfo',
+        component: UserInfo
+      },
+      {
+        path: '/ShowAccounting',
+        name: 'ShowAccounting',
+        component: ShowAccounting
+      },
+      {
+        path: '/GjeldUtSpesifisert/:bruker_skylder_id',
+        name: 'GjeldUtSpesifisert',
+        component: GjeldUtSpesifisert
       }
     ]
   }
