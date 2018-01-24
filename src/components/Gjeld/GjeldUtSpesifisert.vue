@@ -1,6 +1,60 @@
+
 <template>
+  <div class="tile is-vertical box" style="background-color: white">
+    <div class="is-ancestor" style="background-color: white">
+      <div class=" is-parent is-vertical " style="background-color: white">
+        <div class="child tile " style="background-color: white">
+          <div class="title is-size-5">Penger som jeg skylder {{user_owes.fornavn + " " + user_owes.etternavn}}: </div>
+        </div> <br>
+
+        <div class="child tile" style="background-color:white">
+          <table class="table">
+            <thead>
+            <th scope="col">Utgift for:</th>
+            <th scope="col">Dato:</th>
+            <th scope="col">Delsum per handletur:</th>
+            <th scope="col">Status: </th>
+
+            </thead>
+
+            <tbody>
+              <tr v-for="debt in debts" @click="selectUser(user_owes)">
+                <td data-label="Utgift for:">  Handletur  </td>
+                <td data-label="Dato:" Dato> 22.01.18 </td>
+                <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
+                <td data-label="Status:" style="color: red"> Ubetalt </td>
+              </tr>
+            </tbody>
+
+
+
+
+          </table>
+
+
+        </div>
+        <div class="box" style="background-color: white">
+          <div class="columns">
+            <div class="column is-three-fifths"> <p class="text"> Total skyld jeg har til {{user_owes.fornavn + " " + user_owes.etternavn}}: &nbsp &nbsp</p> </div>
+            <div class="column is-two-fifths"> <div class="box" style="background-color: lightsalmon; text-align: center; font-weight: bold; font-size: large">  41 kr </div>  </div>
+          </div>
+        </div> <br>
+
+        <button @click="$router.back()"> Tilbake </button>
+
+      </div>
+    </div>
+  </div>
+</template>
+
+
+
+
+
+
+<!-- <template>
   <div class="box">
-    <div class="title">Penger som jeg skylder {{user_owes.fornavn + " " + user_owes.etternavn}} </div>
+    <div class="title is-size-5">Penger som jeg skylder {{user_owes.fornavn + " " + user_owes.etternavn}} </div>
     <div class="level" v-for="debt in debts">
       <a> {{debt.belop}}kr -  litt mer info her <input type="checkbox"></a>
     </div>
@@ -8,7 +62,13 @@
 
 
   </div>
-</template>
+</template> -->
+
+
+
+
+
+
 <script>
 
   import axios from 'axios';
@@ -29,7 +89,8 @@
     data(){
       return {
         user_owes: {fornavn: '', etternavn: ''},
-        debts: []
+        debts: [],
+        users: []
       };
     }
   };
