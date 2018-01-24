@@ -5,7 +5,7 @@
   <div class="table is-striped">
     <section class="panel">
       <p class="panel-heading">
-        Gjøremålliste for {{$store.state.current_group.navn}}
+        Gjøremålliste: {{$store.state.current_group.navn}}
       </p>
       <div class="panel-block">
         <table class="table">
@@ -64,20 +64,11 @@
         //this.visGruppe();
       },
 
-      /*
-      mounted() {
-        this.visGruppe();
-      },
-*/
+
 
 // [{}] <- betyr at array inneholder et objekt
 
       methods: {
-        /*
-        selectGroup(group) {
-          router.push('TodoListOverview2/' + user.bruker_id);
-        },
-*/
         fillRows() {
           axios.get('http://localhost:9000/rest/gjoremalslisterUndergruppe/1').then(response => {
             //alert('Alle lister til bruker hentet');
@@ -91,21 +82,6 @@
             console.log(JSON.stringify(err));
           });
         },
-/*
-          visGruppe(){
-            axios.get('http://localhost:9000/rest/undergrupperForBruker/' + store.state.current_user.bruker_id).then(response => {
-              //alert('Alle lister til bruker hentet');
-              let g = response.data;
-              console.log(g);
-              let obj = {gruppe: g.navn};
-              this.g.push(obj);
-
-            }).catch(err => {
-              console.log(JSON.stringify(err));
-            });
-
-          }
-          */
       }
     }
 
