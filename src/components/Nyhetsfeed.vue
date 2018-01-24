@@ -15,13 +15,13 @@
               <nav class="level">
                 <!-- left side -->
                 <div class="level-left">
-                  <h class="has-text-grey">{{row.hvem.fornavn}} {{row.hvem.etternavn}}</h>
+                  <p class="has-text-grey">{{row.hvem.fornavn}} {{row.hvem.etternavn}}</p>
                 </div>
 
                 <!-- right side -->
                 <div class="level-right">
                   <div class="level-item">
-                    <h class="has-text-grey">{{row.nar}}</h>
+                    <p class="has-text-grey">{{row.nar}}</p>
                   </div>
                 </div>
               </nav>
