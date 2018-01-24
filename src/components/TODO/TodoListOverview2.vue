@@ -1,11 +1,12 @@
 <template>
+  <div>
   <div class="column">
   <div class="columns is-one-quarter">
     <div class="column is-half">
   <div class="table is-striped">
     <section class="panel">
       <p class="panel-heading">
-        Gjøremålliste: {{$store.state.current_group.navn}}
+        Gjøremålliste for: {{$store.state.current_group.navn}}
       </p>
       <div class="panel-block">
         <table class="table">
@@ -43,15 +44,28 @@
   </div>
   </div>
   </div>
+
+  <div id="root" class="container">
+    <modal v-if="showModal" @close="showModal = false">
+      <p> tet</p>
+    </modal>
+    <button class="modal-close"> Lukk </button>
+    <button @click="showModal = true">Show modal</button>
+
+    <button class="modal-close" ></button>
+  </div>
+  </div>
 </template>
 
 <script>
   import axios from 'axios';
   import {store} from '@/store'
   import router from '@/router/index'
+  import Modal from "./Modal";
 
 
     export default {
+      components: Modal,
       name: "todo-list-overview2",
       data() {
         return {
