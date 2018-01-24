@@ -2,7 +2,7 @@
   <div class="tile is-vertical">
     <div class="tile is-ancestor">
       <div class=" tile is-parent">
-        <div class="tile is-child box" style="background-color: lightskyblue">
+        <div class="tile is-child box" style="background-color: white">
           <Newsfeed v-bind:value="5"></Newsfeed>
         </div>
       </div>
@@ -13,6 +13,10 @@
           <Shoppinglists :value="5"></Shoppinglists>
         </div>
       </div>
+
+      <Modal :title="true" :modalVisible="true" @modalClosing="closeModal"><p>Test</p></Modal>
+      <button class="button" @click="testing">Show</button>
+
       <div class="tile is-parent">
         <div class="tile is-child box is-half" style="background-color: lightskyblue">
           <Shoppinglists :value="5"></Shoppinglists>
@@ -31,12 +35,27 @@
     import Todo from './TODO/TodoList';
     import Shoppinglists from '@/components/Shoppinglists'
     import Newsfeed from '@/components/Nyhetsfeed'
+    import Modal from '@/components/Modal'
     import router from '../router/index'
     import {store} from '../store'
 
     export default {
       name: 'Home',
-      components: { Todo, Shoppinglists, Newsfeed },
+      components: { Todo, Shoppinglists, Newsfeed, Modal },
+      date: function () {
+        return {
+          showMe: true
+        }
+      },
+      methods:{
+        testing(){
+          this.showMe = true;
+          console.log(this.showMe);
+        },
+        closeModal(){
+          this.showMe = false;
+        }
+      }
     }
 </script>
 

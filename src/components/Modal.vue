@@ -5,13 +5,12 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <h1 class="modal-card-title">{{title}}</h1>
-        <button class="delete" aria-label="close"></button>
+        <button class="delete" aria-label="close" @click="closeModal"></button>
       </header>
       <section class="modal-card-body">
         <slot></slot>
       </section>
     </div>
-    <button class="modal-close" @click="showModal = false"></button>
   </div>
 </div>
 </template>
@@ -28,9 +27,9 @@
         return this.header;
       }
     },
-    data(){
-      return{
-        modalVisible: false
+    methods: {
+      closeModal(){
+        this.$emit('modalClosing');
       }
     }
   }
