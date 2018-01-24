@@ -1,44 +1,49 @@
 <template>
   <section>
-    <div class="is-ancestor box" style="background-color: azure">
+    <div class="is-ancestor">
       <h3 class="title is-3">Administrere grupper og kollektiv</h3>
       <div class="is-parent tile">
         <br>
         <div class="is-child tile box" style="background-color: azure">
           <div v-if="showJoinSection===true">
-            Skriv inn navnet på kollektivet du ønsker å bli medlem av
-            <br>
-            <div class="field-body">
-              <div class="field">
+            <h2 class="subtitle">Skriv inn navnet på kollektivet du ønsker å bli medlem av</h2>
+            <div class="field">
+              <div class="field-body">
                 <input  type="text" class="input" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
-              <button class="button" v-on:click="joinGroup(innmelding.kollektiv_navn)">
-                Søk medlemskap
-              </button>
-            </div>
+                <button class="button" v-on:click="joinGroup(innmelding.kollektiv_navn)">
+                  Søk medlemskap
+                </button>
+              </div>
             </div>
             {{ joinResult }}
           </div>
           <br>
           <div v-if="showCreateMainGroupSection===true">
-            Skriv inn navnet på kollektivet du ønsker å opprette
-            <br>
+            <h2 class="subtitle">Skriv inn navnet på kollektivet du ønsker å opprette</h2>
             <div class="field-body">
               <div class="field">
                 <input  type="text" class="input" placeholder="Kollektivets navn" v-model="oppretteMain.navn">
+              </div>
+              <div class="field-body">
                 <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
-                <button class="button" v-on:click="createMainGroup(oppretteMain.navn)">
-                  Opprett kollektiv
-                </button>
               </div>
             </div>
+            <button class="button" v-on:click="createMainGroup(oppretteMain.navn)">
+              Opprett kollektiv
+            </button>
             {{ createMainResult }}
           </div>
           <br>
           <div v-if="showCreateSubGroupSection===true">
-            Skriv inn navnet på gruppen du ønsker å opprette
-            <br>
-            <input  type="text" class="input" placeholder="Gruppens navn" v-model="oppretteSub.navn">
-            <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
+            <h2 class="subtitle">Skriv inn navnet på gruppen du ønsker å opprette</h2>
+            <div class="field-body">
+              <div class="field">
+                <input  type="text" class="input" placeholder="Gruppens navn" v-model="oppretteSub.navn">
+              </div>
+              <div class="field-body">
+                <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
+              </div>
+            </div>
             <button class="button" v-on:click="createSubGroup(oppretteSub.navn)">
               Opprett gruppe
             </button>
@@ -46,23 +51,27 @@
           </div>
         </div>
       </div>
-      <div class="is-parent tile" style="background-color: azure">
+      <div class="is-parent tile">
         <div class="is-child tile box" style="background-color: azure">
           <div v-if="showUsersGroups===true">
-            Du er medlem av følgende kollektiv og grupper:
-            <ul id="usersGroupsList">
-              <li v-for="option in options_usersgroups"  v-bind:key="option.uid">
-                {{ option.text }} {{ option.isDef }}
-                <button v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
-              </li>
-            </ul>
+            <h2 class="subtitle">Du er medlem av følgende kollektiv og grupper:</h2>
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+              <thead>
+              <th>Kollektiver</th>
+              <th></th>
+              </thead>
+              <tr v-for="option in options_usersgroups"  v-bind:key="option.uid">
+                <td>{{ option.text }} {{ option.isDef }}</td>
+                <td><button class="button" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button></td>
+              </tr>
+            </table>
             {{ leaveSubResult }}
           </div>
         </div>
         <div class="is-child tile box is-7" style="background-color: azure">
           <div v-if="showInviteSection===true">
             <div v-if="showGroupSelect===true">
-              Du er administrator for flere kollektiv.
+              <h2 class="subtitle">Du er administrator for flere kollektiv.
               Nå administreres
               <select class="dropdown" v-model="selected_maingroup" v-on:change="makeMainGrpObj(selected_maingroup)">
                 <option disabled value="">Velg kollektiv</option>
@@ -70,6 +79,7 @@
                   {{ option.text }}
                 </option>
               </select>
+              </h2>
             </div>
 
             <br>
@@ -91,20 +101,24 @@
                 {{ item.bruker }}
               </dt>
               <dd v-for="item in approvals" v-bind:key="item.tid">
-                <button v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
-                <button v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
+                <button class="button" v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
+                <button class="button" v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
               </dd>
             </dl>
           </div>
           <br>
           <div v-if="showAvailableSubgroups===true">
             Dette er alle gruppene som hører inn under {{ selected_maingroup_object.navn }}:
-            <ul id="availableSubGroupsList">
-              <li v-for="option in options_subgroup"  v-bind:key="option.uid">
-                {{ option.navn }}
-                <button v-on:click="joinSubGroup(option.uid)">Bli med</button>
-              </li>
-            </ul>
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+              <thead>
+              <th>Grupper</th>
+              <th></th>
+              </thead>
+              <tr v-for="option in options_subgroup"  v-bind:key="option.uid">
+              <td>{{ option.navn }}</td>
+              <td> <button class="button" v-on:click="joinSubGroup(option.uid)">Bli med</button></td>
+              </tr>
+            </table>
             {{ joinSubResult }}
           </div>
         </div>
@@ -124,7 +138,7 @@
     data(){
         return {
             showCreateMainGroupSection: true,
-            showCreateSubGroupSection: false,
+            showCreateSubGroupSection: true,
             showJoinSection: true,
             showInviteSection: false,
             showGroupSelect: true,
@@ -207,7 +221,7 @@
                     navn: response.data.navn,
                     beskrivelse: response.data.beskrivelse
                 };
-                
+
                 // let tmpObj = response.data.map((item) => {
                 //     return {
                 //         text: item.navn,
@@ -529,7 +543,4 @@
 </script>
 
 <style scoped>
-  .input{
-    width: 40em;
-  }
 </style>
