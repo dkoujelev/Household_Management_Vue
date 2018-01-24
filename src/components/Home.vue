@@ -2,8 +2,8 @@
   <div class="tile is-vertical">
     <div class="tile is-ancestor">
       <div class=" tile is-parent">
-        <div class="tile is-child box" style="background-color: lightskyblue">
-          <Newsfeed v-bind:value="5"></Newsfeed>
+        <div class="tile is-child box" style="background-color: white">
+          <Newsfeed :value="5"></Newsfeed>
         </div>
       </div>
     </div>
@@ -13,6 +13,7 @@
           <Shoppinglists :value="5"></Shoppinglists>
         </div>
       </div>
+
       <div class="tile is-parent">
         <div class="tile is-child box is-half" style="background-color: lightskyblue">
           <Shoppinglists :value="5"></Shoppinglists>
@@ -20,11 +21,6 @@
       </div>
     </div>
   </div>
-
-
-
-
-
 </template>
 
 <script>
@@ -37,6 +33,21 @@
     export default {
       name: 'Home',
       components: { Todo, Shoppinglists, Newsfeed },
+
+      data(){
+        return {
+          showMe: false,
+          titleTest: 'This is a title'
+        }
+      },
+      methods:{
+        openShoppingList(){
+          this.showMe = true;
+        },
+        closeShoppingList(){
+          this.showMe = false;
+        }
+      }
     }
 </script>
 
