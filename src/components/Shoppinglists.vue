@@ -49,10 +49,37 @@
         return (isNaN(Number.parseInt(this.value)) ? -1 : this.value);
       }
     },
+    asyncComputed:{
+        rows(){
+          let rows = [];
 
+          let cap = this.len;
+          let rest = "http://localhost:9000/rest/handlelisteForUndergruppe/" + store.state.current_group.undergruppe_id;
+          if(cap > 0) rest = "http://localhost:9000/rest/handlelisteForBruker/" + store.state.current_user.bruker_id;
+          return axios.get(rest).then(response => {
+            let resRows = response.data;
+            for(let i = 0; i < resRows.length; i++){
+              if(resRows[i].handling_utfort === "1970-01-01T00:00:00.000Z") {
+                let date = this.formateDate(resRows[i].frist);
+                let obj = {handleliste_id: resRows[i].handleliste_id, navn: resRows[i].navn, frist: date};
+                rows.push(obj);
+
+                if(cap > 0){
+                  cap -= 1;
+                }
+                if(cap === 0){
+                  break;
+                }
+              }
+            }
+            return rows;
+          }).catch(err => {
+            console.log(err);
+          });
+        }
+    },
     data(){
       return {
-        rows: [],
         list: {},
         showShoppingList: false,
         showAddShoppingList: false
@@ -63,8 +90,6 @@
     },
     methods: {
       update(){
-        this.rows = [];
-        this.fillRows();
         this.closeAddShoppingList();
         this.closeShoppingList();
       },
@@ -88,30 +113,6 @@
       formateDate(raw){
         return raw.substring(8, 10) + " " + raw.substring(5, 7) + " " + raw.substring(0,4)
           + " kl: " + raw.substring(11, 16);
-      },
-      fillRows(){
-        let cap = this.len;
-        let rest = "http://localhost:9000/rest/handlelisteForUndergruppe/" + store.state.current_group.undergruppe_id;
-        if(cap > 0) rest = "http://localhost:9000/rest/handlelisteForBruker/" + store.state.current_user.bruker_id;
-        axios.get(rest).then(response => {
-          let resRows = response.data;
-          for(let i = 0; i < resRows.length; i++){
-            if(resRows[i].handling_utfort === "1970-01-01T00:00:00.000Z") {
-              let date = this.formateDate(resRows[i].frist);
-              let obj = {handleliste_id: resRows[i].handleliste_id, navn: resRows[i].navn, frist: date};
-              this.rows.push(obj);
-
-              if(cap > 0){
-                cap -= 1;
-              }
-              if(cap === 0){
-                break;
-              }
-            }
-          }
-        }).catch(err => {
-          console.log(err);
-        });
       }
     }
   }
