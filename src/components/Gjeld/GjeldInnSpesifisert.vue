@@ -19,7 +19,7 @@
             <tbody>
             <tr v-for="debt in debts">
               <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
-              <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
+              <td data-label="Dato:"> {{debt.opprettet}} </td>
               <td data-label="delsum:">  {{debt.belop + " kr" }}  </td>
               <td data-label="Status:"> <input type="checkbox" v-model="debt.delete"> </td>
               <td data-label="Tilknyttet handleliste">
@@ -36,7 +36,7 @@
         <div class="box" style="background-color: white">
           <div class="columns">
             <div class="column is-three-fifths"> <p class="text"> Total skyld {{user_owes.fornavn + " " + user_owes.etternavn}} har til meg: &nbsp &nbsp</p> </div>
-            <div class="column is-two-fifths"> <div class="box" style="background-color: lightsalmon; text-align: center; font-weight: bold; font-size: large">  41 kr </div>  </div>
+            <div class="column is-two-fifths"> <div class="box" style="background-color: lightsalmon; text-align: center; font-weight: bold; font-size: large">  {{totalDebt}} kr </div>  </div>
           </div>
         </div> <br>
 
@@ -113,11 +113,16 @@
       };
     },
     methods:{
+      formatDate(raw){
+        return raw.substring(8, 10) + "." + raw.substring(5, 7) + "." + raw.substring(0,4);
+      },
       loadDebt(){
         axios.post('http://localhost:9000/rest/gjeldSpesifisert', {skylder: this.$route.params.bruker_skylder_id ,
           innkrever: store.state.current_user.bruker_id})
           .then(response => {
             this.debts = response.data;
+            for(let debt of this.debts)
+              debt.opprettet = this.formatDate(debt.opprettet);
             return axios.get('http://localhost:9000/rest/bruker/' + this.$route.params.bruker_skylder_id);
           }).then(response => this.user_owes = response.data)
           .catch(err => {
@@ -140,6 +145,14 @@
       },
       showShoppingList(debt){
         router.push('/ViewShoppingList/' + debt.handleliste_id);
+      }
+    },
+    computed:{
+      totalDebt(){
+        let total = 0;
+        for(let debt of this.debts)
+          total += debt.belop;
+        return total;
       }
     }
   };
