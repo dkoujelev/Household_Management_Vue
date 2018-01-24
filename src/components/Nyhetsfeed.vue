@@ -1,9 +1,13 @@
 <template>
   <div class="is-ancestor">
+    <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
+      <h2 slot="title">Lag nyhet</h2>
+      <Addnews slot="content" @addedNews="update" @closeAddNews="closeModal" />
+    </Modal>
     <div class=" is-parent is-vertical ">
       <h2 class="subtitle is-2">Nyheter</h2>
       <div class="child tile is-vertical">
-          <Addnews v-if="!isHome" :showCancel="false" @addedNews="update"></Addnews>
+        <Addnews v-if="!isHome" :showCancel="false" @addedNews="update" />
       </div>
       <br>
       <div class="child tile is-vertical">
@@ -38,7 +42,7 @@
       </div>
       <br>
       <div class="child" v-if="!isHome">
-        <router-link class="button is-link" to="/Addnews">Lag nyhet</router-link>
+        <button class="button is-link" @click="openModal">Lag nyhet</button>
       </div>
       <br>
     </div>
@@ -49,10 +53,12 @@
   import axios from 'axios';
   import {store} from '@/store'
   import Addnews from '@/components/Addnews'
+  import Modal from '@/components/Modal'
 
   export default {
     name: 'Nyhetsfeed',
     props: [ 'value' ],
+    components: { Modal, Addnews },
     computed: {
       len: function () {
         return (isNaN(Number.parseInt(this.value)) ? -1 : this.value);
@@ -61,17 +67,24 @@
         return ((isNaN(Number.parseInt(this.value)) ? -1 : this.value) !== -1);
       }
     },
-    components:{Addnews},
     data(){
       return {
-        rows: []
+        rows: [],
+        showModal: false
       };
     },
     mounted(){
-      this.fillRows();
+      this.update();
     },
     methods: {
+      openModal(){
+        this.showModal = true;
+      },
+      closeModal(){
+        this.showModal = false;
+      },
       update(){
+        this.closeModal();
         this.rows = [];
         this.fillRows();
       },
@@ -82,7 +95,6 @@
       deleteNews(row){
         let id = row.melding_id;
         axios.delete('http://localhost:9000/rest/melding/' + id).then(response => {
-          alert('Nyhet slettet');
           this.rows = [];
           this.fillRows();
         });

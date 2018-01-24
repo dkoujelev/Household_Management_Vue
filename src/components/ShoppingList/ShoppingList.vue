@@ -13,6 +13,7 @@
         <br>
         <div>
           <label class="label">Skriv inn varer</label>
+          <p class="help is-danger">{{errorMessages.navn}}</p>
         </div>
         <div class="field" v-for="row in rows">
           <div class="field-body">
@@ -48,7 +49,7 @@
             <div class="level-right">
               <div class="level-item">
                 <p class="level-item">
-                  <router-link class="button is-danger" to="/Shoppinglists">Avbrytt</router-link>
+                  <button class="button is-danger" @click="closeNewShoppingList">Avbryt</button>
                 </p>
 
               </div>
@@ -79,13 +80,20 @@
         ],
         errorMessages: {
           overskrift: '',
-          tekst: ''
+          navn: ''
         }
       }
     },
     methods: {
-      deleteList(){
-        router.push('shoppinglists');
+      hide(){
+        this.name = '';
+        this.rows = [ {navn: "", antall: 1} ];
+        this.errorMessages.overskrift = '';
+        this.errorMessages.navn = '';
+      },
+      closeNewShoppingList(){
+        this.hide();
+        this.$emit('closingAddShoppingList');
       },
       addRow() {
         this.rows.push({navn: "", antall: 1});
@@ -115,9 +123,8 @@
         };
 
         axios.post('http://localhost:9000/rest/handleliste', shoppinglist).then( response => {
-          alert('handleliste lagt inn!');
-          this.$emit('added-shoppinglist', shoppinglist);
-          router.push('Shoppinglists');
+          this.hide();
+          this.$emit('addedShoppingList');
         }).catch(err => {
           console.log(JSON.stringify(err));
         });
@@ -125,11 +132,22 @@
       },
       checkInput() {
         let noErrors = true;
+        this.errorMessages.overskrift = '';
         this.errorMessages.name = '';
+
         if (this.name === "") {
           this.errorMessages.overskrift = 'Meldingen må ha en overskift';
           noErrors = false;
         }
+
+        for(let i = 0; i < this.rows.length; i++){
+          if(this.rows[i].navn === ''){
+            noErrors = false;
+            this.errorMessages.navn = 'Alle varer må ha navn';
+            break;
+          }
+        }
+
         if (noErrors) this.sendData();
       }
     }
