@@ -7,8 +7,8 @@
         <div class="is-child tile box" style="background-color: azure">
           <div v-if="showJoinSection===true">
             <h2 class="subtitle">Skriv inn navnet på kollektivet du ønsker å bli medlem av</h2>
-            <div class="field-body">
-              <div class="field">
+            <div class="field">
+              <div class="field-body">
                 <input  type="text" class="input" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
                 <button class="button" v-on:click="joinGroup(innmelding.kollektiv_navn)">
                   Søk medlemskap
@@ -55,12 +55,16 @@
         <div class="is-child tile box" style="background-color: azure">
           <div v-if="showUsersGroups===true">
             <h2 class="subtitle">Du er medlem av følgende kollektiv og grupper:</h2>
-            <ul id="usersGroupsList">
-              <li v-for="option in options_usersgroups"  v-bind:key="option.uid">
-                {{ option.text }} {{ option.isDef }}
-                <button class="button" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
-              </li>
-            </ul>
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+              <thead>
+              <th>Kollektiver</th>
+              <th></th>
+              </thead>
+              <tr v-for="option in options_usersgroups"  v-bind:key="option.uid">
+                <td>{{ option.text }} {{ option.isDef }}</td>
+                <td><button class="button" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button></td>
+              </tr>
+            </table>
             {{ leaveSubResult }}
           </div>
         </div>
@@ -105,12 +109,16 @@
           <br>
           <div v-if="showAvailableSubgroups===true">
             Dette er alle gruppene som hører inn under {{ selected_maingroup_object.navn }}:
-            <ul id="availableSubGroupsList">
-              <li v-for="option in options_subgroup"  v-bind:key="option.uid">
-                {{ option.navn }}
-                <button class="button" v-on:click="joinSubGroup(option.uid)">Bli med</button>
-              </li>
-            </ul>
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+              <thead>
+              <th>Grupper</th>
+              <th></th>
+              </thead>
+              <tr v-for="option in options_subgroup"  v-bind:key="option.uid">
+              <td>{{ option.navn }}</td>
+              <td> <button class="button" v-on:click="joinSubGroup(option.uid)">Bli med</button></td>
+              </tr>
+            </table>
             {{ joinSubResult }}
           </div>
         </div>
