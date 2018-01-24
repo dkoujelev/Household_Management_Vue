@@ -3,7 +3,15 @@
 
     <div class="tile is-parent box is-vertical is-6" style="background-color: lightskyblue">
       <div class="tile is-child  ">
-        <h3>Handleliste</h3>
+        <nav class="level">
+          <div class="level-right">
+            <h3>Handleliste</h3>
+          </div>
+          <div class="level-left">
+            <router-link class="is-link" to="/Shoppinglists"><span style="color: blue;">Tilbake til handlelister</span></router-link>
+          </div>
+        </nav>
+
       </div>
       <div class="tile is-child ">
         <table class="table is-bordered is-striped  is-hoverable is-fullwidth">
@@ -112,7 +120,13 @@
       deleteItem(row){
         axios.delete('http://localhost:9000/rest/vare/' + row.item_id).then(response => {
           this.$emit('ItemRemoved');
-          this.rows.splice(row, 1);
+          let rows = this.rows;
+          for(let i = 0; i < rows.length; i++){
+            if(rows[i] === row){
+              this.rows.splice(i, 1);
+              break;
+            }
+          }
         });
       },
       updateList(){

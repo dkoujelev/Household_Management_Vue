@@ -16,7 +16,10 @@ module.exports = function(connection, server) {
     connection.query('SELECT * FROM Vare WHERE vare_id=?', req.params.vare_id, function (err, rows, fields) {
       if(err)
         return next(err);
-      res.send(rows);
+      if(rows.length !== 1)
+        res.send('Item not found!');
+      else
+        res.send(rows);
       return next();
     });
   });

@@ -8,8 +8,6 @@ import SeeAccounting from '@/components/SeeAccounting'
 import AddExpence from '@/components/AddExpence'
 import AddCostRegister from '@/components/AddCostRegister'
 import Nyhetsfeed from '@/components/Nyhetsfeed'
-import Newsfeedhome from '@/components/home/Newsfeedhome'
-import Shoppinglistshome from '@/components/home/Shoppinglistshome'
 import Shoppinglists from '@/components/Shoppinglists'
 import Addnews from '@/components/Addnews'
 import ShowExpences from '@/components/ShowExpences'
@@ -26,7 +24,6 @@ import Grupper from '@/components/Grupper'
 import UserInfo from '@/components/UserInfo'
 import ShowAccounting from '@/components/ShowAccounting.vue'
 import GjeldUtSpesifisert from '@/components/Gjeld/GjeldUtSpesifisert.vue'
-
 
 Vue.use(Router);
 
@@ -71,16 +68,6 @@ export default new Router({
         path: '/Nyhetsfeed',
         name: 'Nyhetsfeed',
         component: Nyhetsfeed
-      },
-      {
-        path: '/Newsfeedhome',
-        name: 'Newfeedhome',
-        component: Newsfeedhome
-      },
-      {
-        path: '/Shoppinglistshome',
-        name: 'Shoppinglistshome',
-        component: Shoppinglistshome
       },
       {
         path: '/Shoppinglists',
