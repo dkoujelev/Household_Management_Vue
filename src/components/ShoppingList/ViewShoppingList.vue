@@ -1,11 +1,12 @@
 <template>
-  <div class="is-ancestor">
-    <div class="is-parent">
-      <div class="tile is-child box is-6">
+  <div class="tile is-ancestor">
+
+    <div class="tile is-parent box is-vertical is-6" style="background-color: lightskyblue">
+      <div class="tile is-child  ">
         <h3>Handleliste</h3>
       </div>
-      <div class="tile is-child box is-6" style="background-color: lightskyblue">
-        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+      <div class="tile is-child ">
+        <table class="table is-bordered is-striped  is-hoverable is-fullwidth">
           <thead>
           <th>Vare</th>
           <th>Antall</th>
@@ -22,16 +23,13 @@
               </label>
             </td>
             <td>
-              <button class="button is-danger" @click="hide">
+              <button class="button is-danger" @click="deleteItem(row)">
                 <i class="fa fa-trash-o" aria-hidden="true"></i>
               </button>
             </td>
           </tr>
         </table>
-      </div>
-    </div>
-    <div class="is-parent">
-      <div class="tile is-child is-6 box" style="background-color: lightskyblue">
+
         <div v-if="addItem">
           <div class="field-body">
             <button class="button is-danger" @click="hide">
@@ -42,28 +40,40 @@
               <i class="fa fa-minus" id="minus" aria-hidden="true"></i>
             </button>
 
-              <button class="button is-light">{{newItem.count}}</button>
+            <button class="button is-light">{{newItem.count}}</button>
             <button class="button is-info" @click="increment()" id="incrementButton">
               <i class="fa fa-plus" id="plus" aria-hidden="true" ></i>
             </button>
           </div>
           <br>
-          <button class="button is-success" @click="updateList">
+          <button class="button is-link" @click="updateList">
             Legg til vare
           </button>
         </div>
+        <button class="button is-link" v-if="!addItem" @click="addItem = true">Legg til vare</button>
+        <br>
 
-        <div class="field-body">
-          <button class="button is-success" v-if="!addItem" @click="addItem = true">Legg til vare</button>
-          <br>
-          <button class="button is-success" @click="completeList">Utfør handleliste</button>
-          <button class="button is-danger" @click="deleteList">Slett handleliste</button>
+      </div>
+
+      <div class="tile is-child ">
+        <div class="block">
+          <nav class="level">
+            <!-- left side -->
+            <div class="level-left">
+              <button class="button is-success" @click="completeList">Utfør handleliste</button>
+            </div>
+
+            <!-- right side -->
+            <div class="level-right">
+              <div class="level-item">
+                <button class="button is-danger" @click="deleteList">Slett handleliste</button>
+              </div>
+            </div>
+          </nav>
         </div>
       </div>
     </div>
   </div>
-
-
 </template>
 
 <script>

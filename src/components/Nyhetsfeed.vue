@@ -2,6 +2,10 @@
   <div class="is-ancestor">
     <div class=" is-parent is-vertical ">
       <h2 class="subtitle is-2">Nyheter</h2>
+      <div class="is-child ">
+          <Addnews></Addnews>
+      </div>
+      <br>
       <div class="child tile is-vertical">
         <article class="message is-link" v-for="row in rows">
           <div class="message-header">
@@ -32,11 +36,11 @@
 
         </article>
       </div>
-      <div class="child box" style="background-color: azure">
+      <br>
+      <div class="child ">
         <router-link class="button is-link" to="/Addnews">Lag nyhet</router-link>
       </div>
-
-
+      <br>
     </div>
   </div>
 </template>
@@ -46,9 +50,11 @@
   import axios from 'axios';
   import Vue from 'vue'
   import {store} from '@/store'
+  import Addnews from '@/components/Addnews'
 
   export default {
     name: 'Nyhetsfeed',
+    components:{Addnews},
     data(){
       return {
         rows: []
