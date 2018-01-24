@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <Modal :title="true" :modalVisible="true" @modalClosing="closeModal"><p>Test</p></Modal>
+      <Modal :title="titleTest" :modalVisible="showMe" @modalClosing="closeModal"><p>Test</p></Modal>
       <button class="button" @click="testing">Show</button>
 
       <div class="tile is-parent">
@@ -44,7 +44,8 @@
       components: { Todo, Shoppinglists, Newsfeed, Modal },
       date: function () {
         return {
-          showMe: true
+          showMe: true,
+          titleTest: 'This is a title'
         }
       },
       methods:{

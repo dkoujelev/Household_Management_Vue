@@ -19,17 +19,23 @@
   export default {
     name: "modal",
     props: [ 'modalVisible', 'header' ],
-    computed:{
-      showModal: function () {
-        return this.modalVisible === true;
-      },
-      title: function () {
-        return this.header;
+    data(){
+      return{
+        showModal: this.modalVisible,
+        title: this.header
       }
     },
     methods: {
       closeModal(){
         this.$emit('modalClosing');
+      }
+    },
+    watch: {
+      modalVisible(){
+        this.showModal = this.modalVisible;
+      },
+      header(){
+        this.title = this.header;
       }
     }
   }
