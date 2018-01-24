@@ -23,7 +23,7 @@
 
       <div class="child tile box" style="background-color: white">
         <p class="text"> Total skyld jeg har til andre medlemmer: &nbsp &nbsp</p>
-        <div class="child tile box" style="background-color: lightsalmon"> 41 kr </div>
+        <div class="child tile box" style="background-color: lightsalmon; font-weight: bold; font-size: large" > 41 kr </div>
       </div> <br>
 
 
@@ -46,22 +46,26 @@
 
   }
 
+  tr {
+    color: royalblue;
+  }
+
   th {
     background-color: gainsboro;
   }
 
-  tr:nth-child(even) {
+  tr:nth-child(odd) {
     background-color: #f2f2f2
 
   }
   tr:hover {
     background-color: azure;
-    color: grey;
+    text-decoration-line: underline;
+    color: royalblue;
     cursor: hand;
 
   }
   tr:active{
-
     color: black;
   }
 

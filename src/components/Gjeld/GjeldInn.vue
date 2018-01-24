@@ -24,7 +24,7 @@
 
       <div class="child tile box" style="background-color: white">
         <p class="text"> Total skyld andre medlemmer har til meg: &nbsp &nbsp</p>
-        <div class="child tile box" style="background-color: lightsalmon"> 124197 kr </div>
+        <div class="child tile box" style="background-color: lightsalmon; font-weight: bold; font-size: large"> 124197 kr </div>
       </div> <br>
 
 

@@ -30,7 +30,7 @@
             </div>
             <div class="navbar-end" @click="showBurger = false">
               <SelectGroup v-if="showNav" @selected-group="selectedGroup" ref="SelectGroup"> </SelectGroup>
-              <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut"> <span class="icon"><i class="fa fa-user-times fa-lg"></i></span>  &nbsp Logg Ut</a>
+              <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut"> <span class="icon"><i class="fa fa-power-off fa-lg"></i></span>  &nbsp Logg Ut</a>
             </div>
           </div>
     </nav>

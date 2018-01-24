@@ -36,7 +36,7 @@
         <div class="box" style="background-color: white">
           <div class="columns">
             <div class="column is-three-fifths"> <p class="text"> Total skyld jeg har til {{user_owes.fornavn + " " + user_owes.etternavn}}: &nbsp &nbsp</p> </div>
-            <div class="column is-two-fifths"> <div class="box" style="background-color: lightsalmon; text-align: center">  41 kr </div>  </div>
+            <div class="column is-two-fifths"> <div class="box" style="background-color: lightsalmon; text-align: center; font-weight: bold; font-size: large">  41 kr </div>  </div>
           </div>
         </div> <br>
 
