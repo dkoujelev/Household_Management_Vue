@@ -1,9 +1,11 @@
 <template>
+  <div>
+    <button class="button" @click="testing">Show</button>
   <div class="tile is-vertical">
     <div class="tile is-ancestor">
       <div class=" tile is-parent">
         <div class="tile is-child box" style="background-color: white">
-          <Newsfeed v-bind:value="5"></Newsfeed>
+          <Newsfeed :value="5"></Newsfeed>
         </div>
       </div>
     </div>
@@ -13,9 +15,6 @@
           <Shoppinglists :value="5"></Shoppinglists>
         </div>
       </div>
-
-      <Modal :title="titleTest" :modalVisible="showMe" @modalClosing="closeModal"><p>Test</p></Modal>
-      <button class="button" @click="testing">Show</button>
 
       <div class="tile is-parent">
         <div class="tile is-child box is-half" style="background-color: lightskyblue">
@@ -24,11 +23,7 @@
       </div>
     </div>
   </div>
-
-
-
-
-
+  </div>
 </template>
 
 <script>
@@ -42,16 +37,15 @@
     export default {
       name: 'Home',
       components: { Todo, Shoppinglists, Newsfeed, Modal },
-      date: function () {
+      data(){
         return {
-          showMe: true,
+          showMe: false,
           titleTest: 'This is a title'
         }
       },
       methods:{
-        testing(){
+        openModal(){
           this.showMe = true;
-          console.log(this.showMe);
         },
         closeModal(){
           this.showMe = false;
