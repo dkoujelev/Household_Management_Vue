@@ -8,7 +8,7 @@
             <router-link class="navbar-item" to="/home">
               <img src="./img/logo_small.png" alt="image not found" width="45"/>
             </router-link>
-
+            <p>Gruppe is here</p>
           <div class="navbar-burger burger" @click="showBurger = !showBurger" v-bind:class="{'is-active' : showBurger}" data-target="navMenu" v-if="showNav">
             <span></span>
             <span></span>
