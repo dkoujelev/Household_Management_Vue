@@ -139,7 +139,7 @@
           }).catch(err => console.log(err));
       },
       showShoppingList(debt){
-        router.push('ViewShoppingList/' + debt.handleliste_id);
+        router.push('/ViewShoppingList/' + debt.handleliste_id);
       }
     }
   };
