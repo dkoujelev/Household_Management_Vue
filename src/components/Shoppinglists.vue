@@ -1,18 +1,26 @@
 <template>
-  <div>
-    <table>
-      <thead>
-      <th>Handleliste</th>
-      <th>Frist</th>
-      <th></th>
-      </thead>
-      <tr v-for="row in rows">
-        <td>{{row.navn}}</td>
-        <td>{{row.frist}}</td>
-        <td><button class="button is-warning" @click="selectList(row.handleliste_id)">Se handleliste</button></td>
-      </tr>
-    </table>
-    <router-link class="button" to="/ShoppingList">Lag handleliste</router-link>
+  <div class="is-ancestor">
+    <div class="is-parent">
+      <div class="tile is-child box is-6">
+        <h3>Handlelister</h3>
+      </div>
+      <div class="tile is-child box is-6">
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+          <thead>
+          <th>Handleliste</th>
+          <th>Frist</th>
+          <th></th>
+          </thead>
+          <tr v-for="row in rows">
+            <td>{{row.navn}}</td>
+            <td>{{row.frist}}</td>
+            <td><button class="button is-warning" @click="selectList(row.handleliste_id)">Se handleliste</button></td>
+          </tr>
+        </table>
+        <br>
+        <router-link class="button is-link" to="/ShoppingList">Lag handleliste</router-link>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -44,9 +52,11 @@
         axios.get('http://localhost:9000/rest/handlelisteForUndergruppe/' + store.state.current_group.undergruppe_id).then(response => {
           let resRows = response.data;
           for(let i = 0; i < resRows.length; i++){
-            let date = this.formateDate(resRows[i].frist);
-            let obj = {handleliste_id: resRows[i].handleliste_id, navn: resRows[i].navn, frist: date};
-            this.rows.push(obj);
+            if(resRows[i].handling_utfort === "1970-01-01T00:00:00.000Z") {
+              let date = this.formateDate(resRows[i].frist);
+              let obj = {handleliste_id: resRows[i].handleliste_id, navn: resRows[i].navn, frist: date};
+              this.rows.push(obj);
+            }
           }
         }).catch(err => {
           console.log(err);

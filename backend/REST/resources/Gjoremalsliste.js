@@ -5,14 +5,15 @@ module.exports = function(connection, server) {
 // Hent en bestemt liste
   server.get('rest/gjoremalsliste/:id', function (req, res, next) {
     connection.query("SELECT * FROM Gjoremalsliste WHERE id=?", [req.params.id], function (err, rows, fields) {
-      if (err || rows.length != 1)
+      if (err)
         return next(err);
-
       let liste = rows[0];
-
+      if(rows.length !== 1){
+        res.send('Gjoremalsliste not found!');
+        return next();
+      }
       if ('opprettet' in liste)
         liste.opprettet = new Date(liste.opprettet);
-
       connection.query("SELECT Gjoremal.* FROM Gjoremal " +
         "INNER JOIN Gjoremalsliste ON Gjoremalsliste.id = Gjoremal.liste_id WHERE Gjoremalsliste.id=?", [req.params.id], function (err, rows, fields) {
         if (err)
@@ -26,7 +27,6 @@ module.exports = function(connection, server) {
             gjoremal.ferdig = new Date(gjoremal.ferdig);
         }
         liste.gjoremal = JSON.parse(JSON.stringify(rows));
-
         res.send(liste);
         return next();
       });
@@ -193,13 +193,13 @@ module.exports = function(connection, server) {
   });
 
 // Slett en liste
-  server.del('rest/gjoremalsliste/', function (req, res, next) {
-    connection.query('DELETE FROM Gjoremal WHERE liste_id=?', req.body.id, function (err, rows, field) {
+  server.del('rest/gjoremalsliste/:id', function (req, res, next) {
+    connection.query('DELETE FROM Gjoremal WHERE liste_id=?', req.params.id, function (err, rows, field) {
       if (err)
         return next(err);
       //let info = rows;
-      connection.query('DELETE FROM Gjoremalsliste WHERE id=?', req.body.id, function (err, rows, field) {
-        if (err)
+      connection.query('DELETE FROM Gjoremalsliste WHERE id=?', req.params.id, function (err, rows, field) {
+        if(err)
           return next(err);
         res.send(rows);
         return next();

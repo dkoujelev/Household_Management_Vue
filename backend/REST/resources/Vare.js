@@ -3,7 +3,7 @@ let util = require('../util');
 module.exports = function(connection, server) {
   // Legg til en ny vare
   server.post('rest/vare/', function (req, res, next) {
-    connection.query('INSERT INTO Vare VALUE ?', req.body, function (err, rows, fields) {
+    connection.query('INSERT INTO Vare SET ?', req.body, function (err, rows, fields) {
       if(err)
         return next(err);
       res.send(rows);
@@ -16,7 +16,10 @@ module.exports = function(connection, server) {
     connection.query('SELECT * FROM Vare WHERE vare_id=?', req.params.vare_id, function (err, rows, fields) {
       if(err)
         return next(err);
-      res.send(rows);
+      if(rows.length !== 1)
+        res.send('Item not found!');
+      else
+        res.send(rows);
       return next();
     });
   });

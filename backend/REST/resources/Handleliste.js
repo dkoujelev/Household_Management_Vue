@@ -68,7 +68,7 @@ module.exports = function(connection, server){
         varer.push(varen);
       }
 
-      console.log(JSON.stringify(varer));
+      //console.log(JSON.stringify(varer));
 
       connection.query('INSERT INTO Vare (navn, handleliste_id, antall) VALUES ?', [varer], function(err,rows,fields){
         if(err)
@@ -119,7 +119,7 @@ module.exports = function(connection, server){
   });
 
 // Oppdater en handleliste
-  server.put('res/handleliste/', function (req,res,next) {
+  server.put('rest/handleliste/:handleliste_id', function (req,res,next) {
     /*
     let varer;
     if('varer' in req){
@@ -134,7 +134,7 @@ module.exports = function(connection, server){
     if('handling_utfort' in req)
       req.handling_utfort = new Date(req.handling_utfort).getTime();
 
-    connection.query('UPDATE Handleliste SET ? WHERE handleliste_id=?', [req.body, req.body.handleliste_id], function (err,rows,fields) {
+    connection.query('UPDATE Handleliste SET ? WHERE handleliste_id=?', [req.body, Number.parseInt(req.params.handleliste_id)], function (err,rows,fields) {
       if(err)
         return next(err);
       res.send(rows);

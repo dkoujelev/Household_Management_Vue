@@ -1,87 +1,114 @@
 <template>
   <section>
-    <div v-if="showJoinSection===true">
-        Skriv inn navnet på kollektivet du ønsker å bli medlem av
-        <input  type="text" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
-        <button v-on:click="joinGroup(innmelding.kollektiv_navn)">
-            Søk medlemskap
-        </button>
-        {{ joinResult }}
-    </div>
-
-
-    <div v-if="showCreateMainGroupSection===true">
-        Skriv inn navnet på kollektivet du ønsker å opprette
-        <input  type="text" placeholder="Kollektivets navn" v-model="oppretteMain.navn">
-        <input  type="text" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
-        <button v-on:click="createMainGroup(oppretteMain.navn)">
-            Opprett kollektiv
-        </button>
-        {{ createMainResult }}
-    </div>
-
-    <div v-if="showCreateSubGroupSection===true">
-        Skriv inn navnet på gruppen du ønsker å opprette
-        <input  type="text" placeholder="Gruppens navn" v-model="oppretteSub.navn">
-        <input  type="text" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
-        <button v-on:click="createSubGroup(oppretteSub.navn)">
-            Opprett gruppe
-        </button>
-        {{ createSubResult }}
-    </div>
-
-
-    <div v-if="showUsersGroups===true">
-        Du er medlem av følgende kollektiv og grupper:
-        <ul id="usersGroupsList">
-            <li v-for="option in options_usersgroups"  v-bind:key="option.uid">
+    <div class="is-ancestor box" style="background-color: azure">
+      <h3 class="title is-3">Administrere grupper og kollektiv</h3>
+      <div class="is-parent tile">
+        <br>
+        <div class="is-child tile box" style="background-color: azure">
+          <div v-if="showJoinSection===true">
+            Skriv inn navnet på kollektivet du ønsker å bli medlem av
+            <br>
+            <div class="field-body">
+              <div class="field">
+                <input  type="text" class="input" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
+              <button class="button" v-on:click="joinGroup(innmelding.kollektiv_navn)">
+                Søk medlemskap
+              </button>
+            </div>
+            </div>
+            {{ joinResult }}
+          </div>
+          <br>
+          <div v-if="showCreateMainGroupSection===true">
+            Skriv inn navnet på kollektivet du ønsker å opprette
+            <br>
+            <div class="field-body">
+              <div class="field">
+                <input  type="text" class="input" placeholder="Kollektivets navn" v-model="oppretteMain.navn">
+                <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
+                <button class="button" v-on:click="createMainGroup(oppretteMain.navn)">
+                  Opprett kollektiv
+                </button>
+              </div>
+            </div>
+            {{ createMainResult }}
+          </div>
+          <br>
+          <div v-if="showCreateSubGroupSection===true">
+            Skriv inn navnet på gruppen du ønsker å opprette
+            <br>
+            <input  type="text" class="input" placeholder="Gruppens navn" v-model="oppretteSub.navn">
+            <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
+            <button class="button" v-on:click="createSubGroup(oppretteSub.navn)">
+              Opprett gruppe
+            </button>
+            {{ createSubResult }}
+          </div>
+        </div>
+      </div>
+      <div class="is-parent tile" style="background-color: azure">
+        <div class="is-child tile box" style="background-color: azure">
+          <div v-if="showUsersGroups===true">
+            Du er medlem av følgende kollektiv og grupper:
+            <ul id="usersGroupsList">
+              <li v-for="option in options_usersgroups"  v-bind:key="option.uid">
                 {{ option.text }} {{ option.isDef }}
                 <button v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
-            </li>
-        </ul>
-        {{ leaveSubResult }}
-    </div>
-
-    <div v-if="showInviteSection===true">
-        <div v-if="showGroupSelect===true">
-            Du er administrator for flere kollektiv.
-            Nå administreres
-            <select v-model="selected_maingroup" v-on:change="selectGroup(selected_maingroup)">
+              </li>
+            </ul>
+            {{ leaveSubResult }}
+          </div>
+        </div>
+        <div class="is-child tile box is-7" style="background-color: azure">
+          <div v-if="showInviteSection===true">
+            <div v-if="showGroupSelect===true">
+              Du er administrator for flere kollektiv.
+              Nå administreres
+              <select class="dropdown" v-model="selected_maingroup" v-on:change="makeMainGrpObj(selected_maingroup)">
                 <option disabled value="">Velg kollektiv</option>
                 <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
-                {{ option.text }}
+                  {{ option.text }}
                 </option>
-            </select>
-        </div>
-        Her kan du invitere nye medlemmer til {{ selected_maingroup.navn }}
+              </select>
+            </div>
 
-    <input  type="email" placeholder="Email" v-model="innmelding.epost">
-    <button v-on:click="doInvite">Send invitasjon</button>
-    {{ mailResult }}
-    </div>
+            <br>
+            Her kan du invitere nye medlemmer til {{ selected_maingroup_object.navn }}
 
-    <div v-if="showApproveSection===true">
-        Disse ønsker å bli med i {{ selected_maingroup.navn }}. Du kan godkjenne eller avvise søknaden(e).
-        <dl id="approvalsList">
-            <dt v-for="item in approvals"  v-bind:key="item.tid">
+            <div class="field-body">
+              <div class="field">
+                <input class="input" type="email" placeholder="Email" v-model="innmelding.epost">
+                <button class="button" v-on:click="doInvite">Send invitasjon</button>
+              </div>
+            </div>
+            {{ mailResult }}
+          </div>
+          <br>
+          <div v-if="showApproveSection===true">
+            Disse ønsker å bli med i {{ selected_maingroup_object.navn }}. Du kan godkjenne eller avvise søknaden(e).
+            <dl id="approvalsList">
+              <dt v-for="item in approvals"  v-bind:key="item.tid">
                 {{ item.bruker }}
-            </dt>
-            <dd v-for="item in approvals" v-bind:key="item.tid">
+              </dt>
+              <dd v-for="item in approvals" v-bind:key="item.tid">
                 <button v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
                 <button v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
-            </dd>
-        </dl>
-    </div>
-
-    <div v-if="showAvailableSubgroups===true">
-        Dette er alle gruppene som hører inn under {{ selected_maingroup.navn }}:
-        <ul id="availableSubGroupsList">
-            <li v-for="option in options_subgroup"  v-bind:key="option.uid">
+              </dd>
+            </dl>
+          </div>
+          <br>
+          <div v-if="showAvailableSubgroups===true">
+            Dette er alle gruppene som hører inn under {{ selected_maingroup_object.navn }}:
+            <ul id="availableSubGroupsList">
+              <li v-for="option in options_subgroup"  v-bind:key="option.uid">
                 {{ option.navn }}
                 <button v-on:click="joinSubGroup(option.uid)">Bli med</button>
-            </li>
-        </ul>
-        {{ joinSubResult }}
+              </li>
+            </ul>
+            {{ joinSubResult }}
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -97,14 +124,14 @@
     data(){
         return {
             showCreateMainGroupSection: true,
-            showCreateSubGroupSection: true,
+            showCreateSubGroupSection: false,
             showJoinSection: true,
-            showInviteSection: true,
+            showInviteSection: false,
             showGroupSelect: true,
-            showSubGroupSelect: true,
+            showSubGroupSelect: false,
             showUsersGroups: true,
-            showApproveSection: true,
-            showAvailableSubgroups:true,
+            showApproveSection: false,
+            showAvailableSubgroups:false,
             current_user: store.state.current_user,
             createMainResult: '',
             createSubResult: '',
@@ -171,8 +198,31 @@
     //     var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([status-zA-Z\-0-9]+\.)+[status-zA-Z]{2,}))$/;
     //     return regex.test(email);
     //   },
+
+        makeMainGrpObj(kid){
+            axios.get('http://localhost:9000/rest/kollektiv/' + kid).then(response => {
+                console.log(response);
+                let tmpObj = {
+                    kollektiv_id: response.data.kollektiv_id,
+                    navn: response.data.navn,
+                    beskrivelse: response.data.beskrivelse
+                };
+                
+                // let tmpObj = response.data.map((item) => {
+                //     return {
+                //         text: item.navn,
+                //         value: item.kollektiv_id,
+                //         navn: item.navn,
+                //         gid: item.kollektiv_id,
+                //         uid: item.undergruppe_id
+                //     };
+                    this.selectGroup(tmpObj);
+                });
+            // });
+        },
+
         selectGroup(theGroup){
-            console.log('DEBUG - selectGroup(' + theGroup + ')');
+           // console.log('DEBUG - selectGroup(' + theGroup + ')');
             console.log('Henter hovedgruppen for kollektiv ' + theGroup.kollektiv_id);
             this.selected_maingroup_object=theGroup;
             axios.get('http://localhost:9000/rest/hovedgruppenForKollektiv/' + theGroup.kollektiv_id).then(response => {
@@ -210,28 +260,19 @@
                 console.log("selectGroup - Error");
                 console.log(err);
             });
-            // axios.get('http://localhost:9000/rest/undergrupperForKollektiv/' + theGroup.kollektiv_id).then(response => {
-            //     this.options_subgroups = response.data.map((item) => {
-            //         return {
-            //             text: item.navn,
-            //             value: item.kollektiv_id,
-            //             navn: item.navn,
-            //             gid: item.kollektiv_id,
-            //             uid: item.undergruppe_id
-            //         };
-            //     });
-            // });
             this.getSubGroupsFor(theGroup.kollektiv_id);
       },
 
       getAllGroupsFor(bruker_id){
-          console.log('DEBUG - getAllGroupsFor(' + bruker_id + ')');
+         // console.log('DEBUG - getAllGroupsFor(' + bruker_id + ')');
           console.log('Getting all groups for user ' + bruker_id);
           axios.get('http://localhost:9000/rest/kollektivForBruker/' + bruker_id).then(response => {
             this.options_maingroup_nonadmin = response.data.map((item) => {
                 return {
                     text: item.navn,
-                    value: item.kollektiv_id
+                    value: item.kollektiv_id,
+                    navn: item.navn,
+                    kid: item.kollektiv_id
                 };
             });
             this.selected_maingroup_nonadmin = '';
@@ -260,9 +301,10 @@
             });
             //console.log(this.options_usersgroups);
           });
+          this.showUsersGroups=true;
       },
       getGroupsWhereAdminFor(bruker_id){
-        console.log('DEBUG - getGroupsWhereAdminFor(' + bruker_id + ')');
+       // console.log('DEBUG - getGroupsWhereAdminFor(' + bruker_id + ')');
         console.log('Getting main group(s) where user ' + bruker_id + ' is admin');
         axios.get('http://localhost:9000/rest/kollektivForAdmin/' + bruker_id).then(response => {
             //console.log('kollektivForAdmin:');
@@ -270,7 +312,9 @@
             this.options_maingroup = response.data.map((item) => {
                 return {
                     text: item.navn,
-                    value: item.kollektiv_id
+                    value: item.kollektiv_id,
+                    navn: item.navn,
+                    kid: item.kollektiv_id
                 };
             });
             //this.selected_maingroup = '';
@@ -291,11 +335,11 @@
                 //this.selected_maingroup_name = response.data[0].navn;
                 this.showInviteSection=true;
                 this.showGroupSelect=false;
-                this.showApproveSection=true;
+                //this.showApproveSection=true;
             }else{ //User is admin of several groups. Group must be selected in order to invite.
                 this.showInviteSection=true;
                 this.showGroupSelect=true;
-                this.showApproveSection=true;
+                //this.showApproveSection=true;
             };
 
           }).catch(err => {
@@ -307,7 +351,7 @@
 
 
       getSubGroupsFor(kollektiv_id){
-        console.log('DEBUG - getSubGroupsFor(' + kollektiv_id + ')');
+       // console.log('DEBUG - getSubGroupsFor(' + kollektiv_id + ')');
         console.log('Getting subgroup(s) for group ' + kollektiv_id);
         axios.get('http://localhost:9000/rest/undergrupperForKollektiv/' + kollektiv_id).then(response => {
             this.options_subgroup = response.data.map((item) => {
@@ -334,7 +378,7 @@
 
 
       approve(kollektiv,epost,status){
-        console.log('DEBUG - approve(' + kollektiv + '.....etc)');
+       // console.log('DEBUG - approve(' + kollektiv + '.....etc)');
           //console.log("epost=" + epost + '   ' + "kollektiv=" + kollektiv + '   ' + "status=" + status);
           let tmpDate = new Date;
         axios.put('http://localhost:9000/rest/innmelding', {
@@ -357,7 +401,7 @@
       },
 
       createMainGroup(groupName){
-          console.log('DEBUG - createMainGroup(' + groupName + ')');
+         // console.log('DEBUG - createMainGroup(' + groupName + ')');
           axios.post('http://localhost:9000/rest/kollektiv/' + this.current_user.bruker_id, {
                 navn: this.oppretteMain.navn,
                 beskrivelse: this.oppretteMain.beskrivelse
@@ -373,7 +417,7 @@
       },
 
     createSubGroup(groupName){
-        console.log('DEBUG - createSubGroup(' + groupName + ')');
+       // console.log('DEBUG - createSubGroup(' + groupName + ')');
           axios.post('http://localhost:9000/rest/undergruppe/' + this.current_user.bruker_id, {
                 navn: this.oppretteSub.navn,
                 beskrivelse: this.oppretteSub.beskrivelse,
@@ -391,7 +435,7 @@
       },
 
       joinGroup(groupName){
-          console.log('DEBUG - joinGroup(' + groupName + ')');
+         // console.log('DEBUG - joinGroup(' + groupName + ')');
          axios.get('http://localhost:9000/rest/kollektivMedNavn/' + groupName).then(response => {
              //console.log(groupName + '=' + response.data);
                     if(response.data != null){
@@ -424,7 +468,7 @@
          })
       },
       joinSubGroup(subGroupID){
-          console.log('DEBUG - joinSubGroup(' + subGroupID + ')');
+         // console.log('DEBUG - joinSubGroup(' + subGroupID + ')');
            axios.post('http://localhost:9000/rest/undergruppeLeggTilBruker/' + subGroupID, {
                 undergruppe_id: subGroupID,
                 bruker_id: this.current_user.bruker_id
@@ -437,7 +481,7 @@
            });
       },
       leaveSubGroup(subGroupID){
-          console.log('DEBUG - leaveSubGroup(' + subGroupID + ')');
+         // console.log('DEBUG - leaveSubGroup(' + subGroupID + ')');
             axios.put('http://localhost:9000/rest/undergruppeFjernBruker/' + subGroupID, {
                 undergruppe_id: subGroupID,
                 bruker_id: this.current_user.bruker_id
@@ -450,7 +494,7 @@
            });
       },
       doInvite(){
-        console.log('DEBUG - doInvite()');
+       // console.log('DEBUG - doInvite()');
         //console.log('Doing invite stuff...');
         let tmpDate = new Date;
         axios.post('http://localhost:9000/rest/epost/', {
@@ -485,5 +529,7 @@
 </script>
 
 <style scoped>
-
+  .input{
+    width: 40em;
+  }
 </style>
