@@ -1,6 +1,4 @@
 <template>
-  <div>
-    <button class="button" @click="testing">Show</button>
   <div class="tile is-vertical">
     <div class="tile is-ancestor">
       <div class=" tile is-parent">
@@ -23,20 +21,19 @@
       </div>
     </div>
   </div>
-  </div>
 </template>
 
 <script>
     import Todo from './TODO/TodoList';
     import Shoppinglists from '@/components/Shoppinglists'
     import Newsfeed from '@/components/Nyhetsfeed'
-    import Modal from '@/components/Modal'
     import router from '../router/index'
     import {store} from '../store'
 
     export default {
       name: 'Home',
       components: { Todo, Shoppinglists, Newsfeed },
+
       data(){
         return {
           showMe: false,
@@ -44,10 +41,10 @@
         }
       },
       methods:{
-        openModal(){
+        openShoppingList(){
           this.showMe = true;
         },
-        closeModal(){
+        closeShoppingList(){
           this.showMe = false;
         }
       }
