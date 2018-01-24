@@ -17,8 +17,6 @@
       </div>
       </div>
     </div>
-
-    <button @click="$router.back()">Tilbake</button>
   </div>
 
 
