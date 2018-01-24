@@ -62,7 +62,7 @@ module.exports = function(connection, server){
   });
 
 // Hent alle undergrupper
-  server.get('rest/undergruppe/',function(req, res, next){
+  server.get('rest/undergrupper/',function(req, res, next){
     //console.log('DEBUG - rest/undergruppe/');
     connection.query("SELECT * FROM Undergruppe", function(err, rows, fields){
       res.send(err ? err : rows);
@@ -71,7 +71,7 @@ module.exports = function(connection, server){
   });
 
 // Hent undergrupper til ett spesifikt kollektiv
-  server.get('rest/undergrupperForKollektiv/:kollektiv_id',function(req, res, next){
+  server.get('rest/undergrupperForKollektiv/:kollektiv_id', function (req, res, next) {
     //console.log('DEBUG - rest/undergrupperForKollektiv/:kollektiv_id');
     connection.query("SELECT * FROM Undergruppe WHERE kollektiv_id=?", req.params.kollektiv_id, function(err, rows, fields){
       res.send(err ? err : rows);
@@ -80,7 +80,7 @@ module.exports = function(connection, server){
   });
 
 // Hent hovedgruppen til ett spesifikt kollektiv
-  server.get('rest/hovedgruppenForKollektiv/:kollektiv_id',function(req, res, next){
+  server.get('rest/hovedgruppenForKollektiv/:kollektiv_id', function (req, res, next) {
     //console.log('DEBUG - rest/hovedgruppenForKollektiv/:kollektiv_id');
     connection.query("SELECT * FROM Undergruppe WHERE kollektiv_id=? AND default_gruppe=1", req.params.kollektiv_id, function(err, rows, fields){
       res.send(err ? err : rows);
@@ -89,7 +89,7 @@ module.exports = function(connection, server){
   });
 
 // Hent undergruppene til en bruker
-  server.get('rest/undergrupperForBruker/:bruker_id',function(req, res, next){
+  server.get('rest/undergrupperForBruker/:bruker_id', function (req, res, next) {
     //console.log('DEBUG - rest/undergruppeForBruker/:bruker_id');
     connection.query("SELECT Undergruppe.*, Kollektiv.navn as kollektiv_navn FROM Undergruppe " +
       "INNER JOIN Bruker_Undergruppe ON Undergruppe.undergruppe_id=Bruker_Undergruppe.undergruppe_id " +
@@ -103,7 +103,7 @@ module.exports = function(connection, server){
   });
 
 // Legg til en bruker i en undergruppe
-  server.post('rest/undergruppeLeggTilBruker/:undergruppe_id',function(req, res, next){
+  server.post('rest/undergruppeLeggTilBruker/:undergruppe_id', function (req, res, next) {
     //console.log('DEBUG - rest/undergruppeLeggTilBruker/:undergruppe_id');
     connection.query('INSERT INTO Bruker_Undergruppe SET bruker_id=?, undergruppe_id=?',[req.body.bruker_id, req.params.undergruppe_id], function(err,rows,fields){
       res.send(err ? err : rows);
@@ -112,7 +112,7 @@ module.exports = function(connection, server){
   });
 
 // Fjern en bruker fra en undergruppe
-  server.put('rest/undergruppeFjernBruker/:undergruppe_id',function(req, res, next){
+  server.put('rest/undergruppeFjernBruker/:undergruppe_id', function (req, res, next) {
     //console.log('DEBUG - rest/undergruppeFjernBruker/:undergruppe_id');
     connection.query('DELETE FROM Bruker_Undergruppe WHERE bruker_id=? AND undergruppe_id=?',[req.body.bruker_id, req.params.undergruppe_id], function(err,rows,fields){
       res.send(err ? err : rows);
@@ -121,7 +121,7 @@ module.exports = function(connection, server){
   });
 
 // Lag en undergruppe (?)
-  server.post('rest/undergruppe/:bruker_id',function(req, res, next){
+  server.post('rest/undergruppe/:bruker_id', function (req, res, next) {
     //console.log('DEBUG - rest/undergruppe/:bruker_id');
     connection.query("INSERT INTO Undergruppe SET ?", req.body, function(err, rows1, fields){
       if(err){res.send(err); return next();}

@@ -27,7 +27,7 @@ module.exports = function(connection, server){
 
   // Hent alle gjoremal i en liste
   server.get('rest/gjoremaler/:id', function (req,res,next) {
-    connection.query('SELECT * FROM Gjoremal WHERE liste_id=?', req.params.id, function (err,rows,field) {
+    connection.query('SELECT * FROM Gjoremal WHERE liste_id=? ORDER BY (frist IS NULL) , (frist) , start ASC', req.params.id, function (err,rows,field) {
       if(err)
         return next(err);
       for(let gjoremal of rows){
