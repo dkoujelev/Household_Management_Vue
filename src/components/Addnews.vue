@@ -42,7 +42,12 @@
 
   export default {
     name: 'Addnews',
-    props: [ '' ],
+    props: [ 'showCancel' ],
+    computed: {
+      show: function () {
+        return (this.showCancel !== false);
+      }
+    },
     data() {
       return {
         melding: {

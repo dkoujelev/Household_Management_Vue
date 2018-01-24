@@ -32,7 +32,7 @@
 
         </article>
       </div>
-      <div class="child box" style="background-color: azure">
+      <div class="child box" v-if="len === -1" style="background-color: azure">
         <router-link class="button is-link" to="/Addnews">Lag nyhet</router-link>
       </div>
 
@@ -87,7 +87,6 @@
               let obj = {hvem: brukere[resRows[i].skrevet_av_bruker],melding_id: resRows[i].melding_id, overskrift: resRows[i].overskrift, nyhet: resRows[i].tekst, nar: date,
                 knapper: (resRows[i].skrevet_av_bruker === store.state.current_user.bruker_id)};
               this.rows.push(obj);
-              console.log(cap);
               if(cap > 0){
                 cap -= 1;
               }

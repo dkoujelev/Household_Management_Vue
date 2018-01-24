@@ -17,8 +17,8 @@
             <td><button class="button is-warning" @click="selectList(row.handleliste_id)">Se handleliste</button></td>
           </tr>
         </table>
-        <br>
-        <router-link class="button is-link" to="/ShoppingList">Lag handleliste</router-link>
+        <br v-if="len === -1">
+        <router-link class="button is-link" to="/ShoppingList" v-if="len === -1">Lag handleliste</router-link>
       </div>
     </div>
   </div>
