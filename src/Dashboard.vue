@@ -41,8 +41,6 @@
     <br/><br/><br/>
 
     <div class="container">
-      <p v-if="loggedIn">Innlogget bruker: {{$store.state.current_user.epost}}</p>
-      <p v-if="loggedIn">Aktiv gruppe: {{$store.state.current_group.navn}}</p>
       <router-view/>
     </div>
 
