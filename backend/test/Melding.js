@@ -53,6 +53,13 @@ describe('Melding',() => {
       });
   });
 
+  it('Hent alle meldinger en bruker skal se', () => {
+    return axios.get('http://localhost:9100/rest/melding/motta/brukerAlle/' + testuser.bruker_id)
+      .then(response => {
+        expect(response.data[0]).to.containSubset(test_melding);
+      });
+  });
+
   it('Slette melding', () => {
     return axios.delete('http://localhost:9100/rest/melding/' + test_melding.melding_id)
       .then(response => {

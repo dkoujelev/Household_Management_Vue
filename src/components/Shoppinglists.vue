@@ -56,9 +56,11 @@
           + " kl: " + raw.substring(11, 16);
       },
       fillRows(){
-        axios.get('http://localhost:9000/rest/handlelisteForUndergruppe/' + store.state.current_group.undergruppe_id).then(response => {
+        let cap = this.len;
+        let rest = "http://localhost:9000/rest/handlelisteForUndergruppe/" + store.state.current_group.undergruppe_id;
+        if(cap > 0) rest = "http://localhost:9000/rest/handlelisteForBruker/" + store.state.current_user.bruker_id;
+        axios.get(rest).then(response => {
           let resRows = response.data;
-          let cap = this.len;
           for(let i = 0; i < resRows.length; i++){
             if(resRows[i].handling_utfort === "1970-01-01T00:00:00.000Z") {
               let date = this.formateDate(resRows[i].frist);

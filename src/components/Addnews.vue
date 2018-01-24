@@ -63,7 +63,7 @@
           overskrift: '',
           tekst: '',
           skrevet_av_bruker: store.state.current_user.bruker_id,
-          sendt_til_kollektiv: store.state.current_group.undergruppe_id
+          sendt_til_kollektiv: store.state.current_group.kollektiv_id
         },
         errorMessages: {
           overskrift: '',

@@ -88,13 +88,17 @@
         });
       },
       fillRows(){
-        axios.get('http://localhost:9000/rest/melding/motta/kollektiv/' + store.state.current_group.undergruppe_id).then(response => {
+        let cap = this.len;
+        let rest = "http://localhost:9000/rest/melding/motta/kollektiv/" + store.state.current_group.kollektiv_id;
+        if(cap > 0) rest = "http://localhost:9000/rest/melding/motta/brukerAlle/" + store.state.current_user.bruker_id;
+
+        axios.get(rest).then(response => {
           let resRows = response.data;
           let brukere;
           axios.get('http://localhost:9000/rest/bruker').then(res => {
             brukere = res.data;
-            let cap = this.len;
             for(let i = 0; i < resRows.length; i++){
+              console.log(resRows[i].sendt);
               let date = this.formateDate(resRows[i].sendt);
               let obj = {hvem: brukere[resRows[i].skrevet_av_bruker],melding_id: resRows[i].melding_id, overskrift: resRows[i].overskrift, nyhet: resRows[i].tekst, nar: date,
                 knapper: (resRows[i].skrevet_av_bruker === store.state.current_user.bruker_id)};
