@@ -29,7 +29,7 @@ module.exports = function(connection, server){
         return next(err);
 
       if(rows.length < 1){
-        console.log("Sending null for id " + req.params.gjeld_id);
+        //console.log("Sending null for id " + req.params.gjeld_id);
         res.send(null);
       }
       else{

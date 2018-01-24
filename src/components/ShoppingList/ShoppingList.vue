@@ -91,7 +91,12 @@
         this.rows.push({navn: "", antall: 1});
       },
       removeRow: function (row) {
-        this.rows.splice(row, 1);
+        for(let i = 0; i < this.rows.length; i++){
+          if(this.rows[i] === row){
+            this.rows.splice(i, 1);
+            break;
+          }
+        }
       },
       increment(row){
         row.antall++;

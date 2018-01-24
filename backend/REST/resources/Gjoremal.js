@@ -7,7 +7,10 @@ module.exports = function(connection, server){
     connection.query("SELECT * FROM Gjoremal WHERE gjoremal_id=?", req.params.gjoremal_id, function(err, rows, field){
       if(err)
         return next(err);
-
+      if(rows.length !== 1){
+        res.send('Gjoremal not found!');
+        return next();
+      }
       let gjoremal = rows[0];
       if(typeof gjoremal !== 'undefined') {
         if ('start' in gjoremal)
@@ -24,7 +27,7 @@ module.exports = function(connection, server){
 
   // Hent alle gjoremal i en liste
   server.get('rest/gjoremaler/:id', function (req,res,next) {
-    connection.query('SELECT * FROM Gjoremal WHERE liste_id=?', req.params.id, function (err,rows,field) {
+    connection.query('SELECT * FROM Gjoremal WHERE liste_id=? ORDER BY (frist IS NULL) , (frist) , start ASC', req.params.id, function (err,rows,field) {
       if(err)
         return next(err);
       for(let gjoremal of rows){

@@ -2,15 +2,15 @@
   <div class="is-ancestor">
     <div class=" is-parent is-vertical ">
       <h2 class="subtitle is-2">Nyheter</h2>
-      <div class="is-child ">
-          <Addnews></Addnews>
+      <div class="child tile is-vertical">
+          <Addnews v-if="!isHome" :showCancel="false" @addedNews="update"></Addnews>
       </div>
       <br>
       <div class="child tile is-vertical">
         <article class="message is-link" v-for="row in rows">
           <div class="message-header">
             <h2>{{row.overskrift}}</h2>
-            <a v-if="row.knapper" @click="deleteNews(row)">Slett</a>
+            <a v-if="row.knapper && !isHome" @click="deleteNews(row)">Slett</a>
           </div>
           <div class="message-body">
             <h3>{{row.nyhet}}</h3>
@@ -19,13 +19,13 @@
               <nav class="level">
                 <!-- left side -->
                 <div class="level-left">
-                  <h class="has-text-grey">{{row.hvem.fornavn}} {{row.hvem.etternavn}}</h>
+                  <p class="has-text-grey">{{row.hvem.fornavn}} {{row.hvem.etternavn}}</p>
                 </div>
 
                 <!-- right side -->
                 <div class="level-right">
                   <div class="level-item">
-                    <h class="has-text-grey">{{row.nar}}</h>
+                    <p class="has-text-grey">{{row.nar}}</p>
                   </div>
                 </div>
               </nav>
@@ -37,7 +37,7 @@
         </article>
       </div>
       <br>
-      <div class="child ">
+      <div class="child" v-if="!isHome">
         <router-link class="button is-link" to="/Addnews">Lag nyhet</router-link>
       </div>
       <br>
@@ -46,14 +46,21 @@
 </template>
 
 <script>
-
   import axios from 'axios';
-  import Vue from 'vue'
   import {store} from '@/store'
   import Addnews from '@/components/Addnews'
 
   export default {
     name: 'Nyhetsfeed',
+    props: [ 'value' ],
+    computed: {
+      len: function () {
+        return (isNaN(Number.parseInt(this.value)) ? -1 : this.value);
+      },
+      isHome: function () {
+        return ((isNaN(Number.parseInt(this.value)) ? -1 : this.value) !== -1);
+      }
+    },
     components:{Addnews},
     data(){
       return {
@@ -64,6 +71,10 @@
       this.fillRows();
     },
     methods: {
+      update(){
+        this.rows = [];
+        this.fillRows();
+      },
       formateDate(raw){
         return raw.substring(8, 10) + " " + raw.substring(5, 7) + " " + raw.substring(0,4)
           + " kl: " + raw.substring(11, 16);
@@ -77,17 +88,27 @@
         });
       },
       fillRows(){
-        axios.get('http://localhost:9000/rest/melding/motta/kollektiv/' + store.state.current_group.undergruppe_id).then(response => {
+        let cap = this.len;
+        let rest = "http://localhost:9000/rest/melding/motta/kollektiv/" + store.state.current_group.kollektiv_id;
+        if(cap > 0) rest = "http://localhost:9000/rest/melding/motta/brukerAlle/" + store.state.current_user.bruker_id;
+
+        axios.get(rest).then(response => {
           let resRows = response.data;
           let brukere;
           axios.get('http://localhost:9000/rest/bruker').then(res => {
             brukere = res.data;
-            console.log(resRows[0].sendt);
             for(let i = 0; i < resRows.length; i++){
+              console.log(resRows[i].sendt);
               let date = this.formateDate(resRows[i].sendt);
               let obj = {hvem: brukere[resRows[i].skrevet_av_bruker],melding_id: resRows[i].melding_id, overskrift: resRows[i].overskrift, nyhet: resRows[i].tekst, nar: date,
                 knapper: (resRows[i].skrevet_av_bruker === store.state.current_user.bruker_id)};
               this.rows.push(obj);
+              if(cap > 0){
+                cap -= 1;
+              }
+              if(cap === 0){
+                break;
+              }
             }
           });
           }).catch(err => {

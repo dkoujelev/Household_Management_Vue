@@ -23,7 +23,7 @@ module.exports = function(connection, server){
         handleliste.handling_utfort = new Date(handleliste.handling_utfort);
 
       connection.query("SELECT Vare.* FROM Vare " +
-        "INNER JOIN Handleliste ON Vare.handleliste_Id=Handleliste.handleliste_id WHERE Handleliste.handleliste_id=?", req.params.handleliste_id, function(err, rows, fields){
+        "INNER JOIN Handleliste ON Vare.handleliste_Id=Handleliste.handleliste_id WHERE Handleliste.handleliste_id=? ", req.params.handleliste_id, function(err, rows, fields){
         if(err)
           return next(err);
 
@@ -49,8 +49,6 @@ module.exports = function(connection, server){
     if('handling_utfort' in handleliste)
       handleliste.handling_utfort = new Date(handleliste.handling_utfort).getTime();
 
-    console.log(handleliste);
-
     connection.query('INSERT INTO Handleliste SET ?', [handleliste], function(err,rows,fields){
       if(err)
         return next(err);
@@ -70,7 +68,7 @@ module.exports = function(connection, server){
         varer.push(varen);
       }
 
-      console.log(JSON.stringify(varer));
+      //console.log(JSON.stringify(varer));
 
       connection.query('INSERT INTO Vare (navn, handleliste_id, antall) VALUES ?', [varer], function(err,rows,fields){
         if(err)
@@ -83,7 +81,7 @@ module.exports = function(connection, server){
 
 // Hent handlelister for en bestemt undergruppe
   server.get('rest/handlelisteForUndergruppe/:undergruppe_id',function(req, res, next) {
-    connection.query("SELECT * FROM Handleliste WHERE undergruppe_id=?", [req.params.undergruppe_id], function (err, rows, fields) {
+    connection.query("SELECT * FROM Handleliste WHERE undergruppe_id=? ORDER BY (favoritt IS FALSE), (frist IS NULL) , (frist) , opprettet ASC", [req.params.undergruppe_id], function (err, rows, fields) {
 
       for(let handleliste of rows){
         if('opprettet' in handleliste)
@@ -102,9 +100,9 @@ module.exports = function(connection, server){
 // Hent alle handlelister som en bestemt bruker har tilgang til
   server.get('rest/handlelisteForBruker/:bruker_id',function(req, res, next){
     connection.query("SELECT Handleliste.* FROM Handleliste " +
-      "INNER JOIN Undergruppe ON Handleliste.undergruppe_id=Undergruppe.undergruppe_id " +
-      "INNER JOIN Bruker_Undergruppe ON Undergruppe.undergruppe_id=Bruker_Undergruppe.undergruppe_id " +
-      "WHERE bruker_id=?", [req.params.bruker_id], function(err, rows, fields){
+    "INNER JOIN Undergruppe ON Handleliste.undergruppe_id=Undergruppe.undergruppe_id " +
+    "INNER JOIN Bruker_Undergruppe ON Undergruppe.undergruppe_id=Bruker_Undergruppe.undergruppe_id " +
+    "WHERE bruker_id=? ORDER BY (favoritt IS FALSE), (frist IS NULL) , (frist) , opprettet ASC", [req.params.bruker_id], function(err, rows, fields){
 
       for(let handleliste of rows){
         if('opprettet' in handleliste)
