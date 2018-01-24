@@ -120,7 +120,13 @@
       deleteItem(row){
         axios.delete('http://localhost:9000/rest/vare/' + row.item_id).then(response => {
           this.$emit('ItemRemoved');
-          this.rows.splice(row, 1);
+          let rows = this.rows;
+          for(let i = 0; i < rows.length; i++){
+            if(rows[i] === row){
+              this.rows.splice(i, 1);
+              break;
+            }
+          }
         });
       },
       updateList(){
