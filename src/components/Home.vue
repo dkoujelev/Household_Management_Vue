@@ -36,7 +36,7 @@
 
     export default {
       name: 'Home',
-      components: { Todo, Shoppinglists, Newsfeed, Modal },
+      components: { Todo, Shoppinglists, Newsfeed },
       data(){
         return {
           showMe: false,
