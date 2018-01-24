@@ -73,6 +73,16 @@ module.exports = function(connection, server){
     });
   });
 
+// Hent alle meldinger som en bruker skal se
+  server.get('rest/melding/motta/brukerAlle/:bruker_id', function (req, res, next) {
+    connection.query("SELECT Melding.* FROM Melding INNER JOIN Bruker_Kollektiv ON Melding.sendt_til_kollektiv = Bruker_Kollektiv.kollektiv_id WHERE bruker_id=?", req.params.bruker_id, function (err, rows, fields) {
+      if(err)
+        return next(err);
+      res.send(rows);
+      return next();
+    });
+  });
+
   // Slett en melding
   server.del('rest/melding/:melding_id', (req,res,next) => {
     connection.query('DELETE FROM Melding WHERE melding_id=?', [req.params.melding_id], (err,rows,fields) => {
