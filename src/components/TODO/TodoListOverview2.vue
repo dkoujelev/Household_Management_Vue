@@ -21,7 +21,7 @@
           </thead>
           <tbody>
           <tr v-for="row in rows">
-            <td @click="selectGroup(group)"> {{row.tittel}} </td>
+            <td> <a @click="modalVisible = true"> {{row.tittel}}</a> </td>
             <td>Kommer</td>
             <td>Kommer</td>
             <td>{{row.dato}}</td>
@@ -41,42 +41,57 @@
       </div>
     </section>
   </div>
+
   </div>
   </div>
   </div>
 
-  <div id="root" class="container">
-    <modal v-if="showModal" @close="showModal = false">
-      <p> tet</p>
-    </modal>
-    <button class="modal-close"> Lukk </button>
-    <button @click="showModal = true">Show modal</button>
+    <div class="modal" v-bind:class="{'is-active': modalVisible}" >
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Gjøremål liste</p>
+          <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <test></test>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" @click="modalVisible=false">Save changes</button>
+          <button class="button" @click="modalVisible = false">Cancel</button>
+        </footer>
+      </div>
+      <button class="modal-close" @click=""></button>
+    </div>
 
-    <button class="modal-close" ></button>
-  </div>
   </div>
 </template>
 
 <script>
   import axios from 'axios';
-  import {store} from '@/store'
-  import router from '@/router/index'
-  import Modal from "./Modal";
+  import {store} from '@/store';
+  import test from '@/components/TODO/TodoListOverview';
+
 
 
     export default {
-      components: Modal,
+      components: {
+        test,
+      },
+     // Components: Modal,
       name: "todo-list-overview2",
       data() {
         return {
           rows: [],
-         //g: {},
+          modalVisible: false,
         };
       },
       mounted() {
         this.fillRows();
         //this.visGruppe();
       },
+
+
 
 
 

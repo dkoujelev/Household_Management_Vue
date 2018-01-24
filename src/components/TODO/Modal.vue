@@ -1,33 +1,64 @@
 <template>
-  <div class="modal">
-  <div class="modal is-active">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-
-        <slot></slot>
-
+  <transition
+    :name="transition"
+    mode="in-out"
+    appear
+    :appear-active-class="enterClass"
+    :enter-active-class="enterClass"
+    :leave-active-class="leaveClass"
+    @beforeEnter="beforeEnter"
+    @afterEnter="afterEnter"
+    @beforeLeave="beforeLeave"
+    @afterLeave="afterLeave"
+  >
+    <div :class="classes" v-if="show">
+      <div class="modal-background" @click="deactive"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">{{ title }}</p>
+          <button class="delete" @click="deactive"></button>
+        </header>
+        <section class="modal-card-body">
+          <slot></slot>
+        </section>
+        <footer class="modal-card-foot">
+          <a class="button is-primary" @click="ok">{{ okText }}</a>
+          <a class="button" @click="cancel">{{ cancelText }}</a>
+        </footer>
       </div>
-      <button class="modal-close is-large" aria-label="close"></button>
     </div>
-    <button class="modal-close" @click="$emit('close')"> </button>
-  </div>
+  </transition>
 </template>
 
 <script>
-    export default {
-        name: "modal",
-
-      methods: {
-        data() {
-          return {
-            showModal: false,
-          };
-        },
-
+  import BaseModal from './BaseModal'
+  export default {
+    mixins: [BaseModal],
+    props: {
+      title: {
+        type: String
+      },
+      okText: {
+        type: String,
+        default: 'Ok'
+      },
+      cancelText: {
+        type: String,
+        default: 'Cancel'
       }
+    },
+    computed: {
+      classes () {
+        return ['modal', 'animated', 'is-active']
+      }
+    },
+    methods: {
+      ok () {
+        this.$emit('ok')
+      },
+      cancel () {
+        this.$emit('cancel')
+      },
     }
+  }
 </script>
-
-<style scoped>
-
-</style>
