@@ -73,7 +73,7 @@ let axios_eksempel = function(){
 };
 
 
-describe.skip('Undergruppe',() => {
+describe('Undergruppe',() => {
 
   // Legg inn et par testusers i basen. Begge testusers er medlem i test_kollektiv som også ligger i basen.
   // Basen tømmes og dette innholdet legges inn på nytt før hver test kjøres
@@ -158,10 +158,10 @@ describe.skip('Undergruppe',() => {
   });
 
   it('Hent alle undergrupper', () => {
-    return axios.get('http://localhost:9100/rest/undergruppe/').then((response) => {
+    return axios.get('http://localhost:9100/rest/undergrupper/').then((response) => {
       let undergrupper = response.data;
       // Sjekk at vi fikk ut like mange undergrupper som vi satte inn.
-      // expect(undergrupper.length).to.equal(3);
+      expect(undergrupper.length).to.equal(5);
 
       // Sjekk at undergruppene som kom ut er identiske med de som ble satt inn.
       expect(undergrupper).to.containSubset([testUndergruppe1, testUndergruppe2, testUndergruppe3]);
@@ -169,11 +169,10 @@ describe.skip('Undergruppe',() => {
   });
 
   it('Hent alle undergruppene til et kollektiv', () => {
-
-    return axios.post('http://localhost:9100/rest/undergrupperForKollektiv/' + testKollektiv1.kollektiv_id).then(response => {
+    return axios.get('http://localhost:9100/rest/undergrupperForKollektiv/' + testKollektiv1.kollektiv_id).then(response => {
       let undergrupper = response.data;
       // Sjekk at vi fikk ut like mange undergrupper som vi satte inn.
-      expect(undergrupper.length).to.equal(2);
+      expect(undergrupper.length).to.equal(3);
 
       // Sjekk at undergruppene som kom ut er identiske med de som ble satt inn.
       expect(undergrupper).to.containSubset([testUndergruppe1, testUndergruppe2]);
@@ -182,22 +181,22 @@ describe.skip('Undergruppe',() => {
 
   it('Hent hovedgruppen til et kollektiv', () => {
 
-    return axios.post('http://localhost:9100/rest/hovedgruppenForKollektiv/' + testKollektiv1.kollektiv_id).then(response => {
+    return axios.get('http://localhost:9100/rest/hovedgruppenForKollektiv/' + testKollektiv1.kollektiv_id).then(response => {
       let undergrupper = response.data;
       // Sjekk at vi fikk ut en undergruppe.
       expect(undergrupper.length).to.equal(1);
 
       // Sjekk at undergruppen som kom ut er identiske med de som ble satt inn.
-      //expect(undergrupper).to.containSubset([testUndergruppe1]);
+      expect(undergrupper).to.not.containSubset([testUndergruppe1]);
     });
   });
 
-  it('Hent hovedgruppen til et kollektiv', () => {
+  it('Hent undergruppene til en bruker', () => {
 
-    return axios.post('http://localhost:9100/rest/undergrupperForBruker/' + testUser1.bruker_id).then(response => {
+    return axios.get('http://localhost:9100/rest/undergrupperForBruker/' + testUser1.bruker_id).then(response => {
       let undergrupper = response.data;
       // Sjekk at vi fikk ut like mange undergrupper som vi satte inn.
-      expect(undergrupper.length).to.equal(4);
+      expect(undergrupper.length).to.equal(3);
 
       // Sjekk at undergruppene som kom ut er identiske med de som ble satt inn.
       expect(undergrupper).to.containSubset([testUndergruppe1, testUndergruppe2]);
