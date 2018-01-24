@@ -3,7 +3,7 @@
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
-          <article class="card is-rounded">
+          <article class="card is-rounded is-centered">
             <div class="card-content">
               <img src="../img/logo_full.png" height="200" width="400"/>
               <p class="help is-danger">{{this.error}}</p>
