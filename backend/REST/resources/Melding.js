@@ -76,6 +76,12 @@ module.exports = function(connection, server){
 // Hent alle meldinger som en bruker skal se
   server.get('rest/melding/motta/brukerAlle/:bruker_id', function (req, res, next) {
     connection.query("SELECT Melding.* FROM Melding INNER JOIN Bruker_Kollektiv ON Melding.sendt_til_kollektiv = Bruker_Kollektiv.kollektiv_id WHERE bruker_id=?", req.params.bruker_id, function (err, rows, fields) {
+
+      for(let melding of rows){
+        if('sendt' in melding)
+          melding.sendt = new Date(melding.sendt);
+      }
+
       if(err)
         return next(err);
       res.send(rows);

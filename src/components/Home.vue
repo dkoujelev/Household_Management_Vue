@@ -10,12 +10,12 @@
     <div class="tile is-ancestor">
       <div class="tile is-parent">
         <div class="tile is-child box is-half" style="background-color: lightskyblue">
-          <Shoppinglists v-bind:value="5"></Shoppinglists>
+          <Shoppinglists :value="5"></Shoppinglists>
         </div>
       </div>
       <div class="tile is-parent">
         <div class="tile is-child box is-half" style="background-color: lightskyblue">
-          <Shoppinglists v-bind:value="5"></Shoppinglists>
+          <Shoppinglists :value="5"></Shoppinglists>
         </div>
       </div>
     </div>
