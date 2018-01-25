@@ -24,6 +24,7 @@
     "chai-subset": "^1.6.0",
     "concurrently": "^3.5.1",
     "d2b": "^0.5.0",
+    "flatpickr": "^4.2.3",
     "mysql": "^2.15.0",
     "node-gyp": "^3.6.2",
     "nodemailer": "^4.4.2",
