@@ -2,8 +2,8 @@ let expect = require('chai').expect;
 let axios = require('axios');
 let bcrypt = require('bcrypt');
 let clearDB = require('./testutil').clearDB;
-
-let restServer = 'http://localhost:9001/rest/';
+let serverConfig = require('./testutil').serverConfig();
+let restServer = 'http://' + serverConfig.serverAddress + ':' + serverConfig.serverPort + '/rest/';
 
 let testuser = {
   epost: 'test@test.com',

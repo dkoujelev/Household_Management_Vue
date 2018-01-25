@@ -3,8 +3,8 @@ let should = require('chai').should();
 let axios = require('axios');
 let clearDB = require('./testutil').clearDB;
 let server = require('../REST/server');
-
-let restServer = 'http://localhost:9001/rest/';
+let serverConfig = require('./testutil').serverConfig();
+let restServer = 'http://' + serverConfig.serverAddress + ':' + serverConfig.serverPort + '/rest/';
 
 let testuser = {
   epost: 'test@test.com',
