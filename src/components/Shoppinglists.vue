@@ -22,11 +22,14 @@
           <tr v-for="row in rows">
             <td>{{row.navn}}</td>
             <td>{{row.frist}}</td>
-            <td><button class="button is-warning" @click="selectList(row)">Se handleliste</button></td>
+            <td>
+              <button class="button is-warning" @click="selectList(row)">Se handleliste</button>
+              <button class="button" :class="{ 'is-success': !row.favorite, 'is-danger': row.favorite}" v-if="!isHome" @click="addFavorite(row)"><i class="fa fa-star" aria-hidden="true"></i></button>
+            </td>
           </tr>
         </table>
         <br v-if="len === -1">
-        <button class="button is-link" @click="openAddShoppingList" v-if="len === -1">Lag handleliste</button>
+        <button class="button is-link" @click="openAddShoppingList" v-if="!isHome">Lag handleliste</button>
       </div>
     </div>
   </div>
@@ -47,10 +50,14 @@
     computed: {
       len: function () {
         return (isNaN(Number.parseInt(this.value)) ? -1 : this.value);
+      },
+      isHome: function () {
+        return ((isNaN(Number.parseInt(this.value)) ? -1 : this.value) !== -1);
       }
     },
     asyncComputed:{
-        rows(){
+      rows: {
+        get(){
           let rows = [];
 
           let cap = this.len;
@@ -61,7 +68,7 @@
             for(let i = 0; i < resRows.length; i++){
               if(resRows[i].handling_utfort === "1970-01-01T00:00:00.000Z") {
                 let date = this.formateDate(resRows[i].frist);
-                let obj = {handleliste_id: resRows[i].handleliste_id, navn: resRows[i].navn, frist: date};
+                let obj = {handleliste_id: resRows[i].handleliste_id, navn: resRows[i].navn, frist: date, favorite: resRows[i].favoritt};
                 rows.push(obj);
 
                 if(cap > 0){
@@ -76,13 +83,18 @@
           }).catch(err => {
             console.log(err);
           });
+        },
+        watch(){
+          this.updated;
         }
+      }
     },
     data(){
       return {
         list: {},
         showShoppingList: false,
-        showAddShoppingList: false
+        showAddShoppingList: false,
+        updated: false,
       };
     },
     mounted(){
@@ -92,6 +104,7 @@
       update(){
         this.closeAddShoppingList();
         this.closeShoppingList();
+        this.updated = !this.updated;
       },
       openShoppingList(){
         this.showShoppingList = true;
@@ -104,6 +117,13 @@
       },
       closeAddShoppingList(){
         this.showAddShoppingList = false;
+      },
+      addFavorite(row){
+        let obj = {favoritt: !row.favorite};
+        axios.put('http://localhost:9000/rest/handleliste/' + row.handleliste_id, obj).then(response => {
+          this.$emit('favoriteUpdated');
+          this.updated = !this.updated;
+        });
       },
       selectList(row){
         this.list.name =  row.navn;

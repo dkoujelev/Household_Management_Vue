@@ -5,6 +5,8 @@
         <h3>Lag din handleliste</h3>
       </div>
       <div class="tile is-child box is-6" style="background-color: lightskyblue">
+        <label class="label">Frist</label>
+        <flat-pickr v-model="date" :config="settings"></flat-pickr>
         <label class="label">Navn å handleliste</label>
         <p class="help is-danger">{{this.errorMessages.overskrift}}</p>
         <div class="control">
@@ -42,6 +44,7 @@
           <nav class="level">
             <!-- left side -->
             <div class="level-left">
+              <input type="checkbox" :checked="save"><p>Lagre handleliste for fremtidig bruk</p>
               <button class="button is-link" @click="checkInput">Godkjenn</button>
             </div>
 
@@ -68,12 +71,19 @@
   import axios from 'axios';
   import router from '@/router'
   import {store} from '@/store'
+  import flatPickr from 'vue-flatpickr-component';
+  import 'flatpickr/dist/flatpickr.css';
 
   export default {
-
+    components: { flatPickr },
 
     data() {
       return {
+        save: false,
+        settings: {
+          enableTime: false
+        },
+        date: new Date(),
         name: "",
         rows: [
           {navn: "", antall: 1},
@@ -119,7 +129,9 @@
           opprettet: new Date(),
           beskrivelse: "",
           undergruppe_id: store.state.current_group.undergruppe_id,
-          varer: this.rows
+          varer: this.rows,
+          frist: this.date,
+          favoritt: this.save
         };
 
         axios.post('http://localhost:9000/rest/handleliste', shoppinglist).then( response => {
