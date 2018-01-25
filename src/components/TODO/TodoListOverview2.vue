@@ -47,7 +47,7 @@
         <div slot="content">
           <p>HAHA</p>
           <h1>7</h1>
-          <ViewTodoList :id.sync="id"/>
+          <ViewTodoList :bjarne.sync="id"/>
           <button class="button is-success">Save changes</button>
           <button class="button" @click="closeModal"> Cancel</button>
         </div>

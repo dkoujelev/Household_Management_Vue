@@ -55,12 +55,7 @@
 
     export default {
       name: "todo-list-overview3",
-      props: ['id'],
-      computed: {
-        id() {
-          return Number.parseInt(this.id);
-        }
-      },
+      props: ['bjarne'],
 
       data() {
         return {
@@ -72,6 +67,11 @@
         this.fillRows();
       },
 
+      watcher: {
+        id(){
+          this.id = this.bjarne;
+        }
+      },
 
       methods: {
 
@@ -116,8 +116,8 @@
           });
         },
 
-        fillRows() { // this.id
-              axios.get('http://localhost:9000/rest/gjoremal/1' .then(response => {
+        fillRows() { // this.id = bjarne props.. hard koder med 1 istedet for this.id så får en ut lister
+              axios.get('http://localhost:9000/rest/gjoremaler/' + this.id).then(response => {
                 //alert('Alle lister til bruker hentet');
                 let resRows = response.data;
                 console.log(resRows);
@@ -127,7 +127,7 @@
                 }
               }).catch(err => {
                 console.log(JSON.stringify(err));
-          }));
+          });
         }
       }
     }
