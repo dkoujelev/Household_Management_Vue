@@ -1,50 +1,51 @@
 <template>
-  <div class="is-ancestor">
-    <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
-      <h2 slot="title">Lag nyhet</h2>
-      <Addnews slot="content" @addedNews="update" @closeAddNews="closeModal" />
-    </Modal>
-    <div class=" is-parent is-vertical ">
-      <h2 class="subtitle is-2">Nyheter</h2>
-      <div class="child tile is-vertical">
-        <Addnews v-if="!isHome" :showCancel="false" @addedNews="update" />
-      </div>
-      <br>
-      <div class="child tile is-vertical">
-        <article class="message is-link" v-for="row in rows">
-          <div class="message-header">
-            <h2>{{row.overskrift}}</h2>
-            <a v-if="row.knapper && !isHome" @click="deleteNews(row)">Slett</a>
-          </div>
-          <div class="message-body">
-            <h3>{{row.nyhet}}</h3>
-
-            <div class="block">
-              <nav class="level">
-                <!-- left side -->
-                <div class="level-left">
-                  <p class="has-text-grey">{{row.hvem.fornavn}} {{row.hvem.etternavn}}</p>
-                </div>
-
-                <!-- right side -->
-                <div class="level-right">
-                  <div class="level-item">
-                    <p class="has-text-grey">{{row.nar}}</p>
+  <div class="container ">
+    <div class="columns" :class="{'is-centered' : !isHome}">
+      <div class="column" :class="{'is-6' : !isHome}">
+      <div class="card is-rounded is-centered">
+        <div class="is-ancestor">
+          <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
+            <h2 slot="title">Lag nyhet</h2>
+            <Addnews slot="content" @addedNews="update" @closeAddNews="closeModal" />
+          </Modal>
+          <div class="is-parent">
+            <div class="is-child">
+              <p class="title">Nyheter</p>
+              <div class="content1">
+                <article class="message is-link" v-for="row in rows">
+                  <div class="message-header">
+                    <h2>{{row.overskrift}}</h2>
+                    <a v-if="row.knapper && !isHome" @click="deleteNews(row)">Slett</a>
                   </div>
-                </div>
-              </nav>
+                  <div class="message-body">
+                    <h3>{{row.nyhet}}</h3>
+
+                    <div class="block">
+                      <nav class="level">
+                        <!-- left side -->
+                        <div class="level-left">
+                          <p class="has-text-grey">{{row.hvem.fornavn}} {{row.hvem.etternavn}}</p>
+                        </div>
+                        <!-- right side -->
+                        <div class="level-right">
+                          <div class="level-item">
+                            <p class="has-text-grey">{{row.nar}}</p>
+                          </div>
+                        </div>
+                      </nav>
+                    </div>
+                  </div>
+                </article>
+              </div>
+              <br>
+              <div class="child" v-if="!isHome">
+                <button class="button is-link" @click="openModal">Lag nyhet</button>
+              </div>
             </div>
-
-
           </div>
-
-        </article>
+        </div>
       </div>
-      <br>
-      <div class="child" v-if="!isHome">
-        <button class="button is-link" @click="openModal">Lag nyhet</button>
-      </div>
-      <br>
+    </div>
     </div>
   </div>
 </template>
@@ -220,6 +221,11 @@
 
   button{
     color: orange;
+  }
+
+  div.content1 {
+    height: 450px;
+    overflow: auto;
   }
 
 </style>

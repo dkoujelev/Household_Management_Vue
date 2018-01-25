@@ -1,7 +1,7 @@
 <template>
   <div class="tile is-vertical">
     <div class="tile is-ancestor">
-      <div class=" tile is-parent is-8">
+      <div class=" tile is-parent is-6">
         <div class="tile is-child box" style="background-color: white">
           <Newsfeed :value="5"></Newsfeed>
         </div>
