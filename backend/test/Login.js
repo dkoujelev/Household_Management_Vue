@@ -4,6 +4,8 @@ let axios = require('axios');
 let clearDB = require('./testutil').clearDB;
 let server = require('../REST/server');
 
+let restServer = 'http://localhost:9001/rest/';
+
 let testuser = {
   epost: 'test@test.com',
   fornavn: 'Test',
@@ -25,7 +27,7 @@ describe('Login',() => {
       server.loginEnabled = false;
     }).then(() => {
       testuser.hashed_passord = hashed_passord;
-      return axios.post('http://localhost:9100/rest/bruker/', testuser);
+      return axios.post(restServer + 'bruker/', testuser);
     }).then((response) => {
       testuser.bruker_id = response.data.insertId;
       server.loginEnabled = true;
@@ -36,12 +38,12 @@ describe('Login',() => {
 
   // Not allowed to access data without being logged in.
   it('Sjekk at uautentisert bruker ikke når REST-ressurser',() => {
-    return axios.get('http://localhost:9100/rest/bruker').should.be.rejected;
+    return axios.get(restServer + 'bruker').should.be.rejected;
   });
 
   it('Sjekk at bruker kan logge inn og aksessere ressurser', () => {
 
-    return axios.post('http://localhost:9100/rest/login', {epost: testuser.epost, passord: testuser.hashed_passord
+    return axios.post(restServer + 'login', {epost: testuser.epost, passord: testuser.hashed_passord
     }).then(response => {
       let header = {
         headers: {
@@ -50,21 +52,21 @@ describe('Login',() => {
       };
       delete testuser.hashed_passord;
       expect(response.data).to.containSubset(testuser);
-      return axios.get('http://localhost:9100/rest/bruker/' + testuser.bruker_id, header)
+      return axios.get(restServer + 'bruker/' + testuser.bruker_id, header)
     }).then(response => {
       expect(response.data).to.containSubset(testuser);
     });
   });
 
   it('Sjekk at bruker er logget inn',() => {
-    return axios.post('http://localhost:9100/rest/login', {epost: testuser.epost, passord: testuser.hashed_passord
+    return axios.post(restServer + 'login', {epost: testuser.epost, passord: testuser.hashed_passord
     }).then(response => {
       let header = {
         headers: {
           cookie: response.headers["set-cookie"]
         }
       };
-      return axios.get('http://localhost:9100/rest/loggedIn', header)
+      return axios.get(restServer + 'loggedIn', header)
     }).then((response) => {
       delete testuser.hashed_passord;
       expect(response.data).to.containSubset(testuser);
@@ -72,7 +74,7 @@ describe('Login',() => {
   });
 
   it('Sjekk at bruker bir logget ut',() => {
-    return axios.post('http://localhost:9100/rest/login', {epost: testuser.epost, passord: testuser.hashed_passord
+    return axios.post(restServer + 'login', {epost: testuser.epost, passord: testuser.hashed_passord
     }).then(response => {
       let header = {
         headers: {
@@ -81,9 +83,9 @@ describe('Login',() => {
       };
       delete testuser.hashed_passord;
       expect(response.data).to.containSubset(testuser);
-      return axios.post('http://localhost:9100/rest/logout', header)
+      return axios.post(restServer + 'logout', header)
     }).then(() => {
-      return axios.get('http://localhost:9100/rest/bruker').should.be.rejected;
+      return axios.get(restServer + 'bruker').should.be.rejected;
     });
   });
 });
