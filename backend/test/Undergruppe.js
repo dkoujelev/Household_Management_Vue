@@ -243,13 +243,15 @@ describe('Undergruppe',() => {
       });
   });
 
-  it.skip('Slett undergruppe',() => {
+  it('Slett undergruppe',() => {
 
     return axios.delete('http://localhost:9100/rest/undergruppe/' + testUndergruppe1.undergruppe_id)
       .then(response => {
         return axios.get('http://localhost:9100/rest/undergruppe/' + testUndergruppe1.undergruppe_id)
       }).then(response => {
-        expect(response.data).to.equal('Undergruppe not found!');
+        testUndergruppe1.deleted = 1;
+        expect(response.data).to.containSubset(testUndergruppe1);
+        expect(response.data).to.not.containSubset(testUndergruppe2,testUndergruppe3);
       });
   });
 });

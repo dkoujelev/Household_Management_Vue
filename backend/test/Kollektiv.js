@@ -188,13 +188,16 @@ describe('Kollektiv',() => {
       });
   });
 
-  it.skip('Slett kollektiv',() => {
+  it('Slett kollektiv',() => {
 
-    return axios.delete('http://localhost:9100/rest/kollektiv/' + testListe.id)
+    return axios.delete('http://localhost:9100/rest/kollektiv/' + testKollektiv1.kollektiv_id)
       .then(response => {
-        return axios.get('http://localhost:9100/rest/kollektiv/' + testListe.id)
+        return axios.get('http://localhost:9100/rest/kollektiv/' + testKollektiv1.kollektiv_id)
       }).then(response => {
-        expect(response.data).to.equal('Kollektiv not found!');
+        testKollektiv1.deleted = 1;
+        expect(response.data).to.containSubset(testKollektiv1);
+      }).catch(exception => {
+        console.log(exception);
       });
   });
 });

@@ -185,7 +185,8 @@ describe('Gjoremalsliste',() => {
       .then(response => {
         return axios.get('http://localhost:9100/rest/gjoremalsliste/' + testListe.id)
       }).then(response => {
-        expect(response.data).to.equal('Gjoremalsliste not found!');
+        testListe.deleted = 1;
+        expect(response.data).to.containSubset(testListe);
       });
   });
 });
