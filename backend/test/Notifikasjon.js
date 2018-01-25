@@ -65,7 +65,7 @@ let testNotification4 = {
     bruker_id:0
 };
 
-describe('Innmelding',() => {
+describe('Notifikasjon',() => {
     beforeEach(() => {
         // OBS: Vi må RETURNERE hele kjeden til testbiblioteket vårt, derfor return før clearDB.
         return clearDB()     // Vi må først nullstille testbasen
