@@ -21,7 +21,7 @@
           </thead>
           <tbody>
           <tr v-for="row in rows">
-            <td> <a @click="modalVisible = true"> {{row.tittel}}</a> </td>
+            <td> <a @click="openTodo(row)"> {{row.tittel}} </a> </td> <!--  -->
             <td>Kommer</td>
             <td>Kommer</td>
             <td>{{row.dato}}</td>
@@ -42,14 +42,19 @@
     </section>
   </div>
 
+      <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
+        <h2 slot="title">Gjøremål </h2>
+        <div slot="content">
+          <p>HAHA</p>
+          <h1>7</h1>
+          <ViewTodoList :id.sync="id"/>
+          <button class="button is-success">Save changes</button>
+          <button class="button" @click="closeModal"> Cancel</button>
+        </div>
+      </Modal>
   </div>
   </div>
   </div>
-
-
-
-    <Modal :title="tittel" :modalVisible="modalVisible" v-if="modalVisible"><p>asdas</p></Modal>
-    <button @click="test">Open</button>
 
   </div>
 </template>
@@ -58,51 +63,53 @@
   import axios from 'axios';
   import {store} from '@/store';
   import Modal from '@/components/Modal';
-
+  import ViewTodoList from '@/components/TODO/TodoListOverview3'
 
     export default {
-      components: { Modal },
-     // Components: Modal,
       name: "todo-list-overview2",
+      components: { Modal, ViewTodoList},
+
       data() {
-        return {
+        return{
+          id: 1,
           rows: [],
-          modalVisible: false,
+          showModal: false,
           tittel: 'Dette er en tittel'
         };
       },
-      mounted() {
+      mounted(){
         this.fillRows();
-        //this.visGruppe();
       },
-
-
-
-
 
 // [{}] <- betyr at array inneholder et objekt
 
       methods: {
-        test(){
-          console.log("click");
-          this.modalVisible = true;
+
+        closeModal(){
+          this.showModal = false;
         },
-        fillRows() {
-          axios.get('http://localhost:9000/rest/gjoremalslisterUndergruppe/1').then(response => {
-            //alert('Alle lister til bruker hentet');
-            let resRows = response.data;
-            console.log(resRows);
-            for (let i = 0; i < resRows.length; i++) {
-              let obj = {tittel: resRows[i].navn, gruppe: resRows[i].navn, dato: resRows[0].opprettet};
-              this.rows.push(obj);
-            }
-          }).catch(err => {
-            console.log(JSON.stringify(err));
-          });
+        openTodo(row) {
+          this.id = row.id;
+          this.showModal = true;
+          //console.log("click");
         },
+
+          fillRows() {
+            //+ store.state.current_user.bruker_id
+            axios.get('http://localhost:9000/rest/gjoremalslisterUndergruppe/1' ).then(response => {
+              //alert('Alle lister til bruker hentet');
+              let resRows = response.data;
+              console.log(resRows);
+              for (let i = 0; i < resRows.length; i++) {
+                let obj = {id: resRows[i].liste_id, tittel: resRows[i].navn, gruppe: resRows[i].navn, dato: resRows[0].opprettet};
+                this.rows.push(obj);
+              }
+            }).catch(err => {
+              console.log(JSON.stringify(err));
+            });
+          }
       }
     }
-
 </script>
 
 <style scoped>
