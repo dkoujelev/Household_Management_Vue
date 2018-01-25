@@ -1,7 +1,8 @@
 let expect = require('chai').expect;
 let axios = require('axios');
 let clearDB = require('./testutil').clearDB;
-
+let serverConfig = require('./testutil').serverConfig();
+let restServer = 'http://' + serverConfig.serverAddress + ':' + serverConfig.serverPort + '/rest/';
 
 let testuser = {
   epost: 'test@test.com',
@@ -69,35 +70,35 @@ describe('Gjoremalsliste',() => {
     return clearDB()     // Vi må først nullstille testbasen
       .then((response) => {
         // Legg testuser inn i basen
-        return axios.post('http://localhost:9100/rest/bruker/', testuser);
+        return axios.post(restServer + 'bruker/', testuser);
       }).then(response => {
         // Finn ut hvilken bruker_id testuser fikk, og legg til i testuser objektet vårt
         testuser.bruker_id = response.data.insertId;
 
         // Legg in test_kollektiv i basen. testuser blir admin.
-        return axios.post('http://localhost:9100/rest/kollektiv/' + testuser.bruker_id, test_kollektiv);
+        return axios.post(restServer + 'kollektiv/' + testuser.bruker_id, test_kollektiv);
       }).then(response => {
         test_kollektiv.kollektiv_id = response.data.insertId;
 
         // Legg in testUndergruppe i basen.
         testUndergruppe.kollektiv_id = test_kollektiv.kollektiv_id;
-        return axios.post('http://localhost:9100/rest/undergruppe/' + testuser.bruker_id, testUndergruppe);
+        return axios.post(restServer + 'undergruppe/' + testuser.bruker_id, testUndergruppe);
       }).then(response => {
         testUndergruppe.undergruppe_id = response.data.insertId;
 
         // Legg in testListe i basen.
         testListe.undergruppe_id = testUndergruppe.undergruppe_id;
-        return axios.post('http://localhost:9100/rest/gjoremalsliste/' + testUndergruppe.undergruppe_id, testListe);
+        return axios.post(restServer + 'gjoremalsliste/' + testUndergruppe.undergruppe_id, testListe);
       }).then(response => {
         testListe.id = response.data.insertId;
 
         // Legg in testGjoremal.
-        return axios.post('http://localhost:9100/rest/gjoremal/', testGjoremal);
+        return axios.post(restServer + 'gjoremal/', testGjoremal);
       }).then(response => {
         testGjoremal.gjoremal_id = response.data.insertId;
 
         // Legg in testGjoremal2.
-        return axios.post('http://localhost:9100/rest/gjoremal/', testGjoremal2);
+        return axios.post(restServer + 'gjoremal/', testGjoremal2);
       }).then(response => {
         testGjoremal2.gjoremal_id = response.data.insertId;
       }).catch(exception => {
@@ -107,7 +108,7 @@ describe('Gjoremalsliste',() => {
 
   it('Hent gjoremalsliste med bestemt id', () => {
     // Hent ut testuser og sammenlign
-    return axios.get('http://localhost:9100/rest/gjoremalsliste/' + testListe.id).then(response => {
+    return axios.get(restServer + 'gjoremalsliste/' + testListe.id).then(response => {
 
       // Vi forventer nå at brukerobjektet fra basen er helt likt testuser-objektet vårt som vi la inn tidligere.
       expect(response.data).to.containSubset(testListe);
@@ -117,7 +118,7 @@ describe('Gjoremalsliste',() => {
 
   it('Hent gjoremalsliste til en undergruppe', () => {
 
-    return axios.get('http://localhost:9100/rest/gjoremalslisterUndergruppe/' + testUndergruppe.undergruppe_id).then((response) => {
+    return axios.get(restServer + 'gjoremalslisterUndergruppe/' + testUndergruppe.undergruppe_id).then((response) => {
       let gjoremaler = response.data;
 
       // Sjekk at vi fikk ut like mange gjoremal som vi satte inn.
@@ -130,7 +131,7 @@ describe('Gjoremalsliste',() => {
 
   it('Hent gjoremalsliste til et kollektiv', () => {
 
-    return axios.get('http://localhost:9100/rest/gjoremalslisterKollektiv/' + test_kollektiv.kollektiv_id).then((response) => {
+    return axios.get(restServer + 'gjoremalslisterKollektiv/' + test_kollektiv.kollektiv_id).then((response) => {
       let gjoremaler = response.data;
 
       // Sjekk at vi fikk ut like mange gjoremal som vi satte inn.
@@ -143,7 +144,7 @@ describe('Gjoremalsliste',() => {
 
   it('Hent gjoremalsliste til en bruker', () => {
 
-    return axios.get('http://localhost:9100/rest/gjoremalslisterBruker/' + testuser.bruker_id).then((response) => {
+    return axios.get(restServer + 'gjoremalslisterBruker/' + testuser.bruker_id).then((response) => {
       let gjoremaler = response.data;
 
       // Sjekk at vi fikk ut like mange gjoremal som vi satte inn.
@@ -161,9 +162,9 @@ describe('Gjoremalsliste',() => {
       navn: "Updated"
     };
 
-    return axios.put('http://localhost:9100/rest/gjoremalsliste/', newListe)
+    return axios.put(restServer + 'gjoremalsliste/', newListe)
       .then(response => {
-        return axios.get('http://localhost:9100/rest/gjoremalsliste/' + newListe.id).then(response => {
+        return axios.get(restServer + 'gjoremalsliste/' + newListe.id).then(response => {
           expect(response.data).to.containSubset(newListe);
         });
       });
@@ -172,20 +173,21 @@ describe('Gjoremalsliste',() => {
   it('Favorittiser gjoremalsliste', () => {
 
     testListe.favoritt = 1;
-    return axios.put('http://localhost:9100/rest/favorittGjoremalsliste/', testListe)
+    return axios.put(restServer + 'favorittGjoremalsliste/', testListe)
       .then(response => {
-        return axios.get('http://localhost:9100/rest/gjoremalsliste/' + testListe.id)
+        return axios.get(restServer + 'gjoremalsliste/' + testListe.id)
       }).then(response => {
         expect(response.data.favoritt).to.equal(testListe.favoritt);
       });
   });
 
   it('Slett gjoremalsliste',() => {
-    return axios.delete('http://localhost:9100/rest/gjoremalsliste/' + testListe.id)
+    return axios.delete(restServer + 'gjoremalsliste/' + testListe.id)
       .then(response => {
-        return axios.get('http://localhost:9100/rest/gjoremalsliste/' + testListe.id)
+        return axios.get(restServer + 'gjoremalsliste/' + testListe.id)
       }).then(response => {
-        expect(response.data).to.equal('Gjoremalsliste not found!');
+        testListe.deleted = 1;
+        expect(response.data).to.containSubset(testListe);
       });
   });
 });

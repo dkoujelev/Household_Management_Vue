@@ -13,7 +13,7 @@ module.exports = function(connection, server){
 // Hent et bestemt kollektiv via navn
   server.get('rest/kollektivMedNavn/:navn',function(req, res, next){
     //console.log('DEBUG - rest/kollektivMedNavn/:navn');
-    connection.query("SELECT * FROM Kollektiv WHERE navn=?", [req.params.navn], function(err, rows, fields){
+    connection.query("SELECT * FROM Kollektiv WHERE navn=? AND deleted=FALSE", [req.params.navn], function(err, rows, fields){
       res.send(err ? err : (rows.length == 1 ? rows[0] : null));
       return next();
     });
@@ -35,7 +35,7 @@ module.exports = function(connection, server){
     //console.log('DEBUG - rest/kollektivForBruker/:bruker_id');
     connection.query("SELECT Kollektiv.* FROM Bruker_Kollektiv " +
       "INNER JOIN Kollektiv ON Bruker_Kollektiv.kollektiv_id=Kollektiv.kollektiv_id " +
-      "WHERE bruker_id=?",req.params.bruker_id, function(err, rows, fields){
+      "WHERE bruker_id=? AND deleted=FALSE",req.params.bruker_id, function(err, rows, fields){
       //console.log('DEBUG - rest/kollektivForBruker/:bruker_id/YELLO!');
       res.send(err ? err : rows);
       return next();
@@ -47,7 +47,7 @@ module.exports = function(connection, server){
     //console.log('DEBUG - rest/kollektivForAdmin/:bruker_id');
     connection.query("SELECT Kollektiv.* FROM Bruker_Kollektiv " +
     "INNER JOIN Kollektiv ON Bruker_Kollektiv.kollektiv_id = Kollektiv.kollektiv_id " +
-    "WHERE bruker_id=? AND er_admin=1",req.params.bruker_id, function(err, rows, fields){
+    "WHERE bruker_id=? AND er_admin=1 AND deleted=FALSE",req.params.bruker_id, function(err, rows, fields){
       res.send(err ? err : rows);
       return next();
     });
@@ -96,6 +96,26 @@ module.exports = function(connection, server){
 
       res.send(rows);
       return next();
+    });
+  });
+
+  server.del('rest/kollektiv/:kollektiv_id', function (req, res, next) {
+    let id = req.params.kollektiv_id;
+    connection.query('UPDATE Kollektiv, Undergruppe SET Kollektiv.deleted = TRUE, Undergruppe.deleted = TRUE WHERE Kollektiv.kollektiv_id=? AND Undergruppe.kollektiv_id=?', [id,id], function (err, rows, fields) {
+      if(err)
+        return next(err);
+      connection.query('SELECT undergruppe_id FROM Undergruppe WHERE kollektiv_id=?', req.params.kollektiv_id, function (err, rows, fields) {
+        if(err)
+          return next(err);
+        connection.query('DELETE FROM Bruker_Undergruppe WHERE ?', rows, function (err, rows, fields) {
+          if(err)
+            return next(err);
+          connection.query('DELETE FROM Bruker_Kollektiv WHERE kollektiv_id=?', req.params.kollektiv_id, function (err, rows, fields) {
+            res.send(err ? err : rows);
+            return next();
+          });
+        });
+      });
     });
   });
 };

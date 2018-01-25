@@ -81,7 +81,8 @@ module.exports = function(connection, server){
 
 // Hent handlelister for en bestemt undergruppe
   server.get('rest/handlelisteForUndergruppe/:undergruppe_id',function(req, res, next) {
-    connection.query("SELECT * FROM Handleliste WHERE undergruppe_id=? ORDER BY (favoritt IS FALSE), (frist IS NULL) , (frist) , opprettet ASC", [req.params.undergruppe_id], function (err, rows, fields) {
+    connection.query("SELECT * FROM Handleliste WHERE undergruppe_id=?  AND deleted=FALSE " +
+      "ORDER BY (favoritt IS FALSE), (frist IS NULL) , (frist) , opprettet ASC", [req.params.undergruppe_id], function (err, rows, fields) {
 
       for(let handleliste of rows){
         if('opprettet' in handleliste)
@@ -102,7 +103,8 @@ module.exports = function(connection, server){
     connection.query("SELECT Handleliste.* FROM Handleliste " +
     "INNER JOIN Undergruppe ON Handleliste.undergruppe_id=Undergruppe.undergruppe_id " +
     "INNER JOIN Bruker_Undergruppe ON Undergruppe.undergruppe_id=Bruker_Undergruppe.undergruppe_id " +
-    "WHERE bruker_id=? ORDER BY (favoritt IS FALSE), (frist IS NULL) , (frist) , opprettet ASC", [req.params.bruker_id], function(err, rows, fields){
+    "WHERE bruker_id=? AND Handleliste.deleted=FALSE " +
+    "ORDER BY (favoritt IS FALSE), (frist IS NULL) , (frist) , opprettet ASC", [req.params.bruker_id], function(err, rows, fields){
 
       for(let handleliste of rows){
         if('opprettet' in handleliste)
@@ -176,10 +178,10 @@ module.exports = function(connection, server){
 
 // Slett en liste
   server.del('rest/handleliste/:handleliste_id', function (req ,res, next) {
-    connection.query('DELETE FROM Vare WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
+    connection.query('UPDATE Vare SET deleted = TRUE WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
       if(err)
         return next(err);
-      connection.query('DELETE FROM Handleliste WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
+      connection.query('UPDATE Handleliste SET deleted = TRUE WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
         if(err)
           return next(err);
         res.send(rows);
