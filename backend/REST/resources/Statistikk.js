@@ -10,7 +10,7 @@ module.exports = function(connection, server) {
   });
 
   // Hent statistikk over alle kjøpte varer i et kollektiv
-  server.get('rest/statistikkMestKjopteVarerKollektiv/:kollektiv_id', function (req, res, next) {
+  server.post('rest/statistikkMestKjopteVarerKollektiv/:kollektiv_id', function (req, res, next) {
     if('fra' in req.body)
       req.body.fra = new Date(req.body.fra).getTime();
     if('til' in req.body)

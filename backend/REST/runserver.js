@@ -13,6 +13,7 @@ module.exports = function(connection,server){
   require("./resources/Login")(connection,server);
   require("./resources/Vare")(connection,server);
   require("./resources/Notifikasjon")(connection,server);
+  require("./resources/Statistikk")(connection,server);
 };
 
 
