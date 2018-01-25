@@ -13,18 +13,18 @@
           </thead>
 
           <tbody>
-            <tr v-for="user in users" @click="selectUser(user)">
-              <td data-label="Navn:">  {{user.fornavn}}  {{user.etternavn}}  </td>
+            <tr v-for="user in users">
+              <td data-label="Navn:"><a @click="selectUser(user)">{{user.fornavn}}  {{user.etternavn}}</a>  </td>
               <td data-label="Totalsum">  {{user.sum + " kr" }}  </td>
             </tr>
           </tbody>
         </table>
-
       </div>
 
+      <router-link class="button" to="AddExpence">Legg til kostnad (gjeld deles med undergruppa. KIM: skriv noe bedre her)</router-link>
       <div class="child tile box" style="background-color: white">
         <p class="text"> Total skyld andre medlemmer har til meg: &nbsp &nbsp</p>
-        <div class="child tile box" style="background-color: lightsalmon; font-weight: bold; font-size: large"> 124197 kr </div>
+        <div class="child tile box" style="background-color: lightsalmon; font-weight: bold; font-size: large"> {{totalDebt}} kr </div>
       </div> <br>
 
 
@@ -75,6 +75,14 @@
         selectUser(user){
           router.push('GjeldInnSpesifisert/' + user.bruker_id);
         }
+    },
+    computed: {
+      totalDebt(){
+        let total = 0;
+        for(let user of this.users)
+          total += user.sum;
+        return total;
+      }
     }
   };
 </script>

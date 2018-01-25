@@ -23,14 +23,14 @@
               <nav class="level">
                 <!-- left side -->
                 <div class="level-left">
-                  <p class="level-item"><a class="button is-primary" v-on:click="checkInput" to="/Nyhetsfeed">Legg ut nyhet</a></p>
+                  <p class="level-item"><button class="button is-primary" @click="checkInput">Legg ut nyhet</button></p>
                 </div>
 
                 <!-- right side -->
                 <div class="level-right">
                   <div class="level-item">
                     <p class="level-item">
-                      <router-link class="button is-danger" to="/Nyhetsfeed" v-if="show">Avbryt</router-link>
+                      <button class="button is-danger" @click="hide" v-if="show">Avbryt</button>
                     </p>
 
                   </div>
@@ -72,6 +72,10 @@
       };
     },
     methods: {
+      hide(){
+        this.clear();
+        this.$emit('closeAddNews');
+      },
       clear(){
         this.melding.overskrift = '';
         this.melding.tekst = '';
@@ -81,8 +85,6 @@
         axios.post('http://localhost:9000/rest/melding', this.melding).then(response => {
           this.$emit('addedNews', this.melding);
           this.clear();
-          alert("denne meldingen er sendt");
-          router.push('nyhetsfeed');
         }).catch(err => {
           console.log(err);
         });

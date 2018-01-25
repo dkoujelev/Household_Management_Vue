@@ -23,7 +23,7 @@
 
       <div class="child tile box" style="background-color: white">
         <p class="text"> Total skyld jeg har til andre medlemmer: &nbsp &nbsp</p>
-        <div class="child tile box" style="background-color: lightsalmon; font-weight: bold; font-size: large" > 41 kr </div>
+        <div class="child tile box" style="background-color: lightsalmon; font-weight: bold; font-size: large" > {{totalDebt}} kr </div>
       </div> <br>
 
 
@@ -53,6 +53,14 @@
     methods:{
       selectUser(user){
         router.push('GjeldUtSpesifisert/' + user.bruker_id);
+      }
+    },
+    computed:{
+      totalDebt(){
+        let total = 0;
+        for(let user of this.users)
+          total += user.sum;
+        return total;
       }
     }
   };

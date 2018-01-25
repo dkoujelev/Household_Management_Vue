@@ -120,7 +120,7 @@ describe('Gjeld',() => {
   it('Sett flere gjeld som betalt', () => {
     return axios.post('http://localhost:9100/rest/settFlereGjeldSomBetalt',{ids:[1,2]})
       .then(response => {
-        return axios.post('http://localhost:9100/rest/gjeldSpesifisert',{ skylder: 1, innkrever: 2 })
+        return axios.get('http://localhost:9100/rest/gjeld')
       }).then(response => {
         expect(response.data[0].betalt).to.be.a.dateString();
         expect(response.data[1].betalt).to.be.a.dateString();

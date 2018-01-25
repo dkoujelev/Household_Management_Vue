@@ -20,12 +20,6 @@
                 </span>
               </p>
               <p class="control">
-                <label class="checkbox">
-                  <input type="checkbox">
-                  Remember me
-                </label>
-              </p>
-              <p class="control">
                 <button class="button is-link is-medium is-fullwidth" v-on:click="login">
                   <i class="fa fa-user"></i>
                   &nbsp Login

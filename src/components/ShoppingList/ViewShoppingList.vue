@@ -2,17 +2,6 @@
   <div class="tile is-ancestor">
 
     <div class="tile is-parent box is-vertical is-6" style="background-color: lightskyblue">
-      <div class="tile is-child  ">
-        <nav class="level">
-          <div class="level-right">
-            <h3>Handleliste</h3>
-          </div>
-          <div class="level-left">
-            <router-link class="is-link" to="/Shoppinglists"><span style="color: blue;">Tilbake til handlelister</span></router-link>
-          </div>
-        </nav>
-
-      </div>
       <div class="tile is-child ">
         <table class="table is-bordered is-striped  is-hoverable is-fullwidth">
           <thead>
@@ -90,10 +79,11 @@
 
   export default {
     name: 'Shoppinglists',
+    props: [ 'id' ],
 
     data(){
       return {
-        id: Number.parseInt(this.$route.params.shoppinglist_id),
+        listId: this.id,
         rows: [],
         addItem: false,
         newItem: {
@@ -102,10 +92,17 @@
         }
       };
     },
-    mounted(){
-      this.fillRows();
+    watch: {
+      id(){
+        this.listId = this.id;
+        this.fillRows();
+      }
     },
     methods: {
+      closeShoppingList(){
+        this.$emit('closingShoppingList');
+        this.hide();
+      },
       hide(){
         this.addItem = false;
         this.newItem.name = '';
@@ -142,25 +139,24 @@
         });
       },
       completeList(){
+        this.closeShoppingList();
         let obj = {
           handling_utfort: new Date().getTime()
         };
-        axios.put('http://localhost:9000/rest/handleliste/' + this.id, obj).then(response => {
+        axios.put('http://localhost:9000/rest/handleliste/' + this.listId, obj).then(response => {
           this.$emit('listCompleted', obj);
           this.hide();
-          router.push('/Shoppinglists');
         });
       },
       deleteList(){
-        axios.delete('http://localhost:9000/rest/handleliste/' + this.id).then(response => {
-          this.$emit('Shoppinglist deleted');
+        axios.delete('http://localhost:9000/rest/handleliste/' + this.listId).then(response => {
+          this.$emit('deleteShoppingList');
           this.hide();
-          alert('Handleliste slettet');
-          router.push('/Shoppinglists');
         });
       },
       fillRows(){
-        axios.get('http://localhost:9000/rest/handleliste/' + this.id).then(response => {
+        this.rows = [];
+        axios.get('http://localhost:9000/rest/handleliste/' + this.listId).then(response => {
           console.log(response.data);
           let resRows = response.data.varer;
           for(let i = 0; i < resRows.length; i++){
