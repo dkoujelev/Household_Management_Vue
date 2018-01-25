@@ -9,10 +9,10 @@
       <ShoppingList slot="content" @closingAddShoppingList="closeAddShoppingList" @addedShoppingList="update"/>
     </Modal>
     <div class="is-parent">
-      <div class="tile is-child box is-6" style="background-color: lightskyblue">
+      <div class="tile is-child box " style="background-color: lightskyblue">
         <h1>Handlelister</h1>
       </div>
-      <div class="tile is-child box is-6" style="background-color: lightskyblue">
+      <div class="tile is-child box" style="background-color: lightskyblue">
         <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
           <thead>
           <th>Handleliste</th>

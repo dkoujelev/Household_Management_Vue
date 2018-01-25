@@ -1,24 +1,21 @@
 <template>
   <div class="tile is-vertical">
     <div class="tile is-ancestor">
-      <div class=" tile is-parent">
+      <div class=" tile is-parent is-8">
         <div class="tile is-child box" style="background-color: white">
           <Newsfeed :value="5"></Newsfeed>
         </div>
       </div>
-    </div>
-    <div class="tile is-ancestor">
-      <div class="tile is-parent">
-        <div class="tile is-child box is-half" style="background-color: lightskyblue">
+      <div class="tile is-parent is-vertical">
+        <div class="tile is-child box" style="background-color: lightskyblue">
+          <Shoppinglists :value="5"></Shoppinglists>
+        </div>
+        <div class="tile is-child box" style="background-color: lightskyblue">
           <Shoppinglists :value="5"></Shoppinglists>
         </div>
       </div>
 
-      <div class="tile is-parent">
-        <div class="tile is-child box is-half" style="background-color: lightskyblue">
-          <Shoppinglists :value="5"></Shoppinglists>
-        </div>
-      </div>
+
     </div>
   </div>
 </template>
