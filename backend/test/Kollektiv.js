@@ -2,6 +2,7 @@ let expect = require('chai').expect;
 let axios = require('axios');
 let clearDB = require('./testutil').clearDB;
 
+let restServer = 'http://localhost:9001/rest/';
 
 let testUser1 = {
   epost: 'test@test.com',
@@ -66,36 +67,36 @@ describe('Kollektiv',() => {
     return clearDB()     // Vi må først nullstille testbasen
       .then((response) => {
         // Legg testUser1 inn i basen
-        return axios.post('http://localhost:9100/rest/bruker/', testUser1);
+        return axios.post(restServer + 'bruker/', testUser1);
       }).then(response => {
         // Finn ut hvilken bruker_id testuser fikk, og legg til i testuser objektet vårt
         testUser1.bruker_id = response.data.insertId;
 
         // Legg testUser2 inn i basen
-        return axios.post('http://localhost:9100/rest/bruker/', testUser2);
+        return axios.post(restServer + 'bruker/', testUser2);
       }).then(response => {
         // Finn ut hvilken bruker_id testuser fikk, og legg til i testuser objektet vårt
         testUser2.bruker_id = response.data.insertId;
 
         // Legg in testKollektiv1 i basen. testUser1 blir admin.
-        return axios.post('http://localhost:9100/rest/kollektiv/' + testUser1.bruker_id, testKollektiv1);
+        return axios.post(restServer + 'kollektiv/' + testUser1.bruker_id, testKollektiv1);
       }).then(response => {
         testKollektiv1.kollektiv_id = response.data.insertId;
 
         // Legg in testKollektiv2 i basen. testUser2 blir admin.
-        return axios.post('http://localhost:9100/rest/kollektiv/' + testUser2.bruker_id, testKollektiv2);
+        return axios.post(restServer + 'kollektiv/' + testUser2.bruker_id, testKollektiv2);
       }).then(response => {
         testKollektiv2.kollektiv_id = response.data.insertId;
 
         // Legg in testUndergruppe i basen.
         testUndergruppe.kollektiv_id = testKollektiv1.kollektiv_id;
-        return axios.post('http://localhost:9100/rest/undergruppe/' + testUser1.bruker_id, testUndergruppe);
+        return axios.post(restServer + 'undergruppe/' + testUser1.bruker_id, testUndergruppe);
       }).then(response => {
         testUndergruppe.undergruppe_id = response.data.insertId;
 
         // Legg in testListe i basen.
         testListe.undergruppe_id = testUndergruppe.undergruppe_id;
-        return axios.post('http://localhost:9100/rest/gjoremalsliste/' + testUndergruppe.undergruppe_id, testListe);
+        return axios.post(restServer + 'gjoremalsliste/' + testUndergruppe.undergruppe_id, testListe);
       }).then(response => {
         testListe.id = response.data.insertId;
       });
@@ -103,7 +104,7 @@ describe('Kollektiv',() => {
 
   it('Hent et kollletiv med bestemt id', () => {
     // Hent ut testuser og sammenlign
-    return axios.get('http://localhost:9100/rest/kollektiv/' + testKollektiv2.kollektiv_id).then(response => {
+    return axios.get(restServer + 'kollektiv/' + testKollektiv2.kollektiv_id).then(response => {
 
       // Vi forventer nå at brukerobjektet fra basen er helt likt testuser-objektet vårt som vi la inn tidligere.
       expect(response.data).to.containSubset(testKollektiv2);
@@ -113,7 +114,7 @@ describe('Kollektiv',() => {
 
   it('Hent et kollektiv med navn', () => {
 
-    return axios.get('http://localhost:9100/rest/kollektivMedNavn/' + testKollektiv1.navn).then((response) => {
+    return axios.get(restServer + 'kollektivMedNavn/' + testKollektiv1.navn).then((response) => {
       let kollektiver = response.data;
 
       // Sjekk at brukerne som kom ut er identiske med de som ble satt inn.
@@ -122,7 +123,7 @@ describe('Kollektiv',() => {
   });
 
   it('Hent alle kollektiv', () => {
-    return axios.get('http://localhost:9100/rest/kollektiv').then((response) => {
+    return axios.get(restServer + 'kollektiv').then((response) => {
       let kollektiver = response.data;
       // Sjekk at vi fikk ut like mange kollektiver som vi satte inn.
       expect(kollektiver.length).to.equal(2);
@@ -137,8 +138,8 @@ describe('Kollektiv',() => {
       bruker_id: testUser1.bruker_id,
       kollektiv_id: testKollektiv2.kollektiv_id
     };
-    return axios.post('http://localhost:9100/rest/meldBrukerInnIKollektiv/', data).then(response => {
-        return axios.get('http://localhost:9100/rest/kollektivForBruker/' + testUser1.bruker_id).then((response) => {
+    return axios.post(restServer + 'meldBrukerInnIKollektiv/', data).then(response => {
+        return axios.get(restServer + 'kollektivForBruker/' + testUser1.bruker_id).then((response) => {
           let kollektiver = response.data;
 
           // Sjekk at vi fikk ut like mange gjoremal som vi satte inn.
@@ -149,7 +150,7 @@ describe('Kollektiv',() => {
 
   it('Hent alle kollektiv til en bruker', () => {
 
-    return axios.get('http://localhost:9100/rest/kollektivForBruker/' + testUser1.bruker_id).then((response) => {
+    return axios.get(restServer + 'kollektivForBruker/' + testUser1.bruker_id).then((response) => {
       let kollektiver = response.data;
 
       // Sjekk at vi fikk ut like mange gjoremal som vi satte inn.
@@ -162,7 +163,7 @@ describe('Kollektiv',() => {
 
   it('Hent alle kollektiv til en bruker hvor han er admin', () => {
 
-    return axios.get('http://localhost:9100/rest/kollektivForAdmin/' + testUser1.bruker_id).then((response) => {
+    return axios.get(restServer + 'kollektivForAdmin/' + testUser1.bruker_id).then((response) => {
       let gjoremaler = response.data;
 
       // Sjekk at vi fikk ut like mange gjoremal som vi satte inn.
@@ -180,9 +181,9 @@ describe('Kollektiv',() => {
       navn: "Updated"
     };
 
-    return axios.put('http://localhost:9100/rest/kollektiv', newImfo)
+    return axios.put(restServer + 'kollektiv', newImfo)
       .then(response => {
-        return axios.get('http://localhost:9100/rest/kollektiv/' + newImfo.kollektiv_id).then(response => {
+        return axios.get(restServer + 'kollektiv/' + newImfo.kollektiv_id).then(response => {
           expect(response.data).to.containSubset(newImfo);
         });
       });
@@ -190,9 +191,9 @@ describe('Kollektiv',() => {
 
   it.skip('Slett kollektiv',() => {
 
-    return axios.delete('http://localhost:9100/rest/kollektiv/' + testListe.id)
+    return axios.delete(restServer + 'kollektiv/' + testListe.id)
       .then(response => {
-        return axios.get('http://localhost:9100/rest/kollektiv/' + testListe.id)
+        return axios.get(restServer + 'kollektiv/' + testListe.id)
       }).then(response => {
         expect(response.data).to.equal('Kollektiv not found!');
       });

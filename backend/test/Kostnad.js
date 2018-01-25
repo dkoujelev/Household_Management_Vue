@@ -2,6 +2,8 @@ let expect = require('chai').expect;
 let axios = require('axios');
 let clearDB = require('./testutil').clearDB;
 
+let restServer = 'http://localhost:9001/rest/';
+
 let testuser = {
   epost: 'test@test.com',
   fornavn: 'Test',
@@ -52,29 +54,29 @@ describe('Kostnad', () => {
     // OBS: Vi må RETURNERE hele kjeden til testbiblioteket vårt, derfor return før clearDB.
     return clearDB()     // Vi må først nullstille testbasen
       .then(response => {
-        return axios.post('http://localhost:9100/rest/bruker', testuser);
+        return axios.post(restServer + 'bruker', testuser);
       }).then(response => {
-        return axios.post('http://localhost:9100/rest/kollektiv/1', test_kollektiv);
+        return axios.post(restServer + 'kollektiv/1', test_kollektiv);
       }).then(response => {
-        return axios.post('http://localhost:9100/rest/bruker', testuser2);
+        return axios.post(restServer + 'bruker', testuser2);
       }).then(response => {
-        return axios.post('http://localhost:9100/rest/oppdaterMedlemsskapIUndergruppe', {undergruppe_id: 1, brukere: [1,2]});
+        return axios.post(restServer + 'oppdaterMedlemsskapIUndergruppe', {undergruppe_id: 1, brukere: [1,2]});
       }).then(response => {
-        return axios.post('http://localhost:9100/rest/handleliste', test_handleliste);
+        return axios.post(restServer + 'handleliste', test_handleliste);
       }).then(response => {
-        return axios.post('http://localhost:9100/rest/kostnad', test_kostnad);
+        return axios.post(restServer + 'kostnad', test_kostnad);
       }).catch(err => console.log(err));
   });
 
   it('Hente en kostnad', () => {
-    return axios.get('http://localhost:9100/rest/kostnad/1')
+    return axios.get(restServer + 'kostnad/1')
       .then(response => {
         expect(response.data).to.containSubset(test_kostnad);
       });
   });
 
   it('Hente kostnader til en handleliste', () => {
-    return axios.get('http://localhost:9100/rest/kostnaderForHandleliste/1')
+    return axios.get(restServer + 'kostnaderForHandleliste/1')
       .then(response => {
         expect(response.data.length).to.equal(1);
         expect(response.data[0]).to.containSubset(test_kostnad);
@@ -82,7 +84,7 @@ describe('Kostnad', () => {
   });
 
   it('Hente kostnader til en undergruppe', () => {
-    return axios.get('http://localhost:9100/rest/kostnaderForUndergruppe/1')
+    return axios.get(restServer + 'kostnaderForUndergruppe/1')
       .then(response => {
         expect(response.data.length).to.equal(1);
         expect(response.data[0]).to.containSubset(test_kostnad);
@@ -90,9 +92,9 @@ describe('Kostnad', () => {
   });
 
   it('Oppdater en kostnad', () => {
-    return axios.put('http://localhost:9100/rest/kostnad', test_kostnad2)
+    return axios.put(restServer + 'kostnad', test_kostnad2)
       .then(response => {
-        return axios.get('http://localhost:9100/rest/kostnad/1');
+        return axios.get(restServer + 'kostnad/1');
       }).then(response => {
         expect(response.data).to.containSubset(test_kostnad2);
       });
@@ -101,7 +103,7 @@ describe('Kostnad', () => {
   // Vi forventer ett gjeld-objekt i basen
   // 50kr skal betales fra bruker 2 til bruker 1
   it('Sjekk at gjeld fordeles rett fra kostnad', () => {
-    return axios.get('http://localhost:9100/rest/gjeld/1')
+    return axios.get(restServer + 'gjeld/1')
       .then(response => {
         expect(response.data).to.containSubset({
           gjeld_id: 1,

@@ -2,6 +2,7 @@ let expect = require('chai').expect;
 let axios = require('axios');
 let clearDB = require('./testutil').clearDB;
 
+let restServer = 'http://localhost:9001/rest/';
 
 let testUser = {
   epost: 'test@test.com',
@@ -81,55 +82,55 @@ describe('Handeliste',() => {
     return clearDB()     // Vi må først nullstille testbasen
       .then((response) => {
         // Legg testUser inn i basen
-        return axios.post('http://localhost:9100/rest/bruker/', testUser);
+        return axios.post(restServer + 'bruker/', testUser);
       }).then(response => {
         // Finn ut hvilken bruker_id testuser fikk, og legg til i testuser objektet vårt
         testUser.bruker_id = response.data.insertId;
 
         // Legg in testKollektiv i basen. testUser1 blir admin.
-        return axios.post('http://localhost:9100/rest/kollektiv/' + testUser.bruker_id, testKollektiv);
+        return axios.post(restServer + 'kollektiv/' + testUser.bruker_id, testKollektiv);
       }).then(response => {
         testKollektiv.kollektiv_id = response.data.insertId;
 
         // Legg in testUndergruppe i basen.
         testUndergruppe.kollektiv_id = testKollektiv.kollektiv_id;
-        return axios.post('http://localhost:9100/rest/undergruppe/' + testUser.bruker_id, testUndergruppe);
+        return axios.post(restServer + 'undergruppe/' + testUser.bruker_id, testUndergruppe);
       }).then(response => {
         testUndergruppe.undergruppe_id = response.data.insertId;
 
         // Legg in testHandleliste1 i basen.
         testHandleliste1.undergruppe_id = testUndergruppe.undergruppe_id;
-        return axios.post('http://localhost:9100/rest/handleliste/', testHandleliste1);
+        return axios.post(restServer + 'handleliste/', testHandleliste1);
       }).then(response => {
         testHandleliste1.handleliste_id = response.data.insertId;
 
         // Legg in testHandleliste2 i basen.
         testHandleliste2.undergruppe_id = testUndergruppe.undergruppe_id;
-        return axios.post('http://localhost:9100/rest/handleliste/', testHandleliste2);
+        return axios.post(restServer + 'handleliste/', testHandleliste2);
       }).then(response => {
         testHandleliste2.handleliste_id = response.data.insertId;
 
         // Legg in testVare1 i basen.
         testVare1.handleliste_id = testHandleliste1.handleliste_id;
-        return axios.post('http://localhost:9100/rest/vare/', testVare1);
+        return axios.post(restServer + 'vare/', testVare1);
       }).then(response => {
         testVare1.vare_id = response.data.insertId;
 
         // Legg in testVare2 i basen.
         testVare2.handleliste_id = testHandleliste1.handleliste_id;
-        return axios.post('http://localhost:9100/rest/vare/', testVare2);
+        return axios.post(restServer + 'vare/', testVare2);
       }).then(response => {
         testVare2.vare_id = response.data.insertId;
 
         // Legg in testVare3 i basen.
         testVare3.handleliste_id = testHandleliste1.handleliste_id;
-        return axios.post('http://localhost:9100/rest/vare/', testVare3);
+        return axios.post(restServer + 'vare/', testVare3);
       }).then(response => {
         testVare3.vare_id = response.data.insertId;
 
         // Legg in testVare4 i basen.
         testVare4.handleliste_id = testHandleliste2.handleliste_id;
-        return axios.post('http://localhost:9100/rest/vare/', testVare4);
+        return axios.post(restServer + 'vare/', testVare4);
       }).then(response => {
         testVare4.vare_id = response.data.insertId;
       }).catch(exception => {
@@ -139,7 +140,7 @@ describe('Handeliste',() => {
 
   it('Hent en fullstendig handleliste med id', () => {
     // Hent ut testHandleliste og sammenlign
-    return axios.get('http://localhost:9100/rest/handleliste/' + testHandleliste1.handleliste_id).then((response) => {
+    return axios.get(restServer + 'handleliste/' + testHandleliste1.handleliste_id).then((response) => {
       // Vi forventer nå at objektet fra basen inneholder test-objektet vårt som vi la inn tidligere.
       expect(response.data).to.containSubset(testHandleliste1);
 
@@ -148,7 +149,7 @@ describe('Handeliste',() => {
 
   it('Hent alle lister til en undergruppe varer i en liste', () => {
 
-    return axios.get('http://localhost:9100/rest/handlelisteForUndergruppe/' + testHandleliste1.undergruppe_id).then((response) => {
+    return axios.get(restServer + 'handlelisteForUndergruppe/' + testHandleliste1.undergruppe_id).then((response) => {
       let lister = response.data;
       expect(lister.length).to.equal(2);
       expect(lister).to.containSubset([testHandleliste1, testHandleliste2]);
@@ -157,7 +158,7 @@ describe('Handeliste',() => {
 
   it('Hent alle lister som en bruker har tilgang til', () => {
 
-    return axios.get('http://localhost:9100/rest/handlelisteForBruker/' + testUser.bruker_id).then((response) => {
+    return axios.get(restServer + 'handlelisteForBruker/' + testUser.bruker_id).then((response) => {
       let lister = response.data;
       expect(lister.length).to.equal(2);
       expect(lister).to.containSubset([testHandleliste1, testHandleliste2]);
@@ -172,9 +173,9 @@ describe('Handeliste',() => {
       beskrivelse: "Denne listen er oppdatert"
     };
 
-    return axios.put('http://localhost:9100/rest/handleliste/' + newImfo.handleliste_id, newImfo)
+    return axios.put(restServer + 'handleliste/' + newImfo.handleliste_id, newImfo)
       .then(response => {
-        return axios.get('http://localhost:9100/rest/handleliste/' + newImfo.handleliste_id).then(response => {
+        return axios.get(restServer + 'handleliste/' + newImfo.handleliste_id).then(response => {
           expect(response.data).to.containSubset(newImfo);
         });
       });
@@ -182,9 +183,9 @@ describe('Handeliste',() => {
 
   it('Slett handleliste',() => {
 
-    return axios.delete('http://localhost:9100/rest/handleliste/' + testHandleliste1.handleliste_id)
+    return axios.delete(restServer + 'handleliste/' + testHandleliste1.handleliste_id)
       .then(response => {
-        return axios.get('http://localhost:9100/rest/handleliste/' + testHandleliste1.handleliste_id)
+        return axios.get(restServer + 'handleliste/' + testHandleliste1.handleliste_id)
       }).then(response => {
         expect(response.data).to.equal('Shoppinglist not found!');
       });
@@ -198,8 +199,8 @@ describe('Handeliste',() => {
       favoritt: 1
     };
 
-    return axios.put('http://localhost:9100/rest/favorittHandleliste/', newImfo).then(response => {
-      return axios.get('http://localhost:9100/rest/handleliste/' + newImfo.handleliste_id).then(response => {
+    return axios.put(restServer + 'favorittHandleliste/', newImfo).then(response => {
+      return axios.get(restServer + 'handleliste/' + newImfo.handleliste_id).then(response => {
         expect(response.data.favoritt).to.equal(newImfo.favoritt);
       });
     });

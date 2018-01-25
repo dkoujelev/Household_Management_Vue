@@ -2,6 +2,7 @@ let expect = require('chai').expect;
 let axios = require('axios');
 let clearDB = require('./testutil').clearDB;
 
+let restServer = 'http://localhost:9001/rest/';
 
 let testUser1 = {
   epost: 'test@test.com',
@@ -83,55 +84,55 @@ describe('Undergruppe',() => {
     return clearDB()     // Vi må først nullstille testbasen
       .then((response) => {
         // Legg testUser1 inn i basen
-        return axios.post('http://localhost:9100/rest/bruker/', testUser1);
+        return axios.post(restServer + 'bruker/', testUser1);
       }).then(response => {
         // Finn ut hvilken bruker_id testuser fikk, og legg til i testuser objektet vårt
         testUser1.bruker_id = response.data.insertId;
         delete testUser1.hashed_passord;
 
         // Legg testUser2 inn i basen
-        return axios.post('http://localhost:9100/rest/bruker/', testUser2);
+        return axios.post(restServer + 'bruker/', testUser2);
       }).then(response => {
         // Finn ut hvilken bruker_id testuser fikk, og legg til i testuser objektet vårt
         testUser2.bruker_id = response.data.insertId;
         delete testUser2.hashed_passord;
 
         // Legg testUser3 inn i basen
-        return axios.post('http://localhost:9100/rest/bruker/', testUser3);
+        return axios.post(restServer + 'bruker/', testUser3);
       }).then(response => {
         // Finn ut hvilken bruker_id testuser fikk, og legg til i testuser objektet vårt
         testUser3.bruker_id = response.data.insertId;
         delete testUser3.hashed_passord;
 
         // Legg in testKollektiv1 i basen. testUser1 blir admin.
-        return axios.post('http://localhost:9100/rest/kollektiv/' + testUser1.bruker_id, testKollektiv1);
+        return axios.post(restServer + 'kollektiv/' + testUser1.bruker_id, testKollektiv1);
       }).then(response => {
         testKollektiv1.kollektiv_id = response.data.insertId;
 
         // Legg in testKollektiv2 i basen. testUser2 blir admin.
-        return axios.post('http://localhost:9100/rest/kollektiv/' + testUser2.bruker_id, testKollektiv2);
+        return axios.post(restServer + 'kollektiv/' + testUser2.bruker_id, testKollektiv2);
       }).then(response => {
         testKollektiv2.kollektiv_id = response.data.insertId;
 
         // Legg in testUndergruppe1 i basen.
         testUndergruppe1.kollektiv_id = testKollektiv1.kollektiv_id;
-        return axios.post('http://localhost:9100/rest/undergruppe/' + testUser1.bruker_id, testUndergruppe1);
+        return axios.post(restServer + 'undergruppe/' + testUser1.bruker_id, testUndergruppe1);
       }).then(response => {
         testUndergruppe1.undergruppe_id = response.data.insertId;
 
         // Legg testUser3 inn i testUndergruppe1.
-        return axios.post('http://localhost:9100/rest/undergruppeLeggTilBruker/' + testUndergruppe1.undergruppe_id, testUser3);
+        return axios.post(restServer + 'undergruppeLeggTilBruker/' + testUndergruppe1.undergruppe_id, testUser3);
       }).then(response => {
 
         // Legg in testUndergruppe2 i basen.
         testUndergruppe2.kollektiv_id = testKollektiv1.kollektiv_id;
-        return axios.post('http://localhost:9100/rest/undergruppe/' + testUser1.bruker_id, testUndergruppe2);
+        return axios.post(restServer + 'undergruppe/' + testUser1.bruker_id, testUndergruppe2);
       }).then(response => {
         testUndergruppe2.undergruppe_id = response.data.insertId;
 
         // Legg in testUndergruppe3 i basen.
         testUndergruppe3.kollektiv_id = testKollektiv2.kollektiv_id;
-        return axios.post('http://localhost:9100/rest/undergruppe/' + testUser2.bruker_id, testUndergruppe3);
+        return axios.post(restServer + 'undergruppe/' + testUser2.bruker_id, testUndergruppe3);
       }).then(response => {
         testUndergruppe3.undergruppe_id = response.data.insertId;
       }).catch(exception => {
@@ -141,7 +142,7 @@ describe('Undergruppe',() => {
 
   it('Hent en undergruppe med bestemt id', () => {
     // Hent ut testUndergruppe1 og sammenlign
-    return axios.get('http://localhost:9100/rest/undergruppe/' + testUndergruppe1.undergruppe_id).then(response => {
+    return axios.get(restServer + 'undergruppe/' + testUndergruppe1.undergruppe_id).then(response => {
       // Vi forventer nå at objektet fra basen inneholder objektet vårt som vi la inn tidligere.
       expect(response.data).to.containSubset(testUndergruppe1);
     });
@@ -149,7 +150,7 @@ describe('Undergruppe',() => {
 
   it('Hent alle brukere i en undergruppe', () => {
 
-    return axios.get('http://localhost:9100/rest/medlemmerIUndergruppe/' + testUndergruppe1.undergruppe_id).then((response) => {
+    return axios.get(restServer + 'medlemmerIUndergruppe/' + testUndergruppe1.undergruppe_id).then((response) => {
       let brukere = response.data;
       expect(brukere.length).to.equal(2);
       // Sjekk at brukeren som kom ut inneholder den som ble satt inn.
@@ -158,7 +159,7 @@ describe('Undergruppe',() => {
   });
 
   it('Hent alle undergrupper', () => {
-    return axios.get('http://localhost:9100/rest/undergrupper/').then((response) => {
+    return axios.get(restServer + 'undergrupper/').then((response) => {
       let undergrupper = response.data;
       // Sjekk at vi fikk ut like mange undergrupper som vi satte inn.
       expect(undergrupper.length).to.equal(5);
@@ -169,7 +170,7 @@ describe('Undergruppe',() => {
   });
 
   it('Hent alle undergruppene til et kollektiv', () => {
-    return axios.get('http://localhost:9100/rest/undergrupperForKollektiv/' + testKollektiv1.kollektiv_id).then(response => {
+    return axios.get(restServer + 'undergrupperForKollektiv/' + testKollektiv1.kollektiv_id).then(response => {
       let undergrupper = response.data;
       // Sjekk at vi fikk ut like mange undergrupper som vi satte inn.
       expect(undergrupper.length).to.equal(3);
@@ -181,7 +182,7 @@ describe('Undergruppe',() => {
 
   it('Hent hovedgruppen til et kollektiv', () => {
 
-    return axios.get('http://localhost:9100/rest/hovedgruppenForKollektiv/' + testKollektiv1.kollektiv_id).then(response => {
+    return axios.get(restServer + 'hovedgruppenForKollektiv/' + testKollektiv1.kollektiv_id).then(response => {
       let undergrupper = response.data;
       // Sjekk at vi fikk ut en undergruppe.
       expect(undergrupper.length).to.equal(1);
@@ -193,7 +194,7 @@ describe('Undergruppe',() => {
 
   it('Hent undergruppene til en bruker', () => {
 
-    return axios.get('http://localhost:9100/rest/undergrupperForBruker/' + testUser1.bruker_id).then(response => {
+    return axios.get(restServer + 'undergrupperForBruker/' + testUser1.bruker_id).then(response => {
       let undergrupper = response.data;
       // Sjekk at vi fikk ut like mange undergrupper som vi satte inn.
       expect(undergrupper.length).to.equal(3);
@@ -205,8 +206,8 @@ describe('Undergruppe',() => {
 
   it('Legg til en bruker i en undergruppe', () => {
 
-    return axios.post('http://localhost:9100/rest/undergruppeLeggTilBruker/' +  testUndergruppe1.undergruppe_id, testUser2).then(response => {
-      return axios.get('http://localhost:9100/rest/medlemmerIUndergruppe/' + testUndergruppe1.undergruppe_id).then(response => {
+    return axios.post(restServer + 'undergruppeLeggTilBruker/' +  testUndergruppe1.undergruppe_id, testUser2).then(response => {
+      return axios.get(restServer + 'medlemmerIUndergruppe/' + testUndergruppe1.undergruppe_id).then(response => {
         let brukere = response.data;
         expect(brukere.length).to.equal(3);
         // Sjekk at brukeren som kom ut inneholder den som ble satt inn.
@@ -217,8 +218,8 @@ describe('Undergruppe',() => {
 
   it('Fjern en bruker fra en undergruppe', () => {
 
-    return axios.put('http://localhost:9100/rest/undergruppeFjernBruker/' +  testUndergruppe1.undergruppe_id, testUser3).then(response => {
-      return axios.get('http://localhost:9100/rest/medlemmerIUndergruppe/' + testUndergruppe1.undergruppe_id).then(response => {
+    return axios.put(restServer + 'undergruppeFjernBruker/' +  testUndergruppe1.undergruppe_id, testUser3).then(response => {
+      return axios.get(restServer + 'medlemmerIUndergruppe/' + testUndergruppe1.undergruppe_id).then(response => {
         let brukere = response.data;
         expect(brukere.length).to.equal(1);
         // Sjekk at brukeren som kom ut inneholder den som ble satt inn.
@@ -235,9 +236,9 @@ describe('Undergruppe',() => {
       beskrivelse: "Denne gruppen er oppdatert"
     };
 
-    return axios.put('http://localhost:9100/rest/undergruppe/', newImfo)
+    return axios.put(restServer + 'undergruppe/', newImfo)
       .then(response => {
-        return axios.get('http://localhost:9100/rest/undergruppe/' + newImfo.undergruppe_id).then(response => {
+        return axios.get(restServer + 'undergruppe/' + newImfo.undergruppe_id).then(response => {
           expect(response.data).to.containSubset(newImfo);
         });
       });
@@ -245,9 +246,9 @@ describe('Undergruppe',() => {
 
   it.skip('Slett undergruppe',() => {
 
-    return axios.delete('http://localhost:9100/rest/undergruppe/' + testUndergruppe1.undergruppe_id)
+    return axios.delete(restServer + 'undergruppe/' + testUndergruppe1.undergruppe_id)
       .then(response => {
-        return axios.get('http://localhost:9100/rest/undergruppe/' + testUndergruppe1.undergruppe_id)
+        return axios.get(restServer + 'undergruppe/' + testUndergruppe1.undergruppe_id)
       }).then(response => {
         expect(response.data).to.equal('Undergruppe not found!');
       });
