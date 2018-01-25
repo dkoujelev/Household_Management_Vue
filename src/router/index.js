@@ -26,7 +26,6 @@ import ShowAccounting from '@/components/ShowAccounting.vue'
 import GjeldUtSpesifisert from '@/components/Gjeld/GjeldUtSpesifisert.vue'
 import TodoListOverview from '@/components/TODO/TodoListOverview'
 import TodoListOverview2 from '@/components/TODO/TodoListOverview2'
-import Modal from '@/components/TODO/Modal'
 
 Vue.use(Router);
 
@@ -168,11 +167,6 @@ export default new Router({
         name: 'TodoListOverview2',
         component: TodoListOverview2
       },
-      {
-        path: '/Modal',
-        name: 'Modal',
-        component: Modal
-      }
     ]
   }
 )

@@ -46,23 +46,10 @@
   </div>
   </div>
 
-    <div class="modal" v-bind:class="{'is-active': modalVisible}" >
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Gjøremål liste</p>
-          <button class="delete" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-          <test></test>
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button is-success" @click="modalVisible=false">Save changes</button>
-          <button class="button" @click="modalVisible = false">Cancel</button>
-        </footer>
-      </div>
-      <button class="modal-close" @click=""></button>
-    </div>
+
+
+    <Modal :title="tittel" :modalVisible="modalVisible" v-if="modalVisible"><p>asdas</p></Modal>
+    <button @click="test">Open</button>
 
   </div>
 </template>
@@ -70,20 +57,18 @@
 <script>
   import axios from 'axios';
   import {store} from '@/store';
-  import test from '@/components/TODO/TodoListOverview';
-
+  import Modal from '@/components/Modal';
 
 
     export default {
-      components: {
-        test,
-      },
+      components: { Modal },
      // Components: Modal,
       name: "todo-list-overview2",
       data() {
         return {
           rows: [],
           modalVisible: false,
+          tittel: 'Dette er en tittel'
         };
       },
       mounted() {
@@ -98,6 +83,10 @@
 // [{}] <- betyr at array inneholder et objekt
 
       methods: {
+        test(){
+          console.log("click");
+          this.modalVisible = true;
+        },
         fillRows() {
           axios.get('http://localhost:9000/rest/gjoremalslisterUndergruppe/1').then(response => {
             //alert('Alle lister til bruker hentet');
