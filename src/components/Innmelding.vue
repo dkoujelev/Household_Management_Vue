@@ -59,10 +59,16 @@
               <thead>
               <th>Oversikt</th>
               <th></th>
+              <th></th>
               </thead>
               <tr v-for="option in options_usersgroups"  v-bind:key="option.uid">
                 <td>{{ option.text }} {{ option.isDef }}</td>
-                <td><button class="button is-link" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button></td>
+                <td>
+                  <button class="button is-link" @click="showMembers(option)">Vis medlemmer</button>
+                </td>
+                <td>
+                  <button class="button is-link" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
+                </td>
               </tr>
             </table>
             {{ leaveSubResult }}
@@ -127,6 +133,19 @@
         </div>
       </div>
     </div>
+    <Modal :modalVisible.sync="showingMembers" @modalClosing="showingMembers=false;">
+      <h2 slot="title">Medlemmer i {{selectedGroup.text}}</h2>
+      <table slot="content" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>
+        <th>Epost</th>
+        <th>Navn</th>
+        </thead>
+        <tr v-for="member in groupMembers">
+          <td>{{member.epost}}</td>
+          <td>testetestest</td>
+        </tr>
+      </table>
+    </Modal>
   </section>
 </template>
 
@@ -135,11 +154,21 @@
   import axios from 'axios';
   import router from '../router/index'
   import {store} from '../store'
+  import Modal from '@/components/Modal'
 
   export default {
     name: 'Innmelding',
+    components:{Modal},
     data(){
         return {
+
+            // Disse tre brukes for å vise medlemmer i gruppe
+            // Når man trykker "Vis medlemmer" i gruppelista.
+            // -Oddbjørn
+            selectedGroup: {text:''},
+            groupMembers:[],
+            showingMembers: false,
+
             showCreateMainGroupSection: true,
             showCreateSubGroupSection: false,
             showJoinSection: true,
@@ -211,6 +240,13 @@
 
     },
     methods: {
+      showMembers(gruppe){
+        axios.get('http://localhost:9000/rest/medlemmerIUndergruppe/' + gruppe.uid).then(response => {
+          this.showingMembers = true;
+          this.selectedGroup = gruppe;
+          this.groupMembers = response.data;
+        }).catch(err => console.log(err));
+      },
     //   validateEmail(email){
     //     var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([status-zA-Z\-0-9]+\.)+[status-zA-Z]{2,}))$/;
     //     return regex.test(email);
