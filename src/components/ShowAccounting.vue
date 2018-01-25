@@ -1,6 +1,6 @@
 <template>
 
-  <div class="tile is-vertical box" style="background-color: white">
+  <!-- <div class="tile is-vertical box" style="background-color: white">
     <div class="title"> Mitt Regnskap: <br> </div>
     <div class="tile is-ancestor" style="background-color: white">
 
@@ -17,15 +17,50 @@
       </div>
       </div>
     </div>
+  </div> -->
+
+
+
+
+  <div class="tile is-ancestor">
+    <div class="tile is-parent">
+      <article class="tile is-child">
+        <div class="container">
+          <div class="FixedHeightContainer">
+            <h2>Title</h2>
+            <div class="Content">
+              blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah...
+            </div>
+
+          </div>
+        </div>
+
+
+
+      </article>
+    </div>
+
+
+
+
   </div>
+
+
+
+
 
 
 </template>
 
 
-<!--
+<!--<div class="columns is-mobile">
+              <div class="column">1</div>
+              <div class="column">2</div>
+              <div class="column">3</div>
+              <div class="column">4</div>
+            </div> -->
 
-<div class="box" style="background-color: white">
+<!--- <div class="box" style="background-color: white">
     <div class="title"> Mitt Regnskap <br> </div>
 
 
@@ -73,3 +108,19 @@
   }
 </script>
 
+<style scoped>
+  .FixedHeightContainer
+  {
+    /** float:right; */
+    height: 250px;
+    width:250px;
+    padding:3px;
+    background:#f00;
+  }
+  .Content
+  {
+    height:200px;
+    overflow:auto;
+    /**background:#fff;*/
+  }
+</style>
