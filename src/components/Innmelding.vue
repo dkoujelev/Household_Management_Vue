@@ -55,22 +55,27 @@
         <div class="is-child tile notification is-info">
           <div v-if="showUsersGroups===true">
             <h2 class="subtitle">Du er medlem av følgende kollektiv og grupper:</h2>
-            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-              <thead>
-              <th>Oversikt</th>
-              <th></th>
-              <th></th>
-              </thead>
-              <tr v-for="option in options_usersgroups"  v-bind:key="option.uid">
-                <td>{{ option.text }} {{ option.isDef }}</td>
-                <td>
-                  <button class="button is-link" @click="showMembers(option)">Vis medlemmer</button>
-                </td>
-                <td>
-                  <button class="button is-link" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
-                </td>
-              </tr>
-            </table>
+            <div class="content">
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
+                <th>Oversikt</th>
+                <th></th>
+                <th></th>
+                </thead>
+                <tr v-for="option in options_usersgroups"  v-bind:key="option.uid">
+                  <td>{{ option.text }} {{ option.isDef }}</td>
+                  <td>
+                    <button class="button is-link is-small is-hidden-desktop" @click="showMembers(option)">Vis medlemmer</button>
+                    <button class="button is-link is-hidden-mobile" @click="showMembers(option)">Vis medlemmer</button>
+
+                  </td>
+                  <td>
+                    <button class="button is-link is-hidden-mobile" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
+                    <button class="button is-link is-small is-hidden-desktop" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
+                  </td>
+                </tr>
+              </table>
+            </div>
             {{ leaveSubResult }}
           </div>
         </div>
@@ -118,23 +123,25 @@
           <br>
           <div v-if="showAvailableSubgroups===true">
             Dette er alle gruppene som hører inn under {{ selected_maingroup_object.navn }}:
-            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-              <thead>
-              <th>Grupper</th>
-              <th></th>
-              </thead>
-              <tr v-for="option in options_subgroup"  v-bind:key="option.uid">
-              <td>{{ option.navn }}</td>
-              <td> <button class="button is-link" v-on:click="joinSubGroup(option.uid)">Bli med</button></td>
-              </tr>
-            </table>
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                  <thead>
+                  <th>Grupper</th>
+                  <th></th>
+                  </thead>
+                  <tr v-for="option in options_subgroup"  v-bind:key="option.uid">
+                  <td>{{ option.navn }}</td>
+                  <td> <button class="button is-link is-hidden-mobile" v-on:click="joinSubGroup(option.uid)">Bli med</button></td>
+                    <button class="button is-link is-small is-hidden-desktop" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+                  </tr>
+              </table>
             {{ joinSubResult }}
           </div>
         </div>
       </div>
     </div>
     <Modal :modalVisible.sync="showingMembers" @modalClosing="showingMembers=false;">
-      <h2 slot="title">Medlemmer i {{selectedGroup.text}}</h2>
+      <h2 slot="title">Medlemmer</h2>
+      <p>{{selectedGroup.text}}</p>
       <table slot="content" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
         <th>Epost</th>
@@ -142,7 +149,7 @@
         </thead>
         <tr v-for="member in groupMembers">
           <td>{{member.epost}}</td>
-          <td>testetestest</td>
+          <td>{{member.fornavn + " " + member.etternavn}}</td>
         </tr>
       </table>
     </Modal>
@@ -585,4 +592,10 @@
 </script>
 
 <style scoped>
+  div.content1 {
+    height:150px;
+    overflow:auto;
+    /**background:#fff;*/
+  }
+
 </style>
