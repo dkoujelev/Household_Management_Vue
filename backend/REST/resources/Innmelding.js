@@ -5,8 +5,6 @@ module.exports = function(connection, server) {
   // Hent alle innmeldinger
   server.get('rest/innmelding/', function (req, res, next) {
     //console.log('DEBUG - GET - rest/innmelding/');
-    //[{"bruker_id":1,"kollektiv_id":1,"status_admin":1,"status_bruker":9,"dato_svar_admin":"2018-01-15T11:12:12.000Z","dato_svar_bruker":null,"aktiv":1,"notat_admin":"Kommer flyttende i mars.","notat_bruker":null},
-    // {"bruker_id":2,"kollektiv_id":1,"status_admin":1,"status_bruker":1,"dato_svar_admin":"2018-01-12T09:21:00.000Z","dato_svar_bruker":"2018-01-12T13:22:20.000Z","aktiv":0,"notat_admin":null,"notat_bruker":null}]
     connection.query("SELECT * FROM Innmelding", function (err, rows, fields) {
       res.send(err ? err : rows);
       return next();
@@ -16,8 +14,6 @@ module.exports = function(connection, server) {
   // Hent alle aktive innmeldinger (søknader) for et kollektiv
   server.get('rest/soknaderForKollektiv/:kollektiv_id', function (req, res, next) {
     //console.log('DEBUG - rest/soknaderForKollektiv/:kollektiv_id');
-    //[{"bruker_id":1,"kollektiv_id":1,"status_admin":1,"status_bruker":9,"dato_svar_admin":"2018-01-15T11:12:12.000Z","dato_svar_bruker":null,"aktiv":1,"notat_admin":"Kommer flyttende i mars.","notat_bruker":null},
-    // {"bruker_id":2,"kollektiv_id":1,"status_admin":1,"status_bruker":1,"dato_svar_admin":"2018-01-12T09:21:00.000Z","dato_svar_bruker":"2018-01-12T13:22:20.000Z","aktiv":0,"notat_admin":null,"notat_bruker":null}]
     connection.query("SELECT * FROM Innmelding WHERE aktiv=true AND status_bruker=1 AND kollektiv_id=?", req.params.kollektiv_id, function (err, rows, fields) {
       res.send(err ? err : rows);
       return next();
@@ -27,8 +23,6 @@ module.exports = function(connection, server) {
   // Hent alle aktive innmeldinger (søknad + invitasjon) for et kollektiv
   server.get('rest/innmeldingerForKollektiv/:kollektiv_id', function (req, res, next) {
     //console.log('DEBUG - rest/innmeldingerForKollektiv/:kollektiv_id');
-    //[{"bruker_id":1,"kollektiv_id":1,"status_admin":1,"status_bruker":9,"dato_svar_admin":"2018-01-15T11:12:12.000Z","dato_svar_bruker":null,"aktiv":1,"notat_admin":"Kommer flyttende i mars.","notat_bruker":null},
-    // {"bruker_id":2,"kollektiv_id":1,"status_admin":1,"status_bruker":1,"dato_svar_admin":"2018-01-12T09:21:00.000Z","dato_svar_bruker":"2018-01-12T13:22:20.000Z","aktiv":0,"notat_admin":null,"notat_bruker":null}]
     connection.query("SELECT * FROM Innmelding WHERE aktiv=true AND kollektiv_id=?", req.params.kollektiv_id, function (err, rows, fields) {
       res.send(err ? err : rows);
       return next();
@@ -38,8 +32,6 @@ module.exports = function(connection, server) {
     // Hent alle aktive innmeldinger (invitasjoner) for et kollektiv
     server.get('rest/invitasjonerForKollektiv/:kollektiv_id', function (req, res, next) {
       //console.log('DEBUG - rest/invitasjonerForKollektiv/:kollektiv_id');
-      //[{"bruker_id":1,"kollektiv_id":1,"status_admin":1,"status_bruker":9,"dato_svar_admin":"2018-01-15T11:12:12.000Z","dato_svar_bruker":null,"aktiv":1,"notat_admin":"Kommer flyttende i mars.","notat_bruker":null},
-      // {"bruker_id":2,"kollektiv_id":1,"status_admin":1,"status_bruker":1,"dato_svar_admin":"2018-01-12T09:21:00.000Z","dato_svar_bruker":"2018-01-12T13:22:20.000Z","aktiv":0,"notat_admin":null,"notat_bruker":null}]
       connection.query("SELECT * FROM Innmelding WHERE aktiv=true AND status_admin=1 AND kollektiv_id=?", req.params.kollektiv_id, function (err, rows, fields) {
         res.send(err ? err : rows);
         return next();
@@ -66,7 +58,30 @@ module.exports = function(connection, server) {
   server.post('rest/innmelding/', function (req, res, next) {
     //console.log('DEBUG - rest/innmelding/');
     connection.query("INSERT INTO Innmelding SET ?", req.body, function (err, rows, fields) {
-      res.send(err ? err : rows);
+      if(err){
+        res.send(err);
+      }else{
+        // We know it's good, add notification if it's not an invite
+        if(req.body.status_bruker=2){
+          let groupAdmins = [];
+          connection.query("SELECT bruker_id FROM Bruker_Kollektiv WHERE kollektiv_id=? AND er_admin=1", req.body.kollektiv_id, function (err, rows0, fields) {
+            groupAdmins=rows0;
+            for(i=0;i<groupAdmins.length;i++){
+              let newNotification = {
+                opprettet:util.getCurrentTimeAsEpoch,
+                tekst: req.body.bruker_epost + ' har søkt om tilgang til et kollektiv',
+                lest:0,
+                id:null,
+                bruker_id:groupAdmin.bruker_id
+              };
+              connection.query("INSERT INTO Notifikasjon SET ?", newNotification, function (err, rows1, fields) {    
+                //Do nothing
+              });
+            };
+          });
+        }
+        res.send(rows);
+      };
       return next();
     });
   });

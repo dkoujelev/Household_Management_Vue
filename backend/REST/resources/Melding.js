@@ -18,15 +18,31 @@ module.exports = function(connection, server){
 
 // Sende melding til bruker eller kollektiv
   server.post('rest/melding',function(req,res,next){
-
     req.body.sendt = util.getCurrentTimeAsEpoch();
-
     connection.query("INSERT INTO Melding SET ?", [req.body], function(err, rows, fields){
-      if(err)
+      if(err){
         return next(err);
-
-      res.send(rows);
-      return next();
+      }else{
+        // We know it's good, add notification
+          let recipients = [];
+          connection.query("SELECT bruker_id FROM Bruker_Kollektiv WHERE kollektiv_id=? AND NOT bruker_id=?", [req.body.sendt_til_kollektiv,req.body.skrevet_av_bruker], function (err, rows0, fields) {
+            recipients = rows0;
+            for(i=0;i<recipients.length;i++){
+              let newNotification = {
+                opprettet:util.getCurrentTimeAsEpoch,
+                tekst: 'Det er lagt ut en ny melding til nyhetsfeed',
+                lest:0,
+                id:null,
+                bruker_id:recipients.bruker_id
+              };
+              connection.query("INSERT INTO Notifikasjon SET ?", newNotification, function (err, rows1, fields) {    
+                //Do nothing
+              });
+            };
+          });
+        res.send(rows);
+        return next();
+      };
     });
   });
 
