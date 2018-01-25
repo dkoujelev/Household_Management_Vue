@@ -152,7 +152,8 @@ describe('Gjoremal',() => {
       .then(response => {
         return axios.get(restServer + 'gjoremal/' + testGjoremal2.gjoremal_id)
       }).then(response => {
-        expect(response.data).to.equal('Gjoremal not found!');
+        testGjoremal2.deleted = 1;
+        expect(response.data).to.containSubset(testGjoremal2);
       });
   });
 });

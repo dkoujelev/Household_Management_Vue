@@ -184,7 +184,8 @@ describe('Vare',() => {
       .then(response => {
         return axios.get(restServer + 'vare/' + testVare1.vare_id)
       }).then(response => {
-        expect(response.data).to.equal('Item not found!');
+        testVare1.deleted = 1;
+        expect(response.data).to.containSubset([testVare1]);
       });
   });
 });

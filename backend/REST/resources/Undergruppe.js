@@ -73,7 +73,7 @@ module.exports = function(connection, server){
 // Hent undergrupper til ett spesifikt kollektiv
   server.get('rest/undergrupperForKollektiv/:kollektiv_id', function (req, res, next) {
     //console.log('DEBUG - rest/undergrupperForKollektiv/:kollektiv_id');
-    connection.query("SELECT * FROM Undergruppe WHERE kollektiv_id=?", req.params.kollektiv_id, function(err, rows, fields){
+    connection.query("SELECT * FROM Undergruppe WHERE kollektiv_id=? AND deleted=FALSE", req.params.kollektiv_id, function(err, rows, fields){
       res.send(err ? err : rows);
       return next();
     });
@@ -82,7 +82,7 @@ module.exports = function(connection, server){
 // Hent hovedgruppen til ett spesifikt kollektiv
   server.get('rest/hovedgruppenForKollektiv/:kollektiv_id', function (req, res, next) {
     //console.log('DEBUG - rest/hovedgruppenForKollektiv/:kollektiv_id');
-    connection.query("SELECT * FROM Undergruppe WHERE kollektiv_id=? AND default_gruppe=1", req.params.kollektiv_id, function(err, rows, fields){
+    connection.query("SELECT * FROM Undergruppe WHERE kollektiv_id=? AND default_gruppe=1 AND deleted=FALSE", req.params.kollektiv_id, function(err, rows, fields){
       res.send(err ? err : rows);
       return next();
     });
@@ -95,7 +95,7 @@ module.exports = function(connection, server){
       "INNER JOIN Bruker_Undergruppe ON Undergruppe.undergruppe_id=Bruker_Undergruppe.undergruppe_id " +
       "INNER JOIN Bruker ON Bruker_Undergruppe.bruker_id=Bruker.bruker_id " +
       "INNER JOIN Kollektiv ON Undergruppe.kollektiv_id = Kollektiv.kollektiv_id " +
-      "WHERE Bruker.bruker_id=? " +
+      "WHERE Bruker.bruker_id=? AND Undergruppe.deleted=FALSE " +
       "ORDER BY Undergruppe.kollektiv_id, Undergruppe.default_gruppe DESC", req.params.bruker_id, function(err, rows, fields){
       res.send(err ? err : rows);
       return next();
@@ -143,9 +143,14 @@ module.exports = function(connection, server){
   });
 
 // Slett en undergruppe
-  /*
   server.del('rest/undergruppe/:undergruppe_id', function (req, res, next) {
-    connection.query("DELETE FROM ")
+    connection.query("UPDATE Undergruppe SET deleted = TRUE WHERE undergruppe_id=?", req.params.undergruppe_id, function (err, rows, fields) {
+      if(err)
+        return next(err);
+      connection.query('DELETE FROM Bruker_Undergruppe WHERE undergruppe_id=?', req.params.undergruppe_id, function (err, rows, fields) {
+        res.send(err ? err : rows);
+        return next();
+      });
+    });
   });
-  */
 };

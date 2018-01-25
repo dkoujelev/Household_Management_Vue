@@ -26,7 +26,7 @@ module.exports = function(connection, server) {
 
   // Hent varer til en liste
   server.get('rest/varer/:handleliste_id', function (req, res, next) {
-    connection.query('SELECT * FROM Vare WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
+    connection.query('SELECT * FROM Vare WHERE handleliste_id=? AND deleted=FALSE', req.params.handleliste_id, function (err, rows, fields) {
       if(err)
         return next(err);
       res.send(rows);
@@ -46,7 +46,7 @@ module.exports = function(connection, server) {
 
   // Slett en vare
   server.del('rest/vare/:vare_id', function (req, res, next) {
-    connection.query('DELETE FROM Vare WHERE vare_id=?', req.params.vare_id, function (err, rows, fields) {
+    connection.query('UPDATE Vare SET deleted = TRUE WHERE vare_id=?', req.params.vare_id, function (err, rows, fields) {
       if(err)
         return next(err);
       res.send(rows);
