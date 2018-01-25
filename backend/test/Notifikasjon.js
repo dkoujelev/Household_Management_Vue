@@ -1,12 +1,10 @@
-import { util } from 'chai/lib/chai';
-import { request } from 'https';
-
 let expect = require('chai').expect;
 let axios = require('axios');
 let clearDB = require('./testutil').clearDB;
 let myUtil = require('../REST/util');
+let serverConfig = require('./testutil').serverConfig();
+let restServer = 'http://' + serverConfig.serverAddress + ':' + serverConfig.serverPort + '/rest/';
 
-let restServer = 'http://localhost:9001/rest/';
 
 /*
                 Notifikasjon
