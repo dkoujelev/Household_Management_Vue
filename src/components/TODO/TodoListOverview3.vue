@@ -96,7 +96,7 @@
             this.hide();
           });
         },
-        */
+        */ //g
 
         deleteList(){
           axios.delete('http://localhost:9000/rest/' + this.listId).then(response => {
