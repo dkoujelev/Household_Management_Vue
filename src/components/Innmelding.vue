@@ -55,16 +55,27 @@
         <div class="is-child tile notification is-info">
           <div v-if="showUsersGroups===true">
             <h2 class="subtitle">Du er medlem av følgende kollektiv og grupper:</h2>
-            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-              <thead>
-              <th>Kollektiver</th>
-              <th></th>
-              </thead>
-              <tr v-for="option in options_usersgroups"  v-bind:key="option.uid">
-                <td>{{ option.text }} {{ option.isDef }}</td>
-                <td><button class="button is-link" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button></td>
-              </tr>
-            </table>
+            <div class="content">
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
+                <th>Oversikt</th>
+                <th></th>
+                <th></th>
+                </thead>
+                <tr v-for="option in options_usersgroups"  v-bind:key="option.uid">
+                  <td>{{ option.text }} {{ option.isDef }}</td>
+                  <td>
+                    <button class="button is-link is-small is-hidden-desktop" @click="showMembers(option)">Vis medlemmer</button>
+                    <button class="button is-link is-hidden-mobile" @click="showMembers(option)">Vis medlemmer</button>
+
+                  </td>
+                  <td>
+                    <button class="button is-link is-hidden-mobile" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
+                    <button class="button is-link is-small is-hidden-desktop" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
+                  </td>
+                </tr>
+              </table>
+            </div>
             {{ leaveSubResult }}
           </div>
         </div>
@@ -112,21 +123,37 @@
           <br>
           <div v-if="showAvailableSubgroups===true">
             Dette er alle gruppene som hører inn under {{ selected_maingroup_object.navn }}:
-            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-              <thead>
-              <th>Grupper</th>
-              <th></th>
-              </thead>
-              <tr v-for="option in options_subgroup"  v-bind:key="option.uid">
-              <td>{{ option.navn }}</td>
-              <td> <button class="button is-link" v-on:click="joinSubGroup(option.uid)">Bli med</button></td>
-              </tr>
-            </table>
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                  <thead>
+                  <th>Grupper</th>
+                  <th></th>
+                  </thead>
+                  <tr v-for="option in options_subgroup"  v-bind:key="option.uid">
+                  <td>{{ option.navn }}</td>
+                  <td> <button class="button is-link is-hidden-mobile" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+                    <button class="button is-link is-small is-hidden-desktop" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+                  </td>
+                  </tr>
+              </table>
             {{ joinSubResult }}
           </div>
         </div>
       </div>
     </div>
+    <Modal :modalVisible.sync="showingMembers" @modalClosing="showingMembers=false;">
+      <h2 slot="title">Medlemmer</h2>
+      <p>{{selectedGroup.text}}</p>
+      <table slot="content" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>
+        <th>Epost</th>
+        <th>Navn</th>
+        </thead>
+        <tr v-for="member in groupMembers">
+          <td>{{member.epost}}</td>
+          <td>{{member.fornavn + " " + member.etternavn}}</td>
+        </tr>
+      </table>
+    </Modal>
   </section>
 </template>
 
@@ -135,11 +162,21 @@
   import axios from 'axios';
   import router from '../router/index'
   import {store} from '../store'
+  import Modal from '@/components/Modal'
 
   export default {
     name: 'Innmelding',
+    components:{Modal},
     data(){
         return {
+
+            // Disse tre brukes for å vise medlemmer i gruppe
+            // Når man trykker "Vis medlemmer" i gruppelista.
+            // -Oddbjørn
+            selectedGroup: {text:''},
+            groupMembers:[],
+            showingMembers: false,
+
             showCreateMainGroupSection: true,
             showCreateSubGroupSection: false,
             showJoinSection: true,
@@ -211,6 +248,13 @@
 
     },
     methods: {
+      showMembers(gruppe){
+        axios.get('http://localhost:9000/rest/medlemmerIUndergruppe/' + gruppe.uid).then(response => {
+          this.showingMembers = true;
+          this.selectedGroup = gruppe;
+          this.groupMembers = response.data;
+        }).catch(err => console.log(err));
+      },
     //   validateEmail(email){
     //     var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([status-zA-Z\-0-9]+\.)+[status-zA-Z]{2,}))$/;
     //     return regex.test(email);
@@ -549,4 +593,10 @@
 </script>
 
 <style scoped>
+  div.content1 {
+    height:150px;
+    overflow:auto;
+    /**background:#fff;*/
+  }
+
 </style>
