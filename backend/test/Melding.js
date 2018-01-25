@@ -2,6 +2,8 @@ let expect = require('chai').expect;
 let axios = require('axios');
 let bcrypt = require('bcrypt');
 let clearDB = require('./testutil').clearDB;
+let serverConfig = require('./testutil').serverConfig();
+let restServer = 'http://' + serverConfig.serverAddress + ':' + serverConfig.serverPort + '/rest/';
 
 let testuser = {
   epost: 'test@test.com',
@@ -33,13 +35,13 @@ let test_melding = {
 describe('Melding',() => {
   beforeEach(() => {
     return clearDB().then(() => {
-      return axios.post('http://localhost:9100/rest/bruker',testuser);
+      return axios.post(restServer + 'bruker',testuser);
     }).then(response => {
       testuser.bruker_id = response.data.insertId;
-      return axios.post('http://localhost:9100/rest/kollektiv/'+testuser.bruker_id, test_kollektiv);
+      return axios.post(restServer + 'kollektiv/'+testuser.bruker_id, test_kollektiv);
     }).then(response => {
       test_kollektiv.kollektiv_id = response.insertId;
-      return axios.post('http://localhost:9100/rest/melding', test_melding);
+      return axios.post(restServer + 'melding', test_melding);
     }).then(response => {
       test_melding.melding_id = response.data.insertId;
     });
@@ -47,23 +49,23 @@ describe('Melding',() => {
 
   // Lagring testes implisitt i beforeEach
   it('Hent melding for kollektiv',() => {
-    return axios.get('http://localhost:9100/rest/melding/motta/kollektiv/' + test_melding.sendt_til_kollektiv)
+    return axios.get(restServer + 'melding/motta/kollektiv/' + test_melding.sendt_til_kollektiv)
       .then(response => {
         expect(response.data[0]).to.containSubset(test_melding);
       });
   });
 
   it('Hent alle meldinger en bruker skal se', () => {
-    return axios.get('http://localhost:9100/rest/melding/motta/brukerAlle/' + testuser.bruker_id)
+    return axios.get(restServer + 'melding/motta/brukerAlle/' + testuser.bruker_id)
       .then(response => {
         expect(response.data[0]).to.containSubset(test_melding);
       });
   });
 
   it('Slette melding', () => {
-    return axios.delete('http://localhost:9100/rest/melding/' + test_melding.melding_id)
+    return axios.delete(restServer + 'melding/' + test_melding.melding_id)
       .then(response => {
-        return axios.get('http://localhost:9100/rest/melding/' + test_melding.melding_id);
+        return axios.get(restServer + 'melding/' + test_melding.melding_id);
       }).should.be.rejected;
   });
 
