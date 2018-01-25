@@ -187,7 +187,8 @@ describe('Handeliste',() => {
       .then(response => {
         return axios.get(restServer + 'handleliste/' + testHandleliste1.handleliste_id)
       }).then(response => {
-        expect(response.data).to.equal('Shoppinglist not found!');
+        testHandleliste1.deleted = 1;
+        expect(response.data).to.containSubset(testHandleliste1);
       });
   });
 
