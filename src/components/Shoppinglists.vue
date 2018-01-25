@@ -24,7 +24,9 @@
             <td>{{row.frist}}</td>
             <td>
               <button class="button is-warning" @click="selectList(row)">Se handleliste</button>
-              <button class="button" :class="{ 'is-success': !row.favorite, 'is-danger': row.favorite}" v-if="!isHome" @click="addFavorite(row)"><i class="fa fa-star" aria-hidden="true"></i></button>
+              <button class="button" :class="{ 'is-success': !row.favorite, 'is-danger': row.favorite}" v-if="!isHome" @click="addFavorite(row)">
+                <i class="fa fa-star" aria-hidden="true"></i><p v-if="row.favorite">&nbsp; Fjern fra favoritt</p><p v-else>&nbsp; Legg til favoritt</p>
+              </button>
             </td>
           </tr>
         </table>
