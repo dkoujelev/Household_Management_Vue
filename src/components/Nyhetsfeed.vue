@@ -1,9 +1,9 @@
 <template>
-  <div class="container ">
-    <div class="columns" :class="{'is-centered' : !isHome}">
-      <div class="column" :class="{'is-6' : !isHome}">
-      <div class="card is-rounded is-centered">
-        <div class="is-ancestor">
+  <div :class="{'container' : !isHome}">
+    <div :class="{'is-centered' : !isHome,'columns' : !isHome}">
+      <div :class="{'column is-6' : !isHome}">
+      <div class="card is-rounded " :class="{'is-centered' :!isHome}">
+        <div class="is-ancestor box"  style="background-color: hsl(204, 86%, 53%)">
           <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
             <h2 slot="title">Lag nyhet</h2>
             <Addnews slot="content" @addedNews="update" @closeAddNews="closeModal" />
@@ -11,8 +11,8 @@
           <div class="is-parent">
             <div class="is-child">
               <p class="title">Nyheter</p>
-              <div class="content1">
-                <article class="message is-link" v-for="row in rows">
+              <div :class="{'content1' : !isHome}">
+                <article class="message is-white" v-for="row in rows">
                   <div class="message-header">
                     <h2>{{row.overskrift}}</h2>
                     <a v-if="row.knapper && !isHome" @click="deleteNews(row)">Slett</a>
@@ -150,94 +150,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  tbody {
-    height: 200px;
-    display: inline-block;
-    width: 100%;
-    overflow: auto;
-  }
-  body {
-    height: 230px;
-    overflow-x: auto;
-    overflow-y: auto;
-    font-family: "Open Sans", sans-serif;
-    line-height: 2.25;
-  }
-  table {
-    border: 2px solid #ccc;
-    border-collapse: collapse;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    table-layout:auto; /*table setup*/
-  }
-  table caption {
-    font-size: 1.5em;
-    margin: .5em 0 .75em;
-  }
-  table tr {
-    background: #f8f8f8;
-    border: 1px solid #ddd;
-    padding: .35em;
-  }
-  table th,
-  table td {
-    background: lightgray;
-    padding: .625em;
-    text-align: left;
-  }
-  table th {
-    background: grey;
-    font-size: .85em;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-  }
-  @media screen and (max-width: 600px) {
-    table {
-      border: 0;
-    }
-    table caption {
-      font-size: 1.3em;
-    }
-    table thead {
-      border: none;
-      clip: rect(0 0 0 0);
-      height: 1px;
-      margin: -1px;
-      overflow: hidden;
-      padding: 0;
-      position: absolute;
-      width: 1px;
-    }
-    table tr {
-      border-bottom: 3px solid #ddd;
-      display: block;
-      margin-bottom: .625em;
-    }
-    table td {
-      border-bottom: 1px solid #ddd;
-      display: block;
-      font-size: .8em;
-      text-align: right;
-    }
-    table td:before {
-      /*
-      * aria-label has no advantage, it won't be read inside a table
-      content: attr(aria-label);
-      */
-      content: attr(data-label);
-      float: left;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-    table td:last-child {
-      border-bottom: 0;
-    }
-  }
 
-  button{
-    color: orange;
-  }
 
   div.content1 {
     height: 450px;

@@ -1,40 +1,47 @@
 <template>
-  <div class="is-ancestor">
-    <Modal :modalVisible.sync="showShoppingList" @modalClosing="closeShoppingList">
-      <h2 slot="title">{{list.name}}</h2>
-      <ViewShoppingList :id.sync="list.id" slot="content" @closingShoppingList="closeShoppingList" @deleteShoppingList="update" @listCompleted="update"/>
-    </Modal>
-    <Modal :modalVisible.sync="showAddShoppingList" @modalClosing="closeAddShoppingList">
-      <h2 slot="title">Lag ny handleliste</h2>
-      <ShoppingList slot="content" @closingAddShoppingList="closeAddShoppingList" @addedShoppingList="update"/>
-    </Modal>
-    <div class="is-parent">
-      <div class="tile is-child box " style="background-color: lightskyblue">
-        <h1>Handlelister</h1>
-      </div>
-      <div class="tile is-child box" style="background-color: lightskyblue">
-        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-          <thead>
-          <th>Handleliste</th>
-          <th>Frist</th>
-          <th></th>
-          </thead>
-          <tr v-for="row in rows">
-            <td>{{row.navn}}</td>
-            <td>{{row.frist}}</td>
-            <td>
-              <button class="button is-warning" @click="selectList(row)">Se handleliste</button>
-              <button class="button" :class="{ 'is-success': !row.favorite, 'is-danger': row.favorite}" v-if="!isHome" @click="addFavorite(row)">
-                <i class="fa fa-star" aria-hidden="true"></i><p v-if="row.favorite">&nbsp; Fjern fra favoritt</p><p v-else>&nbsp; Legg til favoritt</p>
-              </button>
-            </td>
-          </tr>
-        </table>
-        <br v-if="len === -1">
-        <button class="button is-link" @click="openAddShoppingList" v-if="!isHome">Lag handleliste</button>
+  <div :class="{'container' : !isHome}">
+    <div :class="{'is-centered' : !isHome,'columns' : !isHome}">
+      <div :class="{'column is-7' : !isHome}">
+        <div class="card is-rounded is-centered">
+          <div class="is-ancestor box" style="background-color:hsl(171, 100%, 41%)">
+            <Modal :modalVisible.sync="showShoppingList" @modalClosing="closeShoppingList">
+              <h2 slot="title">{{list.name}}</h2>
+              <ViewShoppingList :id.sync="list.id" slot="content" @closingShoppingList="closeShoppingList" @deleteShoppingList="update" @listCompleted="update"/>
+            </Modal>
+            <Modal :modalVisible.sync="showAddShoppingList" @modalClosing="closeAddShoppingList">
+              <h2 slot="title">Lag ny handleliste</h2>
+              <ShoppingList slot="content" @closingAddShoppingList="closeAddShoppingList" @addedShoppingList="update"/>
+            </Modal>
+            <div class="is-parent">
+              <div class="is-child">
+                <div class="title">Handlelister</div>
+                <div :class="{'content1' : !isHome}">
+                  <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                    <thead>
+                    <th>Handleliste</th>
+                    <th>Frist</th>
+                    <th></th>
+                    </thead>
+                    <tr v-for="row in rows">
+                      <td>{{row.navn}}</td>
+                      <td>{{row.frist}}</td>
+                      <td>
+                        <button class="button is-warning" @click="selectList(row)">Se handleliste</button>
+                        <button class="button" :class="{ 'is-success': !row.favorite, 'is-danger': row.favorite}" v-if="!isHome" @click="addFavorite(row)">
+                          <i class="fa fa-star" aria-hidden="true"></i><p v-if="row.favorite">&nbsp; Fjern fra favoritt</p><p v-else>&nbsp; Legg til favoritt</p>
+                        </button>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <br v-if="len === -1">
+                <button class="button is-link" @click="openAddShoppingList" v-if="!isHome">Lag handleliste</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 
