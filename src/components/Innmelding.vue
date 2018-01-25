@@ -130,8 +130,9 @@
                   </thead>
                   <tr v-for="option in options_subgroup"  v-bind:key="option.uid">
                   <td>{{ option.navn }}</td>
-                  <td> <button class="button is-link is-hidden-mobile" v-on:click="joinSubGroup(option.uid)">Bli med</button></td>
+                  <td> <button class="button is-link is-hidden-mobile" v-on:click="joinSubGroup(option.uid)">Bli med</button>
                     <button class="button is-link is-small is-hidden-desktop" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+                  </td>
                   </tr>
               </table>
             {{ joinSubResult }}
