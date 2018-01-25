@@ -57,7 +57,7 @@
             <h2 class="subtitle">Du er medlem av følgende kollektiv og grupper:</h2>
             <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
               <thead>
-              <th>Kollektiver</th>
+              <th>Oversikt</th>
               <th></th>
               </thead>
               <tr v-for="option in options_usersgroups"  v-bind:key="option.uid">
