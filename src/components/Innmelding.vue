@@ -1,16 +1,16 @@
 <template>
   <section>
     <div class="is-ancestor">
-      <h3 class="title is-3">Administrere grupper og kollektiv</h3>
       <div class="is-parent tile">
         <br>
-        <div class="is-child tile box" style="background-color: azure">
+        <div class="is-child tile notification is-info">
+          <p class="title">Administrere grupper og kollektiv</p>
           <div v-if="showJoinSection===true">
             <h2 class="subtitle">Skriv inn navnet på kollektivet du ønsker å bli medlem av</h2>
             <div class="field">
               <div class="field-body">
                 <input  type="text" class="input" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
-                <button class="button is-link" v-on:click="joinGroup(innmelding.kollektiv_navn)">
+                <button class="button is-link is-inverted" v-on:click="joinGroup(innmelding.kollektiv_navn)">
                   Søk medlemskap
                 </button>
               </div>
@@ -28,7 +28,7 @@
                 <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
               </div>
             </div>
-            <button class="button is-link" v-on:click="createMainGroup(oppretteMain.navn)">
+            <button class="button is-link is-inverted" v-on:click="createMainGroup(oppretteMain.navn)">
               Opprett kollektiv
             </button>
             {{ createMainResult }}
@@ -44,7 +44,7 @@
                 <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
               </div>
             </div>
-            <button class="button is-link" v-on:click="createSubGroup(oppretteSub.navn)">
+            <button class="button is-link is-inverted" v-on:click="createSubGroup(oppretteSub.navn)">
               Opprett gruppe
             </button>
             {{ createSubResult }}
@@ -52,7 +52,7 @@
         </div>
       </div>
       <div class="is-parent tile">
-        <div class="is-child tile box" style="background-color: azure">
+        <div class="is-child tile notification is-info">
           <div v-if="showUsersGroups===true">
             <h2 class="subtitle">Du er medlem av følgende kollektiv og grupper:</h2>
             <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
@@ -68,7 +68,7 @@
             {{ leaveSubResult }}
           </div>
         </div>
-        <div class="is-child tile box is-7" style="background-color: azure">
+        <div class="is-child tile notification is-7 is-info">
           <div v-if="showGroupSelect===true">
             <div class="field">
               <h2 class="subtitle">Du er administrator for flere kollektiv.
@@ -76,7 +76,7 @@
               </h2>
               <p class="is-hidden-desktop">Trykk på kolonnen under for å få opp kollektiver</p>
               <div>
-                <select class="dropdown" v-model="selected_maingroup" v-on:change="makeMainGrpObj(selected_maingroup)" style="background-color: aqua">
+                <select class="dropdown" v-model="selected_maingroup" v-on:change="makeMainGrpObj(selected_maingroup)" style="background-color: royalblue">
                   <option disabled value="">Velg kollektiv</option>
                   <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
                     {{ option.text }}
@@ -91,7 +91,7 @@
             <div class="field-body">
               <div class="field">
                 <input class="input" type="email" placeholder="Email" v-model="innmelding.epost">
-                <button class="button is-link" v-on:click="doInvite">Send invitasjon</button>
+                <button class="button is-link is-inverted" v-on:click="doInvite">Send invitasjon</button>
               </div>
             </div>
             {{ mailResult }}
