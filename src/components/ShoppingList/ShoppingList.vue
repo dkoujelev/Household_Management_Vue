@@ -1,13 +1,13 @@
 <template>
   <div class="is-ancestor">
     <div class="is-parent">
-      <div class="tile is-child box is-6" style="background-color: lightskyblue">
-        <h3>Lag din handleliste</h3>
-      </div>
-      <div class="tile is-child box is-6" style="background-color: lightskyblue">
-        <label class="label">Frist</label>
-        <flat-pickr v-model="date" :config="settings"></flat-pickr>
-        <label class="label">Navn å handleliste</label>
+      <div class="tile is-child">
+        <div>
+          <label class="label">Frist</label>
+          <flat-pickr v-model="date" :config="settings"></flat-pickr>
+        </div>
+        <br>
+        <label class="label">Navn på handleliste</label>
         <p class="help is-danger">{{this.errorMessages.overskrift}}</p>
         <div class="control">
           <input class="input" type="text" placeholder="Navn på handleliste" v-model="name">
@@ -39,13 +39,20 @@
             <button class="button is-success" @click="addRow">Legg til ny vare</button>
           </div>
         </div>
-        <br>
         <div class="block">
           <nav class="level">
             <!-- left side -->
             <div class="level-left">
-              <input type="checkbox" :checked="save"><p>Lagre handleliste for fremtidig bruk</p>
-              <button class="button is-link" @click="checkInput">Godkjenn</button>
+              <label>
+                <input type="checkbox" :checked="save"> Lagre handleliste for fremtidig bruk
+              </label>
+            </div>
+          </nav>
+          <nav class="level">
+            <div class="left">
+              <div class="level-item">
+                <button class="button is-link" @click="checkInput">Godkjenn</button>
+              </div>
             </div>
 
             <!-- right side -->
