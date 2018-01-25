@@ -3,6 +3,7 @@
     <div class="tile is-ancestor">
       <div class=" tile is-parent is-8">
         <div class="tile is-child box" style="background-color: white">
+          <aTodo></aTodo>
           <Newsfeed :value="5"></Newsfeed>
         </div>
       </div>
@@ -27,9 +28,11 @@
     import router from '../router/index'
     import {store} from '../store'
 
+    import aTodo from "@/components/TODO/aTodo"
+
     export default {
       name: 'Home',
-      components: { Todo, Shoppinglists, Newsfeed },
+      components: { Todo, Shoppinglists, Newsfeed, aTodo },
 
       data(){
         return {
