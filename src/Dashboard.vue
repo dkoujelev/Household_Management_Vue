@@ -4,14 +4,12 @@
     <!-- START NAV -->
     <nav class="navbar is-link is-fixed-top">
         <div class="navbar-brand">
-
             <router-link class="navbar-item" to="/home">
               <img src="./img/logo_small.png" alt="image not found" width="45"/>
             </router-link>
           <div class="navbar-item">
             <SelectGroup v-if="showNav" ref="SelectGroup"> </SelectGroup>
           </div>
-
           <div class="navbar-burger burger" @click="showBurger = !showBurger" v-bind:class="{'is-active' : showBurger}" data-target="navMenu" v-if="showNav">
             <span></span>
             <span></span>
