@@ -28,7 +28,7 @@
               <router-link class="navbar-item" v-if="showNav" to="/TestMail">TestMail</router-link> -->
               <router-link class="navbar-item" v-if="showNav" to="/ShowAccounting"> <span class="icon"><i class="fa fa-calculator fa-lg" > </i>   </span> &nbsp Regnskap &nbsp </router-link>
               <router-link class="navbar-item" v-if="showNav" to="/UserInfo"><span class="icon"><i class="fa fa-user fa-lg"></i></span> &nbsp Min Side </router-link>
-
+              <router-link class="navbar-item" v-if="showNav" to="/MyTestPanel"> TestPanel </router-link>
 
             </div>
             <div class="navbar-end" @click="showBurger = false">
@@ -37,12 +37,16 @@
           </div>
     </nav>
     <!-- END NAV -->
+    <div class="myContainer" style="max-height: 100%">
+      <br/><br/><br/>
 
-    <br/><br/><br/>
+      <div class="content">
+        <router-view/>
+      </div>
 
-    <div class="container">
-      <router-view/>
+
     </div>
+
 
   </div>
 </template>
@@ -102,10 +106,56 @@ export default {
 </script>
 
 <style>
-  body {
-    background-color: lightcyan;
-    height: 100vh;
+  /**.myContainer {
+    background-color: #ffc14d;
+    /** height: 100vh;
+
+
+  }*/
+  .content {
+
   }
+
+  body {
+    /** background-color: white; */
+    background-image: url("./components/urban.jpg");
+    /** background-repeat: repeat-x; /** repeting image */
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    /**Blured filter */
+    /** -webkit-filter: blur(5px); */
+    /** -moz-filter: blur(5px); */
+    /** -o-filter: blur(5px); */
+    /** -ms-filter: blur(5px); */
+    /** filter: blur(5px); */
+
+
+
+
+
+
+  }
+
+
+
+   Alternative way:
+  html {
+
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+
+
+
+
+
+
 
 
 </style>
