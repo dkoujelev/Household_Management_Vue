@@ -67,9 +67,55 @@
         return ((isNaN(Number.parseInt(this.value)) ? -1 : this.value) !== -1);
       }
     },
+    asyncComputed:{
+      rows: {
+        get(){
+          let rows = [];
+
+          let cap = this.len;
+          let rest = "http://localhost:9000/rest/melding/motta/kollektiv/" + store.state.current_group.kollektiv_id;
+          if(cap > 0) rest = "http://localhost:9000/rest/melding/motta/brukerAlle/" + store.state.current_user.bruker_id;
+
+          return axios.get(rest).then(response => {
+            let resRows = response.data;
+            let brukere;
+            return axios.get('http://localhost:9000/rest/bruker').then(res => {
+              brukere = res.data;
+              for (let i = 0; i < resRows.length; i++) {
+                console.log(resRows[i].sendt);
+                let date = this.formateDate(resRows[i].sendt);
+                let obj = {
+                  hvem: brukere[resRows[i].skrevet_av_bruker],
+                  melding_id: resRows[i].melding_id,
+                  overskrift: resRows[i].overskrift,
+                  nyhet: resRows[i].tekst,
+                  nar: date,
+                  knapper: (resRows[i].skrevet_av_bruker === store.state.current_user.bruker_id)
+                };
+                rows.push(obj);
+                if (cap > 0) {
+                  cap -= 1;
+                }
+                if (cap === 0) {
+                  break;
+                }
+              }
+              return rows;
+            }).catch(err => {
+              console.log(err);
+            });
+          }).catch(err => {
+            console.log(err);
+          });
+        },
+        watch(){
+          this.updated;
+        }
+      }
+    },
     data(){
       return {
-        rows: [],
+        updated: false,
         showModal: false
       };
     },
@@ -84,9 +130,8 @@
         this.showModal = false;
       },
       update(){
+        this.updated = !this.updated;
         this.closeModal();
-        this.rows = [];
-        this.fillRows();
       },
       formateDate(raw){
         return raw.substring(8, 10) + " " + raw.substring(5, 7) + " " + raw.substring(0,4)
@@ -95,37 +140,8 @@
       deleteNews(row){
         let id = row.melding_id;
         axios.delete('http://localhost:9000/rest/melding/' + id).then(response => {
-          this.rows = [];
-          this.fillRows();
-        });
-      },
-      fillRows(){
-        let cap = this.len;
-        let rest = "http://localhost:9000/rest/melding/motta/kollektiv/" + store.state.current_group.kollektiv_id;
-        if(cap > 0) rest = "http://localhost:9000/rest/melding/motta/brukerAlle/" + store.state.current_user.bruker_id;
 
-        axios.get(rest).then(response => {
-          let resRows = response.data;
-          let brukere;
-          axios.get('http://localhost:9000/rest/bruker').then(res => {
-            brukere = res.data;
-            for(let i = 0; i < resRows.length; i++){
-              console.log(resRows[i].sendt);
-              let date = this.formateDate(resRows[i].sendt);
-              let obj = {hvem: brukere[resRows[i].skrevet_av_bruker],melding_id: resRows[i].melding_id, overskrift: resRows[i].overskrift, nyhet: resRows[i].tekst, nar: date,
-                knapper: (resRows[i].skrevet_av_bruker === store.state.current_user.bruker_id)};
-              this.rows.push(obj);
-              if(cap > 0){
-                cap -= 1;
-              }
-              if(cap === 0){
-                break;
-              }
-            }
-          });
-          }).catch(err => {
-            console.log(err);
-          });
+        });
       }
     }
   }
