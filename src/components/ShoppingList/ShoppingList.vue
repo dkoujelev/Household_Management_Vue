@@ -1,10 +1,7 @@
 <template>
   <div class="is-ancestor">
     <div class="is-parent">
-      <div class="tile is-child box is-6" style="background-color: lightskyblue">
-        <h3>Lag din handleliste</h3>
-      </div>
-      <div class="tile is-child box is-6" style="background-color: lightskyblue">
+      <div class="tile is-child " >
         <label class="label">Navn å handleliste</label>
         <p class="help is-danger">{{this.errorMessages.overskrift}}</p>
         <div class="control">

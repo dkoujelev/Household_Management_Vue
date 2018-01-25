@@ -1,7 +1,7 @@
 <template>
   <div class="tile is-ancestor">
 
-    <div class="tile is-parent box is-vertical is-6" style="background-color: lightskyblue">
+    <div class="tile is-parent is-vertical">
       <div class="tile is-child ">
         <table class="table is-bordered is-striped  is-hoverable is-fullwidth">
           <thead>
