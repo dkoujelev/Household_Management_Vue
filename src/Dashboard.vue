@@ -4,12 +4,12 @@
     <!-- START NAV -->
     <nav class="navbar is-link is-fixed-top">
         <div class="navbar-brand">
-
             <router-link class="navbar-item" to="/home">
               <img src="./img/logo_small.png" alt="image not found" width="45"/>
             </router-link>
-          <p>test</p>
-          <SelectGroup v-if="showNav" @selected-group="selectedGroup" ref="SelectGroup"> </SelectGroup>
+          <div class="navbar-item">
+            <SelectGroup v-if="showNav" ref="SelectGroup"> </SelectGroup>
+          </div>
           <div class="navbar-burger burger" @click="showBurger = !showBurger" v-bind:class="{'is-active' : showBurger}" data-target="navMenu" v-if="showNav">
             <span></span>
             <span></span>
@@ -30,7 +30,6 @@
 
             </div>
             <div class="navbar-end" @click="showBurger = false">
-              <SelectGroup v-if="showNav" @selected-group="selectedGroup" ref="SelectGroup"> </SelectGroup>
               <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut"> <span class="icon"><i class="fa fa-power-off fa-lg"></i></span>  &nbsp Logg Ut</a>
             </div>
           </div>
@@ -40,8 +39,6 @@
     <br/><br/><br/>
 
     <div class="container">
-      <p v-if="loggedIn">Innlogget bruker: {{$store.state.current_user.epost}}</p>
-      <p v-if="loggedIn">Aktiv gruppe: {{$store.state.current_group.navn}}</p>
       <router-view/>
     </div>
 
@@ -61,9 +58,6 @@ export default {
   name: 'dashboard',
   components: {SelectGroup, AddCollective, AddGroup},
   methods:{
-    selectedGroup(group){
-      store.commit('current_group',group);
-    },
     addedGroup(group){
       this.$refs.SelectGroup.loadGroups();
       this.addingGroup = false;
