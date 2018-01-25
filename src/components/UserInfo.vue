@@ -10,24 +10,6 @@
         </div>
       </div>
     </div>
-
-    <div class="is-parent tile box">
-      <div class="tile is-child box" style="background-color: lightskyblue">
-        <div class="title is-2">Medlemmer i gruppen {{currentGroup.navn}}</div>
-        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-          <thead>
-          <th>Epost</th>
-          <th>Navn</th>
-          </thead>
-          <tr v-for="member in groupMembers">
-            <td>{{member.epost}}</td>
-            <td>testetestest</td>
-          </tr>
-        </table>
-        <br v-if="len === -1">
-        <button class="button is-link" @click="openAddShoppingList" v-if="len === -1">Lag handleliste</button>
-      </div>
-    </div>
   </div>
 
 </template>
@@ -44,19 +26,11 @@
             first_name: '',
             last_name: '',
             email: ''
-          },
-          groupMembers: [],
-          currentGroup:{navn:'eksempel_gruppe',id:'1'}
+          }
         }
       },
       methods: {
-        getMembers(gruppe_id){
-          axios.get('http://localhost:9000/rest/medlemmerIUndergruppe/' + gruppe_id).then(response => {
-            this.groupMembers = response.data;
-          }).catch(err => console.log(err));
-        },
         getData(){
-          this.getMembers(1);
           axios.get('http://localhost:9000/rest/bruker/' + store.state.current_user.bruker_id).then(response => {
             let data = response.data;
             console.log(data);
