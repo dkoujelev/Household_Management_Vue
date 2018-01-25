@@ -2,6 +2,8 @@ let expect = require('chai').expect;
 let axios = require('axios');
 let bcrypt = require('bcrypt');
 let clearDB = require('./testutil').clearDB;
+let serverConfig = require('./testutil').serverConfig();
+let restServer = 'http://' + serverConfig.serverAddress + ':' + serverConfig.serverPort + '/rest/';
 
 let testuser = {
   epost: 'test@test.com',
@@ -56,21 +58,21 @@ describe('Bruker',() => {
     return clearDB()     // Vi må først nullstille testbasen
     .then((response) => {
       // Legg testuser inn i basen
-      return axios.post('http://localhost:9100/rest/bruker', testuser);
+      return axios.post(restServer + 'bruker', testuser);
     }).then(response => {
       // Finn ut hvilken bruker_id testuser fikk, og legg til i testuser objektet vårt
       testuser.bruker_id = response.data.insertId;
       // Vi bryr oss ikke om å sammenligne passord i denne testen, så passord fjernes før objektene sammenlignes
       delete testuser.hashed_passord;
       // Legg testuser2 inn i basen
-      return axios.post('http://localhost:9100/rest/bruker', testuser2);
+      return axios.post(restServer + 'bruker', testuser2);
     }).then(response => {
         // Finn ut hvilken bruker_id testuser2 fikk, og legg til i testuser objektet vårt
       testuser2.bruker_id = response.data.insertId;
       // Vi bryr oss ikke om å sammenligne passord i denne testen, så passord fjernes før objektene sammenlignes
       delete testuser2.hashed_passord;
       // Legg in test_kollektiv i basen. testuser blir admin.
-      return axios.post('http://localhost:9100/rest/kollektiv/' + testuser.bruker_id, test_kollektiv);
+      return axios.post(restServer + 'kollektiv/' + testuser.bruker_id, test_kollektiv);
     }).then(response => {
       test_kollektiv.kollektiv_id = response.data.insertId;
 
@@ -81,13 +83,13 @@ describe('Bruker',() => {
       };
         // testuser ligger allerede inne i kollektivet pga han som "oppretta" det over.
         // Trenger kun å legge inn testuser2 i testkollektivet.
-      return axios.post('http://localhost:9100/rest/meldBrukerInnIKollektiv', data);
+      return axios.post(restServer + 'meldBrukerInnIKollektiv', data);
     });
   });
 
   it('Hent bruker med bestemt id', () => {
     // Hent ut testuser og sammenlign
-    return axios.get('http://localhost:9100/rest/bruker/' + testuser.bruker_id).then(response => {
+    return axios.get(restServer + 'bruker/' + testuser.bruker_id).then(response => {
 
       // Sjekk at passorded ble satt/hashet rett
       expect(bcrypt.compareSync(testuser1_oldpass, response.data.hashed_passord)).to.be.true;
@@ -103,7 +105,7 @@ describe('Bruker',() => {
 
   it('Hent bruker med bestemt epost', () => {
     // Hent ut testuser fra basen, ved å oppgi brukerens epost.
-    return axios.get('http://localhost:9100/rest/brukerMedEpost/' + testuser.epost).then(response => {
+    return axios.get(restServer + 'brukerMedEpost/' + testuser.epost).then(response => {
       delete response.data.hashed_passord;
 
       // Sjekk at brukerobjektet vi fikk ut fra REST er likt det vi putta inn.
@@ -113,7 +115,7 @@ describe('Bruker',() => {
 
   it('Hent alle brukere', () => {
 
-    return axios.get('http://localhost:9100/rest/bruker').then((response) => {
+    return axios.get(restServer + 'bruker').then((response) => {
       let users = response.data;
 
       // Sjekk at vi fikk ut like mange brukere som vi satte inn.
@@ -129,12 +131,12 @@ describe('Bruker',() => {
 
   it('Sjekk om en bruker er registrert', () => {
 
-    return axios.get('http://localhost:9100/rest/brukerepost/' + testuser.epost).then(response => {
+    return axios.get(restServer + 'brukerepost/' + testuser.epost).then(response => {
       delete response.data.hashed_passord;
 
       expect(response.data).to.deep.equal({exists: true});
 
-      return axios.get('http://localhost:9100/rest/brukerepost/' + 'epost@somikke.finnes');
+      return axios.get(restServer + 'brukerepost/' + 'epost@somikke.finnes');
     })
     .then(response => {
       delete response.data.hashed_passord;
@@ -144,7 +146,7 @@ describe('Bruker',() => {
   });
 
   it('Hent alle brukere i et bestemt kollektiv', () => {
-    return axios.get('http://localhost:9100/rest/brukereIKollektiv/' + test_kollektiv.kollektiv_id).then(response => {
+    return axios.get(restServer + 'brukereIKollektiv/' + test_kollektiv.kollektiv_id).then(response => {
 
       let users = response.data;
 
@@ -173,12 +175,12 @@ describe('Bruker',() => {
       adresse: 'ny adresse'
     };
 
-    return axios.post('http://localhost:9100/rest/bruker', old_user)
+    return axios.post(restServer + 'bruker', old_user)
     .then(response => {
       new_user.bruker_id = response.data.insertId;
-      return axios.put('http://localhost:9100/rest/bruker', new_user);
+      return axios.put(restServer + 'bruker', new_user);
     }).then(response => {
-      return axios.get('http://localhost:9100/rest/bruker/' + new_user.bruker_id);
+      return axios.get(restServer + 'bruker/' + new_user.bruker_id);
     }).then(response => {
       delete response.data.hashed_passord;
 
@@ -197,7 +199,7 @@ describe('Bruker',() => {
       hashed_passord: 'passord'
     };
 
-    return axios.post('http://localhost:9100/rest/bruker', user)
+    return axios.post(restServer + 'bruker', user)
     .then(response => {
 
       user.bruker_id = response.data.insertId;
@@ -207,9 +209,9 @@ describe('Bruker',() => {
         "newPassword": "nyttpassord"
       };
 
-      return axios.put('http://localhost:9100/rest/changePassword', data);
+      return axios.put(restServer + 'changePassword', data);
     }).then(response => {
-      return axios.get('http://localhost:9100/rest/bruker/' + user.bruker_id);
+      return axios.get(restServer + 'bruker/' + user.bruker_id);
     }).then(response => {
       expect(bcrypt.compareSync("nyttpassord", response.data.hashed_passord)).to.be.true;
       expect(bcrypt.compareSync(user.hashed_passord, "blehhhhh")).to.be.false;

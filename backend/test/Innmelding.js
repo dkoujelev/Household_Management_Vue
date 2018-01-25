@@ -1,7 +1,8 @@
 let expect = require('chai').expect;
 let axios = require('axios');
 let clearDB = require('./testutil').clearDB;
-
+let serverConfig = require('./testutil').serverConfig();
+let restServer = 'http://' + serverConfig.serverAddress + ':' + serverConfig.serverPort + '/rest/';
 
 let testUser = {
   epost: 'test@test.com',
@@ -87,35 +88,35 @@ describe('Innmelding',() => {
       return clearDB()     // Vi må først nullstille testbasen
         .then((response) => {
           // Legg testUser inn i basen
-          return axios.post('http://localhost:9100/rest/bruker/', testUser);
+          return axios.post(restServer + 'bruker/', testUser);
         }).then(response => {
           // Finn ut hvilken bruker_id testuser fikk, og legg til i testuser objektet vårt
           testUser.bruker_id = response.data.insertId;
           
-          return axios.post('http://localhost:9100/rest/bruker/', testUser2);
+          return axios.post(restServer + 'bruker/', testUser2);
         }).then(response => {
           // Finn ut hvilken bruker_id testuser fikk, og legg til i testuser objektet vårt
           testUser2.bruker_id = response.data.insertId;
           // Legg inn testKollektiv i basen. testUser1 blir admin.
-          return axios.post('http://localhost:9100/rest/kollektiv/' + testUser.bruker_id, testKollektiv);
+          return axios.post(restServer + 'kollektiv/' + testUser.bruker_id, testKollektiv);
         }).then(response => {
           testKollektiv.kollektiv_id = response.data.insertId;
   
           // Legg inn testUndergruppe i basen.
           testUndergruppe.kollektiv_id = testKollektiv.kollektiv_id;
-          return axios.post('http://localhost:9100/rest/undergruppe/' + testUser.bruker_id, testUndergruppe);
+          return axios.post(restServer + 'undergruppe/' + testUser.bruker_id, testUndergruppe);
         }).then(response => {
           testUndergruppe.undergruppe_id = response.data.insertId;
 
 
         // Legg inn testKollektiv2 i basen. testUser1 blir admin.
-            return axios.post('http://localhost:9100/rest/kollektiv/' + testUser.bruker_id, testKollektiv2);
+            return axios.post(restServer + 'kollektiv/' + testUser.bruker_id, testKollektiv2);
         }).then(response => {
             testKollektiv2.kollektiv_id = response.data.insertId;
 
         // Legg inn testUndergruppe2 i basen.
             testUndergruppe2.kollektiv_id = testKollektiv2.kollektiv_id;
-            return axios.post('http://localhost:9100/rest/undergruppe/' + testUser.bruker_id, testUndergruppe2);
+            return axios.post(restServer + 'undergruppe/' + testUser.bruker_id, testUndergruppe2);
         }).then(response => {
             testUndergruppe2.undergruppe_id = response.data.insertId;
 
@@ -125,11 +126,11 @@ describe('Innmelding',() => {
             testInnmelding3.kollektiv_id = testKollektiv2.kollektiv_id;
 
             // Legg til testInnmeldingene i databasen.
-            return axios.post('http://localhost:9100/rest/innmelding/', testInnmelding1);
+            return axios.post(restServer + 'innmelding/', testInnmelding1);
                 }).then(response => {
-            return axios.post('http://localhost:9100/rest/innmelding/', testInnmelding2);
+            return axios.post(restServer + 'innmelding/', testInnmelding2);
                 }).then(response => {
-            return axios.post('http://localhost:9100/rest/innmelding/', testInnmelding3);
+            return axios.post(restServer + 'innmelding/', testInnmelding3);
                 }).then(response => {
                     // Ferdig med oppsett!
                 });
@@ -139,17 +140,17 @@ describe('Innmelding',() => {
     it('Hent 3 fullstendige innmeldinger', () => {
         // Hent ut testHandleliste og sammenlign
         //console.log('       Henter #1...');
-        return axios.get('http://localhost:9100/rest/innmelding/' + testKollektiv.kollektiv_id + '?bruker_epost=' + 'invitert@test.com').then((response) => {
+        return axios.get(restServer + 'innmelding/' + testKollektiv.kollektiv_id + '?bruker_epost=' + 'invitert@test.com').then((response) => {
             // Vi forventer nå at objektet fra basen inneholder test-objektet vårt som vi la inn tidligere.
             expect(response.data).to.containSubset(testInnmelding1);       
 
             //console.log('       Henter #2...');
-            return axios.get('http://localhost:9100/rest/innmelding/' + testKollektiv.kollektiv_id + '?bruker_epost=' + 'soker@test.com').then((response) => {
+            return axios.get(restServer + 'innmelding/' + testKollektiv.kollektiv_id + '?bruker_epost=' + 'soker@test.com').then((response) => {
                 // Vi forventer nå at objektet fra basen inneholder test-objektet vårt som vi la inn tidligere.
                 expect(response.data).to.containSubset(testInnmelding2);
 
                 //console.log('       Henter #3...');
-                return axios.get('http://localhost:9100/rest/innmelding/' + testKollektiv2.kollektiv_id + '?bruker_epost=' + 'test2@test.com').then((response) => {
+                return axios.get(restServer + 'innmelding/' + testKollektiv2.kollektiv_id + '?bruker_epost=' + 'test2@test.com').then((response) => {
                     // Vi forventer nå at objektet fra basen inneholder test-objektet vårt som vi la inn tidligere.
                     expect(response.data).to.containSubset(testInnmelding3);
                 });
@@ -160,7 +161,7 @@ describe('Innmelding',() => {
     // Hent ut alle for et kollektiv og sammenlign
     it('Hent alle innmeldinger for kollektivet', () => {
         // Hent ut testHandleliste og sammenlign
-        return axios.get('http://localhost:9100/rest/innmeldingerForKollektiv/' + testKollektiv.kollektiv_id).then((response) => {
+        return axios.get(restServer + 'innmeldingerForKollektiv/' + testKollektiv.kollektiv_id).then((response) => {
             // Vi forventer nå at objektet fra basen inneholder test-objektene som vi la inn tidligere.
             expect(response.data).to.containSubset([testInnmelding1,testInnmelding2]);
         });
@@ -169,7 +170,7 @@ describe('Innmelding',() => {
     // Hent ut alle invitasjoner for et kollektiv og sammenlign
     it('Hent alle invitasjoner for kollektivet', () => {
         // Hent ut testHandleliste og sammenlign
-        return axios.get('http://localhost:9100/rest/invitasjonerForKollektiv/' + testKollektiv.kollektiv_id).then((response) => {
+        return axios.get(restServer + 'invitasjonerForKollektiv/' + testKollektiv.kollektiv_id).then((response) => {
             // Vi forventer nå at objektet fra basen inneholder test-objektene som vi la inn tidligere.
             expect(response.data).to.containSubset([testInnmelding1]);
         });
@@ -178,7 +179,7 @@ describe('Innmelding',() => {
     // Hent ut alle søknader for et kollektiv og sammenlign
     it('Hent alle søknader for kollektivet', () => {
         // Hent ut testHandleliste og sammenlign
-        return axios.get('http://localhost:9100/rest/soknaderForKollektiv/' + testKollektiv.kollektiv_id).then((response) => {
+        return axios.get(restServer + 'soknaderForKollektiv/' + testKollektiv.kollektiv_id).then((response) => {
             // Vi forventer nå at objektet fra basen inneholder test-objektene som vi la inn tidligere.
             expect(response.data).to.containSubset([testInnmelding2]);
         });
@@ -187,7 +188,7 @@ describe('Innmelding',() => {
     // Hent ut absolutt alle og sammenlign
     it('Hent absolutt alle innmeldinger', () => {
         // Hent ut testHandleliste og sammenlign
-        return axios.get('http://localhost:9100/rest/innmelding/').then((response) => {
+        return axios.get(restServer + 'innmelding/').then((response) => {
             // Vi forventer nå at objektet fra basen inneholder test-objektene som vi la inn tidligere.
             expect(response.data).to.containSubset([testInnmelding1,testInnmelding2,testInnmelding3]);
         });
@@ -195,7 +196,7 @@ describe('Innmelding',() => {
     
     // Bruker klikker defekt lenke fra epost:
     it('Klikk lenke med feil i data', () => {
-        return axios.get('http://localhost:9100/rest/invitasjon/' + testKollektiv.kollektiv_id + '?bruker_epost=' + 'finnesikke@test.com' +'&bruker_svar=hellno').then((response) => {
+        return axios.get(restServer + 'invitasjon/' + testKollektiv.kollektiv_id + '?bruker_epost=' + 'finnesikke@test.com' +'&bruker_svar=hellno').then((response) => {
             // Vi forventer nå å få tilbake 'null' 
             expect(response.data).to.containSubset(null);
         });
@@ -204,7 +205,7 @@ describe('Innmelding',() => {
     // Ukjent bruker klikker lenke fra epost:
     it('Klikk lenke fra epost (ukjent bruker)', () => {
         // Hent ut testHandleliste og sammenlign
-        return axios.get('http://localhost:9100/rest/invitasjon/' + testKollektiv.kollektiv_id + '?bruker_epost=' + 'invitert@test.com' +'&bruker_svar=jatakk').then((response) => {
+        return axios.get(restServer + 'invitasjon/' + testKollektiv.kollektiv_id + '?bruker_epost=' + 'invitert@test.com' +'&bruker_svar=jatakk').then((response) => {
             // Vi forventer nå en standard streng som lar brukeren registrere seg
             expect(response.data).to.containSubset(userNotExistEmailReply);
         });
@@ -212,7 +213,7 @@ describe('Innmelding',() => {
 
     // Bruker klikker lenke fra epost:
     it('Klikk lenke fra epost (eksisterende bruker)', () => {
-        return axios.get('http://localhost:9100/rest/invitasjon/' + testKollektiv2.kollektiv_id + '?bruker_epost=' + 'test2@test.com' +'&bruker_svar=jatakk').then((response) => {
+        return axios.get(restServer + 'invitasjon/' + testKollektiv2.kollektiv_id + '?bruker_epost=' + 'test2@test.com' +'&bruker_svar=jatakk').then((response) => {
             if(response.data[0] != null){    
                 // Vi forventer nå at testInnmelding1 har blitt oppdatert slik:
                 let newExpectation = {
