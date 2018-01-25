@@ -1,60 +1,69 @@
 <template>
-  <div>
-
-    <testDato></testDato>
-    <testDato></testDato>
-
-  <div class='chart'>
-    <!-- import font awesome for legend icons -->
-    <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet'>
-    <ChartAxis :data='chartData'></ChartAxis>
-  </div>
-  </div>
+    <div class="box">
+      <div class='chart'>
+        <div class="field"><label>test</label><flat-pickr v-model="from"></flat-pickr></div>
+        <div class="field"><label>test</label><flat-pickr v-model="to"></flat-pickr></div>
+        <ChartAxis :data='chartData'></ChartAxis>
+      </div>
+    </div>
 </template>
 
 <script>
-  import { svgArea, svgLine, svgScatter } from 'd2b'
+  import { svgArea, svgLine, svgScatter, svgBar } from 'd2b'
   import { ChartAxis } from 'vue-d2b'
-  import testDato from '@/components/Charts/testDato'
+  import flatPickr from 'vue-flatpickr-component';
+  import 'flatpickr/dist/flatpickr.css';
+  import {store} from '@/store';
 
   export default {
     data () {
       return {
-        chartData: {
-          sets: [
-            {
-              generators: [svgArea(), svgLine(), svgScatter()],
-              graphs: [
+        from: new Date(),
+        to: new Date()
+      }
+    },
+    asyncComputed:{
+
+      chartData(){
+        let settings = {
+          from: this.from, to:this.to,
+          kollektiv_id: store.state.current_group.kollektiv_id,
+          antall: 5
+        };
+
+        let response = {data:[
+          {navn: 'Melk', antall:3},
+          {navn: 'Ost', antall: 5}
+        ]};
+
+//        return axios.post('http://localhost:9000/rest/oftestKjopteVarer', settings)
+//          .then(response => {
+            let chart_data= {
+              sets: [
                 {
-                  label: 'area 1',
-                  values: [
-                    {x: 1, y: 25},
-                    {x: 2, y: 38},
-                    {x: 3, y: 24},
-                    {x: 4, y: 60},
-                    {x: 5, y: 22}
-                  ]
-                },
-                {
-                  label: 'area 2',
-                  values: [
-                    {x: 1, y: 15},
-                    {x: 2, y: 8},
-                    {x: 3, y: 54},
-                    {x: 4, y: 22},
-                    {x: 5, y: 20}
+                  generators: [svgBar()],
+                  graphs: [
+                    {
+                      label: 'Ofte kjøpte varer',
+                      values: []
+                    }
                   ]
                 }
               ]
+            };
+            for(let vare of response.data){
+              chart_data.sets[0].graphs[0].values.push({
+                x: vare.navn,
+                y: vare.antall
+              });
             }
-          ]
-        }
+            return chart_data;
+//          });
       }
     },
-
     components: {
       ChartAxis,
-      testDato
+      flatPickr
     }
   }
 </script>
