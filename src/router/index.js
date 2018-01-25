@@ -24,6 +24,7 @@ import Grupper from '@/components/Grupper'
 import UserInfo from '@/components/UserInfo'
 import ShowAccounting from '@/components/ShowAccounting.vue'
 import GjeldUtSpesifisert from '@/components/Gjeld/GjeldUtSpesifisert.vue'
+import MyTestPanel from '@/components/MyTestPanel.vue'
 
 Vue.use(Router);
 
@@ -154,6 +155,11 @@ export default new Router({
         path: '/GjeldUtSpesifisert/:bruker_skylder_id',
         name: 'GjeldUtSpesifisert',
         component: GjeldUtSpesifisert
+      },
+      {
+        path: '/MyTestPanel',
+        name: 'MyTestPanel',
+        component: MyTestPanel
       }
     ]
   }
