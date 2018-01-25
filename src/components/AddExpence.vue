@@ -40,7 +40,7 @@
             newExpence.sum = this.expence.sum;
             newExpence.kvittering = this.expence.kvittering;
 
-            router.push('ShowExpences');
+            router.back();
 
             this.$emit('added-expence', newExpence);
           }).catch(err => {

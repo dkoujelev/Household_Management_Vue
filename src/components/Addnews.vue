@@ -1,7 +1,7 @@
 <template>
   <div class="is-ancestor">
-    <div class="tile is-parent">
-      <div class="tile is-child">
+    <div class="is-parent is-vertical">
+      <div class="is-child tile is-vertical">
         <article class="message is-info">
           <div class="message-header">
             <div class="row">
@@ -23,14 +23,14 @@
               <nav class="level">
                 <!-- left side -->
                 <div class="level-left">
-                  <p class="level-item"><a class="button is-primary" v-on:click="checkInput" to="/Nyhetsfeed">Post nyhet</a></p>
+                  <p class="level-item"><button class="button is-primary" @click="checkInput">Legg ut nyhet</button></p>
                 </div>
 
                 <!-- right side -->
                 <div class="level-right">
                   <div class="level-item">
                     <p class="level-item">
-                      <router-link class="button is-danger" to="/Nyhetsfeed">Avbryt</router-link>
+                      <button class="button is-danger" @click="hide" v-if="show">Avbryt</button>
                     </p>
 
                   </div>
@@ -51,13 +51,19 @@
 
   export default {
     name: 'Addnews',
+    props: [ 'showCancel' ],
+    computed: {
+      show: function () {
+        return (this.showCancel !== false);
+      }
+    },
     data() {
       return {
         melding: {
           overskrift: '',
           tekst: '',
           skrevet_av_bruker: store.state.current_user.bruker_id,
-          sendt_til_kollektiv: store.state.current_group.undergruppe_id
+          sendt_til_kollektiv: store.state.current_group.kollektiv_id
         },
         errorMessages: {
           overskrift: '',
@@ -66,14 +72,19 @@
       };
     },
     methods: {
+      hide(){
+        this.clear();
+        this.$emit('closeAddNews');
+      },
+      clear(){
+        this.melding.overskrift = '';
+        this.melding.tekst = '';
+      },
       addNews() {
         this.melding.sendt = new Date();
         axios.post('http://localhost:9000/rest/melding', this.melding).then(response => {
-          this.$emit('added-news', this.melding);
-          this.melding.tekst = "";
-          this.melding.overskrift = "";
-          alert("denne meldingen er sendt");
-          router.push('nyhetsfeed');
+          this.$emit('addedNews', this.melding);
+          this.clear();
         }).catch(err => {
           console.log(err);
         });
