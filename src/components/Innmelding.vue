@@ -10,7 +10,7 @@
             <div class="field">
               <div class="field-body">
                 <input  type="text" class="input" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
-                <button class="button" v-on:click="joinGroup(innmelding.kollektiv_navn)">
+                <button class="button is-link" v-on:click="joinGroup(innmelding.kollektiv_navn)">
                   Søk medlemskap
                 </button>
               </div>
@@ -28,7 +28,7 @@
                 <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
               </div>
             </div>
-            <button class="button" v-on:click="createMainGroup(oppretteMain.navn)">
+            <button class="button is-link" v-on:click="createMainGroup(oppretteMain.navn)">
               Opprett kollektiv
             </button>
             {{ createMainResult }}
@@ -44,7 +44,7 @@
                 <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
               </div>
             </div>
-            <button class="button" v-on:click="createSubGroup(oppretteSub.navn)">
+            <button class="button is-link" v-on:click="createSubGroup(oppretteSub.navn)">
               Opprett gruppe
             </button>
             {{ createSubResult }}
@@ -62,7 +62,7 @@
               </thead>
               <tr v-for="option in options_usersgroups"  v-bind:key="option.uid">
                 <td>{{ option.text }} {{ option.isDef }}</td>
-                <td><button class="button" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button></td>
+                <td><button class="button is-link" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button></td>
               </tr>
             </table>
             {{ leaveSubResult }}
@@ -91,7 +91,7 @@
             <div class="field-body">
               <div class="field">
                 <input class="input" type="email" placeholder="Email" v-model="innmelding.epost">
-                <button class="button" v-on:click="doInvite">Send invitasjon</button>
+                <button class="button is-link" v-on:click="doInvite">Send invitasjon</button>
               </div>
             </div>
             {{ mailResult }}
@@ -104,8 +104,8 @@
                 {{ item.bruker }}
               </dt>
               <dd v-for="item in approvals" v-bind:key="item.tid">
-                <button class="button" v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
-                <button class="button" v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
+                <button class="button is-link" v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
+                <button class="button is-link" v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
               </dd>
             </dl>
           </div>
@@ -119,7 +119,7 @@
               </thead>
               <tr v-for="option in options_subgroup"  v-bind:key="option.uid">
               <td>{{ option.navn }}</td>
-              <td> <button class="button" v-on:click="joinSubGroup(option.uid)">Bli med</button></td>
+              <td> <button class="button is-link" v-on:click="joinSubGroup(option.uid)">Bli med</button></td>
               </tr>
             </table>
             {{ joinSubResult }}
