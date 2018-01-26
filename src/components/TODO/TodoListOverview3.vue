@@ -74,6 +74,9 @@
         }
       },
       methods: {
+        formateDate(raw){
+          return raw.substring(8, 10) + "." + raw.substring(5, 7) + "." + raw.substring(2,4);
+        },
         updatePage(){
           this.rows = [];
           this.fillRows();
@@ -105,7 +108,7 @@
               axios.get('http://localhost:9000/rest/gjoremaler/' + this.list_id).then(response => {
                 let resRows = response.data;
                 for (let i = 0; i < resRows.length; i++) {
-                  let obj = {id: resRows[i].gjoremal_id, navn: resRows[i].navn, beskrivelse: resRows[i].beskrivelse, start: resRows[i].start, frist: resRows[i].frist, ferdig: resRows[i].ferdig};
+                  let obj = {id: resRows[i].gjoremal_id, navn: resRows[i].navn, beskrivelse: resRows[i].beskrivelse, start: resRows[i].start, frist: this.formateDate(resRows[i].frist), ferdig: resRows[i].ferdig};
                   this.rows.push(obj);
                 }
               }).catch(err => {
