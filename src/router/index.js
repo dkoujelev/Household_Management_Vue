@@ -27,10 +27,8 @@ import GjeldUtSpesifisert from '@/components/Gjeld/GjeldUtSpesifisert.vue'
 import TodoListOverview from '@/components/TODO/TodoListOverview'
 import TodoListOverview2 from '@/components/TODO/TodoListOverview2'
 import MyTestPanel from '@/components/MyTestPanel.vue'
-import ItemChart from '@/components/Charts/ItemChart'
-import GjeldChart from '@/components/Charts/GjeldChart'
 import ForgottenPassword from '@/components/ForgottenPassword'
-
+import Statistikk from '@/components/Statistikk.vue'
 
 Vue.use(Router);
 
@@ -178,19 +176,14 @@ export default new Router({
       component: MyTestPanel
     },
     {
-      path: '/ItemChart',
-      name: 'ItemChart',
-      component: ItemChart
-    },
-    {
       path: '/ForgottenPassword',
       name: 'ForgottenPassword',
       component: ForgottenPassword
     },
     {
-      path: '/GjeldChart',
-      name: 'GjeldChart',
-      component: GjeldChart
+      path: '/Statistikk',
+      name: 'Statistikk',
+      component: Statistikk
     },
   ]
 })
