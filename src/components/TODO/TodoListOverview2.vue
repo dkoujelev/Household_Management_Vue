@@ -38,7 +38,7 @@
       <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
         <h2 slot="title">Gjøremål </h2>
         <div slot="content">
-          <ViewTodoList :bjarne.sync="id"/>
+          <ViewTodoList :my_id.sync="id"/>
         </div>
       </Modal>
   </div>
@@ -72,8 +72,6 @@
           tittel: 'Dette er en tittel'
         };
       },
-
-// [{}] <- betyr at array inneholder et objekt
       asyncComputed:{
         rows: {
           get(){

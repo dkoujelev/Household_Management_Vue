@@ -54,7 +54,7 @@
 
     export default {
       name: "todo-list-overview3",
-      props: ['bjarne'],
+      props: ['my_id'],
       components: { addTodo },
 
       data() {
@@ -68,8 +68,8 @@
         this.fillRows();
       },
       watch: {
-        bjarne(){
-          this.list_id = this.bjarne;
+        my_id(){
+          this.list_id = this.my_id;
           this.updatePage();
         }
       },
