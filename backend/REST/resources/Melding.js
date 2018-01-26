@@ -21,6 +21,8 @@ module.exports = function(connection, server){
     req.body.sendt = util.getCurrentTimeAsEpoch();
     connection.query("INSERT INTO Melding SET ?", [req.body], function(err, rows, fields){
       if(err){
+          console.log('SQL Error:   ' + err.code + ': ' + err.sqlMessage);
+          console.log('SQL query:   ' + err.sql);
         return next(err);
       }else{
         // We know it's good, add notification
@@ -29,14 +31,36 @@ module.exports = function(connection, server){
             recipients = rows0;
             for(i=0;i<recipients.length;i++){
               let newNotification = {
-                opprettet:util.getCurrentTimeAsEpoch,
+                opprettet:util.getCurrentTimeAsEpoch(),
                 tekst: 'Det er lagt ut en ny melding til nyhetsfeed',
                 lest:0,
                 id:null,
-                bruker_id:recipients.bruker_id
+                bruker_id:recipients[i].bruker_id
               };
               connection.query("INSERT INTO Notifikasjon SET ?", newNotification, function (err, rows1, fields) {    
-                //Do nothing
+                if(err){
+                  console.log(err.code);
+                  console.log(err.sqlMessage);
+                  console.log(err.sql);
+                  console.log('');
+                }else{
+                   console.log('------ OK! ------: ' + newNotification.bruker_id);
+                  // console.log(rows1);
+                  // console.log('-----------------');
+                  connection.query("SELECT * FROM Notifikasjon", newNotification, function (err, rows2, fields) {    
+                    if(err){
+                      console.log(err.code);
+                      console.log(err.sqlMessage);
+                      console.log(err.sql);
+                      console.log('');
+                    }else{
+                      for(i=0;i<rows2.length;i++){
+                        console.log('check: ' + rows2[i].bruker_id + ', ' + rows2[i].opprettet + ', ' + rows2[i].id);
+                      };
+                      console.log('------');
+                    };
+                  });
+                };
               });
             };
           });

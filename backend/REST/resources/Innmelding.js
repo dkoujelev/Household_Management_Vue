@@ -40,7 +40,7 @@ module.exports = function(connection, server) {
 
   // Hent en bestemt innmelding
   server.get('rest/innmelding/:kollektiv_id', function (req, res, next) {
-    //console.log('DEBUG - rest/innmelding/:kollektiv_id');
+    //console.log('DEBUG - GET - rest/innmelding/:kollektiv_id');
     if (req.params.kollektiv_id) {
       connection.query("SELECT * FROM Innmelding WHERE bruker_epost=? AND kollektiv_id=?", [req.params.bruker_epost, req.params.kollektiv_id], function (err, rows, fields) {
         res.send(err ? err : (rows.length == 1 ? rows[0] : null));
@@ -56,29 +56,45 @@ module.exports = function(connection, server) {
 
 // Legg til innmelding
   server.post('rest/innmelding/', function (req, res, next) {
-    //console.log('DEBUG - rest/innmelding/');
+    //console.log('DEBUG - POST - rest/innmelding/');
     connection.query("INSERT INTO Innmelding SET ?", req.body, function (err, rows, fields) {
       if(err){
         res.send(err);
       }else{
         // We know it's good, add notification if it's not an invite
-        if(req.body.status_bruker=2){
+        if(req.body.status_admin==2){
+          //console.log('This Innmelding is a request for membership! status_admin:' + req.body.status_admin);
+          let myTime = util.getCurrentTimeAsEpoch();
+          let msg = req.body.bruker_epost + ' har søkt om tilgang til et kollektiv';
+          let newNotification = {
+            opprettet:myTime,
+            tekst: msg,
+            lest:0,
+            id:null,
+            bruker_id:0
+          };
           let groupAdmins = [];
           connection.query("SELECT bruker_id FROM Bruker_Kollektiv WHERE kollektiv_id=? AND er_admin=1", req.body.kollektiv_id, function (err, rows0, fields) {
-            groupAdmins=rows0;
+            groupAdmins = rows0;
             for(i=0;i<groupAdmins.length;i++){
-              let newNotification = {
-                opprettet:util.getCurrentTimeAsEpoch,
-                tekst: req.body.bruker_epost + ' har søkt om tilgang til et kollektiv',
-                lest:0,
-                id:null,
-                bruker_id:groupAdmin.bruker_id
-              };
-              connection.query("INSERT INTO Notifikasjon SET ?", newNotification, function (err, rows1, fields) {    
-                //Do nothing
+              newNotification.bruker_id=groupAdmins[i].bruker_id;
+              //console.log(newNotification);
+              connection.query("INSERT INTO Notifikasjon SET ?", newNotification, function (err, rows1, fields) {
+                //Do nothing?
+                if(err){
+                  console.log(err.code);
+                  console.log(err.sqlMessage);
+                  console.log(err.sql);
+                }else{
+                  console.log('------ OK ------');
+                  console.log(rows1);
+                  console.log('----------------');
+                };
               });
             };
           });
+        }else{
+          //console.log('This Innmelding is NOT a request for membership! status_admin:' + req.body.status_admin);
         }
         res.send(rows);
       };

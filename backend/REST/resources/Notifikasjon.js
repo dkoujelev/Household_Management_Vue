@@ -22,7 +22,7 @@ module.exports = function(connection, server) {
 
     // Hent alle notifications for bruker
     server.get('rest/notifikasjon/:bruker_id/alle', function (req, res, next) {
-        //console.log('   DEBUG - GET - rest/notifikasjon/:bruker_id');
+        //console.log('   DEBUG - GET - rest/notifikasjon/:bruker_id/alle');
         connection.query("SELECT * FROM Notifikasjon WHERE bruker_id=?", req.params.bruker_id, function (err, rows, fields) {
           res.send(err ? err : rows);
           return next();
