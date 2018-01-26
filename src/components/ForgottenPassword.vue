@@ -8,7 +8,7 @@
               <img src="../img/logo_full.png" height="200" width="400"/>
               <h1 class="title"><br/>Glemt passord</h1>
               <p class="control has-icon">
-                <input class="input" type="email" placeholder="Epost" v-model="forgottenPasswordEmail">
+                <input class="input" type="email" placeholder="Epost" @keyup.enter="sendNewPassword" v-model="forgottenPasswordEmail">
                 <span class="icon is-small">
                 <i class="fa fa-envelope"></i>
                 </span>
