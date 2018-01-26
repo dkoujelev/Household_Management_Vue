@@ -97,7 +97,7 @@
             ferdig: new Date().getTime() //this.listId,
           }; //  + this.listId
           axios.put('http://localhost:9000/rest/gjoremal/1' + this.listId, obj).then(response => {
-            this.$emit('listCompleted', obj);
+           // this.$emit('listCompleted', obj);
           //  this.rows = [];
             this.fillRows();
             //this.rows.push(obj)
