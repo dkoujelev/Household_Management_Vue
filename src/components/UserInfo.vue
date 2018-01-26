@@ -6,7 +6,7 @@
           <p>Fornsssavn: {{user_info.first_name}}</p>
           <p>Etternavn: {{user_info.last_name}}</p>
           <p>E-mail: {{user_info.email}}</p>
-          <router-link class="button is-dark" to="/ChangePassword">Endre passord</router-link>
+          <button class="button is-dark" @click="changingPassword=true">Endre passord</button>
         </div>
       </div>
       <div class="is-child tile notification is-info">
@@ -49,6 +49,10 @@
         </tr>
       </table>
     </Modal>
+    <Modal :modalVisible.sync="changingPassword" @modalClosing="changingPassword=false;">
+      <h2 slot="title">Endring av passord</h2>
+      <ChangePassword slot="content" @change-password-canceled="changingPassword=false"></ChangePassword>
+    </Modal>
   </div>
 
 </template>
@@ -57,11 +61,13 @@
   import axios from 'axios'
   import {store} from '../store'
   import Modal from '@/components/Modal'
+  import ChangePassword from '@/components/ChangePassword.vue'
 
     export default {
       name: "user-info",
       data(){
         return{
+          changingPassword: false,
           user_info:{
             first_name: '',
             last_name: '',
@@ -73,7 +79,7 @@
           showingMembers: false,
         }
       },
-      components:{Modal},
+      components:{Modal, ChangePassword},
       methods: {
         getData(){
           axios.get('http://localhost:9000/rest/bruker/' + store.state.current_user.bruker_id).then(response => {
