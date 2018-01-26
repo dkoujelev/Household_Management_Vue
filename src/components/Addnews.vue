@@ -2,43 +2,40 @@
   <div class="is-ancestor">
     <div class="is-parent is-vertical">
       <div class="is-child tile is-vertical">
-        <article class="message is-info">
-          <div class="message-header">
+        <label class="label">Tittel:</label>
             <div class="row">
               <div class="col-25">
                 <p class="help is-white">{{this.errorMessages.overskrift}}</p>
               </div>
               <div class="col-25">
-                <input id="inputBox" type="text" class="input is-info" placeholder="Skriv tittel her" v-model="melding.overskrift">
+                <input id="inputBox" type="text" class="input" placeholder="Skriv tittel her" v-model="melding.overskrift">
               </div>
             </div>
-          </div>
-          <div class="message-body">
-            <label class="label">Nyhet</label>
+        <br>
+            <label class="label">Beskrivelse:</label>
             <p class="help is-dark">{{this.errorMessages.tekst}}</p>
             <p class="control">
               <textarea class="textarea" placeholder="Skriv nyhet her" v-model="melding.tekst"></textarea>
             </p>
+
             <div class="block">
               <nav class="level">
-                <!-- left side -->
-                <div class="level-left">
-                  <p class="level-item"><button class="button is-primary" @click="checkInput">Legg ut nyhet</button></p>
+                <div class="is-pulled-left">
+                  <div class="level-item">
+                    <p class="level-item"><button class="button" style="background-color: orange"  @click="checkInput">Legg ut nyhet</button></p>
+                  </div>
                 </div>
 
                 <!-- right side -->
                 <div class="level-right">
-                  <div class="level-item">
+                  <div class="level-item is-pulled-right">
                     <p class="level-item">
                       <button class="button is-danger" @click="hide" v-if="show">Avbryt</button>
                     </p>
-
                   </div>
                 </div>
               </nav>
             </div>
-          </div>
-        </article>
       </div>
     </div>
   </div>
@@ -111,7 +108,7 @@
 <style scoped>
 
   input[type=text] {
-    background-color:lightskyblue;
+    background-color:white;
     color: black;
   }
 

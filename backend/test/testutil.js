@@ -18,6 +18,12 @@ module.exports = {
       //else
         //reject("Kan ikke cleare database " + connection.connection_cfg.database );
     });
+  },
+  serverConfig(){
+    return {
+      serverAddress:'localhost',
+      serverPort:9001
+    }
   }
 
 };

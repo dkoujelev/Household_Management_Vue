@@ -89,7 +89,7 @@ module.exports = function(connection, server){
 
   // Slett en melding
   server.del('rest/melding/:melding_id', (req,res,next) => {
-    connection.query('DELETE FROM Melding WHERE melding_id=? ORDER BY sendt DESC', [req.params.melding_id], (err,rows,fields) => {
+    connection.query('DELETE FROM Melding WHERE melding_id=?', [req.params.melding_id], (err,rows,fields) => {
       if(err)
         return next(err);
 
@@ -98,6 +98,7 @@ module.exports = function(connection, server){
     });
   });
 
-  // Oppdatere melding - TRENGER IKKE
+  // Oppdatere melding
+  // Trengs ikke
 
 };

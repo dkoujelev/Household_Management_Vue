@@ -12,18 +12,18 @@ module.exports = function(connection, server) {
         res.send('Gjoremalsliste not found!');
         return next();
       }
-      if ('opprettet' in liste)
+      if ('opprettet' in liste && liste.opprettet !== null)
         liste.opprettet = new Date(liste.opprettet);
       connection.query("SELECT Gjoremal.* FROM Gjoremal " +
         "INNER JOIN Gjoremalsliste ON Gjoremalsliste.id = Gjoremal.liste_id WHERE Gjoremalsliste.id=?", [req.params.id], function (err, rows, fields) {
         if (err)
           return next(err);
         for (let gjoremal of rows) {
-          if ('start' in gjoremal)
+          if ('start' in gjoremal && gjoremal.start !== null)
             gjoremal.start = new Date(gjoremal.start);
-          if ('frist' in gjoremal)
+          if ('frist' in gjoremal && gjoremal.frist !== null)
             gjoremal.frist = new Date(gjoremal.frist);
-          if ('ferdig' in gjoremal)
+          if ('ferdig' in gjoremal && gjoremal.ferdig !== null)
             gjoremal.ferdig = new Date(gjoremal.ferdig);
         }
         liste.gjoremal = JSON.parse(JSON.stringify(rows));
@@ -35,12 +35,13 @@ module.exports = function(connection, server) {
 
 // Hent alle lister i en undergruppe
   server.get('rest/gjoremalslisterUndergruppe/:undergruppe_id', function (req, res, next) {
-    connection.query("SELECT * FROM Gjoremalsliste WHERE undergruppe_id=? ORDER BY (favoritt IS FALSE), opprettet ASC", [req.params.undergruppe_id], function (err, rows, fields) {
+    connection.query("SELECT * FROM Gjoremalsliste WHERE undergruppe_id=? AND deleted=FALSE " +
+      "ORDER BY (favoritt IS FALSE), opprettet ASC", [req.params.undergruppe_id], function (err, rows, fields) {
       if (err)
         return next(err);
 
       for (let gjoremalsliste of rows) {
-        if ('opprettet' in gjoremalsliste)
+        if ('opprettet' in gjoremalsliste && gjoremalsliste.opprettet !== null)
           gjoremalsliste.opprettet = new Date(gjoremalsliste.opprettet);
       }
       let liste = JSON.parse(JSON.stringify(rows));
@@ -74,11 +75,12 @@ module.exports = function(connection, server) {
 
 // Hent alle lister i et kollektiv
   server.get('rest/gjoremalslisterKollektiv/:kollektiv_id', function (req, res, next) {
-    connection.query("SELECT DISTINCT Gjoremalsliste.* FROM `Gjoremalsliste` INNER JOIN Undergruppe WHERE kollektiv_id=? ORDER BY (favoritt IS FALSE), opprettet ASC", req.params.kollektiv_id, function (err, rows, field) {
+    connection.query("SELECT DISTINCT Gjoremalsliste.* FROM `Gjoremalsliste` INNER JOIN Undergruppe WHERE kollektiv_id=? AND Gjoremalsliste.deleted=FALSE " +
+      "ORDER BY (favoritt IS FALSE), opprettet ASC", req.params.kollektiv_id, function (err, rows, field) {
       if (err)
         return next(err);
       for (liste of rows) {
-        if ('opprettet' in liste)
+        if ('opprettet' in liste && liste.opprettet !== null)
           liste.opprettet = new Date(liste.opprettet);
       }
       let lister = JSON.parse(JSON.stringify(rows));
@@ -90,11 +92,12 @@ module.exports = function(connection, server) {
 // Hent alle lister til en bruker
   server.get('rest/gjoremalslisterBruker/:bruker_id', function (req, res, next) {
     connection.query("SELECT DISTINCT Undergruppe.navn AS undergruppe, Gjoremalsliste.* FROM `Gjoremalsliste` INNER JOIN Gjoremal " +
-      "INNER JOIN Undergruppe ON Undergruppe.undergruppe_id = Gjoremalsliste.undergruppe_id WHERE bruker_id=? ORDER BY (favoritt IS FALSE), opprettet ASC", req.params.bruker_id, function (err, rows, field) {
+      "INNER JOIN Undergruppe ON Undergruppe.undergruppe_id = Gjoremalsliste.undergruppe_id WHERE bruker_id=? AND Gjoremalsliste.deleted=FALSE " +
+      "ORDER BY (favoritt IS FALSE), opprettet ASC", req.params.bruker_id, function (err, rows, field) {
       if (err)
         return next(err);
       for (liste of rows) {
-        if ('opprettet' in liste)
+        if ('opprettet' in liste && liste.opprettet !== null)
           liste.opprettet = new Date(liste.opprettet);
       }
       let lister = JSON.parse(JSON.stringify(rows));
@@ -154,7 +157,7 @@ module.exports = function(connection, server) {
 // Oppdater en liste
   server.put('rest/gjoremalsliste/', function (req, res, next) {
     let liste = Object.assign({}, req.body);
-    if ('opprettet' in liste)
+    if ('opprettet' in liste && liste.opprettet !== null)
       liste.opprettet = new Date(liste.opprettet).getTime();
 
     connection.query("UPDATE Gjoremalsliste SET ? WHERE id=?", [req.body, req.body.id], function (err, rows, field) {
@@ -194,11 +197,11 @@ module.exports = function(connection, server) {
 
 // Slett en liste
   server.del('rest/gjoremalsliste/:id', function (req, res, next) {
-    connection.query('DELETE FROM Gjoremal WHERE liste_id=?', req.params.id, function (err, rows, field) {
+    connection.query('UPDATE Gjoremal SET deleted=TRUE WHERE liste_id=?', req.params.id, function (err, rows, field) {
       if (err)
         return next(err);
       //let info = rows;
-      connection.query('DELETE FROM Gjoremalsliste WHERE id=?', req.params.id, function (err, rows, field) {
+      connection.query('UPDATE Gjoremalsliste SET deleted=TRUE WHERE id=?', req.params.id, function (err, rows, field) {
         if(err)
           return next(err);
         res.send(rows);

@@ -44,9 +44,9 @@ module.exports = function(connection, server){
       delete handleliste.varer;
 
     handleliste.opprettet = util.getCurrentTimeAsEpoch();
-    if('frist' in handleliste)
+    if('frist' in handleliste && handleliste.frist !== null)
       handleliste.frist = new Date(handleliste.frist).getTime();
-    if('handling_utfort' in handleliste)
+    if('handling_utfort' in handleliste && handleliste.handling_utfort !== null)
       handleliste.handling_utfort = new Date(handleliste.handling_utfort).getTime();
 
     connection.query('INSERT INTO Handleliste SET ?', [handleliste], function(err,rows,fields){
@@ -81,14 +81,15 @@ module.exports = function(connection, server){
 
 // Hent handlelister for en bestemt undergruppe
   server.get('rest/handlelisteForUndergruppe/:undergruppe_id',function(req, res, next) {
-    connection.query("SELECT * FROM Handleliste WHERE undergruppe_id=? ORDER BY (favoritt IS FALSE), (frist IS NULL) , (frist) , opprettet ASC", [req.params.undergruppe_id], function (err, rows, fields) {
+    connection.query("SELECT * FROM Handleliste WHERE undergruppe_id=?  AND deleted=FALSE " +
+      "ORDER BY (favoritt IS FALSE), (frist IS NULL) , (frist) , opprettet ASC", [req.params.undergruppe_id], function (err, rows, fields) {
 
       for(let handleliste of rows){
-        if('opprettet' in handleliste)
+        if('opprettet' in handleliste && handleliste.opprettet !== null)
           handleliste.opprettet = new Date(handleliste.opprettet);
-        if('frist' in handleliste)
+        if('frist' in handleliste && handleliste.frist !== null)
           handleliste.frist = new Date(handleliste.frist);
-        if('handling_utfort' in handleliste)
+        if('handling_utfort' in handleliste && handleliste.handling_utfort !== null)
           handleliste.handling_utfort = new Date(handleliste.handling_utfort);
       }
 
@@ -102,14 +103,15 @@ module.exports = function(connection, server){
     connection.query("SELECT Handleliste.* FROM Handleliste " +
     "INNER JOIN Undergruppe ON Handleliste.undergruppe_id=Undergruppe.undergruppe_id " +
     "INNER JOIN Bruker_Undergruppe ON Undergruppe.undergruppe_id=Bruker_Undergruppe.undergruppe_id " +
-    "WHERE bruker_id=? ORDER BY (favoritt IS FALSE), (frist IS NULL) , (frist) , opprettet ASC", [req.params.bruker_id], function(err, rows, fields){
+    "WHERE bruker_id=? AND Handleliste.deleted=FALSE " +
+    "ORDER BY (favoritt IS FALSE), (frist IS NULL) , (frist) , opprettet ASC", [req.params.bruker_id], function(err, rows, fields){
 
       for(let handleliste of rows){
-        if('opprettet' in handleliste)
+        if('opprettet' in handleliste && handleliste.opprettet !== null)
           handleliste.opprettet = new Date(handleliste.opprettet);
-        if('frist' in handleliste)
+        if('frist' in handleliste && handleliste.frist !== null)
           handleliste.frist = new Date(handleliste.frist);
-        if('handling_utfort' in handleliste)
+        if('handling_utfort' in handleliste && handleliste.handling_utfort !== null)
           handleliste.handling_utfort = new Date(handleliste.handling_utfort);
       }
 
@@ -127,11 +129,11 @@ module.exports = function(connection, server){
       req.delete('varer')
     }
     */
-    if('opprettet' in req)
+    if('opprettet' in req.body && req.body.opprettet !== null)
       req.opprettet = new Date(req.opprettet).getTime();
-    if('frist' in req)
+    if('frist' in req.body && req.body.frist !== null)
       req.frist = new Date(req.frist).getTime();
-    if('handling_utfort' in req)
+    if('handling_utfort' in req.body && req.body.handling_utfort !== null)
       req.handling_utfort = new Date(req.handling_utfort).getTime();
 
     connection.query('UPDATE Handleliste SET ? WHERE handleliste_id=?', [req.body, Number.parseInt(req.params.handleliste_id)], function (err,rows,fields) {
@@ -176,10 +178,10 @@ module.exports = function(connection, server){
 
 // Slett en liste
   server.del('rest/handleliste/:handleliste_id', function (req ,res, next) {
-    connection.query('DELETE FROM Vare WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
+    connection.query('UPDATE Vare SET deleted = TRUE WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
       if(err)
         return next(err);
-      connection.query('DELETE FROM Handleliste WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
+      connection.query('UPDATE Handleliste SET deleted = TRUE WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
         if(err)
           return next(err);
         res.send(rows);

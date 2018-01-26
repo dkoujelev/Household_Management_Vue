@@ -1,45 +1,47 @@
 <template>
-  <div class="column">
-    <div class="columns is-one-quarter">
-      <div class="column is-half">
-        <div class="table is-striped">
-          <section class="panel">
-            <p class="panel-heading">
-              Gruppenes gjøremål
-            </p>
-            <div class="panel-block">
-              <table class="table">
-                <thead>
-                <tr>
-                  <th>Gruppenavn</th>
-                  <th>Gruppe id</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="row in rows">
-                  <td><a @click=" selectGroup(row.undergruppe_id)"> {{row.gruppenavn}}</a></td>
-                  <td>Kommer</td>
-                  <td class="is-icon">
-                    <a href="#">
-                      <i class="fa fa-twitter"></i>
-                    </a>
-                  </td>
-                  <td class="is-icon">
-                    <a href="#">
-                      <i class="fa fa-instagram"></i>
-                    </a>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
+<div class="container">
+  <div class="columns is-centered">
+    <div class="column is-7">
+      <div class="card is-rounded is-centered">
+        <div class="is-ancestor box" style="background-color: hsl(348, 100%, 61%)	;">
+         <div class="is-parent">
+           <div class="is-child">
+             <p class="title">Liste over grupper med gjøremål</p>
+             <div class="content1">
+               <table class="table">
+                 <thead>
+                 <tr>
+                   <th>Gruppenavn</th>
+                   <th>Gruppe id</th>
+                   <th>Status</th>
+                   <th></th>
+                 </tr>
+                 </thead>
+                 <tbody>
+                 <tr v-for="row in rows">
+                   <td><a @click=" selectGroup(row.undergruppe_id)"> {{row.gruppenavn}}</a></td>
+                   <td>Kommer</td>
+                   <td class="is-icon">
+                     <a href="#">
+                       <i class="fa fa-twitter"></i>
+                     </a>
+                   </td>
+                   <td class="is-icon">
+                     <a href="#">
+                       <i class="fa fa-instagram"></i>
+                     </a>
+                   </td>
+                 </tr>
+                 </tbody>
+               </table>
+             </div>
             </div>
-          </section>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 </template>
 
 
@@ -98,5 +100,9 @@
 
   div.panel-block{
 
+  }
+  div.content1 {
+    height: 450px;
+    overflow: auto;
   }
 </style>
