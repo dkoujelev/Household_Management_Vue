@@ -12,8 +12,8 @@
                   <p>Fornavn: {{user_info.first_name}}</p>
                   <p>Etternavn: {{user_info.last_name}}</p>
                   <p>E-mail: {{user_info.email}}</p>
-                  <router-link class="button" style="background-color: orange"  to="/ChangePassword">Endre passord</router-link>
-                </div>
+                  <button class="button is-dark" style="background-color: orange" @click="changingPassword=true">Endre passord</button>
+                 </div>
               </div>
             </div>
             <br>
@@ -56,6 +56,24 @@
         </div>
       </div>
     </div>
+    <Modal :modalVisible.sync="showingMembers" @modalClosing="showingMembers=false;">
+      <h2 slot="title">Medlemmer</h2>
+      <p>{{selectedGroup.text}}</p>
+      <table slot="content" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>
+        <th>Epost</th>
+        <th>Navn</th>
+        </thead>
+        <tr v-for="member in groupMembers">
+          <td>{{member.epost}}</td>
+          <td>{{member.fornavn + " " + member.etternavn}}</td>
+        </tr>
+      </table>
+    </Modal>
+    <Modal :modalVisible.sync="changingPassword" @modalClosing="changingPassword=false;">
+      <h2 slot="title">Endring av passord</h2>
+      <ChangePassword slot="content" @change-password-canceled="changingPassword=false"></ChangePassword>
+    </Modal>
   </div>
 </template>
 
@@ -63,11 +81,13 @@
   import axios from 'axios'
   import {store} from '../store'
   import Modal from '@/components/Modal'
+  import ChangePassword from '@/components/ChangePassword.vue'
 
     export default {
       name: "user-info",
       data(){
         return{
+          changingPassword: false,
           user_info:{
             first_name: '',
             last_name: '',
@@ -79,7 +99,7 @@
           showingMembers: false,
         }
       },
-      components:{Modal},
+      components:{Modal, ChangePassword},
       methods: {
         getData(){
           axios.get('http://localhost:9000/rest/bruker/' + store.state.current_user.bruker_id).then(response => {

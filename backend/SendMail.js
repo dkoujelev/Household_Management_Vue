@@ -37,12 +37,10 @@ var doMail = function(mailData,next){
       console.log('Performing the sendMail function...');
       if (error) {
         console.log(error);
-        res.send(error);
-        return next;
+        return next(error);
       } else {
         console.log('Email sent! (' + info.response + ')');
-        res.send(info.response);
-        return next;
+        return next(info.response);
       };
     });
   };
