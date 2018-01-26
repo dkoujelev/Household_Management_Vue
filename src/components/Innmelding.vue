@@ -1,173 +1,173 @@
 <template>
-  <section>
-    <div class="is-ancestor">
-      <div class="is-parent tile">
-        <br>
-        <div class="is-child tile notification is-info">
-          <p class="title">Administrere grupper og kollektiv</p>
-          <div v-if="showJoinSection===true">
-            <h2 class="subtitle">Skriv inn navnet på kollektivet du ønsker å bli medlem av</h2>
-            <div class="field">
-              <div class="field-body">
-                <input  type="text" class="input" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
-                <button class="button is-link is-inverted" v-on:click="joinGroup(innmelding.kollektiv_navn)">
-                  Søk medlemskap
-                </button>
-              </div>
-            </div>
-            {{ joinResult }}
-          </div>
-          <br>
-          <div v-if="showCreateMainGroupSection===true">
-            <h2 class="subtitle">Skriv inn navnet på kollektivet du ønsker å opprette</h2>
-            <div class="field-body">
-              <div class="field">
-                <input  type="text" class="input" placeholder="Kollektivets navn" v-model="oppretteMain.navn">
-              </div>
-              <div class="field-body">
-                <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
-              </div>
-            </div>
-            <button class="button is-link is-inverted" v-on:click="createMainGroup(oppretteMain.navn)">
-              Opprett kollektiv
-            </button>
-            {{ createMainResult }}
-          </div>
-          <br>
-          <div v-if="showCreateSubGroupSection===true">
-            <h2 class="subtitle">Skriv inn navnet på gruppen du ønsker å opprette</h2>
-            <div class="field-body">
-              <div class="field">
-                <input  type="text" class="input" placeholder="Gruppens navn" v-model="oppretteSub.navn">
-              </div>
-              <div class="field-body">
-                <input  type="text" class="input" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
-              </div>
-            </div>
-            <button class="button is-link is-inverted" v-on:click="createSubGroup(oppretteSub.navn)">
-              Opprett gruppe
-            </button>
-            {{ createSubResult }}
-          </div>
-        </div>
-      </div>
-      <div class="is-parent tile">
-        <div class="is-child tile notification is-info">
-          <div v-if="showUsersGroups===true">
-            <h2 class="subtitle">Dine kollektiv og grupper</h2>
-            <div class="content">
-              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                <thead>
-                <th>Navn</th>
-                <th>Beskrivelse</th>
-                <th>Medlemmer</th>
-                <th>Handling</th>
-                </thead>
-                <tr v-for="option in options_epic"  v-bind:key="option.uid">
-                  <td>{{ option.text }} {{ option.isDef }}</td>
-                  <!-- Her kan vel egentlig variabelen isDef brukes til å bedre skille mellom gruppe og kollektiv, om ønskelig...
-                       F.eks ved å kjøre fet skrift eller annen (bakgrunns)farge på kollektiv or whatever. Opp til stylistene! -->
-                  <td>
-                    {{ option.beskrivelse }}
-                  </td>
-                  <td>
-                    <button class="button is-link is-small is-hidden-desktop" @click="showMembers(option)">Vis medlemmer</button>
-                    <button class="button is-link is-hidden-mobile" @click="showMembers(option)">Vis medlemmer</button>
-                  </td>
-                  <td v-if="option.canLeave===true">
-                    <button class="button is-link is-hidden-mobile" v-on:click="leaveSubGroup(option.uid)">Forlat</button>
-                    <button class="button is-link is-small is-hidden-desktop" v-on:click="leaveSubGroup(option.uid)">Forlat</button>
-                  </td>
-                  <td v-if="option.canJoin===true">
-                    <button class="button is-link is-hidden-mobile" v-on:click="joinSubGroup(option.uid)">Bli med</button>
-                    <button class="button is-link is-small is-hidden-desktop" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="card is-rounded is-centered">
+          <div class="is-ancestor box" style="background-color: hsl(217, 71%, 53%)">
+            <div class="is-parent">
+              <div class="is-child">
+                <p class="title"style="color:white">Opprett grupper og kollektiv</p>
+                <div v-if="showJoinSection===true">
+                  {{ joinResult }}
+                  <div class="field">
+                    <div class="field-body">
+                      <p class="subtitle" style="color:white">Søk medlemskap i et kollektiv: </p>
+                      <input  type="text" class="input" style="width: 160px" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
+                        <button class="button" style="background-color:orange" v-on:click="joinGroup(innmelding.kollektiv_navn)">
+                          Søk medlemskap
+                        </button>
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <div v-if="showCreateMainGroupSection===true">
+                  <div class="field">
+                    <div class="field-body">
+                      {{ createMainResult }}
+                      <p class="subtitle " style="color:white">Opprett et kollektiv:</p>
+                      <input  type="text" class="input" style="width: 160px" placeholder="Kollektivets navn" v-model="oppretteMain.navn">
+                      <input  type="text" class="input" style="width: 320px" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
+                      <button class="button" style="background-color:orange" v-on:click="createMainGroup(oppretteMain.navn)">
+                        Opprett kollektiv
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <br>
+                  <div v-if="showGroupSelect===true">
+                      <p class="title" style="color:white">Administrer grupper og kollektiv</p>
+                    <div class="field">
+                      <div class="field-body">
+                        <p style="color:white">Velg kollektiv:</p>
+                        <select class="dropdown" v-model="selected_maingroup" v-on:change="makeMainGrpObj(selected_maingroup)" style="background-color: white">
+                        <option disabled value="">Velg kollektiv</option>
+                        <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
+                          {{ option.text }}
+                        </option>
+                      </select>
+                      </div>
+                    </div>
+                  </div>
+                <br>
+                <div v-if="showCreateSubGroupSection===true">
+                  {{ createSubResult }}
+                  <div class="field">
+                    <div class="field-body">
+                      <p class="subtitle"  style="color:white">Opprett en gruppe i {{ selected_maingroup_object.navn }}:</p>
+                      <input  type="text" class="input" style="width: 160px" placeholder="Navn" v-model="oppretteSub.navn">
+                      <input  type="text" class="input" style="width: 200px" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
+                      <button class="button"  style="background-color:orange" v-on:click="createSubGroup(oppretteSub.navn)">
+                        Opprett gruppe
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <br>
+                  <div v-if="showInviteSection===true">
+                    {{ mailResult }}
+                    <div class="field">
+                      <div class="field-body">
+                        <p class="subtitle"  style="color:white">Inviter nye medlemmer til {{ selected_maingroup_object.navn }}:</p>
+                        <input class="input" type="email" style="width: 320px" placeholder="Email" v-model="innmelding.epost">
+                        <button class="button" style="background-color:orange" v-on:click="doInvite">Send invitasjon</button>
+                      </div>
+                    </div>
 
-                  </td>
-                </tr>
-              </table>
-            </div>
-            {{ leaveJoinSubResult }}
-          </div>
-        </div>
-        <div class="is-child tile notification is-7 is-info">
-          <div v-if="showGroupSelect===true">
-            <div class="field">
-              <h2 class="subtitle">Du er administrator for flere kollektiv.
-                Nå administreres:
-              </h2>
-              <p class="is-hidden-desktop">Trykk på kolonnen under for å få opp kollektiver</p>
-              <div>
-                <select class="dropdown" v-model="selected_maingroup" v-on:change="makeMainGrpObj(selected_maingroup)" style="background-color: royalblue">
-                  <option disabled value="">Velg kollektiv</option>
-                  <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
-                    {{ option.text }}
-                  </option>
-                </select>
+                  </div>
+                  <br>
+                  <div v-if="showApproveSection===true">
+                    <p class="text" style="color:white">Disse ønsker å bli med i {{ selected_maingroup_object.navn }}</p>
+                    <div class="content1">
+                    <table class="table is-bordered is-fullwidth">
+                      <thead>
+                        <th>Hvem</th>
+                        <th>Velg</th>
+                      </thead>
+                      <tr v-for="item in approvals"  v-bind:key="item.tid">
+                        <td> {{ item.bruker }}</td>
+                        <td>
+                          <button class="button is-link" v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
+                          <button class="button is-link" v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
+                        </td>
+                      </tr>
+                    </table>
+                    </div>
+                  </div>
+                  <br>
+                  <div v-if="showAvailableSubgroups===true">
+                    Dette er alle gruppene som hører inn under {{ selected_maingroup_object.navn }}:
+                    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                      <thead>
+                      <th>Grupper</th>
+                      <th></th>
+                      </thead>
+                      <tr v-for="option in options_subgroup"  v-bind:key="option.uid">
+                        <td>{{ option.navn }}</td>
+                        <td> <button class="button is-link is-hidden-touch" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+                          <button class="button is-link is-small is-hidden-desktop" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+                        </td>
+                      </tr>
+                    </table>
+                    {{ joinSubResult }}
+                  </div>
+                <!-- Table starting here -->
+                <div v-if="showUsersGroups===true">
+                  <h2 class="subtitle" style="color: white">Dine kollektiv og grupper</h2>
+                  <div class="content1">
+                    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                      <thead>
+                      <th>Navn</th>
+                      <th>Beskrivelse</th>
+                      <th>Medlemmer</th>
+                      <th>Handling</th>
+                      </thead>
+                      <tr v-for="option in options_epic"  v-bind:key="option.uid">
+                        <td>{{ option.text }} {{ option.isDef }}</td>
+                        <!-- Her kan vel egentlig variabelen isDef brukes til å bedre skille mellom gruppe og kollektiv, om ønskelig...
+                             F.eks ved å kjøre fet skrift eller annen (bakgrunns)farge på kollektiv or whatever. Opp til stylistene! -->
+                        <td>
+                          {{ option.beskrivelse }}
+                        </td>
+                        <td>
+                          <button class="button is-link is-small is-hidden-desktop" @click="showMembers(option)">Vis medlemmer</button>
+                          <button class="button is-link is-hidden-mobile" @click="showMembers(option)">Vis medlemmer</button>
+                        </td>
+                        <td v-if="option.canLeave===true">
+                          <button class="button is-link is-hidden-mobile" v-on:click="leaveSubGroup(option.uid)">Forlat</button>
+                          <button class="button is-link is-small is-hidden-desktop" v-on:click="leaveSubGroup(option.uid)">Forlat</button>
+                        </td>
+                        <td v-if="option.canJoin===true">
+                          <button class="button is-link is-hidden-mobile" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+                          <button class="button is-link is-small is-hidden-desktop" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  {{ leaveJoinSubResult }}
+                </div>
+                <!-- trenger modal -->
+                <Modal :modalVisible.sync="showingMembers" @modalClosing="showingMembers=false;">
+                  <h2 slot="title">Medlemmer</h2>
+                  <p>{{selectedGroup.text}}</p>
+                  <table slot="content" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                    <thead>
+                    <th>Epost</th>
+                    <th>Navn</th>
+                    </thead>
+                    <tr v-for="member in groupMembers">
+                      <td>{{member.epost}}</td>
+                      <td>{{member.fornavn + " " + member.etternavn}}</td>
+                    </tr>
+                  </table>
+                </Modal>
               </div>
             </div>
           </div>
-            <br>
-          <div v-if="showInviteSection===true">
-            Her kan du invitere nye medlemmer til {{ selected_maingroup_object.navn }}
-            <div class="field-body">
-              <div class="field">
-                <input class="input" type="email" placeholder="Email" v-model="innmelding.epost">
-                <button class="button is-link is-inverted" v-on:click="doInvite">Send invitasjon</button>
-              </div>
-            </div>
-            {{ mailResult }}
-          </div>
-          <br>
-          <div v-if="showApproveSection===true">
-            Disse ønsker å bli med i {{ selected_maingroup_object.navn }}. Du kan godkjenne eller avvise søknaden(e).
-            <dl id="approvalsList">
-              <dt v-for="item in approvals"  v-bind:key="item.tid">
-                {{ item.bruker }}
-              </dt>
-              <dd v-for="item in approvals" v-bind:key="item.tid">
-                <button class="button is-link" v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
-                <button class="button is-link" v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
-              </dd>
-            </dl>
-          </div>
-          <br>
-<<<<<<< HEAD
-          <div v-if="showAvailableSubgroups===true">
-            Dette er alle gruppene som hører inn under {{ selected_maingroup_object.navn }}:
-              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                  <thead>
-                  <th>Grupper</th>
-                  <th></th>
-                  </thead>
-                  <tr v-for="option in options_subgroup"  v-bind:key="option.uid">
-                  <td>{{ option.navn }}</td>
-                  <td> <button class="button is-link is-hidden-touch" v-on:click="joinSubGroup(option.uid)">Bli med</button>
-                    <button class="button is-link is-small is-hidden-desktop" v-on:click="joinSubGroup(option.uid)">Bli med</button>
-                  </td>
-                  </tr>
-              </table>
-            {{ joinSubResult }}
-          </div>
-=======
->>>>>>> master
         </div>
       </div>
     </div>
-    <Modal :modalVisible.sync="showingMembers" @modalClosing="showingMembers=false;">
-      <h2 slot="title">Medlemmer</h2>
-      <p>{{selectedGroup.text}}</p>
-      <table slot="content" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-        <thead>
-        <th>Epost</th>
-        <th>Navn</th>
-        </thead>
-        <tr v-for="member in groupMembers">
-          <td>{{member.epost}}</td>
-          <td>{{member.fornavn + " " + member.etternavn}}</td>
-        </tr>
-      </table>
-    </Modal>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -315,6 +315,8 @@
                     });
                     if(this.approvals.length==0){
                         this.showApproveSection=false;
+                    }else{
+                      this.showApproveSection=true;
                     }
                     //this.selected_subgroup = '';
                 }).catch(err => {
@@ -618,7 +620,7 @@
 
 <style scoped>
   div.content1 {
-    height:150px;
+    height:250px;
     overflow:auto;
     /**background:#fff;*/
   }

@@ -8,7 +8,7 @@
               <img src="./img/logo_small.png" alt="image not found" width="45"/>
             </router-link>
           <div class="navbar-item">
-            <SelectGroup v-if="showNav" ref="SelectGroup"> </SelectGroup>
+            <SelectGroup v-if="showNav" ref="SelectGroup" style="width: 160px"> </SelectGroup>
           </div>
           <div class="navbar-burger burger" @click="showBurger = !showBurger" v-bind:class="{'is-active' : showBurger}" data-target="navMenu" v-if="showNav">
             <span></span>
@@ -130,14 +130,7 @@ export default {
     /** -ms-filter: blur(5px); */
     /** filter: blur(5px); */
 
-
-
-
-
-
   }
-
-
 
    Alternative way:
   html {
@@ -147,9 +140,6 @@ export default {
   -o-background-size: cover;
   background-size: cover;
 }
-
-
-
 
 
 
