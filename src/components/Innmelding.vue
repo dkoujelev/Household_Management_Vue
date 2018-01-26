@@ -66,11 +66,11 @@
                   <td>{{ option.text }} {{ option.isDef }}</td>
                   <td>
                     <button class="button is-link is-small is-hidden-desktop" @click="showMembers(option)">Vis medlemmer</button>
-                    <button class="button is-link is-hidden-mobile" @click="showMembers(option)">Vis medlemmer</button>
+                    <button class="button is-link is-hidden-touch" @click="showMembers(option)">Vis medlemmer</button>
 
                   </td>
                   <td>
-                    <button class="button is-link is-hidden-mobile" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
+                    <button class="button is-link is-hidden-touch" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
                     <button class="button is-link is-small is-hidden-desktop" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
                   </td>
                 </tr>
@@ -130,7 +130,7 @@
                   </thead>
                   <tr v-for="option in options_subgroup"  v-bind:key="option.uid">
                   <td>{{ option.navn }}</td>
-                  <td> <button class="button is-link is-hidden-mobile" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+                  <td> <button class="button is-link is-hidden-touch" v-on:click="joinSubGroup(option.uid)">Bli med</button>
                     <button class="button is-link is-small is-hidden-desktop" v-on:click="joinSubGroup(option.uid)">Bli med</button>
                   </td>
                   </tr>

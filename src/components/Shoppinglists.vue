@@ -9,7 +9,7 @@
               <ViewShoppingList :id.sync="list.id" slot="content" @closingShoppingList="closeShoppingList" @deleteShoppingList="update" @listCompleted="update"/>
             </Modal>
             <Modal :modalVisible.sync="showAddShoppingList" @modalClosing="closeAddShoppingList">
-              <h2 slot="title">Lag ny handleliste</h2>
+              <h2 slot="title">Ny handleliste</h2>
               <ShoppingList slot="content" @closingAddShoppingList="closeAddShoppingList" @addedShoppingList="update"/>
             </Modal>
             <div class="is-parent">
@@ -35,7 +35,7 @@
                   </table>
                 </div>
                 <br v-if="len === -1">
-                <button class="button is-link" @click="openAddShoppingList" v-if="!isHome">Lag handleliste</button>
+                <button class="button is-link" @click="openAddShoppingList" v-if="!isHome">Ny handleliste</button>
               </div>
             </div>
           </div>

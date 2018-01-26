@@ -7,10 +7,12 @@
           <flat-pickr v-model="date" :config="settings"></flat-pickr>
         </div>
         <br>
-        <label class="label">Navn på handleliste</label>
+        <label class="label is-4">Navn på handleliste</label>
         <p class="help is-danger">{{this.errorMessages.overskrift}}</p>
         <div class="control">
-          <input class="input" type="text" placeholder="Navn på handleliste" v-model="name">
+          <div class="field-body">
+            <input class="input" type="text" placeholder="Navn på handleliste" v-model="name" >
+          </div>
         </div>
         <br>
         <div>
@@ -19,19 +21,23 @@
         </div>
         <div class="field" v-for="row in rows">
           <div class="field-body">
-            <button class="button is-danger" @click="removeRow(row)">
-              <i class="fa fa-trash-o" aria-hidden="true"></i>
-            </button>
-            <input class="input" name="" v-model="row.navn" type="text" placeholder="Text input" value="">
-            <button class="button is-danger" id="decrementButton" @click="decrement(row)">
-              <i class="fa fa-minus" id="minus" aria-hidden="true"></i>
-            </button>
-            <div>
-              <button class="button is-light">{{row.antall}}</button>
-            </div>
-            <button class="button is-info" @click="increment(row)" id="incrementButton">
-              <i class="fa fa-plus" id="plus" aria-hidden="true" ></i>
-            </button>
+            <nav class="level">
+              <div class="level-item is-pulled-left">
+                <button class="button is-danger is-pulled-left" @click="removeRow(row)">
+                  <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="level-item">
+                <input class="input" name="" v-model="row.navn" type="text" placeholder="Text input" value="">
+              </div>
+                <button class="button is-danger" id="decrementButton" @click="decrement(row)">
+                  <i class="fa fa-minus" id="minus" aria-hidden="true"></i>
+                </button>
+                <button class="button is-light">{{row.antall}}</button>
+                <button class="button is-info" @click="increment(row)" id="incrementButton">
+                  <i class="fa fa-plus" id="plus" aria-hidden="true" ></i>
+                </button>
+            </nav>
           </div>
         </div>
         <div class="field is-grouped">
@@ -49,7 +55,7 @@
             </div>
           </nav>
           <nav class="level">
-            <div class="left">
+            <div class="is-pulled-left">
               <div class="level-item">
                 <button class="button is-link" @click="checkInput">Godkjenn</button>
               </div>
@@ -57,7 +63,7 @@
 
             <!-- right side -->
             <div class="level-right">
-              <div class="level-item">
+              <div class="level-item is-pulled-right">
                 <p class="level-item">
                   <button class="button is-danger" @click="closeNewShoppingList">Avbryt</button>
                 </p>
