@@ -156,5 +156,11 @@
     height: 450px;
     overflow: auto;
   }
+  div.is-ancestor {
+    background-color: #ffffff;
+    border: 1px solid black;
+    opacity: 0.6;
+    filter: alpha(opacity=60); /* For IE8 and earlier */
+  }
 
 </style>

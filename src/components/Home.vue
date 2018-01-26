@@ -11,7 +11,7 @@
             </article>
           </div>
       </div>
-      
+
       <div class="tile is-parent is-vertical">
         <article class="tile is-child  is-success is-fixed">
           <Shoppinglists :value="5"></Shoppinglists>
