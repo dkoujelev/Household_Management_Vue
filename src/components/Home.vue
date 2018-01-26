@@ -32,11 +32,9 @@
     import router from '../router/index'
     import {store} from '../store'
 
-    import aTodo from "@/components/TODO/aTodo"
-
     export default {
       name: 'Home',
-      components: { Todo, Shoppinglists, Newsfeed, aTodo },
+      components: { Todo, Shoppinglists, Newsfeed },
 
       data(){
         return {
