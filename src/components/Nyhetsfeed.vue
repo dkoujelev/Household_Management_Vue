@@ -1,11 +1,11 @@
 <template>
   <div :class="{'container' : !isHome}">
     <div :class="{'is-centered' : !isHome,'columns' : !isHome}">
-      <div :class="{'column is-6' : !isHome}">
+      <div :class="{'column is-8' : !isHome}">
       <div class="card is-rounded " :class="{'is-centered' :!isHome}">
-        <div class="is-ancestor box"  style="background-color: hsl(204, 86%, 53%)">
+        <div class="is-ancestor box"  style="background-color: hsl(217, 71%, 53%)	">
           <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
-            <h2 slot="title">Lag nyhet</h2>
+            <h2 slot="title" style="color:white">Lag nyhet</h2>
             <Addnews slot="content" @addedNews="update" @closeAddNews="closeModal" />
           </Modal>
           <div class="is-parent">
@@ -18,7 +18,7 @@
                     <a v-if="row.knapper && !isHome" @click="deleteNews(row)">Slett</a>
                   </div>
                   <div class="message-body">
-                    <h3>{{row.nyhet}}</h3>
+                    <h4>{{row.nyhet}}</h4>
 
                     <div class="block">
                       <nav class="level">
@@ -39,7 +39,7 @@
               </div>
               <br>
               <div class="child" v-if="!isHome">
-                <button class="button is-link" @click="openModal">Lag nyhet</button>
+                <button class="button" @click="openModal">Lag nyhet</button>
               </div>
             </div>
           </div>
@@ -158,9 +158,15 @@
   }
   div.is-ancestor {
     background-color: #ffffff;
-    border: 1px solid black;
+
     opacity: 1;
     filter: alpha(opacity=60); /* For IE8 and earlier */
   }
 
+  p.title{
+    color: white;
+  }
+  button.button{
+  background-color: orange;
+  }
 </style>

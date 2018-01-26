@@ -1,36 +1,57 @@
 <template>
-  <div class="is-ancestor">
-    <div class="is-parent tile box" style="background-color: azure">
-      <div class="is-child tile is-2">
-        <div class="block">
-          <p>Fornsssavn: {{user_info.first_name}}</p>
-          <p>Etternavn: {{user_info.last_name}}</p>
-          <p>E-mail: {{user_info.email}}</p>
-          <button class="button is-dark" @click="changingPassword=true">Endre passord</button>
-        </div>
-      </div>
-      <div class="is-child tile notification is-info">
-        <div>
-          <h2 class="subtitle">Du er medlem av følgende kollektiv og grupper:</h2>
-          <div class="content">
-            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-              <thead>
-              <th>Oversikt</th>
-              <th></th>
-              <th></th>
-              </thead>
-              <tr v-for="group in groups">
-                <td>{{ group.navn }}</td>
-                <td>
-                  <button class="button is-link is-small is-hidden-desktop" @click="showMembers(group)">Vis medlemmer</button>
-                  <button class="button is-link is-hidden-mobile" @click="showMembers(group)">Vis medlemmer</button>
-                </td>
-                <td>
-                  <button class="button is-link is-hidden-mobile" v-if="!group.default_gruppe" @click=" leaveSubGroup(group.undergruppe_id)">Forlat gruppe</button>
-                  <button class="button is-link is-small is-hidden-desktop" v-if="!group.default_gruppe" @click="leaveSubGroup(group.undergruppe_id)">Forlat gruppe</button>
-                </td>
-              </tr>
-            </table>
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="card is-rounded is-centered">
+          <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)	 ">
+            <div class="is-parent">
+              <div class="is-child">
+                <div class="block">
+                  <p class="title">Min Side</p>
+                  <p class="subtitle">Personalia:</p>
+                  <p>Fornavn: {{user_info.first_name}}</p>
+                  <p>Etternavn: {{user_info.last_name}}</p>
+                  <p>E-mail: {{user_info.email}}</p>
+                  <button class="button" style="background-color: orange" @click="changingPassword=true">Endre passord</button>
+                </div>
+              </div>
+            </div>
+            <br>
+            <p class="subtitle">Du er medlem av følgende kollektiv og grupper:</p>
+            <div class="is-parent">
+              <div class="is-child">
+                <div class="content1">
+                  <div>
+                    <div class="content">
+                      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                        <thead>
+                        <th>Oversikt</th>
+                        <th></th>
+                        <th></th>
+                        </thead>
+                        <tr v-for="group in groups">
+                          <td>{{ group.navn }}</td>
+                          <td>
+                            <button class="button is-link is-small is-hidden-desktop" @click="showMembers(group)">Vis medlemmer</button>
+                            <button class="button is-link is-hidden-mobile" @click="showMembers(group)">Vis medlemmer</button>
+                          </td>
+                          <td>
+                            <button class="button is-danger is-hidden-mobile" v-if="!group.default_gruppe" @click=" leaveSubGroup(group.undergruppe_id)">Forlat gruppe</button>
+                            <button class="button is-danger is-small is-hidden-desktop" v-if="!group.default_gruppe" @click="leaveSubGroup(group.undergruppe_id)">Forlat gruppe</button>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="is-parent">
+              <div class="is-child">
+                <router-link class="button"  style="background-color: orange" to="/Innmelding">Administrere grupper/kollektiver</router-link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -54,7 +75,6 @@
       <ChangePassword slot="content" @change-password-canceled="changingPassword=false"></ChangePassword>
     </Modal>
   </div>
-
 </template>
 
 <script>
@@ -125,5 +145,26 @@
 </script>
 
 <style scoped>
+
+  div.content1 {
+    height: 235px;
+    overflow: auto;
+  }
+  p.title{
+    color: white;
+  }
+  p{
+    color: white;
+  }
+
+  thead th:nth-child(1){
+    width: 70%;
+  }
+  thead th:nth-child(2){
+    width: 15%;
+  }
+  thead th:nth-child(3){
+    width: 15%;
+  }
 
 </style>
