@@ -48,7 +48,7 @@
           <p>HAHA</p>
           <h1>7</h1>
           <ViewTodoList :bjarne.sync="id"/>
-          <button class="button is-success">Save changes</button>
+          <button class="button is-success" @click="saveChanges">Save changes</button>
           <button class="button" @click="closeModal"> Cancel</button>
         </div>
       </Modal>
@@ -85,13 +85,14 @@
 
       methods: {
 
-        closeModal(){
-          this.showModal = false;
-        },
         openTodo(row) {
           this.id = row.id;
           this.showModal = true;
           //console.log("click");
+        },
+
+        closeModal(){
+          this.showModal = false;
         },
 
           fillRows() {

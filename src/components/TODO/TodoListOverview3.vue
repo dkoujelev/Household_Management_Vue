@@ -16,16 +16,20 @@
                     <th>Beskrivelse</th>
                     <th>Frist</th>
                     <th>Ferdig</th>
-                    <th>Status</th>
+                    <!--<th>Status</th> -->
+
                   </tr>
                   </thead>
                   <tbody>
                   <tr v-for="row in rows">
                     <td> <a @click=""> {{row.navn}} </a> </td> <!--  -->
-                    <td>Kommer</td>
-                    <td>{{row.frist}}</td>
-                    <td>{{row.ferdig}}</td>
                     <td>{{row.beskrivelse}}</td>
+                    <td>{{row.frist}}</td>
+                    <td>
+                      <label class="checkbox" v-if="checked">
+                        <input type="checkbox">
+                      </label>
+                    </td>
                     <td class="is-icon">
                       <a href="#">
                         <i class="fa fa-twitter"></i>
@@ -83,6 +87,7 @@
           });
         },
 
+
 /*
         completeList(){
           this.closeShoppingList();
@@ -96,7 +101,31 @@
             this.hide();
           });
         },
-        */ //g
+       */
+        saveChanges(){
+          this.closeModal();
+          let obj = {
+            ferdig: new Date().getTime() //this.listId,
+          };
+          axios.put('localhost:9000/rest/gjoremal/' + obj).then(response => {
+            //this.$emit('saveChanges', obj);
+            this.hide();
+          });
+        },
+
+/*
+        checked(){
+          seen = false;
+          axios.put('' + this.listId).then(response => {
+            this.$emit('saveChanges');
+            //this.hide();
+           let seen = {ferdig: resRows[i].ferdig};
+            seen = true;
+
+          });
+        },
+*/
+
 
         deleteList(){
           axios.delete('http://localhost:9000/rest/' + this.listId).then(response => {
@@ -117,12 +146,12 @@
         },
 
         fillRows() { // this.id = bjarne props.. hard koder med 1 istedet for this.id så får en ut lister
-              axios.get('http://localhost:9000/rest/gjoremaler/' + this.id).then(response => {
+              axios.get('http://localhost:9000/rest/gjoremaler/1').then(response => {
                 //alert('Alle lister til bruker hentet');
                 let resRows = response.data;
                 console.log(resRows);
                 for (let i = 0; i < resRows.length; i++) {
-                  let obj = {navn: resRows[i].navn, beskrivelse: resRows[i].beskrivelse,  start: resRows[i].start, frist: resRows[0].frist , ferdig: resRows[i].ferdig};
+                  let obj = {navn: resRows[i].navn, beskrivelse: resRows[i].beskrivelse,  start: resRows[i].start, frist: resRows[0].frist};
                   this.rows.push(obj);
                 }
               }).catch(err => {
