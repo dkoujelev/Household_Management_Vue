@@ -77,7 +77,7 @@
           return axios.get(rest).then(response => {
             let resRows = response.data;
             for(let i = 0; i < resRows.length; i++){
-              if(resRows[i].handling_utfort === "1970-01-01T00:00:00.000Z") {
+              if(resRows[i].handling_utfort === "1970-01-01T00:00:00.000Z" || resRows[i].favoritt) {
                 let date = this.formateDate(resRows[i].frist);
                 let obj = {handleliste_id: resRows[i].handleliste_id, navn: resRows[i].navn, frist: date, favorite: resRows[i].favoritt};
                 rows.push(obj);
@@ -167,7 +167,6 @@
 
   div.content1 {
     height: 450px;
-    overflow: auto;
   }
   p.title{
     color: white;
