@@ -52,33 +52,7 @@
         </div>
       </div>
       <div class="is-parent tile">
-        <div class="is-child tile notification is-info">
-          <div v-if="showUsersGroups===true">
-            <h2 class="subtitle">Du er medlem av følgende kollektiv og grupper:</h2>
-            <div class="content">
-              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                <thead>
-                <th>Oversikt</th>
-                <th></th>
-                <th></th>
-                </thead>
-                <tr v-for="option in options_usersgroups"  v-bind:key="option.uid">
-                  <td>{{ option.text }} {{ option.isDef }}</td>
-                  <td>
-                    <button class="button is-link is-small is-hidden-desktop" @click="showMembers(option)">Vis medlemmer</button>
-                    <button class="button is-link is-hidden-mobile" @click="showMembers(option)">Vis medlemmer</button>
 
-                  </td>
-                  <td>
-                    <button class="button is-link is-hidden-mobile" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
-                    <button class="button is-link is-small is-hidden-desktop" v-if="option.canLeave===true" v-on:click="leaveSubGroup(option.uid)">Forlat gruppe</button>
-                  </td>
-                </tr>
-              </table>
-            </div>
-            {{ leaveSubResult }}
-          </div>
-        </div>
         <div class="is-child tile notification is-7 is-info">
           <div v-if="showGroupSelect===true">
             <div class="field">
@@ -140,20 +114,6 @@
         </div>
       </div>
     </div>
-    <Modal :modalVisible.sync="showingMembers" @modalClosing="showingMembers=false;">
-      <h2 slot="title">Medlemmer</h2>
-      <p>{{selectedGroup.text}}</p>
-      <table slot="content" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-        <thead>
-        <th>Epost</th>
-        <th>Navn</th>
-        </thead>
-        <tr v-for="member in groupMembers">
-          <td>{{member.epost}}</td>
-          <td>{{member.fornavn + " " + member.etternavn}}</td>
-        </tr>
-      </table>
-    </Modal>
   </section>
 </template>
 
@@ -162,21 +122,11 @@
   import axios from 'axios';
   import router from '../router/index'
   import {store} from '../store'
-  import Modal from '@/components/Modal'
 
   export default {
     name: 'Innmelding',
-    components:{Modal},
     data(){
         return {
-
-            // Disse tre brukes for å vise medlemmer i gruppe
-            // Når man trykker "Vis medlemmer" i gruppelista.
-            // -Oddbjørn
-            selectedGroup: {text:''},
-            groupMembers:[],
-            showingMembers: false,
-
             showCreateMainGroupSection: true,
             showCreateSubGroupSection: false,
             showJoinSection: true,
