@@ -101,15 +101,12 @@
           this.showModal = false;
         },
 
-
         deleteList(){ //+ this.listId
           axios.delete('http://localhost:9000/rest/gjoremalslisterUndergruppe/1' ).then(response => {
             this.$emit('deleteTodoList');
             this.hide();
           });
         },
-
-
 
         fillRows() {
             //+ store.state.current_user.bruker_id
