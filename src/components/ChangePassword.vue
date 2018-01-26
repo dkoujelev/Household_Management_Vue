@@ -1,9 +1,6 @@
 <template>
   <div class="is-ancestor">
-
-    <div class="is-parent tile box" style="background-color: azure">
       <div class="is-child tile is-3 is-block-desktop-only">
-        <h1>Endring av passord</h1>
         <div>
           <p class="help is-danger">{{this.error.all}}</p>
           <br>
@@ -18,13 +15,13 @@
         </div>
         <div>
           <p class="help is-danger">{{this.error.newPasswordMissmatch}}</p>
+          <p class="help is-success">{{passwordChangeMsg}}</p>
           <br/>
-          <button class="button is-primary" @click="changePassword">Bytt passord</button>
         </div>
-    </div>
 
     </div>
-
+      <a class="button" @click="$emit('change-password-canceled')">Tilbake</a>
+      <a class="button is-primary" @click="changePassword">Bytt passord</a>
   </div>
 </template>
 
@@ -34,9 +31,10 @@
   import {store} from '../store'
 
     export default {
-        name: "change-password",
+        name: "ChangePassword",
       data(){
         return{
+          passwordChangeMsg: '',
           oldPassword: '',
           newPassword: '',
           newPasswordRepeat: '',
@@ -92,9 +90,9 @@
             let update = {email: store.state.current_user.epost, newPassword: this.newPassword};
             axios.put('http://localhost:9000/rest/changePassword', update).then(response => {
               if(response.data.updated){
-                alert('changed');
+                this.passwordChangeMsg = 'Passord endret.';
                 this.$emit('passwordUpdated');
-                router.push(''); // Push to my profile page
+                //router.push(''); // Push to my profile page
               } else{
                 this.$emit('passwordChangeFailed');
               }

@@ -106,6 +106,7 @@ module.exports = function(connection, server){
 
   //Slett en kostnad
   // NEI! Er kobla for tett sammen med gjeld til å slette.
+  // Ser ingen nytte i å ha den
 
 
   server.put('rest/kostnad/',(req,res,next) => {
