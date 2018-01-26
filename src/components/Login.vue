@@ -30,27 +30,13 @@
                 <router-link class="is-link" to="/Register">Registrer deg?</router-link>
               </div>
               <div class="field">
-                <a class="is-link" @click="forgottenPassword = true">Glemt passord?</a>
+                <router-link class="is-link" to="/ForgottenPassword">Glemt passord?</router-link>
               </div>
             </div>
           </article>
         </div>
       </div>
     </div>
-    <Modal :modalVisible.sync="forgottenPassword" @modalClosing="forgottenPassword=false">
-      <h2 slot="title">Tilbakestill passord</h2>
-      <div slot="content">
-        <p class="control has-icon">
-          <input class="input" type="email" placeholder="Email" v-model="forgottenPasswordEmail">
-          <span class="icon is-small">
-            <i class="fa fa-envelope"></i>
-          </span>
-        </p>
-        <p class="control">
-          <a class="button" @click="sendNewPassword">Send nytt passord</a>
-        </p>
-      </div>
-    </Modal>
   </section>
 </template>
 
@@ -58,15 +44,11 @@
   import axios from 'axios';
   import router from '../router/index'
   import {store} from '../store'
-  import Modal from '@/components/Modal'
 
   export default {
     name: 'Login',
-    components: {Modal},
     data(){
       return {
-        forgottenPassword:false,
-        forgottenPasswordEmail: '',
         login_info: {
           epost: '',
           passord: ''
@@ -75,12 +57,6 @@
       }
     },
     methods: {
-      sendNewPassword(){
-        axios.post('http://localhost:9000/rest/forgottenPassword',{epost: this.forgottenPasswordEmail})
-          .then(response => {
-            this.forgottenPassword = false;
-          }).catch(err => { console.log(err); });
-      },
       validateEmail(email){
         var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return regex.test(email);

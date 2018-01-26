@@ -26,6 +26,7 @@ import ShowAccounting from '@/components/ShowAccounting.vue'
 import GjeldUtSpesifisert from '@/components/Gjeld/GjeldUtSpesifisert.vue'
 import MyTestPanel from '@/components/MyTestPanel.vue'
 import ItemChart from '@/components/Charts/ItemChart'
+import ForgottenPassword from '@/components/ForgottenPassword'
 
 Vue.use(Router);
 
@@ -166,7 +167,12 @@ export default new Router({
         path: '/ItemChart',
         name: 'ItemChart',
         component: ItemChart
-      }
+      },
+      {
+        path: '/ForgottenPassword',
+        name: 'ForgottenPassword',
+        component: ForgottenPassword
+      },
     ]
   }
 )
