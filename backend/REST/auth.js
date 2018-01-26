@@ -36,7 +36,17 @@ let auth = {
     return true;
   },
   checkThatSessionHasUserId(req,res,next,id){
-
+    /*
+    console.log(req.body);
+    console.log(req.headers);
+    let user = this.getSession(id);
+    if(user.bruker_id === req.body.bruker_id){
+      return true;
+    } else {
+      res.send(403);
+      return false;
+    }
+    */
   },
   clearLogins(){
     this.sessions = {};

@@ -13,11 +13,11 @@ module.exports = function(connection, server){
       }
       let gjoremal = rows[0];
       if(typeof gjoremal !== 'undefined') {
-        if ('start' in gjoremal)
+        if ('start' in gjoremal && gjoremal.start !== null)
           gjoremal.start = new Date(gjoremal.start);
-        if ('frist' in gjoremal)
+        if ('frist' in gjoremal && gjoremal.frist !== null)
           gjoremal.frist = new Date(gjoremal.frist);
-        if ('ferdig' in gjoremal)
+        if ('ferdig' in gjoremal && gjoremal.ferdig !== null)
           gjoremal.ferdig = new Date(gjoremal.ferdig);
       }
       res.send(gjoremal);
@@ -32,11 +32,11 @@ module.exports = function(connection, server){
       if(err)
         return next(err);
       for(let gjoremal of rows){
-        if('start' in gjoremal)
+        if ('start' in gjoremal && gjoremal.start !== null)
           gjoremal.start = new Date(gjoremal.start);
-        if('frist' in gjoremal)
+        if ('frist' in gjoremal && gjoremal.frist !== null)
           gjoremal.frist = new Date(gjoremal.frist);
-        if('ferdig' in gjoremal)
+        if ('ferdig' in gjoremal && gjoremal.ferdig !== null)
           gjoremal.ferdig = new Date(gjoremal.ferdig);
       }
       res.send(rows);
@@ -48,9 +48,9 @@ module.exports = function(connection, server){
   server.post('rest/gjoremal/',function(req, res, next){
 
     req.body.start = util.getCurrentTimeAsEpoch();
-    if('frist' in req.body)
+    if('frist' in req.body && req.body.frist !== null)
       req.body.frist = new Date(req.body.frist).getTime();
-    if('ferdig' in req.body)
+    if('ferdig' in req.body && req.body.ferdig !== null)
       req.body.ferdig = new Date(req.body.ferdig).getTime();
 
     connection.query("INSERT INTO Gjoremal SET ?", req.body, function(err, rows, field){
@@ -65,11 +65,11 @@ module.exports = function(connection, server){
   server.put('rest/gjoremal/',function(req,res,next){
     let id = req.body.gjoremal_id;
     //console.log(id);
-    if('start' in req.body)
+    if('start' in req.body && req.body.start !== null)
       req.body.start = new Date(req.body.start).getTime();
-    if('frist' in req.body)
+    if('frist' in req.body && req.body.frist !== null)
       req.body.frist = new Date(req.body.frist).getTime();
-    if('ferdig' in req.body)
+    if('ferdig' in req.body && req.body.ferdig !== null)
       req.body.ferdig = new Date(req.body.ferdig).getTime();
 
     connection.query("UPDATE Gjoremal SET ? WHERE gjoremal_id=?", [req.body, id], function(err, rows, fields){

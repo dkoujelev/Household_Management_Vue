@@ -63,7 +63,7 @@
             <!-- right side -->
             <div class="is-pulled-right">
               <div class="level-item">
-                <button class="button is-danger" @click="deleteList">Slett handleliste</button>
+                <button class="button is-danger" v-confirm="{cancel: function(){}, ok: deleteList, message:'Vil du virkelig slette handlelisten?'}">Slett handleliste</button>
               </div>
             </div>
           </nav>

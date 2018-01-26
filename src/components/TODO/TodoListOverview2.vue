@@ -13,7 +13,6 @@
           <thead>
           <tr>
             <th>Tittel</th>
-            <th>Gruppenavn</th>
             <th>Status</th>
             <th>Dato</th>
             <th></th>
@@ -23,17 +22,11 @@
           <tr v-for="row in rows">
             <td> <a @click="openTodo(row)"> {{row.tittel}} </a> </td> <!--  -->
             <td>Kommer</td>
-            <td>Kommer</td>
             <td>{{row.dato}}</td>
-            <td class="is-icon">
-              <a href="#">
-                <i class="fa fa-twitter"></i>
-              </a>
-            </td>
-            <td class="is-icon">
-              <a href="#">
-                <i class="fa fa-instagram"></i>
-              </a>
+            <td>
+              <button class="button is-danger" @click="deleteList">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+              </button>
             </td>
           </tr>
           </tbody>
@@ -45,11 +38,7 @@
       <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
         <h2 slot="title">Gjøremål </h2>
         <div slot="content">
-          <p>HAHA</p>
-          <h1>7</h1>
-          <ViewTodoList :bjarne.sync="id"/>
-          <button class="button is-success" @click="saveChanges">Save changes</button>
-          <button class="button" @click="closeModal"> Cancel</button>
+          <ViewTodoList :my_id.sync="id"/>
         </div>
       </Modal>
   </div>
@@ -71,44 +60,55 @@
 
       data() {
         return{
+          updated: false,
           id: 1,
-          rows: [],
+          addItem: false,
+          newItem: {
+            name: '',
+            count: 1,
+          },
+          completeTodo: false,
           showModal: false,
           tittel: 'Dette er en tittel'
         };
       },
-      mounted(){
-        this.fillRows();
+      asyncComputed:{
+        rows: {
+          get(){
+            let rows = [];
+            return axios.get('http://localhost:9000/rest/gjoremalslisterUndergruppe/' + store.state.current_group.undergruppe_id).then(response => {
+              let resRows = response.data;
+              console.log(resRows);
+              for (let i = 0; i < resRows.length; i++) {
+                let obj = {id: resRows[i].id, tittel: resRows[i].navn, gruppe: resRows[i].navn, dato: resRows[0].opprettet};
+                rows.push(obj);
+              }
+              return rows;
+            }).catch(err => {
+              console.log(JSON.stringify(err));
+            });
+          },
+          watch(){
+            this.updated;
+          }
+        }
       },
-
-// [{}] <- betyr at array inneholder et objekt
-
       methods: {
-
         openTodo(row) {
           this.id = row.id;
           this.showModal = true;
-          //console.log("click");
         },
 
         closeModal(){
           this.showModal = false;
         },
 
-          fillRows() {
-            //+ store.state.current_user.bruker_id
-            axios.get('http://localhost:9000/rest/gjoremalslisterUndergruppe/1' ).then(response => {
-              //alert('Alle lister til bruker hentet');
-              let resRows = response.data;
-              console.log(resRows);
-              for (let i = 0; i < resRows.length; i++) {
-                let obj = {id: resRows[i].liste_id, tittel: resRows[i].navn, gruppe: resRows[i].navn, dato: resRows[0].opprettet};
-                this.rows.push(obj);
-              }
-            }).catch(err => {
-              console.log(JSON.stringify(err));
-            });
-          }
+        deleteList(){
+          axios.delete('http://localhost:9000/rest/gjoremalsliste/' + this.id).then(response => {
+            this.$emit('deleteTodoList');
+            this.update();
+          });
+        },
       }
     }
 </script>

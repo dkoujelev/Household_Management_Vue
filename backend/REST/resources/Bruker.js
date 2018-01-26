@@ -113,13 +113,18 @@ module.exports = function(connection, server) {
 
 //Change password
   server.put('rest/changePassword', function (req, res, next) {
+    /*
+    console.log(req.headers);
+    console.log(req.body);
+    auth.checkThatSessionHasUserId(req, res, next, req.headers.cookie.sessionId);
+    */
     let isUpdated = true;
     //Update the password
     let passord = [req.body.newPassword] + ""; //            Get the clear text password from the request body. (The + "" is apparently needed for bcrypt to read the data as a proper string.)
     let hash = bcrypt.hashSync(passord, 10); //                  Hashing the password 10 times
     /*******INSERT CODE HERE*******/
 
-    connection.query('UPDATE Bruker SET hashed_passord=? WHERE epost=?', [hash, req.body.email], function (err, rows, field) {
+    connection.query('UPDATE Bruker SET hashed_passord=? WHERE epost=?', [hash, req.body.email], function (err, rows, fields) {
       if (err) {
         isUpdated = false;
         return next(err);
@@ -128,6 +133,17 @@ module.exports = function(connection, server) {
       //Return
       res.send({updated: isUpdated});
 
+      return next();
+    });
+  });
+
+  // Fjern bruker
+  // NOT USED
+  server.del('rest/bruker/:bruker_id', function (req, res, next) {
+    connection.query('DELETE FROM Bruker, Bruker_Kollektiv, Bruker_Undergruppe WHERE bruker_id=?', req.params.bruker_id, function (err, rows, fields) {
+      if(err)
+        return next(err);
+      res.send(rows);
       return next();
     });
   });

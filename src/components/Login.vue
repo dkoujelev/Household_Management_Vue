@@ -26,7 +26,12 @@
                 </button>
               </p>
               <br/>
-              <router-link class="is-link" to="/Register">Registrer deg?</router-link>
+              <div class="field">
+                <router-link class="is-link" to="/Register">Registrer deg?</router-link>
+              </div>
+              <div class="field">
+                <router-link class="is-link" to="/ForgottenPassword">Glemt passord?</router-link>
+              </div>
             </div>
           </article>
         </div>
