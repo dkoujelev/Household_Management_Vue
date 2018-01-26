@@ -48,7 +48,7 @@
           <p>HAHA</p>
           <h1>7</h1>
           <ViewTodoList :bjarne.sync="id"/>
-          <button class="button is-success" @click="saveChanges">Save changes</button>
+          <button class="button is-success" @click="completeTodo">Save changes</button>
           <button class="button" @click="closeModal"> Cancel</button>
         </div>
       </Modal>
@@ -84,6 +84,11 @@
 // [{}] <- betyr at array inneholder et objekt
 
       methods: {
+
+        completeTodo(){
+          this.$emit('confirmTodo');
+        },
+
 
         openTodo(row) {
           this.id = row.id;

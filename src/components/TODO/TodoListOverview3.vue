@@ -26,19 +26,9 @@
                     <td>{{row.beskrivelse}}</td>
                     <td>{{row.frist}}</td>
                     <td>
-                      <label class="checkbox" v-if="checked">
-                        <input type="checkbox">
+                      <label class="checkbox">
+                        <input type="checkbox" v-if="completeTodo">
                       </label>
-                    </td>
-                    <td class="is-icon">
-                      <a href="#">
-                        <i class="fa fa-twitter"></i>
-                      </a>
-                    </td>
-                    <td class="is-icon">
-                      <a href="#">
-                        <i class="fa fa-instagram"></i>
-                      </a>
                     </td>
                   </tr>
                   </tbody>
@@ -79,16 +69,16 @@
 
       methods: {
 
+
         deleteTodo(row){
           let id = row.bruker_id; //eller undergruppe_id ? //+ id
-          axios.delete('http://localhost:9000/rest/gjoremal/1' ).then(response => {
+          axios.delete('http://localhost:9000/rest/gjoremal/2' ).then(response => {
             this.rows = [];
             this.fillRows();
           });
         },
 
-
-/*
+        /*
         completeList(){
           this.closeShoppingList();
           let obj = {
@@ -102,14 +92,14 @@
           });
         },
        */
-        saveChanges(){
-          this.closeModal();
+        completeTodo(){
+          this.confirmTodo();
           let obj = {
             ferdig: new Date().getTime() //this.listId,
           };
-          axios.put('localhost:9000/rest/gjoremal/' + obj).then(response => {
-            //this.$emit('saveChanges', obj);
-            this.hide();
+          axios.put('localhost:9000/rest/gjoremal/' + this.listId + obj).then(response => {
+            this.$emit('saveChanges', obj);
+            this.rows.push({ferdig })
           });
         },
 
