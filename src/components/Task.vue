@@ -41,12 +41,39 @@
       </table>
     <router-link class="button" to="/Addnews">Lag gjøremål</router-link>
 
+    <div class="modal" v-bind:class="{'is-active': modalVisible}" >
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Modal title</p>
+          <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <!-- Content ... -->
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success">Save changes</button>
+          <button class="button">Cancel</button>
+        </footer>
+      </div>
+      <button class="modal-close" @click="modalVisible = false"></button>
+    </div>
+
+    <p>
+      <button class="button" id="showModal" @click="modalVisible = true">Show</button>
+    </p>
+
   </div>
 </template>
 
 <script>
   export default {
     name: 'Task',
+    data(){
+      return{
+        modalVisible: false
+      }
+    }
   }
 </script>
 

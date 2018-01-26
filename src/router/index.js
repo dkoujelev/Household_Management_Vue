@@ -8,8 +8,6 @@ import SeeAccounting from '@/components/SeeAccounting'
 import AddExpence from '@/components/AddExpence'
 import AddCostRegister from '@/components/AddCostRegister'
 import Nyhetsfeed from '@/components/Nyhetsfeed'
-import Newsfeedhome from '@/components/home/Newsfeedhome'
-import Shoppinglistshome from '@/components/home/Shoppinglistshome'
 import Shoppinglists from '@/components/Shoppinglists'
 import Addnews from '@/components/Addnews'
 import ShowExpences from '@/components/ShowExpences'
@@ -24,7 +22,10 @@ import NewUser from '@/components/NewUser'
 import ChangePassword from '@/components/ChangePassword'
 import Grupper from '@/components/Grupper'
 import UserInfo from '@/components/UserInfo'
-
+import ShowAccounting from '@/components/ShowAccounting.vue'
+import GjeldUtSpesifisert from '@/components/Gjeld/GjeldUtSpesifisert.vue'
+import MyTestPanel from '@/components/MyTestPanel.vue'
+import ItemChart from '@/components/Charts/ItemChart'
 
 Vue.use(Router);
 
@@ -71,16 +72,6 @@ export default new Router({
         component: Nyhetsfeed
       },
       {
-        path: '/Newsfeedhome',
-        name: 'Newfeedhome',
-        component: Newsfeedhome
-      },
-      {
-        path: '/Shoppinglistshome',
-        name: 'Shoppinglistshome',
-        component: Shoppinglistshome
-      },
-      {
         path: '/Shoppinglists',
         name: 'Shoppinglists',
         component: Shoppinglists
@@ -111,7 +102,7 @@ export default new Router({
         component: TodoList
       },
       {
-        path: '/ViewShoppingList',
+        path: '/ViewShoppingList/:shoppinglist_id',
         name: 'ViewShoppingList',
         component: ViewShoppingList
       },
@@ -155,6 +146,26 @@ export default new Router({
         path: '/UserInfo',
         name: 'UserInfo',
         component: UserInfo
+      },
+      {
+        path: '/ShowAccounting',
+        name: 'ShowAccounting',
+        component: ShowAccounting
+      },
+      {
+        path: '/GjeldUtSpesifisert/:bruker_skylder_id',
+        name: 'GjeldUtSpesifisert',
+        component: GjeldUtSpesifisert
+      },
+      {
+        path: '/MyTestPanel',
+        name: 'MyTestPanel',
+        component: MyTestPanel
+      },
+      {
+        path: '/ItemChart',
+        name: 'ItemChart',
+        component: ItemChart
       }
     ]
   }

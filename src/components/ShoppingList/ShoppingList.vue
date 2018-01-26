@@ -1,117 +1,149 @@
 <template>
-  <div class="tile is-ancestor" id="ancestor">
-    <div class="tile is-vertical is-8">
-      <div class="tile">
-        <div class="tile is-parent is-vertical">
-          <article class="tile is-child notification">
-            <div class="container is-fluid">
-              <div class="field">
-                <label class="label">Navn å handleliste</label>
-                <p class="help is-danger">{{this.errorMessages.overskrift}}</p>
-                <div class="control">
-                  <input class="input" type="text" placeholder="Text input" v-model="name">
-                </div>
-              </div>
-
-              <label class="label">Skriv inn varer</label>
-              <div class="field" v-for="row in rows">
-
-
-                <div class="field-body">
-                  <button class="button is-danger" @click="removeRow(row)">
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                  </button>
-                  <input class="input" name="" v-model="row.navn" type="text" placeholder="Text input" value="">
-                  <button class="button is-danger" id="decrementButton" @click="decrement(row)">
-                    <i class="fa fa-minus" id="minus" aria-hidden="true"></i>
-                  </button>
-                  <button class="button is-info" @click="row.antall++" id="incrementButton">
-                  <i class="fa fa-plus" id="plus" aria-hidden="true" ></i>
-                  </button>
-                    <div>
-                      <button class="button is-light">{{row.antall}}</button>
-                    </div>
-                </div>
-              </div>
-
-              <div class="field is-grouped">
-                <div class="control">
-                  <button class="button is-success" @click="addRow">Ny vare</button>
-                </div>
+  <div class="is-ancestor">
+    <div class="is-parent">
+      <div class="tile is-child">
+        <div>
+          <label class="label">Frist</label>
+          <flat-pickr v-model="date" :config="settings"></flat-pickr>
+        </div>
+        <br>
+        <label class="label">Navn på handleliste</label>
+        <p class="help is-danger">{{this.errorMessages.overskrift}}</p>
+        <div class="control">
+          <input class="input" type="text" placeholder="Navn på handleliste" v-model="name">
+        </div>
+        <br>
+        <div>
+          <label class="label">Skriv inn varer</label>
+          <p class="help is-danger">{{errorMessages.navn}}</p>
+        </div>
+        <div class="field" v-for="row in rows">
+          <div class="field-body">
+            <button class="button is-danger" @click="removeRow(row)">
+              <i class="fa fa-trash-o" aria-hidden="true"></i>
+            </button>
+            <input class="input" name="" v-model="row.navn" type="text" placeholder="Text input" value="">
+            <button class="button is-danger" id="decrementButton" @click="decrement(row)">
+              <i class="fa fa-minus" id="minus" aria-hidden="true"></i>
+            </button>
+            <div>
+              <button class="button is-light">{{row.antall}}</button>
+            </div>
+            <button class="button is-info" @click="increment(row)" id="incrementButton">
+              <i class="fa fa-plus" id="plus" aria-hidden="true" ></i>
+            </button>
+          </div>
+        </div>
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-success" @click="addRow">Legg til ny vare</button>
+          </div>
+        </div>
+        <div class="block">
+          <nav class="level">
+            <!-- left side -->
+            <div class="level-left">
+              <label>
+                <input type="checkbox" :checked="save"> Lagre handleliste for fremtidig bruk
+              </label>
+            </div>
+          </nav>
+          <nav class="level">
+            <div class="left">
+              <div class="level-item">
+                <button class="button is-link" @click="checkInput">Godkjenn</button>
               </div>
             </div>
-            <div class="field">
-            </div>
-            <div class="control">
-              <button class="button is-link" v-on:click="checkInput">Godkjenn</button>
-              <button class="button is-danger"  @click="">Slett handleliste</button>
-              <router-link class="button" to="/Shoppinglists">Avbrytt</router-link>
 
+            <!-- right side -->
+            <div class="level-right">
+              <div class="level-item">
+                <p class="level-item">
+                  <button class="button is-danger" @click="closeNewShoppingList">Avbryt</button>
+                </p>
+
+              </div>
             </div>
-          </article>
+          </nav>
         </div>
       </div>
     </div>
   </div>
-
-
 </template>
 
 
 
 
 <script>
-  //metode som inneholder et objekt som returnern data
-
   import axios from 'axios';
-  import router from '../../router/index'
-  import Shoppinglists from '../Shoppinglists';
+  import router from '@/router'
+  import {store} from '@/store'
+  import flatPickr from 'vue-flatpickr-component';
+  import 'flatpickr/dist/flatpickr.css';
 
   export default {
-
+    components: { flatPickr },
 
     data() {
       return {
+        save: false,
+        settings: {
+          enableTime: false
+        },
+        date: new Date(),
         name: "",
         rows: [
           {navn: "", antall: 1},
         ],
         errorMessages: {
           overskrift: '',
-          tekst: ''
+          navn: ''
         }
       }
     },
     methods: {
-      addRow: function () {
+      hide(){
+        this.name = '';
+        this.rows = [ {navn: "", antall: 1} ];
+        this.errorMessages.overskrift = '';
+        this.errorMessages.navn = '';
+      },
+      closeNewShoppingList(){
+        this.hide();
+        this.$emit('closingAddShoppingList');
+      },
+      addRow() {
         this.rows.push({navn: "", antall: 1});
       },
       removeRow: function (row) {
-        //console.log(row);
-        this.rows.splice(row, 1);
-      },
-      decrement(row){
-        if(row.antall > 1){
-          row.antall--;
+        for(let i = 0; i < this.rows.length; i++){
+          if(this.rows[i] === row){
+            this.rows.splice(i, 1);
+            break;
+          }
         }
       },
-
+      increment(row){
+        row.antall++;
+      },
+      decrement(row){
+        if(row.antall > 1) row.antall--;
+      },
       sendData(){
         let shoppinglist =
         {
           navn: this.name,
           opprettet: new Date(),
           beskrivelse: "",
-          undergruppe_id: 2, //Må leses inn fra komponent (foreldre som inneholder)
-          varer: this.rows
+          undergruppe_id: store.state.current_group.undergruppe_id,
+          varer: this.rows,
+          frist: this.date,
+          favoritt: this.save
         };
-        console.dir(shoppinglist);
 
         axios.post('http://localhost:9000/rest/handleliste', shoppinglist).then( response => {
-          alert('handleliste lagt inn!');
-          this.$emit('added-shoppinglist', shoppinglist);
-          console.log("1");
-          router.push('Shoppinglists');
+          this.hide();
+          this.$emit('addedShoppingList');
         }).catch(err => {
           console.log(JSON.stringify(err));
         });
@@ -119,12 +151,22 @@
       },
       checkInput() {
         let noErrors = true;
+        this.errorMessages.overskrift = '';
         this.errorMessages.name = '';
+
         if (this.name === "") {
-          console.log("1");
           this.errorMessages.overskrift = 'Meldingen må ha en overskift';
           noErrors = false;
         }
+
+        for(let i = 0; i < this.rows.length; i++){
+          if(this.rows[i].navn === ''){
+            noErrors = false;
+            this.errorMessages.navn = 'Alle varer må ha navn';
+            break;
+          }
+        }
+
         if (noErrors) this.sendData();
       }
     }

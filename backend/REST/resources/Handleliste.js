@@ -23,7 +23,7 @@ module.exports = function(connection, server){
         handleliste.handling_utfort = new Date(handleliste.handling_utfort);
 
       connection.query("SELECT Vare.* FROM Vare " +
-        "INNER JOIN Handleliste ON Vare.handleliste_Id=Handleliste.handleliste_id WHERE Handleliste.handleliste_id=?", req.params.handleliste_id, function(err, rows, fields){
+        "INNER JOIN Handleliste ON Vare.handleliste_Id=Handleliste.handleliste_id WHERE Handleliste.handleliste_id=? ", req.params.handleliste_id, function(err, rows, fields){
         if(err)
           return next(err);
 
@@ -68,7 +68,7 @@ module.exports = function(connection, server){
         varer.push(varen);
       }
 
-      console.log(JSON.stringify(varer));
+      //console.log(JSON.stringify(varer));
 
       connection.query('INSERT INTO Vare (navn, handleliste_id, antall) VALUES ?', [varer], function(err,rows,fields){
         if(err)
@@ -81,7 +81,8 @@ module.exports = function(connection, server){
 
 // Hent handlelister for en bestemt undergruppe
   server.get('rest/handlelisteForUndergruppe/:undergruppe_id',function(req, res, next) {
-    connection.query("SELECT * FROM Handleliste WHERE undergruppe_id=?", [req.params.undergruppe_id], function (err, rows, fields) {
+    connection.query("SELECT * FROM Handleliste WHERE undergruppe_id=?  AND deleted=FALSE " +
+      "ORDER BY (favoritt IS FALSE), (frist IS NULL) , (frist) , opprettet ASC", [req.params.undergruppe_id], function (err, rows, fields) {
 
       for(let handleliste of rows){
         if('opprettet' in handleliste)
@@ -100,9 +101,10 @@ module.exports = function(connection, server){
 // Hent alle handlelister som en bestemt bruker har tilgang til
   server.get('rest/handlelisteForBruker/:bruker_id',function(req, res, next){
     connection.query("SELECT Handleliste.* FROM Handleliste " +
-      "INNER JOIN Undergruppe ON Handleliste.undergruppe_id=Undergruppe.undergruppe_id " +
-      "INNER JOIN Bruker_Undergruppe ON Undergruppe.undergruppe_id=Bruker_Undergruppe.undergruppe_id " +
-      "WHERE bruker_id=?", [req.params.bruker_id], function(err, rows, fields){
+    "INNER JOIN Undergruppe ON Handleliste.undergruppe_id=Undergruppe.undergruppe_id " +
+    "INNER JOIN Bruker_Undergruppe ON Undergruppe.undergruppe_id=Bruker_Undergruppe.undergruppe_id " +
+    "WHERE bruker_id=? AND Handleliste.deleted=FALSE " +
+    "ORDER BY (favoritt IS FALSE), (frist IS NULL) , (frist) , opprettet ASC", [req.params.bruker_id], function(err, rows, fields){
 
       for(let handleliste of rows){
         if('opprettet' in handleliste)
@@ -119,7 +121,7 @@ module.exports = function(connection, server){
   });
 
 // Oppdater en handleliste
-  server.put('res/handleliste/', function (req,res,next) {
+  server.put('rest/handleliste/:handleliste_id', function (req,res,next) {
     /*
     let varer;
     if('varer' in req){
@@ -134,7 +136,7 @@ module.exports = function(connection, server){
     if('handling_utfort' in req)
       req.handling_utfort = new Date(req.handling_utfort).getTime();
 
-    connection.query('UPDATE Handleliste SET ? WHERE handleliste_id=?', [req.body, req.body.handleliste_id], function (err,rows,fields) {
+    connection.query('UPDATE Handleliste SET ? WHERE handleliste_id=?', [req.body, Number.parseInt(req.params.handleliste_id)], function (err,rows,fields) {
       if(err)
         return next(err);
       res.send(rows);
@@ -176,10 +178,10 @@ module.exports = function(connection, server){
 
 // Slett en liste
   server.del('rest/handleliste/:handleliste_id', function (req ,res, next) {
-    connection.query('DELETE FROM Vare WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
+    connection.query('UPDATE Vare SET deleted = TRUE WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
       if(err)
         return next(err);
-      connection.query('DELETE FROM Handleliste WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
+      connection.query('UPDATE Handleliste SET deleted = TRUE WHERE handleliste_id=?', req.params.handleliste_id, function (err, rows, fields) {
         if(err)
           return next(err);
         res.send(rows);

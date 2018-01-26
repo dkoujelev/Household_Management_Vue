@@ -3,7 +3,7 @@
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
-          <article class="card is-rounded">
+          <article class="card is-rounded is-centered">
             <div class="card-content">
               <img src="../img/logo_full.png" height="200" width="400"/>
               <p class="help is-danger">{{this.error}}</p>
@@ -20,13 +20,7 @@
                 </span>
               </p>
               <p class="control">
-                <label class="checkbox">
-                  <input type="checkbox">
-                  Remember me
-                </label>
-              </p>
-              <p class="control">
-                <button class="button is-primary is-medium is-fullwidth" v-on:click="login">
+                <button class="button is-link is-medium is-fullwidth" v-on:click="login">
                   <i class="fa fa-user"></i>
                   &nbsp Login
                 </button>
@@ -83,13 +77,13 @@
               this.login_info.passord = "";
               store.commit('current_user', response.data);
 
-              // FOR TESTING, REMOVE WHEN SOLUTION READY
-              store.commit('current_group', {undergruppe_id: 1});
-              // REMOVE ME WHEN DONE
-
               store.commit('loggedIn', true);
-              axios.get('http://localhost:9000/rest/kollektivForBruker/' + response.data.bruker_id).then(response => {
+              axios.get('http://localhost:9000/rest/undergrupperForBruker/' + response.data.bruker_id).then(response => {
                 store.commit('isMember', response.data.length > 0);
+                console.log(store.state.isMember);
+                if(response.data.length > 0) {
+                  store.commit('current_group', response.data[0]);
+                }
                 if (response.data.length === 0)
                   router.push('NewUser');
                 else

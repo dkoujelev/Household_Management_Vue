@@ -1,30 +1,55 @@
 <template>
-      <div class="tile is-ancestor box" style="background-color: deeppink">
-        <div class="tile is-parent  box" style="background-color: skyblue">
-          <div class="child tile is-6 box" style="background-color: palevioletred">
-            <Newsfeedhome></Newsfeedhome>
+  <div class="container">
+
+    <div class="tile is-ancestor">
+      <div class="tile is-vertical is-8">
+          <div class="tile is-parent is-vertical">
+            <article class="tile is-child">
+
+                <Newsfeed :value="5"></Newsfeed>
+                <!-- Content -->
+            </article>
           </div>
-          <div class="child tile is-6 box" style="background-color: grey">
-            <Shoppinglistshome></Shoppinglistshome>
-          </div>
-        </div>
       </div>
 
-
+      <div class="tile is-parent is-vertical">
+        <article class="tile is-child  is-success is-fixed">
+          <Shoppinglists :value="5"></Shoppinglists>
+        </article>
+        <article class="tile is-child is-success is-fixed">
+          <Shoppinglists :value="5"></Shoppinglists>
+        </article>
+      </div>
+    </div>
+  </div>
 
 </template>
 
 <script>
-    import Newsfeedhome from './home/Newsfeedhome'
-    import Taskhome from './home/Taskhome'
-    import Shoppinglistshome from './home/Shoppinglistshome'
     import Todo from './TODO/TodoList';
+    import Shoppinglists from '@/components/Shoppinglists'
+    import Newsfeed from '@/components/Nyhetsfeed'
     import router from '../router/index'
     import {store} from '../store'
 
     export default {
       name: 'Home',
-      components: {Newsfeedhome,Taskhome,Shoppinglistshome,Todo},
+      components: { Todo, Shoppinglists, Newsfeed },
+
+      data(){
+        return {
+          showMe: false,
+          titleTest: 'This is a title'
+        }
+      },
+      methods:{
+        openShoppingList(){
+          this.showMe = true;
+        },
+        closeShoppingList(){
+          this.showMe = false;
+        }
+      }
     }
 </script>
 
