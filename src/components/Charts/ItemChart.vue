@@ -2,9 +2,9 @@
     <div class="is-parent">
       <div class="tile is-child box">
         <div class='chart'>
-          <div class="field"><label>fra dato: </label><flat-pickr v-model="from"></flat-pickr></div>
-          <div class="field"><label>til dato: </label><flat-pickr v-model="to"></flat-pickr></div>
-          Oftest kjøpte varer i valgt periode:
+          <div class="field"><label>fra dato: </label><flat-pickr :options="{dateFormat:'dd.mm.YYYY'}" v-model="from"></flat-pickr></div>
+          <div class="field"><label>til dato: </label><flat-pickr :options="{dateFormat:'dd.mm.YYYY'}" v-model="to"></flat-pickr></div>
+          Oftest kjøpte varer i valgt tidsperiode:
           <ChartAxis :data='chartData'></ChartAxis>
         </div>
       </div>
@@ -13,6 +13,7 @@
         <br />
         <br />
         <br />
+        <a class="button" @click="goBack">Tilbake</a>
       </div>
     </div>
 </template>
@@ -24,6 +25,7 @@
   import 'flatpickr/dist/flatpickr.css';
   import {store} from '@/store';
   import axios from 'axios';
+  import router from '@/router';
 
   export default {
     data () {
@@ -92,6 +94,11 @@
     components: {
       ChartAxis,
       flatPickr
+    },
+    methods:{
+      goBack(){
+        router.back();
+      }
     }
   }
 </script>
