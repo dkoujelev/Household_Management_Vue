@@ -1,26 +1,69 @@
 let server = require("../server");
 let sendMailScript = require('../../SendMail.js');
+let bcrypt = require('bcrypt');
+let randomstring = require('randomstring');
 
 module.exports = function(connection, server){
 
-// Opprett nytt kollektiv
-server.post('rest/epost',function(req, res, next){
-    //Hent innholdet i mailen
-    let toAddress=req.params.to;
-    let fromAddress=req.params.from;
-    let subject=req.params.subject;
-    let body=req.params.body;
+  // Opprett nytt kollektiv
+  server.post('rest/epost',function(req, res, next){
+      //Hent innholdet i mailen
+      let toAddress=req.params.to;
+      let fromAddress=req.params.from;
+      let subject=req.params.subject;
+      let body=req.params.body;
 
-    //Kjør scriptet for å sende mail
-    let mailData = {0:toAddress,
-                    1:fromAddress,
-                    2:subject,
-                    3:body
-                  };
+      //Kjør scriptet for å sende mail
+      let mailData = {0:toAddress,
+                      1:fromAddress,
+                      2:subject,
+                      3:body
+                    };
 
-    //console.log('mailData= {' + mailData[0] + ',' + mailData[1] + ',' + mailData[2] + ',' + mailData[3] + '}');
+      //console.log('mailData= {' + mailData[0] + ',' + mailData[1] + ',' + mailData[2] + ',' + mailData[3] + '}');
 
-    res.send(sendMailScript(mailData,next));
-    next();
-  });
+    sendMailScript(mailData,(response)=>{
+      res.send(response);
+      return next();
+    });
+    });
+
+  // Forventet input:
+  //
+  // {epost: 'eksempel@test.com'}
+  // Returnerer {sent: true} hvis det gikk, {sent: false} hvis det ikke gikk.
+  server.post('rest/forgottenPassword',(req,res,next) => {
+
+    connection.query("SELECT * FROM Bruker WHERE epost=?", [req.body.epost],(err,rows,fields) => {
+      if(err || rows.length < 1){
+        console.log(err);
+        res.send({sent: false});
+        return next();
+      }
+
+      let bruker = rows[0];
+      let newpass = randomstring.generate({readable: true, length: 8});
+      let hash = bcrypt.hashSync(newpass, 10);
+
+      connection.query("UPDATE Bruker SET hashed_passord=? WHERE bruker_id=?", [hash,bruker.bruker_id],(err,rows,fields) => {
+        if(err){
+          console.log(err);
+          res.send({sent: false});
+          return next();
+        }
+
+        let mailData = {
+          0: bruker.epost,
+          1:'admin@geving.no',
+          2:'Nytt passord',
+          3:'Du har fått nytt passord på Household Manager.\n\nDitt nye passord er: ' + newpass
+        };
+
+        sendMailScript(mailData,response =>{
+          res.send({sent: true});
+          return next();
+        });
+      });
+    });
+  })
 };

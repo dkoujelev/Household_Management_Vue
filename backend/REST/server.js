@@ -24,14 +24,15 @@ server.use(restify.plugins.bodyParser({
   mapParams: true
 }))
 
-server.loginEnabled = true;
+server.loginEnabled = false;
 
 server.use((req, res, next) => {
     //console.log("creating connection");
     if(server.loginEnabled){
-      let approved = ['/rest/login','/rest/loggedIn','/rest/logout'];
+      let approved = ['/rest/login','/rest/loggedIn','/rest/logout','rest/forgottenPassword'];
       let is_posting_new_user = (req.getRoute().method == 'POST' && req.getPath().startsWith('/rest/bruker'));
       let brukerepost = req.getPath().startsWith('/rest/brukerepost/');
+      console.log(req.getRoute().method + " " + req.getPath());
 
       if(!(approved.includes(req.getPath()) || is_posting_new_user || brukerepost) && !auth.checkThatSessionExists(req,res)){
         return next(false);

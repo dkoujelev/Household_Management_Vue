@@ -29,6 +29,7 @@
     "node-gyp": "^3.6.2",
     "nodemailer": "^4.4.2",
     "npm": "^5.6.0",
+    "randomstring": "^1.1.5",
     "restify": "^6.3.4",
     "restify-cookies": "^0.2.2",
     "restify-cors-middleware": "^1.1.0",
