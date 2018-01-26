@@ -113,7 +113,11 @@ module.exports = function(connection, server) {
 
 //Change password
   server.put('rest/changePassword', function (req, res, next) {
-    auth.checkThatSessionHasUserId(req, res, next, req.body.bruker_id);
+    /*
+    console.log(req.headers);
+    console.log(req.body);
+    auth.checkThatSessionHasUserId(req, res, next, req.headers.cookie.sessionId);
+    */
     let isUpdated = true;
     //Update the password
     let passord = [req.body.newPassword] + ""; //            Get the clear text password from the request body. (The + "" is apparently needed for bcrypt to read the data as a proper string.)
