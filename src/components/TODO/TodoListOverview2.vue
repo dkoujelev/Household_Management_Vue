@@ -38,11 +38,7 @@
       <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
         <h2 slot="title">Gjøremål </h2>
         <div slot="content">
-          <p>HAHA</p>
-          <h1>7</h1>
           <ViewTodoList :bjarne.sync="id"/>
-          <button class="button is-success" @click="completeTodo">Save changes</button>
-          <button class="button" @click="closeModal"> Cancel</button>
         </div>
       </Modal>
   </div>
@@ -64,8 +60,8 @@
 
       data() {
         return{
+          updated: false,
           id: 1,
-          rows: [],
           addItem: false,
           newItem: {
             name: '',
@@ -76,52 +72,45 @@
           tittel: 'Dette er en tittel'
         };
       },
-      mounted(){
-        this.fillRows();
-      },
 
 // [{}] <- betyr at array inneholder et objekt
-
+      asyncComputed:{
+        rows: {
+          get(){
+            let rows = [];
+            return axios.get('http://localhost:9000/rest/gjoremalslisterUndergruppe/' + store.state.current_group.undergruppe_id).then(response => {
+              let resRows = response.data;
+              console.log(resRows);
+              for (let i = 0; i < resRows.length; i++) {
+                let obj = {id: resRows[i].id, tittel: resRows[i].navn, gruppe: resRows[i].navn, dato: resRows[0].opprettet};
+                rows.push(obj);
+              }
+              return rows;
+            }).catch(err => {
+              console.log(JSON.stringify(err));
+            });
+          },
+          watch(){
+            this.updated;
+          }
+        }
+      },
       methods: {
-
-        hide(){
-          this.addItem = false;
-          this.newItem.name = '';
-          this.newItem.count = 1;
-        },
-
         openTodo(row) {
           this.id = row.id;
           this.showModal = true;
-          //console.log("click");
-
         },
 
         closeModal(){
           this.showModal = false;
         },
 
-        deleteList(){ //+ this.listId
-          axios.delete('http://localhost:9000/rest/gjoremalslisterUndergruppe/1' ).then(response => {
+        deleteList(){
+          axios.delete('http://localhost:9000/rest/gjoremalsliste/' + this.id).then(response => {
             this.$emit('deleteTodoList');
-            this.hide();
+            this.update();
           });
         },
-
-        fillRows() {
-            //+ store.state.current_user.bruker_id
-            axios.get('http://localhost:9000/rest/gjoremalslisterUndergruppe/1' ).then(response => {
-              //alert('Alle lister til bruker hentet');
-              let resRows = response.data;
-              console.log(resRows);
-              for (let i = 0; i < resRows.length; i++) {
-                let obj = {id: resRows[i].liste_id, tittel: resRows[i].navn, gruppe: resRows[i].navn, dato: resRows[0].opprettet};
-                this.rows.push(obj);
-              }
-            }).catch(err => {
-              console.log(JSON.stringify(err));
-            });
-          }
       }
     }
 </script>
