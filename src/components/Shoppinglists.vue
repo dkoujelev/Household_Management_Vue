@@ -167,7 +167,6 @@
 
   div.content1 {
     height: 450px;
-    overflow: auto;
   }
 
 </style>
