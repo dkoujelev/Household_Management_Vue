@@ -5,7 +5,7 @@
           <div class="tile is-parent is-vertical">
             <article class="tile is-child">
 
-                <Newsfeed :value="5"></Newsfeed>
+                <Newsfeed :value="3"></Newsfeed>
                 <!-- Content -->
             </article>
           </div>
@@ -13,10 +13,10 @@
 
       <div class="tile is-parent is-vertical">
         <article class="tile is-child  is-success is-fixed">
-          <Shoppinglists :value="5"></Shoppinglists>
+          <Shoppinglists :value="3"></Shoppinglists>
         </article>
         <article class="tile is-child is-success is-fixed">
-          <Shoppinglists :value="5"></Shoppinglists>
+          <Shoppinglists :value=3></Shoppinglists>
         </article>
       </div>
     </div>
