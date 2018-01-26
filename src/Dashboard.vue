@@ -26,7 +26,7 @@
               <router-link class="navbar-item" v-if="showNav" to="/TestMail">TestMail</router-link> -->
               <router-link class="navbar-item" v-if="showNav" to="/ShowAccounting"> <span class="icon"><i class="fa fa-calculator fa-lg" > </i>   </span> &nbsp Regnskap &nbsp </router-link>
               <router-link class="navbar-item" v-if="showNav" to="/UserInfo"><span class="icon"><i class="fa fa-user fa-lg"></i></span> &nbsp Min Side </router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/MyTestPanel"> TestPanel </router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/Statistikk">Statistikk</router-link>
 
             </div>
             <div class="navbar-end" @click="showBurger = false">

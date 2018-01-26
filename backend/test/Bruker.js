@@ -201,15 +201,21 @@ describe('Bruker',() => {
 
     return axios.post(restServer + 'bruker', user)
     .then(response => {
-
       user.bruker_id = response.data.insertId;
+    return axios.post(restServer + 'login', {epost: user.epost, passord: user.hashed_passord});
+    }).then(response => {
+      console.log(response.headers);
 
       let data = {
         "email": user.epost,
         "newPassword": "nyttpassord"
       };
 
-      return axios.put(restServer + 'changePassword', data);
+      headers = {
+        cookie: response.headers["set-cookie"]
+
+      };
+    return axios.put(restServer + 'changePassword', data);
     }).then(response => {
       return axios.get(restServer + 'bruker/' + user.bruker_id);
     }).then(response => {
