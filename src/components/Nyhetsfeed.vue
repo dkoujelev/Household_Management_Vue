@@ -5,7 +5,7 @@
       <div class="card is-rounded " :class="{'is-centered' :!isHome}">
         <div class="is-ancestor box"  style="background-color: hsl(217, 71%, 53%)	">
           <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
-            <h2 slot="title">Lag nyhet</h2>
+            <h2 slot="title" style="color:white">Lag nyhet</h2>
             <Addnews slot="content" @addedNews="update" @closeAddNews="closeModal" />
           </Modal>
           <div class="is-parent">
@@ -39,7 +39,7 @@
               </div>
               <br>
               <div class="child" v-if="!isHome">
-                <button class="button1" @click="openModal">Lag nyhet</button>
+                <button class="button" @click="openModal">Lag nyhet</button>
               </div>
             </div>
           </div>
@@ -166,7 +166,7 @@
   p.title{
     color: white;
   }
-  button.button1{
+  button.button{
   background-color: orange;
   }
 </style>

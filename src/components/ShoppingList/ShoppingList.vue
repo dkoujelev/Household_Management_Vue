@@ -42,7 +42,7 @@
         </div>
         <div class="field is-grouped">
           <div class="control">
-            <button class="button is-success" @click="addRow">Legg til ny vare</button>
+            <button class="button is-link" @click="addRow">Legg til ny vare</button>
           </div>
         </div>
         <div class="block">
@@ -57,7 +57,7 @@
           <nav class="level">
             <div class="is-pulled-left">
               <div class="level-item">
-                <button class="button is-link" @click="checkInput">Godkjenn</button>
+                <button class="button" style="background-color: orange" @click="checkInput">Godkjenn</button>
               </div>
             </div>
 
@@ -161,7 +161,7 @@
         this.errorMessages.name = '';
 
         if (this.name === "") {
-          this.errorMessages.overskrift = 'Meldingen må ha en overskift';
+          this.errorMessages.overskrift = 'Hnadlelisten må ha et navn';
           noErrors = false;
         }
 
@@ -186,11 +186,11 @@
 
 <style scoped>
 #minus{
-  color: black;
+  color: white;
 }
 
 #plus{
-  color: black;
+  color: white;
   }
 
 

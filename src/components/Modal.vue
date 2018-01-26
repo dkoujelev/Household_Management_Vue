@@ -39,6 +39,6 @@
 
 <style scoped>
   .modal-card-head{
-    background-color: lightblue;
+    background-color: hsl(217, 71%, 53%);
   }
 </style>

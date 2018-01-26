@@ -5,11 +5,11 @@
         <div class="card is-rounded is-centered">
           <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)	">
             <Modal :modalVisible.sync="showShoppingList" @modalClosing="closeShoppingList">
-              <h2 slot="title">{{list.name}}</h2>
+              <h2 slot="title" style="color:white">{{list.name}}</h2>
               <ViewShoppingList :id.sync="list.id" slot="content" @closingShoppingList="closeShoppingList" @deleteShoppingList="update" @listCompleted="update"/>
             </Modal>
             <Modal :modalVisible.sync="showAddShoppingList" @modalClosing="closeAddShoppingList">
-              <h2 slot="title">Ny handleliste</h2>
+              <h2 slot="title" style="color:white">Ny handleliste</h2>
               <ShoppingList slot="content" @closingAddShoppingList="closeAddShoppingList" @addedShoppingList="update"/>
             </Modal>
             <div class="is-parent">
@@ -184,5 +184,5 @@
   thead th:nth-child(3){
     width: 40%;
   }
-  
+
 </style>
