@@ -159,7 +159,7 @@
   div.is-ancestor {
     background-color: #ffffff;
     border: 1px solid black;
-    opacity: 0.6;
+    opacity: 1;
     filter: alpha(opacity=60); /* For IE8 and earlier */
   }
 
