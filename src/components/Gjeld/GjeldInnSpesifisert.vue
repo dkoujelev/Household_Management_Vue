@@ -1,47 +1,28 @@
 <template>
-  <div class="tile is-vertical box" style="background-color: white">
-    <div class="is-ancestor" style="background-color: white">
-      <div class=" is-parent is-vertical " style="background-color: white">
-        <div class="child tile " style="background-color: white">
-          <div class="title is-size-5">Penger som {{user_owes.fornavn + " " + user_owes.etternavn}} skylder meg: </div>
-        </div> <br>
-
-        <div class="child tile" style="background-color:white">
-          <table class="table">
-            <thead>
-            <th scope="col">Beskrivelse</th>
-            <th scope="col">Dato:</th>
-            <th scope="col">Delsum per handletur:</th>
-            <th scope="col">Slett gjeld? </th>
-            <th scope="col">Tilknyttet handleliste</th>
-            </thead>
-
-            <tbody>
-            <tr v-for="debt in debts">
-              <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
-              <td data-label="Dato:"> {{debt.opprettet}} </td>
-              <td data-label="delsum:">  {{debt.belop + " kr" }}  </td>
-              <td data-label="Status:"> <input type="checkbox" v-model="debt.delete"> </td>
-              <td data-label="Tilknyttet handleliste">
-                <a v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</a>
-                <p v-else>Ingen handleliste</p>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-
-        </div>
-        <a class="button" @click="deleteDebt">Slett valgt gjeld</a>
-
-        <div class="box" style="background-color: white">
-          <div class="columns">
-            <div class="column is-three-fifths"> <p class="text"> Total skyld {{user_owes.fornavn + " " + user_owes.etternavn}} har til meg: &nbsp &nbsp</p> </div>
-            <div class="column is-two-fifths"> <div class="box" style="background-color: lightsalmon; text-align: center; font-weight: bold; font-size: large">  {{totalDebt}} kr </div>  </div>
-          </div>
-        </div> <br>
-
-        <button @click="$router.back()">Tilbake</button>
+  <div class="is-ancestor" style="background-color: white">
+    <div class=" is-parent is-vertical " style="background-color: white">
+      <div class="child tile " style="background-color: white">
+        <h3>Medlemmer som skylder meg penger</h3>
       </div>
+
+      <div class="child tile" style="background-color:white">
+        <table class="table">
+          <thead>
+          <th scope="col">Navn</th>
+          <th scope="col">Sum</th>
+          </thead>
+
+          <tbody>
+          <tr v-for="debt in debts" @click="selectUser(debt)">
+            <td data-label="Navn">  {{debt.fornavn}}  {{debt.etternavn}}  </td>
+            <td data-label="Sum">  {{debt.sum + " kr" }}  </td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+
     </div>
   </div>
 </template>
@@ -157,6 +138,6 @@
     }
   };
 </script>
-<style>
+<style scoped>
 
 </style>
