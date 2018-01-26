@@ -32,32 +32,29 @@ module.exports = function(connection, server){
             for(i=0;i<recipients.length;i++){
               let newNotification = {
                 opprettet:util.getCurrentTimeAsEpoch(),
-                tekst: 'Det er lagt ut en ny melding til nyhetsfeed',
+                tekst: req.body.tekst, //'Det er lagt ut en ny melding til nyhetsfeed',
                 lest:0,
                 id:null,
                 bruker_id:recipients[i].bruker_id
               };
               connection.query("INSERT INTO Notifikasjon SET ?", newNotification, function (err, rows1, fields) {    
                 if(err){
-                  console.log(err.code);
-                  console.log(err.sqlMessage);
-                  console.log(err.sql);
+                  console.log('SQL Error:   ' + err.code + ': ' + err.sqlMessage);
+                  console.log('SQL query:   ' + err.sql);
                   console.log('');
                 }else{
-                   console.log('------ OK! ------: ' + newNotification.bruker_id);
-                  // console.log(rows1);
-                  // console.log('-----------------');
-                  connection.query("SELECT * FROM Notifikasjon", newNotification, function (err, rows2, fields) {    
+                  //console.log('Ny notifikasjon for bruker_id: ' + newNotification.bruker_id);
+                  connection.query("SELECT * FROM Notifikasjon", function (err, rows2, fields) {    
+                    //console.log('Resulat for ny notifikasjon for bruker_id: ' + newNotification.bruker_id);
                     if(err){
-                      console.log(err.code);
-                      console.log(err.sqlMessage);
-                      console.log(err.sql);
+                      console.log('SQL Error:   ' + err.code + ': ' + err.sqlMessage);
+                      console.log('SQL query:   ' + err.sql);
                       console.log('');
                     }else{
                       for(i=0;i<rows2.length;i++){
-                        console.log('check: ' + rows2[i].bruker_id + ', ' + rows2[i].opprettet + ', ' + rows2[i].id);
+                        //console.log('id=' + rows2[i].id + ' bruker_id=' + rows2[i].bruker_id  + ' opprettet=' + rows2[i].opprettet + ' lest=' + rows2[i].lest + ' tekst=' + rows2[i].tekst);
                       };
-                      console.log('------');
+                      //console.log('------');
                     };
                   });
                 };
