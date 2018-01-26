@@ -44,9 +44,9 @@ module.exports = function(connection, server){
       delete handleliste.varer;
 
     handleliste.opprettet = util.getCurrentTimeAsEpoch();
-    if('frist' in handleliste)
+    if('frist' in handleliste && handleliste.frist !== null)
       handleliste.frist = new Date(handleliste.frist).getTime();
-    if('handling_utfort' in handleliste)
+    if('handling_utfort' in handleliste && handleliste.handling_utfort !== null)
       handleliste.handling_utfort = new Date(handleliste.handling_utfort).getTime();
 
     connection.query('INSERT INTO Handleliste SET ?', [handleliste], function(err,rows,fields){
@@ -85,11 +85,11 @@ module.exports = function(connection, server){
       "ORDER BY (favoritt IS FALSE), (frist IS NULL) , (frist) , opprettet ASC", [req.params.undergruppe_id], function (err, rows, fields) {
 
       for(let handleliste of rows){
-        if('opprettet' in handleliste)
+        if('opprettet' in handleliste && handleliste.opprettet !== null)
           handleliste.opprettet = new Date(handleliste.opprettet);
-        if('frist' in handleliste)
+        if('frist' in handleliste && handleliste.frist !== null)
           handleliste.frist = new Date(handleliste.frist);
-        if('handling_utfort' in handleliste)
+        if('handling_utfort' in handleliste && handleliste.handling_utfort !== null)
           handleliste.handling_utfort = new Date(handleliste.handling_utfort);
       }
 
@@ -107,11 +107,11 @@ module.exports = function(connection, server){
     "ORDER BY (favoritt IS FALSE), (frist IS NULL) , (frist) , opprettet ASC", [req.params.bruker_id], function(err, rows, fields){
 
       for(let handleliste of rows){
-        if('opprettet' in handleliste)
+        if('opprettet' in handleliste && handleliste.opprettet !== null)
           handleliste.opprettet = new Date(handleliste.opprettet);
-        if('frist' in handleliste)
+        if('frist' in handleliste && handleliste.frist !== null)
           handleliste.frist = new Date(handleliste.frist);
-        if('handling_utfort' in handleliste)
+        if('handling_utfort' in handleliste && handleliste.handling_utfort !== null)
           handleliste.handling_utfort = new Date(handleliste.handling_utfort);
       }
 
@@ -129,11 +129,11 @@ module.exports = function(connection, server){
       req.delete('varer')
     }
     */
-    if('opprettet' in req)
+    if('opprettet' in req.body && req.body.opprettet !== null)
       req.opprettet = new Date(req.opprettet).getTime();
-    if('frist' in req)
+    if('frist' in req.body && req.body.frist !== null)
       req.frist = new Date(req.frist).getTime();
-    if('handling_utfort' in req)
+    if('handling_utfort' in req.body && req.body.handling_utfort !== null)
       req.handling_utfort = new Date(req.handling_utfort).getTime();
 
     connection.query('UPDATE Handleliste SET ? WHERE handleliste_id=?', [req.body, Number.parseInt(req.params.handleliste_id)], function (err,rows,fields) {
