@@ -1,21 +1,29 @@
 <template>
-    <div class="is-parent">
-      <div class="tile is-child box">
-        <div class='chart'>
-          <div class="field"><label>fra dato: </label><flat-pickr :options="{dateFormat:'dd.mm.YYYY'}" v-model="from"></flat-pickr></div>
-          <div class="field"><label>til dato: </label><flat-pickr :options="{dateFormat:'dd.mm.YYYY'}" v-model="to"></flat-pickr></div>
-          Oftest kjøpte varer i valgt tidsperiode:
-          <ChartAxis :data='chartData'></ChartAxis>
+
+  <div class="columns is-centered">
+    <div class="column is-7">
+      <div class="card is-rounded is-centered">
+        <div class="is-ancestor box" style="background-color: hsl(48, 100%, 67%)	">
+          <div class="is-parent">
+            <div class="is-child">
+              <div class="title">Statistikk</div>
+              <div class="content1">
+                <div class="field-body">
+                  <div class="field"><label>fra dato: </label><flat-pickr :options="{dateFormat:'dd.mm.YYYY'}" v-model="from"></flat-pickr></div>
+                  <div class="field"><label>til dato: </label><flat-pickr :options="{dateFormat:'dd.mm.YYYY'}" v-model="to"></flat-pickr></div>
+                </div>
+                <br>
+                Oftest kjøpte varer i valgt tidsperiode:
+                  <ChartAxis :data='chartData'></ChartAxis>
+                  <a class="button" @click="goBack">Tilbake</a>
+             </div>
+            </div>
+          </div>
         </div>
       </div>
-      <!-- FUCKED FIX for å unngå at chart havner utfor div'en. -->
-      <div class="tile is-child box">
-        <br />
-        <br />
-        <br />
-        <a class="button" @click="goBack">Tilbake</a>
-      </div>
     </div>
+  </div>
+
 </template>
 
 <script>
@@ -107,5 +115,10 @@
   .chart{
     width: 100%;
     height: 400px;
+  }
+
+  div.content1 {
+    height: 500px;
+    overflow: auto;
   }
 </style>

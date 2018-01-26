@@ -65,7 +65,7 @@
                 </thead>
                 <tr v-for="option in options_epic"  v-bind:key="option.uid">
                   <td>{{ option.text }} {{ option.isDef }}</td>
-                  <!-- Her kan vel egentlig variabelen isDef brukes til å bedre skille mellom gruppe og kollektiv, om ønskelig... 
+                  <!-- Her kan vel egentlig variabelen isDef brukes til å bedre skille mellom gruppe og kollektiv, om ønskelig...
                        F.eks ved å kjøre fet skrift eller annen (bakgrunns)farge på kollektiv or whatever. Opp til stylistene! -->
                   <td>
                     {{ option.beskrivelse }}
@@ -81,6 +81,7 @@
                   <td v-if="option.canJoin===true">
                     <button class="button is-link is-hidden-mobile" v-on:click="joinSubGroup(option.uid)">Bli med</button>
                     <button class="button is-link is-small is-hidden-desktop" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+
                   </td>
                 </tr>
               </table>
@@ -130,6 +131,25 @@
             </dl>
           </div>
           <br>
+<<<<<<< HEAD
+          <div v-if="showAvailableSubgroups===true">
+            Dette er alle gruppene som hører inn under {{ selected_maingroup_object.navn }}:
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                  <thead>
+                  <th>Grupper</th>
+                  <th></th>
+                  </thead>
+                  <tr v-for="option in options_subgroup"  v-bind:key="option.uid">
+                  <td>{{ option.navn }}</td>
+                  <td> <button class="button is-link is-hidden-touch" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+                    <button class="button is-link is-small is-hidden-desktop" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+                  </td>
+                  </tr>
+              </table>
+            {{ joinSubResult }}
+          </div>
+=======
+>>>>>>> master
         </div>
       </div>
     </div>
@@ -321,7 +341,7 @@
               this.options_usersgroups = response.data.map((item) => {
                   let tmpIsDef = '';
                   let tmpCanLeave = false;
-                  
+
                   if(item.default_gruppe==1){
                       tmpIsDef='(Kollektiv)';
                       tmpCanLeave=false;
@@ -336,7 +356,7 @@
                       isDef: tmpIsDef,
                       canLeave:tmpCanLeave
                   };
-              });              
+              });
             });
             this.showUsersGroups=true;
         },
@@ -405,7 +425,7 @@
                     canLeave:false
                 };
             });
-            
+
             // You've just gotten all of the subs for ONE main group.
             // These must be merged with the EPIC list...
                 for(let i=0;i<this.tmpOptions.length;i++){

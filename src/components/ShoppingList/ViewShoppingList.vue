@@ -7,8 +7,8 @@
           <thead>
           <th>Vare</th>
           <th>Antall</th>
-          <th></th>
-          <th></th>
+          <th>Handlet</th>
+          <th>Slett</th>
           </thead>
           <tr v-for="row in rows">
             <td>{{row.vare}}</td>
@@ -56,12 +56,12 @@
         <div class="block">
           <nav class="level">
             <!-- left side -->
-            <div class="level-left">
-              <button class="button is-success" @click="completeList">Utfør handleliste</button>
+            <div class="is-pulled-left">
+              <button class="button" style="background-color: orange" @click="completeList">Utfør handleliste</button>
             </div>
 
             <!-- right side -->
-            <div class="level-right">
+            <div class="is-pulled-right">
               <div class="level-item">
                 <button class="button is-danger" @click="deleteList">Slett handleliste</button>
               </div>
@@ -259,6 +259,19 @@
     position: absolute;
     opacity: 0;
     cursor: pointer;
+  }
+
+  thead th:nth-child(1){
+    width: 70%;
+  }
+  thead th:nth-child(2){
+    width: 15%;
+  }
+  thead th:nth-child(3){
+    width: 15%;
+  }
+  thead th:nth-child(4){
+    width: 15%;
   }
 
 

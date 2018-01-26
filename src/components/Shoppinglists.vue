@@ -1,20 +1,20 @@
 <template>
   <div :class="{'container' : !isHome}">
     <div :class="{'is-centered' : !isHome,'columns' : !isHome}">
-      <div :class="{'column is-7' : !isHome}">
+      <div :class="{'column is-8' : !isHome}">
         <div class="card is-rounded is-centered">
-          <div class="is-ancestor box" style="background-color:hsl(171, 100%, 41%)">
+          <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)	">
             <Modal :modalVisible.sync="showShoppingList" @modalClosing="closeShoppingList">
-              <h2 slot="title">{{list.name}}</h2>
+              <h2 slot="title" style="color:white">{{list.name}}</h2>
               <ViewShoppingList :id.sync="list.id" slot="content" @closingShoppingList="closeShoppingList" @deleteShoppingList="update" @listCompleted="update"/>
             </Modal>
             <Modal :modalVisible.sync="showAddShoppingList" @modalClosing="closeAddShoppingList">
-              <h2 slot="title">Lag ny handleliste</h2>
+              <h2 slot="title" style="color:white">Ny handleliste</h2>
               <ShoppingList slot="content" @closingAddShoppingList="closeAddShoppingList" @addedShoppingList="update"/>
             </Modal>
             <div class="is-parent">
               <div class="is-child">
-                <div class="title">Handlelister</div>
+                <p class="title">Handlelister</p>
                 <div :class="{'content1' : !isHome}">
                   <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                     <thead>
@@ -26,7 +26,7 @@
                       <td>{{row.navn}}</td>
                       <td>{{row.frist}}</td>
                       <td>
-                        <button class="button is-warning" @click="selectList(row)">Se handleliste</button>
+                        <button class="button is-link" @click="selectList(row)">Se handleliste</button>
                         <button class="button" :class="{ 'is-success': !row.favorite, 'is-danger': row.favorite}" v-if="!isHome" @click="addFavorite(row)">
                           <i class="fa fa-star" aria-hidden="true"></i><p v-if="row.favorite">&nbsp; Fjern fra favoritt</p><p v-else>&nbsp; Legg til favoritt</p>
                         </button>
@@ -35,7 +35,7 @@
                   </table>
                 </div>
                 <br v-if="len === -1">
-                <button class="button is-link" @click="openAddShoppingList" v-if="!isHome">Lag handleliste</button>
+                <button class="button" @click="openAddShoppingList" v-if="!isHome">Ny handleliste</button>
               </div>
             </div>
           </div>
@@ -168,6 +168,21 @@
   div.content1 {
     height: 450px;
     overflow: auto;
+  }
+  p.title{
+    color: white;
+  }
+  button{
+    background-color: orange;
+  }
+  thead th:nth-child(1){
+    width: 40%;
+  }
+  thead th:nth-child(2){
+    width: 20%;
+  }
+  thead th:nth-child(3){
+    width: 40%;
   }
 
 </style>
