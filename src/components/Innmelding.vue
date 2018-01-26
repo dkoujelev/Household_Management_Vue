@@ -131,7 +131,6 @@
             </dl>
           </div>
           <br>
-<<<<<<< HEAD
           <div v-if="showAvailableSubgroups===true">
             Dette er alle gruppene som hører inn under {{ selected_maingroup_object.navn }}:
               <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
@@ -148,8 +147,6 @@
               </table>
             {{ joinSubResult }}
           </div>
-=======
->>>>>>> master
         </div>
       </div>
     </div>
