@@ -12,9 +12,8 @@
                   <p>Fornavn: {{user_info.first_name}}</p>
                   <p>Etternavn: {{user_info.last_name}}</p>
                   <p>E-mail: {{user_info.email}}</p>
-                  <button class="button is-dark" @click="changingPassword=true">Endre passord</button>
-                  <router-link class="button" style="background-color: orange"  to="/ChangePassword">Endre passord</router-link>
-                </div>
+                  <button class="button is-dark" style="background-color: orange" @click="changingPassword=true">Endre passord</button>
+                 </div>
               </div>
             </div>
             <br>
