@@ -170,6 +170,7 @@ export default new Router({
         name: 'TodoListOverview2',
         component: TodoListOverview2
       },
+      {
         path: '/MyTestPanel',
         name: 'MyTestPanel',
         component: MyTestPanel
@@ -180,5 +181,4 @@ export default new Router({
         component: ItemChart
       }
     ]
-  }
-)
+  })
