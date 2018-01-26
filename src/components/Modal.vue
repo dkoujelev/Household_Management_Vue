@@ -38,5 +38,7 @@
 </script>
 
 <style scoped>
-
+  .modal-card-head{
+    background-color: hsl(217, 71%, 53%);
+  }
 </style>
