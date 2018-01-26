@@ -25,6 +25,7 @@ import UserInfo from '@/components/UserInfo'
 import ShowAccounting from '@/components/ShowAccounting.vue'
 import GjeldUtSpesifisert from '@/components/Gjeld/GjeldUtSpesifisert.vue'
 import MyTestPanel from '@/components/MyTestPanel.vue'
+import ItemChart from '@/components/Charts/ItemChart'
 
 Vue.use(Router);
 
@@ -160,6 +161,11 @@ export default new Router({
         path: '/MyTestPanel',
         name: 'MyTestPanel',
         component: MyTestPanel
+      },
+      {
+        path: '/ItemChart',
+        name: 'ItemChart',
+        component: ItemChart
       }
     ]
   }
