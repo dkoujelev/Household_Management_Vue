@@ -1,36 +1,39 @@
 <template>
   <div class="is-ancestor">
-    <div class="is-parent tile box" style="background-color: azure">
-      <div class="is-child tile is-2">
-        <div class="block">
-          <p>Fornavn: {{user_info.first_name}}</p>
-          <p>Etternavn: {{user_info.last_name}}</p>
-          <p>E-mail: {{user_info.email}}</p>
-          <router-link class="button is-dark" to="/ChangePassword">Endre passord</router-link>
+    <div class="columns is-centered is-6">
+      <div class="is-parent column is-vertical is-6">
+        <div class="is-child card notification is-info">
+          <div class="block">
+            <p>Fornavn: {{user_info.first_name}}</p>
+            <p>Etternavn: {{user_info.last_name}}</p>
+            <p>E-mail: {{user_info.email}}</p>
+            <router-link class="button is-info is-inverted" to="/ChangePassword">Endre passord</router-link>
+          </div>
         </div>
-      </div>
-      <div class="is-child tile notification is-info">
-        <div>
-          <h2 class="subtitle">Du er medlem av følgende kollektiv og grupper:</h2>
-          <div class="content">
-            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-              <thead>
-              <th>Oversikt</th>
-              <th></th>
-              <th></th>
-              </thead>
-              <tr v-for="group in groups">
-                <td>{{ group.navn }}</td>
-                <td>
-                  <button class="button is-link is-small is-hidden-desktop" @click="showMembers(group)">Vis medlemmer</button>
-                  <button class="button is-link is-hidden-mobile" @click="showMembers(group)">Vis medlemmer</button>
-                </td>
-                <td>
-                  <button class="button is-link is-hidden-mobile" v-if="!group.default_gruppe" @click=" leaveSubGroup(group.undergruppe_id)">Forlat gruppe</button>
-                  <button class="button is-link is-small is-hidden-desktop" v-if="!group.default_gruppe" @click="leaveSubGroup(group.undergruppe_id)">Forlat gruppe</button>
-                </td>
-              </tr>
-            </table>
+        <div class="is-child card notification is-info">
+          <div>
+            <h2 class="subtitle">Du er medlem av følgende kollektiv og grupper:</h2>
+            <div class="content">
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
+                <th>Oversikt</th>
+                <th></th>
+                <th></th>
+                </thead>
+                <tr v-for="group in groups">
+                  <td>{{ group.navn }}</td>
+                  <td>
+                    <button class="button is-link is-small is-hidden-desktop" @click="showMembers(group)">Vis medlemmer</button>
+                    <button class="button is-link is-hidden-mobile" @click="showMembers(group)">Vis medlemmer</button>
+                  </td>
+                  <td>
+                    <button class="button is-link is-hidden-mobile" v-if="!group.default_gruppe" @click=" leaveSubGroup(group.undergruppe_id)">Forlat gruppe</button>
+                    <button class="button is-link is-small is-hidden-desktop" v-if="!group.default_gruppe" @click="leaveSubGroup(group.undergruppe_id)">Forlat gruppe</button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <router-link class="button is-link is-inverted" to="/Innmelding">Administrere grupper/kollektiver</router-link>
           </div>
         </div>
       </div>
