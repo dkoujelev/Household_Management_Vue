@@ -24,9 +24,12 @@ import Grupper from '@/components/Grupper'
 import UserInfo from '@/components/UserInfo'
 import ShowAccounting from '@/components/ShowAccounting.vue'
 import GjeldUtSpesifisert from '@/components/Gjeld/GjeldUtSpesifisert.vue'
+import TodoListOverview from '@/components/TODO/TodoListOverview'
+import TodoListOverview2 from '@/components/TODO/TodoListOverview2'
 import MyTestPanel from '@/components/MyTestPanel.vue'
 import ItemChart from '@/components/Charts/ItemChart'
 import ForgottenPassword from '@/components/ForgottenPassword'
+
 
 Vue.use(Router);
 
@@ -159,6 +162,16 @@ export default new Router({
         component: GjeldUtSpesifisert
       },
       {
+        path: '/TodoListOverview',
+        name: 'TodoListOverview',
+        component: TodoListOverview
+      },
+      {
+        path: '/TodoListOverview2/:undergruppe_id',
+        name: 'TodoListOverview2',
+        component: TodoListOverview2
+      },
+      {
         path: '/MyTestPanel',
         name: 'MyTestPanel',
         component: MyTestPanel
@@ -174,5 +187,4 @@ export default new Router({
         component: ForgottenPassword
       },
     ]
-  }
-)
+  })
