@@ -28,163 +28,169 @@ import TodoListOverview from '@/components/TODO/TodoListOverview'
 import TodoListOverview2 from '@/components/TODO/TodoListOverview2'
 import MyTestPanel from '@/components/MyTestPanel.vue'
 import ItemChart from '@/components/Charts/ItemChart'
+import GjeldChart from '@/components/Charts/GjeldChart'
 import ForgottenPassword from '@/components/ForgottenPassword'
 
 
 Vue.use(Router);
 
 export default new Router({
-    routes: [
-      {
-        path: '/',
-        name: 'Root',
-        component: Login
-      },
-      {
-        path: '/home',
-        name: 'Hjem',
-        component: Home
-      },
-      {
-        path: '/Login',
-        name: 'Login',
-        component: Login
-      },
-      {
-        path: '/Register',
-        name: 'Register',
-        component: Register
-      },
-      {
-        path: '/Task',
-        name: 'Task',
-        component: Task
-      },
-      {
-        path: '/SeeAccounting',
-        name: 'SeeAccounting',
-        component: SeeAccounting
-      },
-      {
-        path: '/AddCostRegister',
-        name: 'AddCostRegister',
-        component: AddCostRegister
-      },
-      {
-        path: '/Nyhetsfeed',
-        name: 'Nyhetsfeed',
-        component: Nyhetsfeed
-      },
-      {
-        path: '/Shoppinglists',
-        name: 'Shoppinglists',
-        component: Shoppinglists
-      },
-      {
-        path: '/Addnews',
-        name: 'Addnews',
-        component: Addnews
-      },
-      {
-        path: '/AddExpence',
-        name: 'AddExpence',
-        component: AddExpence
-      },
-      {
-        path: '/ShowExpences',
-        name: 'ShowExpences',
-        component: ShowExpences
-      },
-      {
-        path: '/ShoppingList',
-        name: 'ShoppingList',
-        component: ShoppingList
-      },
-      {
-        path: '/TodoList',
-        name: 'TodoList',
-        component: TodoList
-      },
-      {
-        path: '/ViewShoppingList/:shoppinglist_id',
-        name: 'ViewShoppingList',
-        component: ViewShoppingList
-      },
-      {
-        path: '/GjeldInn',
-        name: 'GjeldInn',
-        component: GjeldInn
-      },
-      {
-        path: '/GjeldUt',
-        name: 'GjeldUt',
-        component: GjeldUt
-      },
-      {
-        path: '/GjeldInnSpesifisert/:bruker_skylder_id',
-        name: 'GjeldInnSpesifisert',
-        component: GjeldInnSpesifisert
-      },
-      {
-        path: '/Innmelding',
-        name: 'Innmelding',
-        component: Innmelding
-      },
-      {
-        path: '/Grupper',
-        name: 'Grupper',
-        component: Grupper,
-        props: true
-      },
-      {
-        path: '/NewUser',
-        name: 'NewUser',
-        component: NewUser
-      },
-      {
-        path: '/ChangePassword',
-        name: 'ChangePassword',
-        component: ChangePassword
-      },
-      {
-        path: '/UserInfo',
-        name: 'UserInfo',
-        component: UserInfo
-      },
-      {
-        path: '/ShowAccounting',
-        name: 'ShowAccounting',
-        component: ShowAccounting
-      },
-      {
-        path: '/GjeldUtSpesifisert/:bruker_skylder_id',
-        name: 'GjeldUtSpesifisert',
-        component: GjeldUtSpesifisert
-      },
-      {
-        path: '/TodoListOverview',
-        name: 'TodoListOverview',
-        component: TodoListOverview
-      },
-      {
-        path: '/TodoListOverview2/:undergruppe_id',
-        name: 'TodoListOverview2',
-        component: TodoListOverview2
-      },
-      {
-        path: '/MyTestPanel',
-        name: 'MyTestPanel',
-        component: MyTestPanel
-      },
-      {
-        path: '/ItemChart',
-        name: 'ItemChart',
-        component: ItemChart
-      },
-      {
-        path: '/ForgottenPassword',
-        name: 'ForgottenPassword',
-        component: ForgottenPassword
-      },
-    ]
-  })
+  routes: [
+    {
+      path: '/',
+      name: 'Root',
+      component: Login
+    },
+    {
+      path: '/home',
+      name: 'Hjem',
+      component: Home
+    },
+    {
+      path: '/Login',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/Register',
+      name: 'Register',
+      component: Register
+    },
+    {
+      path: '/Task',
+      name: 'Task',
+      component: Task
+    },
+    {
+      path: '/SeeAccounting',
+      name: 'SeeAccounting',
+      component: SeeAccounting
+    },
+    {
+      path: '/AddCostRegister',
+      name: 'AddCostRegister',
+      component: AddCostRegister
+    },
+    {
+      path: '/Nyhetsfeed',
+      name: 'Nyhetsfeed',
+      component: Nyhetsfeed
+    },
+    {
+      path: '/Shoppinglists',
+      name: 'Shoppinglists',
+      component: Shoppinglists
+    },
+    {
+      path: '/Addnews',
+      name: 'Addnews',
+      component: Addnews
+    },
+    {
+      path: '/AddExpence',
+      name: 'AddExpence',
+      component: AddExpence
+    },
+    {
+      path: '/ShowExpences',
+      name: 'ShowExpences',
+      component: ShowExpences
+    },
+    {
+      path: '/ShoppingList',
+      name: 'ShoppingList',
+      component: ShoppingList
+    },
+    {
+      path: '/TodoList',
+      name: 'TodoList',
+      component: TodoList
+    },
+    {
+      path: '/ViewShoppingList/:shoppinglist_id',
+      name: 'ViewShoppingList',
+      component: ViewShoppingList
+    },
+    {
+      path: '/GjeldInn',
+      name: 'GjeldInn',
+      component: GjeldInn
+    },
+    {
+      path: '/GjeldUt',
+      name: 'GjeldUt',
+      component: GjeldUt
+    },
+    {
+      path: '/GjeldInnSpesifisert/:bruker_skylder_id',
+      name: 'GjeldInnSpesifisert',
+      component: GjeldInnSpesifisert
+    },
+    {
+      path: '/Innmelding',
+      name: 'Innmelding',
+      component: Innmelding
+    },
+    {
+      path: '/Grupper',
+      name: 'Grupper',
+      component: Grupper,
+      props: true
+    },
+    {
+      path: '/NewUser',
+      name: 'NewUser',
+      component: NewUser
+    },
+    {
+      path: '/ChangePassword',
+      name: 'ChangePassword',
+      component: ChangePassword
+    },
+    {
+      path: '/UserInfo',
+      name: 'UserInfo',
+      component: UserInfo
+    },
+    {
+      path: '/ShowAccounting',
+      name: 'ShowAccounting',
+      component: ShowAccounting
+    },
+    {
+      path: '/GjeldUtSpesifisert/:bruker_skylder_id',
+      name: 'GjeldUtSpesifisert',
+      component: GjeldUtSpesifisert
+    },
+    {
+      path: '/TodoListOverview',
+      name: 'TodoListOverview',
+      component: TodoListOverview
+    },
+    {
+      path: '/TodoListOverview2/:undergruppe_id',
+      name: 'TodoListOverview2',
+      component: TodoListOverview2
+    },
+    {
+      path: '/MyTestPanel',
+      name: 'MyTestPanel',
+      component: MyTestPanel
+    },
+    {
+      path: '/ItemChart',
+      name: 'ItemChart',
+      component: ItemChart
+    },
+    {
+      path: '/ForgottenPassword',
+      name: 'ForgottenPassword',
+      component: ForgottenPassword
+    },
+    {
+      path: '/GjeldChart',
+      name: 'GjeldChart',
+      component: GjeldChart
+    },
+  ]
+})
