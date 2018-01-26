@@ -26,9 +26,15 @@
                     <td>{{row.beskrivelse}}</td>
                     <td>{{row.frist}}</td>
                     <td>
-                      <label class="checkbox">
-                        <input type="checkbox" v-if="completeTodo">
+                      <label class="checkboxContainer" @click="completeTodo" >
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
                       </label>
+                    <td>
+                      <button class="button is-danger" @click="deleteItem(row)">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                      </button>
+
                     </td>
                   </tr>
                   </tbody>
@@ -70,15 +76,35 @@
       methods: {
 
 
-        deleteTodo(row){
-          let id = row.bruker_id; //eller undergruppe_id ? //+ id
-          axios.delete('http://localhost:9000/rest/gjoremal/2' ).then(response => {
-            this.rows = [];
-            this.fillRows();
+        deleteItem(row){ // + row.item_id
+          axios.delete('http://localhost:9000/rest/gjoremal/1' ).then(response => {
+            this.$emit('ItemRemoved');
+            let rows = this.rows;
+            for(let i = 0; i < rows.length; i++){
+              if(rows[i] === row){
+                this.rows.splice(i, 1);
+                break;
+              }
+            }
           });
         },
 
-        /*
+
+        completeTodo(){
+          //this.closeModal();
+          let obj = {
+            //gjoremal_id:
+            ferdig: new Date().getTime() //this.listId,
+          }; //  + this.listId
+          axios.put('http://localhost:9000/rest/gjoremal/' + this.listId, obj).then(response => {
+            this.$emit('listCompleted', obj);
+            this.rows = [];
+            this.fillRows();
+            //this.rows.push(obj)
+          });
+        },
+
+      /*
         completeList(){
           this.closeShoppingList();
           let obj = {
@@ -92,16 +118,7 @@
           });
         },
        */
-        completeTodo(){
-          this.confirmTodo();
-          let obj = {
-            ferdig: new Date().getTime() //this.listId,
-          };
-          axios.put('localhost:9000/rest/gjoremal/' + this.listId + obj).then(response => {
-            this.$emit('saveChanges', obj);
-            this.rows.push({ferdig })
-          });
-        },
+
 
 /*
         checked(){
@@ -136,7 +153,7 @@
         },
 
         fillRows() { // this.id = bjarne props.. hard koder med 1 istedet for this.id så får en ut lister
-              axios.get('http://localhost:9000/rest/gjoremaler/1').then(response => {
+              axios.get('http://localhost:9000/rest/gjoremaler/2').then(response => {
                 //alert('Alle lister til bruker hentet');
                 let resRows = response.data;
                 console.log(resRows);

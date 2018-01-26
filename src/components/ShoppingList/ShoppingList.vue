@@ -5,7 +5,7 @@
         <h3>Lag din handleliste</h3>
       </div>
       <div class="tile is-child box is-6" style="background-color: lightskyblue">
-        <label class="label">Navn å handleliste</label>
+        <label class="label">Navn på handleliste</label>
         <p class="help is-danger">{{this.errorMessages.overskrift}}</p>
         <div class="control">
           <input class="input" type="text" placeholder="Navn på handleliste" v-model="name">

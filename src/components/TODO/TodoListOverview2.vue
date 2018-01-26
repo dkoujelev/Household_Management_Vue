@@ -13,7 +13,6 @@
           <thead>
           <tr>
             <th>Tittel</th>
-            <th>Gruppenavn</th>
             <th>Status</th>
             <th>Dato</th>
             <th></th>
@@ -23,17 +22,11 @@
           <tr v-for="row in rows">
             <td> <a @click="openTodo(row)"> {{row.tittel}} </a> </td> <!--  -->
             <td>Kommer</td>
-            <td>Kommer</td>
             <td>{{row.dato}}</td>
-            <td class="is-icon">
-              <a href="#">
-                <i class="fa fa-twitter"></i>
-              </a>
-            </td>
-            <td class="is-icon">
-              <a href="#">
-                <i class="fa fa-instagram"></i>
-              </a>
+            <td>
+              <button class="button is-danger" @click="deleteList">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+              </button>
             </td>
           </tr>
           </tbody>
@@ -73,6 +66,12 @@
         return{
           id: 1,
           rows: [],
+          addItem: false,
+          newItem: {
+            name: '',
+            count: 1,
+          },
+          completeTodo: false,
           showModal: false,
           tittel: 'Dette er en tittel'
         };
@@ -85,22 +84,34 @@
 
       methods: {
 
-        completeTodo(){
-          this.$emit('confirmTodo');
+        hide(){
+          this.addItem = false;
+          this.newItem.name = '';
+          this.newItem.count = 1;
         },
-
 
         openTodo(row) {
           this.id = row.id;
           this.showModal = true;
           //console.log("click");
+
         },
 
         closeModal(){
           this.showModal = false;
         },
 
-          fillRows() {
+
+        deleteList(){ //+ this.listId
+          axios.delete('http://localhost:9000/rest/gjoremalslisterUndergruppe/1' ).then(response => {
+            this.$emit('deleteTodoList');
+            this.hide();
+          });
+        },
+
+
+
+        fillRows() {
             //+ store.state.current_user.bruker_id
             axios.get('http://localhost:9000/rest/gjoremalslisterUndergruppe/1' ).then(response => {
               //alert('Alle lister til bruker hentet');
