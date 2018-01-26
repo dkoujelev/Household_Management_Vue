@@ -26,6 +26,9 @@ import ShowAccounting from '@/components/ShowAccounting.vue'
 import GjeldUtSpesifisert from '@/components/Gjeld/GjeldUtSpesifisert.vue'
 import TodoListOverview from '@/components/TODO/TodoListOverview'
 import TodoListOverview2 from '@/components/TODO/TodoListOverview2'
+import MyTestPanel from '@/components/MyTestPanel.vue'
+import ItemChart from '@/components/Charts/ItemChart'
+
 
 Vue.use(Router);
 
@@ -167,6 +170,15 @@ export default new Router({
         name: 'TodoListOverview2',
         component: TodoListOverview2
       },
+        path: '/MyTestPanel',
+        name: 'MyTestPanel',
+        component: MyTestPanel
+      },
+      {
+        path: '/ItemChart',
+        name: 'ItemChart',
+        component: ItemChart
+      }
     ]
   }
 )

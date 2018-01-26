@@ -1,26 +1,27 @@
 <template>
-  <div class="tile is-vertical">
+  <div class="container">
     <div class="tile is-ancestor">
-      <div class=" tile is-parent">
-        <div class="tile is-child box" style="background-color: white">
-          <Newsfeed :value="5"></Newsfeed>
-        </div>
-      </div>
-    </div>
-    <div class="tile is-ancestor">
-      <div class="tile is-parent">
-        <div class="tile is-child box is-half" style="background-color: lightskyblue">
-          <Shoppinglists :value="5"></Shoppinglists>
-        </div>
+      <div class="tile is-vertical is-8">
+          <div class="tile is-parent is-vertical">
+            <article class="tile is-child">
+
+                <Newsfeed :value="5"></Newsfeed>
+                <!-- Content -->
+            </article>
+          </div>
       </div>
 
-      <div class="tile is-parent">
-        <div class="tile is-child box is-half" style="background-color: lightskyblue">
+      <div class="tile is-parent is-vertical">
+        <article class="tile is-child  is-success is-fixed">
           <Shoppinglists :value="5"></Shoppinglists>
-        </div>
+        </article>
+        <article class="tile is-child is-success is-fixed">
+          <Shoppinglists :value="5"></Shoppinglists>
+        </article>
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
