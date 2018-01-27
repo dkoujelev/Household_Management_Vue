@@ -190,6 +190,8 @@
             groupMembers:[],
             showingMembers: false,
 
+            updated: false,
+
             showCreateMainGroupSection: true,
             showCreateSubGroupSection: false,
             showJoinSection: true,
@@ -243,6 +245,9 @@
             options_epic:[],
             options_usersgroups: ''
       }
+    },
+    watch(){
+      this.updated;
     },
     created: function() {
         this.getGroupsWhereAdminFor(this.current_user.bruker_id);
@@ -483,6 +488,8 @@
             //notat_bruker: ''
         }).then(response => {
             console.log(response);
+            store.state.updateGroups = !store.state.updateGroups;
+            this.updated = !this.updated;
             //TODO: Hide the button / entire line / just add status green tick?
         }).catch(err => {
               console.log(err);
@@ -498,6 +505,8 @@
             }).then(response => {
                 console.log(response);
                 this.createMainResult="Du har opprettet et kollektiv!";
+                store.state.updateGroups = !store.state.updateGroups;
+                this.updated = !this.updated;
                 //TODO: Hide the button / entire line / just add status green tick?
             }).catch(err => {
                 this.createMainResult="Noe gikk galt!";
@@ -515,7 +524,9 @@
         default_gruppe: 0
       }).then(response => {
         console.log(response);
-      this.createSubResult="Du har opprettet en gruppe!";
+        this.createSubResult="Du har opprettet en gruppe!";
+        store.state.updateGroups = !store.state.updateGroups;
+        this.updated = !this.updated;
       //TODO: Hide the button / entire line / just add status green tick?
     }).catch(err => {
         this.createSubResult="Noe gikk galt!";
@@ -545,6 +556,8 @@
                         }).then(response => {
                             console.log(response);
                             this.joinResult="Du har søkt om medlemskap!";
+                            store.state.updateGroups = !store.state.updateGroups;
+                            this.updated = !this.updated;
                             //TODO: Hide the button / entire line / just add status green tick?
                         }).catch(err => {
                             this.joinResult="Noe gikk galt!";
@@ -565,6 +578,8 @@
            }).then(response => {
                // Report back to GUI
                this.leaveJoinSubResult = 'Innmelding OK!';
+                store.state.updateGroups = !store.state.updateGroups;
+                 this.updated = !this.updated;
            }).catch(err => {
                console.log(err);
                this.leaveJoinSubResult = 'Innmelding IKKE OK!';
@@ -578,6 +593,8 @@
            }).then(response => {
                // Report back to GUI
                this.leaveJoinSubResult = 'Fjerning OK!';
+                store.state.updateGroups = !store.state.updateGroups;
+                this.updated = !this.updated;
            }).catch(err => {
                console.log(err);
                this.leaveJoinSubResult = 'Fjerning IKKE OK!';
