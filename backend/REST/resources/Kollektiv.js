@@ -90,12 +90,14 @@ module.exports = function(connection, server){
   server.post('/rest/meldBrukerInnIKollektiv/', (req,res,next) => {
     //console.log('DEBUG - rest/meldBrukerInnIKollektiv');
     connection.query('INSERT INTO Bruker_Kollektiv SET ?', [req.body], (err,rows,fields) => {
-
-      if(err)
-        return next(err);
-
-      res.send(rows);
-      return next();
+      if(err){
+          console.log('SQL Error:   ' + err.code + ': ' + err.sqlMessage);
+          console.log('SQL query:   ' + err.sql);
+      }else{
+        //console.log(rows[0]);
+        res.send(rows);
+        return next();
+      };
     });
   });
 

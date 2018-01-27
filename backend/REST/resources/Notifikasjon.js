@@ -15,18 +15,58 @@ module.exports = function(connection, server) {
     server.get('rest/notifikasjon/:id', function (req, res, next) {
         //console.log('   DEBUG - GET - rest/notifikasjon/:id');
         connection.query("SELECT * FROM Notifikasjon WHERE id=?", req.params.id, function (err, rows, fields) {
-          res.send(err ? err : rows);
-          return next();
+        //   res.send(err ? err : rows);
+        //   return next();
+            if(err){
+                console.log(err);
+                return next(err);
+            }else{
+                res.send(rows);
+                return next();
+            };
           });
         });
 
     // Hent alle notifications for bruker
     server.get('rest/notifikasjon/:bruker_id/alle', function (req, res, next) {
-        //console.log('   DEBUG - GET - rest/notifikasjon/:bruker_id');
-        connection.query("SELECT * FROM Notifikasjon WHERE bruker_id=?", req.params.bruker_id, function (err, rows, fields) {
-          res.send(err ? err : rows);
-          return next();
-          });
+
+        connection.query("SELECT * FROM Notifikasjon", function (err, rows, fields) {
+            if(err){
+                console.log(err);
+                return next(err);
+            }else{
+                res.send(rows);
+                return next();
+            };
+        });
+
+        // console.log('   DEBUG - GET - rest/notifikasjon/:bruker_id/alle');
+        // console.log('For user ' + req.params.bruker_id);
+        // //connection.query("SELECT * FROM Notifikasjon WHERE bruker_id=?", req.params.bruker_id, function (err, rows, fields) {
+        // connection.query("SELECT * FROM Notifikasjon", function (err, rows, fields) {
+        // //   res.send(err ? err : rows);
+        // //   return next();
+
+        // // SELECT * FROM Notifikasjon WHERE bruker_id=2
+            
+        //     if(err){
+        //         console.log(err);
+        //         return next(err);
+        //     }else{
+        //         console.log('Hits: ' + rows.length);
+        //         let newRows=[];
+        //         for(i=0;i<rows.length;i++){
+        //             console.log('[[' + rows[0] + ']]')
+        //             if(rows[i].bruker_id==req.params.bruker_id){
+        //                 newRows.push(rows[i]);
+        //             }
+        //         }
+        //         //console.log(rows);
+        //         //res.send(rows);
+        //         res.send(newRows);
+        //         return next();
+        //     };
+        //   });
         });
 
     // Hent uleste notifications for bruker
@@ -87,6 +127,19 @@ module.exports = function(connection, server) {
     server.put('rest/notifikasjon/:bruker_id/lesalle', function (req, res, next) {
         //console.log('   DEBUG - PUT - rest/notifikasjon/:id/lesalle');
         connection.query("UPDATE Notifikasjon SET lest=1 WHERE lest=0 AND bruker_id=?", req.body.bruker_id, function (err, rows, fields) {
+            if(err){
+                console.log(err);
+                return next(err);
+            }else{
+                res.send(rows);
+                return next();
+            };
+        });
+     });
+
+
+    server.get('rest/notifikasjondump/', function (req, res, next) {
+        connection.query("SELECT * FROM Notifikasjon", function (err, rows, fields) {
             if(err){
                 console.log(err);
                 return next(err);
