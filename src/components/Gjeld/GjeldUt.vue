@@ -11,7 +11,7 @@
 
 
             <div class="block_1"></div> <hr/>
-            <p class="subtitle"> Kredit - Gjeld ut total: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: #FF7F50; font-weight: bold"> {{totalDebt}} kr </span></p>
+            <p class="subtitle"> Kredit - Gjeld ut total: &nbsp&nbsp<span class="p" style="font-size: 20px; color: #FF7F50; font-weight: bold"> {{totalDebt}} kr </span></p>
             <div class="block_1"></div> <hr/>
 
             <div class="is-child">
@@ -29,7 +29,7 @@
                     <tr v-for="user in users" @click="selectUser(user)">
                       <td data-label="Navn">  {{user.fornavn}}  {{user.etternavn}}  </td>
                       <td data-label="Sum">  {{user.sum + " kr" }}  </td>
-                      <td data-label="Vis"> <button> Vis person </button></td>
+                      <td data-label="Vis"> <button class="button" style="background-color: hsl(217, 71%, 53%); color: white"> Vis person </button></td>
                     </tr>
                     </tbody>
                   </table>

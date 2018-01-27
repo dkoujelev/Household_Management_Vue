@@ -7,10 +7,8 @@
             <div class="is-parent">
               <p class="title"> Debet - Gjeld inn</p>
               <p class="subtitle"> Skyld andre medlemmer har til meg </p>
-              <br>
-
               <div class="block_1"></div> <hr/>
-              <p class="subtitle"> Debet - Gjeld inn: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> {{totalDebt}} kr </span></p>
+              <p class="subtitle"> Debet - Gjeld inn: &nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> {{totalDebt}} kr </span></p>
               <div class="block_1"></div> <hr/>
 
               <div class="is-child">
@@ -29,7 +27,7 @@
                       <tr v-for="user in users" @click="selectUser(user)">
                         <td data-label="Navn">  {{user.fornavn}}  {{user.etternavn}}  </td>
                         <td data-label="Sum">  {{user.sum + " kr" }}  </td>
-                        <td data-label="Vis"> <button> Vis person </button></td>
+                        <td data-label="Vis"> <button class="button" style="background-color: hsl(217, 71%, 53%); color: white"> Vis person </button></td>
                       </tr>
                       </tbody>
                     </table>
@@ -40,10 +38,7 @@
                 </div>
               </div>
             <br>
-            <br>
-            <br>
-
-            <router-link class="button" to="./AddExpence"> Legg til utgift for gruppe </router-link>
+            <p> Legg til ny utgift for valgt gruppe:  {{}} <span>  <router-link class="button" to="./AddExpence"> Legg til utgift </router-link> </span> </p>
             </div>
             <br>
             <br>

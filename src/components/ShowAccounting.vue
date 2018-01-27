@@ -6,14 +6,11 @@
           <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)	 ">
             <p class="title">Regnskap</p>
             <p class="subtitle"> Min personlige økonomiske ballanse: </p>
-            <div class="is-parent is-centered is-12">
-
+            <div class="is-parent is-12">
               <div class="tile is-child is-6 is-centered">
-                <div class="block">
-
+                <div class="block is-centered">
                   <br>
                   <br>
-
                   <p class="subtitle"> Debet - Gjeld inn: &nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> 941 kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldInn">Administrer </router-link> </span>  </p>
                   <p class="subtitle"> Kredit - Gjeld ut: &nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: #ff9980; font-weight: bold"> 441 kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldUt">Administrer </router-link> </span> </p>
                   <div class="block_1"></div> <hr/>
@@ -21,11 +18,8 @@
                   <div class="block_1"></div> <hr/>
                   <br>
                   <br>
-
                 </div>
-
               </div>
-
             </div>
             <br>
             <br>
