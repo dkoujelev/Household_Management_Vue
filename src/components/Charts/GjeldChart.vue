@@ -1,7 +1,5 @@
 <template>
-
-
-        <div class="is-ancestor" >
+        <div class="is-ancestor">
           <div class="is-parent">
             <div class="is-child">
               <div class="title" style="color:white">Brukere som har mest gjeld i kollektivet</div>
@@ -12,8 +10,6 @@
             </div>
           </div>
         </div>
-
-
 </template>
 
 <script>

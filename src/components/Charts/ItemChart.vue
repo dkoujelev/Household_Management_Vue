@@ -3,7 +3,7 @@
 
         <div class="is-ancestor">
           <div class="is-parent">
-            <div class="is-child">
+            <div class="is-child" >
               <div class="title" style="color:white">Oftest kjøpte varer i valgt tidsperiode</div>
               <div class="field-body">
                 <div class="field"><label style="color:white">Fra dato: </label><flat-pickr :options="{dateFormat:'dd.mm.YYYY'}" v-model="from"></flat-pickr></div>

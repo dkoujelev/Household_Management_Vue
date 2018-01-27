@@ -1,63 +1,59 @@
 <template>
-  <div>
-  <div class="column">
-  <div class="columns is-one-quarter">
-    <div class="column is-half">
-  <div class="table is-striped">
-    <section class="panel">
-      <p class="panel-heading">
-        Gjøremålliste for: {{$store.state.current_group.navn}}
-      </p>
-      <div class="panel-block">
-        <table class="table">
-          <thead>
-          <tr>
-            <th>Tittel</th>
-            <th>Status</th>
-            <th>Dato</th>
-            <th></th>
-          </tr>
-          </thead>
-          <tbody>
-          <ConfirmModal :modalVisible.sync="showConfirmModal" :rowData.sync="list" :message="confirmText" @cancel="showConfirmModal = false" @confirm="deleteList"/>
-          <tr v-for="row in rows">
-            <td> <a @click="openTodo(row)"> {{row.tittel}} </a> </td> <!--  -->
-            <td>Kommer</td>
-            <td>{{row.dato}}</td>
-            <td>
-              <button class="button is-danger" @click="confirmDelete(row)">
-                <i class="fa fa-trash-o" aria-hidden="true"></i>
-              </button>
-            </td>
-          </tr>
-          <div>
-            <button class="button is-success" @click="helpModalOpen" id="opprett">Opprett gjøremål</button>
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="card is-rounded is-centered">
+          <div class="is-ancestor box" style="background-color: hsl(217, 71%, 53%)">
+            <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
+              <h2 slot="title">Gjøremål </h2>
+              <div slot="content">
+                <ViewTodoList :my_id.sync="todoId"/>
+              </div>
+            </Modal>
+
+            <Modal :modalVisible.sync="showAddNewTodoList" @modalClosing="closeModal" @modalOpen="helpModalOpen">
+              <h2 slot="title">Gjøremål </h2>
+              <div slot="content">
+                <addTodoList/>
+              </div>
+            </Modal>
+            <div class="is-parent">
+              <div class="is-child">
+                <h2 class="title" style="color:white">Gjøremålsliste for: {{$store.state.current_group.navn}}</h2>
+                <div class="container1">
+                  <table class="table">
+                    <thead>
+                    <tr>
+                      <th>Tittel</th>
+                      <th>Status</th>
+                      <th>Dato</th>
+                      <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ConfirmModal :modalVisible.sync="showConfirmModal" :rowData.sync="list" :message="confirmText" @cancel="showConfirmModal = false" @confirm="deleteList"/>
+                    <tr v-for="row in rows">
+                      <td> <a @click="openTodo(row)"> {{row.tittel}} </a> </td> <!--  -->
+                      <td>Kommer</td>
+                      <td>{{row.dato}}</td>
+                      <td>
+                        <button class="button is-danger" @click="confirmDelete(row)">
+                          <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div>
+                  <button class="button" style="background-color: orange" @click="helpModalOpen" id="opprett">Opprett gjøremål</button>
+                </div>
+              </div>
+            </div>
           </div>
-          </tbody>
-        </table>
-      </div>
-    </section>
-  </div>
-
-      <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
-        <h2 slot="title">Gjøremål </h2>
-        <div slot="content">
-          <ViewTodoList :my_id.sync="todoId"/>
         </div>
-      </Modal>
-
-      <Modal :modalVisible.sync="showAddNewTodoList" @modalClosing="closeModal" @modalOpen="helpModalOpen">
-      <h2 slot="title">Gjøremål </h2>
-      <div slot="content">
-        <addTodoList/>
       </div>
-      </Modal>
-
-
-  </div>
-  </div>
-  </div>
-
+    </div>
   </div>
 </template>
 
@@ -156,6 +152,10 @@
 
 div.panel-block{
 
+}
+div.content1 {
+  height: 450px;
+  overflow: auto;
 }
 
 
