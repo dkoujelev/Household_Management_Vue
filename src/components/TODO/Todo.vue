@@ -113,7 +113,7 @@
 
 </script>
 
-<style>
+<style scoped>
 
 .content{
   padding-top: 10px;
