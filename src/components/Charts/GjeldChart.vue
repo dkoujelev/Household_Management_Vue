@@ -4,8 +4,7 @@
         <div class="is-ancestor" >
           <div class="is-parent">
             <div class="is-child">
-              <div class="title" style="color:white">Statistikk</div>
-              <p style="color:white">Brukere som har mest gjeld i kollektivet:</p>
+              <div class="title" style="color:white">Brukere som har mest gjeld i kollektivet</div>
               <div class="content1">
                 <ChartPie style="background-color: white" :data='chartData'></ChartPie>
                 <!--<a class="button" @click="goBack">Tilbake</a>-->
