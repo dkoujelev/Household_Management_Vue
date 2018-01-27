@@ -54,7 +54,7 @@
     </div>
     <Modal :modalVisible.sync="showingShoppingList" @modalClosing="showingShoppingList=false;">
       <h2 slot="title" style="color:white">{{currentList_name}}</h2>
-      <ViewShoppingList :id.sync="currentList_id" slot="content" @closingShoppingList="showingShoppingList=false;"/>
+      <ViewShoppingList :readOnly="true" :id.sync="currentList_id" slot="content" @closingShoppingList="showingShoppingList=false;"/>
     </Modal>
   </div>
 </template>

@@ -52,7 +52,7 @@
     </div>
     <Modal :modalVisible.sync="showingShoppingList" @modalClosing="showingShoppingList=false;">
       <h2 slot="title" style="color:white">{{currentList_name}}</h2>
-      <ViewShoppingList :id.sync="currentList_id" slot="content" @closingShoppingList="showingShoppingList=false;"/>
+      <ViewShoppingList :readOnly="true" :id.sync="currentList_id" slot="content" @closingShoppingList="showingShoppingList=false;"/>
     </Modal>
   </div>
 </template>
@@ -166,9 +166,6 @@
       };
     },
     methods:{
-      showShoppingList(debt){
-        router.push('/ViewShoppingList/' + debt.handleliste_id);
-      },
       formatDate(raw){
         return raw.substring(8, 10) + "." + raw.substring(5, 7) + "." + raw.substring(0,4);
       },
