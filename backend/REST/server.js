@@ -2,6 +2,7 @@ let restify = require("restify");
 let CookieParser = require('restify-cookies');
 let auth = require('./auth');
 let mysql = require('mysql');
+let serverConfig = require('./serverConfig');
 
 let server = restify.createServer();
 server.use(CookieParser.parse);
@@ -26,6 +27,10 @@ server.use(restify.plugins.bodyParser({
 
 server.use((req, res, next) => {
     //console.log("creating connection");
+
+    if(!serverConfig.loginEnabled)
+      return next();
+
     let approved = ['/rest/login','/rest/loggedIn','/rest/logout','/rest/forgottenPassword'];
     let is_posting_new_user = (req.getRoute().method == 'POST' && req.getPath().startsWith('/rest/bruker'));
     let brukerepost = req.getPath().startsWith('/rest/brukerepost/');
