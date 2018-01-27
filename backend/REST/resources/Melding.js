@@ -1,4 +1,5 @@
 let util = require('../util');
+let auth = require('../auth');
 
 module.exports = function(connection, server){
 
@@ -18,6 +19,12 @@ module.exports = function(connection, server){
 
 // Sende melding til bruker eller kollektiv
   server.post('rest/melding',function(req,res,next){
+
+
+    if(!auth.checkThatSessionHasUserId(req,res,req.body.skrevet_av_bruker))
+      return next();
+
+
     req.body.sendt = util.getCurrentTimeAsEpoch();
     connection.query("INSERT INTO Melding SET ?", [req.body], function(err, rows, fields){
       if(err){
@@ -126,7 +133,7 @@ module.exports = function(connection, server){
 
   // Slett en melding
   server.del('rest/melding/:melding_id', (req,res,next) => {
-    connection.query('DELETE FROM Melding WHERE melding_id=? ORDER BY sendt DESC', [req.params.melding_id], (err,rows,fields) => {
+    connection.query('DELETE FROM Melding WHERE melding_id=?', [req.params.melding_id], (err,rows,fields) => {
       if(err)
         return next(err);
 
@@ -135,6 +142,7 @@ module.exports = function(connection, server){
     });
   });
 
-  // Oppdatere melding - TRENGER IKKE
+  // Oppdatere melding
+  // Trengs ikke
 
 };

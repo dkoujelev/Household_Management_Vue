@@ -1,10 +1,9 @@
 <template>
-  <section class="hero is-fullheight is-medium is-bold">
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
           <article class="card is-rounded is-centered">
-            <div class="card-content">
+            <div class="card-content" style="background-color: hsl(217, 71%, 53%)">
               <img src="../img/logo_full.png" height="200" width="400"/>
               <p class="help is-danger">{{this.error}}</p>
               <p class="control has-icon">
@@ -20,19 +19,23 @@
                 </span>
               </p>
               <p class="control">
-                <button class="button is-link is-medium is-fullwidth" v-on:click="login">
+                <button class="button is-medium is-fullwidth" style="background-color: orange" v-on:click="login">
                   <i class="fa fa-user"></i>
                   &nbsp Login
                 </button>
               </p>
               <br/>
-              <router-link class="is-link" to="/Register">Registrer deg?</router-link>
+              <div class="field">
+                <router-link class="is-link" style="color:white" to="/Register">Registrer deg?</router-link>
+              </div>
+              <div class="field">
+                <router-link class="is-link" style="color:white" to="/ForgottenPassword">Glemt passord?</router-link>
+              </div>
             </div>
           </article>
         </div>
       </div>
     </div>
-  </section>
 </template>
 
 <script>
@@ -84,10 +87,11 @@
                 if(response.data.length > 0) {
                   store.commit('current_group', response.data[0]);
                 }
-                if (response.data.length === 0)
-                  router.push('NewUser');
-                else
-                  router.push('home');
+                if(!store.state.isMember){
+                  router.push('/NewUser');
+                } else{
+                  router.push('/Home');
+                }
               });
             }
           }).catch(err => {

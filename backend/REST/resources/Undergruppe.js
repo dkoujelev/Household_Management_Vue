@@ -49,10 +49,9 @@ module.exports = function(connection, server){
 
   // Hent alle medlemmer i en undergruppe
   server.get('rest/medlemmerIUndergruppe/:undergruppe_id', (req,res,next) => {
-    connection.query('SELECT Bruker.* FROM Undergruppe ' +
-      'INNER JOIN Bruker_Undergruppe ON Undergruppe.undergruppe_id=Bruker_Undergruppe.undergruppe_id ' +
+    connection.query('SELECT Bruker.* FROM Bruker_Undergruppe ' +
       'INNER JOIN Bruker ON Bruker_Undergruppe.bruker_id=Bruker.bruker_id ' +
-      'WHERE Undergruppe.undergruppe_id = ?', req.params.undergruppe_id, (err,rows,fields) => {
+      'WHERE undergruppe_id = ?', req.params.undergruppe_id, (err,rows,fields) => {
       if(err)
         return next(err);
 
@@ -151,6 +150,19 @@ module.exports = function(connection, server){
         res.send(err ? err : rows);
         return next();
       });
+    });
+  });
+
+  // Hent alle tilgjengelige undergrupper til alle kollektiv en gitt bruker er medlem av
+  server.get('/rest/tilgjengeligeundergrupperforbruker/:bruker_id', function (req, res, next) {
+    //console.log('DEBUG - rest/tilgjengeligeundergrupperforbruker/:bruker_id');
+    connection.query("SELECT Undergruppe.*, Bruker_Kollektiv.* FROM Undergruppe " +
+    "INNER JOIN Bruker_Kollektiv ON Undergruppe.kollektiv_id=Bruker_Kollektiv.kollektiv_id " +
+    "INNER JOIN Bruker ON Bruker_Kollektiv.bruker_id=Bruker.bruker_id " +
+    "WHERE Bruker.bruker_id=? AND Undergruppe.deleted=FALSE " +
+    "ORDER BY Undergruppe.kollektiv_id, Undergruppe.default_gruppe DESC;", req.params.bruker_id, function(err, rows, fields){
+      res.send(err ? err : rows);
+      return next();
     });
   });
 };

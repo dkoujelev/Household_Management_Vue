@@ -1,64 +1,56 @@
 <template>
-  <div class="is-ancestor">
-    <div class="is-parent">
-      <div class="tile is-child box is-6" style="background-color: lightskyblue">
-        <h3>Lag din handleliste</h3>
-      </div>
-      <div class="tile is-child box is-6" style="background-color: lightskyblue">
-        <label class="label">Frist</label>
-        <flat-pickr v-model="date" :config="settings"></flat-pickr>
-        <label class="label">Navn å handleliste</label>
+  <div class="tile is-ancestor">
+    <div class="tile is-parent is-vertical">
+      <div class="tile is-child">
+        <label class="label">Navn på handleliste</label>
         <p class="help is-danger">{{this.errorMessages.overskrift}}</p>
         <div class="control">
           <input class="input" type="text" placeholder="Navn på handleliste" v-model="name">
+          <label class="help" for="dp">Frist</label>
+          <flatPickr id="dp" v-model="date" :config="{enableTime: false}"></flatPickr>
         </div>
-        <br>
-        <div>
-          <label class="label">Skriv inn varer</label>
-          <p class="help is-danger">{{errorMessages.navn}}</p>
-        </div>
+      </div>
+      <div class="tile is-child">
+        <label class="label">Skriv inn varer</label>
+        <p class="help is-danger">{{errorMessages.navn}}</p>
         <div class="field" v-for="row in rows">
           <div class="field-body">
             <button class="button is-danger" @click="removeRow(row)">
               <i class="fa fa-trash-o" aria-hidden="true"></i>
             </button>
-            <input class="input" name="" v-model="row.navn" type="text" placeholder="Text input" value="">
+            <input class="input" name="" v-model="row.navn" type="text"  placeholder="Text input" value="">
             <button class="button is-danger" id="decrementButton" @click="decrement(row)">
               <i class="fa fa-minus" id="minus" aria-hidden="true"></i>
             </button>
-            <div>
-              <button class="button is-light">{{row.antall}}</button>
-            </div>
+            <button class="button is-light">{{row.antall}}</button>
             <button class="button is-info" @click="increment(row)" id="incrementButton">
               <i class="fa fa-plus" id="plus" aria-hidden="true" ></i>
             </button>
           </div>
         </div>
-        <div class="field is-grouped">
-          <div class="control">
-            <button class="button is-success" @click="addRow">Legg til ny vare</button>
-          </div>
-        </div>
-        <br>
-        <div class="block">
-          <nav class="level">
-            <!-- left side -->
-            <div class="level-left">
-              <input type="checkbox" :checked="save"><p>Lagre handleliste for fremtidig bruk</p>
-              <button class="button is-link" @click="checkInput">Godkjenn</button>
-            </div>
+      </div>
 
-            <!-- right side -->
-            <div class="level-right">
-              <div class="level-item">
-                <p class="level-item">
-                  <button class="button is-danger" @click="closeNewShoppingList">Avbryt</button>
-                </p>
-
+      <div class="is-child">
+        <button class="button is-success" @click="addRow">Legg til ny vare</button>
+      </div>
+      <br>
+      <div class="is-child">
+          <div class="block">
+            <nav class="level">
+              <!-- left side -->
+              <div class="is-pulled-left">
+                <button class="button is-link" @click="checkInput">Godkjenn</button>
               </div>
-            </div>
-          </nav>
-        </div>
+
+              <!-- right side -->
+              <div class="is-pulled-right">
+                <div class="level-item">
+                  <button class="button is-danger" @click="closeNewShoppingList">Avbryt</button>
+                </div>
+              </div>
+            </nav>
+          </div>
+
       </div>
     </div>
   </div>
@@ -79,15 +71,11 @@
 
     data() {
       return {
-        save: false,
-        settings: {
-          enableTime: false
-        },
-        date: new Date(),
         name: "",
         rows: [
           {navn: "", antall: 1},
         ],
+        date: new Date(),
         errorMessages: {
           overskrift: '',
           navn: ''
@@ -98,6 +86,7 @@
       hide(){
         this.name = '';
         this.rows = [ {navn: "", antall: 1} ];
+        this.date = new Date();
         this.errorMessages.overskrift = '';
         this.errorMessages.navn = '';
       },
@@ -130,8 +119,7 @@
           beskrivelse: "",
           undergruppe_id: store.state.current_group.undergruppe_id,
           varer: this.rows,
-          frist: this.date,
-          favoritt: this.save
+          frist: this.date
         };
 
         axios.post('http://localhost:9000/rest/handleliste', shoppinglist).then( response => {

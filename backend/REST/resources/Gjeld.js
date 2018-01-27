@@ -90,7 +90,9 @@ module.exports = function(connection, server){
 // For å hente all gjeld fra bruker 1 til bruker 2, send følgende i request body:
 // {skylder: 1, innkrever: 2}
   server.post('rest/gjeldSpesifisert', function(req,res,next) {
-    connection.query('SELECT *, Kostnad.handleliste_id as handleliste_id FROM Gjeld LEFT JOIN Kostnad ON Gjeld.kostnad_id=Kostnad.kostnad_id WHERE Gjeld.bruker_skylder_id=? ' +
+    connection.query('SELECT Gjeld.*, Kostnad.handleliste_id as handleliste_id, Handleliste.navn AS handleliste_navn FROM Gjeld LEFT JOIN Kostnad ON Gjeld.kostnad_id=Kostnad.kostnad_id ' +
+      'LEFT JOIN Handleliste ON Kostnad.handleliste_id=Handleliste.handleliste_id ' +
+      'WHERE Gjeld.bruker_skylder_id=? ' +
       'AND Gjeld.bruker_innkrever_id=? AND Gjeld.betalt IS NULL', [req.body.skylder, req.body.innkrever], function (err, rows, fields) {
       for(let row of rows){
         if('opprettet' in row)
