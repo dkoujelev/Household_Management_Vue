@@ -24,11 +24,14 @@
             <td>Kommer</td>
             <td>{{row.dato}}</td>
             <td>
-              <button class="button is-danger" @click="deleteList">
+              <button class="button is-danger" v-confirm="{cancel: function(){}, ok: deleteList, message:'Vil du virkelig slette handlelisten?'}">
                 <i class="fa fa-trash-o" aria-hidden="true"></i>
               </button>
             </td>
           </tr>
+          <div>
+            <button class="button is-success" @click="helpModalOpen" id="opprett">Opprett gjøremål</button>
+          </div>
           </tbody>
         </table>
       </div>
@@ -38,9 +41,18 @@
       <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
         <h2 slot="title">Gjøremål </h2>
         <div slot="content">
-          <ViewTodoList :my_id.sync="id"/>
+          <ViewTodoList :my_id.sync="todoId"/>
         </div>
       </Modal>
+
+      <Modal :modalVisible.sync="showAddNewTodoList" @modalClosing="closeModal" @modalOpen="helpModalOpen">
+      <h2 slot="title">Gjøremål </h2>
+      <div slot="content">
+        <addTodoList/>
+      </div>
+      </Modal>
+
+
   </div>
   </div>
   </div>
@@ -53,15 +65,17 @@
   import {store} from '@/store';
   import Modal from '@/components/Modal';
   import ViewTodoList from '@/components/TODO/TodoListOverview3'
+  import addTodoList from '@/components/TODO/addTodoList'
 
     export default {
       name: "todo-list-overview2",
-      components: { Modal, ViewTodoList},
+      components: { Modal, ViewTodoList, addTodoList},
 
       data() {
         return{
+          showAddNewTodoList: false,
           updated: false,
-          id: 1,
+          todoId: 1,
           addItem: false,
           newItem: {
             name: '',
@@ -98,16 +112,27 @@
           return raw.substring(8, 10) + "." + raw.substring(5, 7) + "." + raw.substring(2,4);
         },
         openTodo(row) {
-          this.id = row.id;
+          this.id = row.todoId;
           this.showModal = true;
         },
 
         closeModal(){
           this.showModal = false;
+          this.showAddNewTodoList = false;
         },
 
+        helpModalOpen(){
+          this.showAddNewTodoList = true;
+        },
+
+
+        modalOpen(){
+          this.showModal = true;
+        },
+
+
         deleteList(){
-          axios.delete('http://localhost:9000/rest/gjoremalsliste/' + this.id).then(response => {
+          axios.delete('http://localhost:9000/rest/gjoremalsliste/' + this.todoId).then(response => {
             this.$emit('deleteTodoList');
             this.update();
           });

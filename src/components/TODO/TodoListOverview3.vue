@@ -18,7 +18,6 @@
                     <th>Frist</th>
                     <th>Ferdig</th>
                     <!--<th>Status</th> -->
-
                   </tr>
                   </thead>
                   <tbody>
