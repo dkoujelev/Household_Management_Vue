@@ -46,10 +46,10 @@
         </div>
       </Modal>
 
-      <Modal :modalVisible.sync="showAddNewTodoList" @modalClosing="closeModal" @modalOpen="helpModalOpen">
+      <Modal :modalVisible.sync="showAddNewTodoList" @modalClosing="showAddNewTodoList = false" @modalOpen="helpModalOpen">
       <h2 slot="title">Gjøremål </h2>
       <div slot="content">
-        <addTodoList/>
+        <addTodoList @todoListAdded="closeWithUpdate" @avbryt="closeModal" @failPost="wrongClosing"/>
       </div>
       </Modal>
 
@@ -124,6 +124,16 @@
         openTodo(row) {
           this.id = row.todoId;
           this.showModal = true;
+        },
+
+        wrongClosing(){
+          this.closeModal()
+        },
+
+        closeWithUpdate(){
+          this.showModal = false;
+          this.showAddNewTodoList = false;
+          this.updated = !this.updated;
         },
 
         closeModal(){

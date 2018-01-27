@@ -34,7 +34,8 @@
     },
     methods: {
       confirm(){
-        this.$emit('confirm', this.d);
+        if(this.d === {}) this.$emit('confirm');
+        else this.$emit('confirm', this.d);
       },
       cancel(){
         this.$emit('cancel');

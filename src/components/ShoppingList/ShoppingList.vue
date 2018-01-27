@@ -93,6 +93,7 @@
       hide(){
         this.name = '';
         this.rows = [ {navn: "", antall: 1} ];
+        this.date = new Date();
         this.errorMessages.overskrift = '';
         this.errorMessages.navn = '';
       },
