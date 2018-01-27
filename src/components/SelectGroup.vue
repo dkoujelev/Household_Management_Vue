@@ -19,9 +19,6 @@
   import {store} from '../store';
 
   export default {
-    created(){
-      this.loadGroups();
-    },
     asyncComputed:{
       groups: {
         get(){
