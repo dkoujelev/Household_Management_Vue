@@ -6,16 +6,35 @@ module.exports = function(connection, server) {
   // Hent en bestemt bruker
   server.get('rest/bruker/:bruker_id', function (req, res, next) {
     connection.query("SELECT * FROM Bruker WHERE bruker_id=?", [req.params.bruker_id], function (err, rows, fields) {
-      res.send(err ? err : (rows.length == 1 ? rows[0] : null));
+      if(err)
+        return next(err);
+      if(rows.length < 1){
+        res.send(null);
+        return next();
+      }
+
+      if('hashed_passord' in rows[0])
+        delete rows[0].hashed_passord;
+
+      res.send(rows[0]);
       return next();
     });
   });
 
 // Finn bruker med bestemt epost
   server.get('rest/brukerMedEpost/:epost', function (req, res, next) {
-
     connection.query("SELECT * FROM Bruker WHERE epost=?", [req.params.epost], function (err, rows, fields) {
-      res.send(err ? err : (rows.length == 1 ? rows[0] : null));
+      if(err)
+        return next(err);
+      if(rows.length < 1){
+        res.send(null);
+        return next();
+      }
+
+      if('hashed_passord' in rows[0])
+        delete rows[0].hashed_passord;
+
+      res.send(rows[0]);
       return next();
     });
   });
@@ -56,7 +75,14 @@ module.exports = function(connection, server) {
 // Hent alle brukere
   server.get('rest/bruker', function (req, res, next) {
     connection.query("SELECT * FROM Bruker ORDER BY bruker_id ASC", function (err, rows, fields) {
-      res.send(err ? err : rows);
+      if(err)
+        return next(err);
+
+      for(let user of rows)
+        if('hashed_passord' in user)
+          delete user.hashed_passord;
+
+      res.send(rows);
       return next();
     });
   });
@@ -80,7 +106,14 @@ module.exports = function(connection, server) {
       "INNER JOIN Bruker_Kollektiv ON Bruker.bruker_id = Bruker_Kollektiv.bruker_id " +
       "INNER JOIN Kollektiv ON Bruker_Kollektiv.kollektiv_id = Kollektiv.kollektiv_id " +
       "WHERE Kollektiv.kollektiv_id = ?", req.params.kollektiv_id, function (err, rows, fields) {
-      res.send(err ? err : rows);
+      if(err)
+        return next(err);
+
+      for(let user of rows)
+        if('hashed_passord' in user)
+          delete user.hashed_passord;
+
+      res.send(rows);
       return next();
     });
   });
@@ -109,7 +142,7 @@ module.exports = function(connection, server) {
 
       (bcrypt.compareSync(password, hashed_password) ? res.send({valid: true}) : res.send({valid: false}));
 
-      return next;
+      return next();
     });
   });
 
