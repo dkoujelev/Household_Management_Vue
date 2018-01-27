@@ -65,7 +65,7 @@ export default {
     logOut(){
         store.state.loggedIn=false;
         axios.post('http://localhost:9000/rest/logout');
-        router.push('Login');
+        router.push('/Login');
     }
   },
   created(){
