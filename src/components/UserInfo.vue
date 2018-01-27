@@ -12,7 +12,7 @@
                   <p>Fornavn: {{user_info.first_name}}</p>
                   <p>Etternavn: {{user_info.last_name}}</p>
                   <p>E-mail: {{user_info.email}}</p>
-                  <button class="button is-dark" style="background-color: orange" @click="changingPassword=true">Endre passord</button>
+                  <button class="button" style="background-color: orange" @click="changingPassword=true">Endre passord</button>
                  </div>
               </div>
             </div>

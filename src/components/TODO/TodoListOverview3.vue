@@ -8,12 +8,13 @@
               <p class="panel-heading">
                 Liste for: {{$store.state.current_group.navn}}
               </p>
+              <addTodo :id.sync="list_id" @todoAdded="updatePage"></addTodo>
               <div class="panel-block">
+
                 <table class="table">
                   <thead>
                   <tr>
                     <th>Tittel(navn)</th>
-                    <th>Beskrivelse</th>
                     <th>Frist</th>
                     <th>Ferdig</th>
                     <!--<th>Status</th> -->
@@ -23,22 +24,15 @@
                   <tbody>
                   <tr v-for="row in rows">
                     <td> <a @click=""> {{row.navn}} </a> </td> <!--  -->
-                    <td>{{row.beskrivelse}}</td>
                     <td>{{row.frist}}</td>
                     <td>
-                      <label class="checkbox" v-if="checked">
-                        <input type="checkbox">
-                      </label>
-                    </td>
-                    <td class="is-icon">
-                      <a href="#">
-                        <i class="fa fa-twitter"></i>
-                      </a>
-                    </td>
-                    <td class="is-icon">
-                      <a href="#">
-                        <i class="fa fa-instagram"></i>
-                      </a>
+                      <button class="button is-info" v-if="row.ferdig === null" @click="completeTodo(row)">Fullfør</button>
+                      <label class="button is-success" v-else><i class="fa fa-check" aria-hidden="true"></i></label>
+                    <td>
+                      <button class="button is-danger" @click="deleteItem(row)">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                      </button>
+
                     </td>
                   </tr>
                   </tbody>
@@ -56,102 +50,65 @@
 <script>
   import axios from 'axios';
   import {store} from '@/store';
+  import addTodo from '@/components/TODO/addTodo'
 
     export default {
       name: "todo-list-overview3",
-      props: ['bjarne'],
+      props: ['my_id'],
+      components: { addTodo },
 
       data() {
         return {
           rows: [],
           modalVisible: false,
+          list_id: 1
         };
       },
       mounted() {
         this.fillRows();
       },
-
-      watcher: {
-        id(){
-          this.id = this.bjarne;
+      watch: {
+        my_id(){
+          this.list_id = this.my_id;
+          this.updatePage();
         }
       },
-
       methods: {
-
-        deleteTodo(row){
-          let id = row.bruker_id; //eller undergruppe_id ? //+ id
-          axios.delete('http://localhost:9000/rest/gjoremal/1' ).then(response => {
-            this.rows = [];
-            this.fillRows();
+        formateDate(raw){
+          return raw.substring(8, 10) + "." + raw.substring(5, 7) + "." + raw.substring(2,4);
+        },
+        updatePage(){
+          this.rows = [];
+          this.fillRows();
+        },
+        deleteItem(row){ // + row.item_id
+          axios.delete('http://localhost:9000/rest/gjoremal/' + row.id).then(response => {
+            this.$emit('ItemRemoved');
+            let rows = this.rows;
+            for(let i = 0; i < rows.length; i++){
+              if(rows[i] === row){
+                this.rows.splice(i, 1);
+                this.updatePage();
+                break;
+              }
+            }
           });
         },
-
-
-/*
-        completeList(){
-          this.closeShoppingList();
+        completeTodo(row){
           let obj = {
-            start: new Date().getTime(),
-            ferdig: new Date().getTime(),
-            frist: new Date().getTime()
+            ferdig: new Date(),
+            gjoremal_id: row.id
           };
-          axios.put('http://localhost:9000/rest/handleliste' + this.listId, obj).then(response => {
-            this.$emit('listCompleted', obj);
-            this.hide();
+          axios.put('http://localhost:9000/rest/gjoremal/', obj).then(response => {
+            this.$emit('todoCompleted', obj);
+            this.updatePage();
           });
         },
-       */
-        saveChanges(){
-          this.closeModal();
-          let obj = {
-            ferdig: new Date().getTime() //this.listId,
-          };
-          axios.put('localhost:9000/rest/gjoremal/' + obj).then(response => {
-            //this.$emit('saveChanges', obj);
-            this.hide();
-          });
-        },
-
-/*
-        checked(){
-          seen = false;
-          axios.put('' + this.listId).then(response => {
-            this.$emit('saveChanges');
-            //this.hide();
-           let seen = {ferdig: resRows[i].ferdig};
-            seen = true;
-
-          });
-        },
-*/
-
-
-        deleteList(){
-          axios.delete('http://localhost:9000/rest/' + this.listId).then(response => {
-            this.$emit('deleteShoppingList');
-            this.hide();
-          });
-        },
-
-
-
-        editTodo(row){
-          let id = row.bruker_id; //eller undergruppe_id ?
-          axios.put('http://localhost:9000/rest/gjoremal/1').then(response => {
-            this.$emit('listEditet', obj);
-            this.rows = [];
-            this.fillRows();
-          });
-        },
-
-        fillRows() { // this.id = bjarne props.. hard koder med 1 istedet for this.id så får en ut lister
-              axios.get('http://localhost:9000/rest/gjoremaler/1').then(response => {
-                //alert('Alle lister til bruker hentet');
+        fillRows() {
+              axios.get('http://localhost:9000/rest/gjoremaler/' + this.list_id).then(response => {
                 let resRows = response.data;
-                console.log(resRows);
                 for (let i = 0; i < resRows.length; i++) {
-                  let obj = {navn: resRows[i].navn, beskrivelse: resRows[i].beskrivelse,  start: resRows[i].start, frist: resRows[0].frist};
+                  let obj = {id: resRows[i].gjoremal_id, navn: resRows[i].navn, beskrivelse: resRows[i].beskrivelse, start: resRows[i].start, frist: this.formateDate(resRows[i].frist), ferdig: resRows[i].ferdig};
                   this.rows.push(obj);
                 }
               }).catch(err => {
