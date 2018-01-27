@@ -32,7 +32,7 @@ module.exports = function(connection, server){
             for(i=0;i<recipients.length;i++){
               let newNotification = {
                 opprettet:util.getCurrentTimeAsEpoch(),
-                tekst: req.body.tekst, //'Det er lagt ut en ny melding til nyhetsfeed',
+                tekst: 'Det er lagt ut en ny melding til nyhetsfeed',
                 lest:0,
                 id:null,
                 bruker_id:recipients[i].bruker_id

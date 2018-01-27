@@ -86,9 +86,9 @@ module.exports = function(connection, server) {
                   console.log(err.sqlMessage);
                   console.log(err.sql);
                 }else{
-                  console.log('------ OK ------');
-                  console.log(rows1);
-                  console.log('----------------');
+                  // console.log('------ OK ------');
+                  // console.log(rows1);
+                  // console.log('----------------');
                 };
               });
             };
