@@ -1,33 +1,31 @@
 <template>
-  <section id="registerDiv" class="hero is-fullheight is-medium is-bold">
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
           <article class="card is-rounded">
-            <div class="card-content">
+            <div class="card-content" style="background-color: hsl(217, 71%, 53%)">
               <img src="../img/logo_full.png" height="200" width="400"/>
-              <h1 class="title"><br/>Glemt passord</h1>
+              <h1 class="title" style="color:white"><br/>Glemt passord</h1>
               <p class="control has-icon">
                 <input class="input" type="email" placeholder="Epost" @keyup.enter="sendNewPassword" v-model="forgottenPasswordEmail">
                 <span class="icon is-small">
                 <i class="fa fa-envelope"></i>
                 </span>
               </p>
-              <p class="help is-success">{{successMsg}}</p>
+              <p class="help" style="color:red">{{successMsg}}</p>
               <p class="control">
                 <br/>
-                <button class="button is-link is-medium is-fullwidth" @click="sendNewPassword">
+                <button class="button is-medium is-fullwidth" style="background-color: orange" @click="sendNewPassword">
                   Send nytt passord
                 </button>
               </p>
 
-              <router-link class="is-ink" to="/Login">Tilbake til Login</router-link>
+              <router-link class="text" style="color:white" to="/Login">Tilbake til Login</router-link>
             </div>
           </article>
         </div>
       </div>
     </div>
-  </section>
 </template>
 
 <script>
@@ -54,10 +52,5 @@
 </script>
 
 <style scoped>
-  .title{
-    color: black;
-  }
-  .error{
-    color: red;
-  }
+
 </style>
