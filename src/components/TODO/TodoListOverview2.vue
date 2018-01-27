@@ -80,7 +80,7 @@
               let resRows = response.data;
               console.log(resRows);
               for (let i = 0; i < resRows.length; i++) {
-                let obj = {id: resRows[i].id, tittel: resRows[i].navn, gruppe: resRows[i].navn, dato: resRows[0].opprettet};
+                let obj = {id: resRows[i].id, tittel: resRows[i].navn, gruppe: resRows[i].navn, dato: this.formateDate(resRows[0].opprettet)};
                 rows.push(obj);
               }
               return rows;
@@ -94,6 +94,9 @@
         }
       },
       methods: {
+        formateDate(raw){
+          return raw.substring(8, 10) + "." + raw.substring(5, 7) + "." + raw.substring(2,4);
+        },
         openTodo(row) {
           this.id = row.id;
           this.showModal = true;
