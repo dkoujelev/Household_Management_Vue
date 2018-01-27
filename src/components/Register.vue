@@ -5,9 +5,9 @@
       <div class="container">
         <div class="columns is-centered">
           <article class="card is-rounded">
-            <div class="card-content">
+            <div class="card-content" style="background-color: hsl(217, 71%, 53%)">
               <img src="../img/logo_full.png" height="200" width="400"/>
-              <h1 class="title"><br/>Registrer deg</h1>
+              <h1 class="title" style="color:white;"><br/>Registrer deg</h1>
               <p class="help is-danger">{{this.errorMessages.email}}</p>
               <p class="control has-icon">
                 <input class="input" type="email" placeholder="Epost" v-model="user.epost">
@@ -45,13 +45,13 @@
               </p>
               <p class="control">
                 <br/>
-                <button class="button is-link is-medium is-fullwidth" v-on:click="passMatch">
+                <button class="button  is-medium is-fullwidth" style="background-color: orange" v-on:click="passMatch">
                   <i class="fa fa-user"></i>
                   &nbsp Lag bruker
                 </button>
               </p>
 
-              <router-link class="is-ink" to="/Login">Login. Jeg har allerde en bruker.</router-link>
+              <router-link class="text" style="color:white" to="/Login">Login. Jeg har allerde en bruker.</router-link>
             </div>
           </article>
         </div>
