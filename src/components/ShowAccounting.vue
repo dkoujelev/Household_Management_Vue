@@ -6,13 +6,12 @@
           <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)	 ">
             <p class="title">Regnskap</p>
             <p class="subtitle"> Min personlige økonomiske balanse: </p>
-            <div class="is-parent is-centered is-12">
+            <div class="is-parent is-12">
               <div class="tile is-child is-6 is-centered">
-                <div class="block">
+                <div class="block is-centered">
                   <br>
                   <br>
                   <a class="button" @click="showingExpense=true"> Legg til utgift for gruppe</a>
-
                   <p class="subtitle"> Debet - Gjeld inn: &nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> {{totalDebt.sum_in}} kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldInn">Administrer </router-link> </span>  </p>
                   <p class="subtitle"> Kredit - Gjeld ut: &nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: #ff9980; font-weight: bold"> {{totalDebt.sum_out}} kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldUt">Administrer </router-link> </span> </p>
                   <div class="block_1"></div> <hr/>

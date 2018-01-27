@@ -6,39 +6,39 @@
 
         <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)">
           <div class="is-parent">
-            <h3 style="color: white">Penger som {{user_owes.fornavn + " " + user_owes.etternavn}} skylder meg:</h3>
-            <br>
+            <p class="title" style="color: white">Penger som {{user_owes.fornavn + " " + user_owes.etternavn}} skylder meg:</p>
             <div class="block_1"></div> <hr/>
-            <p class="subtitle"> Debet - Gjeld inn - {{user_owes.fornavn + " " + user_owes.etternavn}}: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> {{totalDebt}} kr </span></p>
+            <p class="subtitle"> Debet - Gjeld inn - {{user_owes.fornavn + " " + user_owes.etternavn}}: &nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> {{totalDebt}} kr </span></p>
             <div class="block_1"></div> <hr/>
             <br>
 
             <div class="child tile" style="background-color:white">
-              <table class="table">
-                <thead>
-                <th scope="col">Utgift for</th>
-                <th scope="col">Dato</th>
-                <th scope="col">Delsum per handletur</th>
-                <th scope="col">Slett gjeld</th>
-                <th scope="col"></th>
-                </thead>
+              <div class="content1">
+                <table class="table">
+                  <thead>
+                  <th scope="col">Utgift for</th>
+                  <th scope="col">Dato</th>
+                  <th scope="col">Delsum per handletur</th>
+                  <th scope="col">Slett gjeld</th>
+                  <th scope="col"></th>
+                  </thead>
 
-                <tbody>
-                <tr v-for="debt in debts">
-                  <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
-                  <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
-                  <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
-                  <td data-label="Slett gjeld">
-                    <input type="checkbox" v-model="debt.delete">
-                  </td>
-                  <td data-label="Tilknyttet handleliste">
-                    <a v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)"><span class="icon"><i class="fa fa-shopping-cart fa-lg"></i></span></a>
-                    <p v-else></p>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-
+                  <tbody>
+                  <tr v-for="debt in debts">
+                    <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
+                    <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
+                    <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
+                    <td data-label="Slett gjeld">
+                      <input type="checkbox" v-model="debt.delete">
+                    </td>
+                    <td data-label="Tilknyttet handleliste">
+                      <a v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)"><span class="icon"><i class="fa fa-shopping-cart fa-lg"></i></span></a>
+                      <p v-else></p>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
           <br>
