@@ -87,7 +87,8 @@ module.exports = function(connection, server) {
 
 // Oppdater en bruker
   server.put('rest/bruker', function (req, res, next) {
-    auth.checkThatSessionHasUserId(req,res,next,req.body.bruker_id);
+    if(!auth.checkThatSessionHasUserId(req,res,req.body.bruker_id))
+      return next();
 
     req.body.hashed_passord = bcrypt.hashSync(req.body.hashed_passord+"", 10);
 
@@ -117,7 +118,8 @@ module.exports = function(connection, server) {
     connection.query('SELECT * FROM Bruker WHERE epost=?',[req.body.email], (err,rows,field) => {
       if(err || rows.length < 1){ res.send({isUpdated: false}); return next(); }
 
-      auth.checkThatSessionHasUserId(req,res,next,rows[0].bruker_id);
+      if(!auth.checkThatSessionHasUserId(req,res,rows[0].bruker_id))
+        return next();
 
       let passord = [req.body.newPassword] + ""; //            Get the clear text password from the request body. (The + "" is apparently needed for bcrypt to read the data as a proper string.)
       let hash = bcrypt.hashSync(passord, 10); //                  Hashing the password 10 times
