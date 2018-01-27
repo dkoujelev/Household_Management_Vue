@@ -11,6 +11,8 @@
                 <div class="block">
                   <br>
                   <br>
+                  <a class="button" @click="showingExpense=true"> Legg til utgift for gruppe</a>
+
                   <p class="subtitle"> Debet - Gjeld inn: &nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> {{totalDebt.sum_in}} kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldInn">Administrer </router-link> </span>  </p>
                   <p class="subtitle"> Kredit - Gjeld ut: &nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: #ff9980; font-weight: bold"> {{totalDebt.sum_out}} kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldUt">Administrer </router-link> </span> </p>
                   <div class="block_1"></div> <hr/>
@@ -36,6 +38,10 @@
           </div>
         </div>
       </div>
+    <Modal :modalVisible.sync="showingExpense" @modalClosing="showingExpense=false;">
+      <h2 slot="title" style="color:white">Legg til utgift</h2>
+      <AddExpence slot="content" @closing="showingExpense=false;" />
+    </Modal>
     </div>
 </template>
 
@@ -265,9 +271,16 @@
   import {store} from '@/store'
   import GjeldInn from '@/components/Gjeld/GjeldInn'
   import GjeldUt from '@/components/Gjeld/GjeldUt'
+  import Modal from '@/components/Modal'
+  import AddExpence from '@/components/AddExpence';
 
   export default {
-    components: {GjeldInn, GjeldUt},
+    data(){
+      return {
+        showingExpense:false
+      };
+    },
+    components: {GjeldInn, GjeldUt, Modal, AddExpence},
     asyncComputed:{
       totalDebt:{
         get(){

@@ -43,7 +43,6 @@
             <br>
             <br>
 
-            <a class="button" @click="showingExpense=true"> Legg til utgift for gruppe</a>
             <a class="button" @click="$router.back()">Avbryt</a>
             </div>
             <br>
@@ -51,10 +50,6 @@
           </div>
 
       </div>
-    <Modal :modalVisible.sync="showingExpense" @modalClosing="showingExpense=false;">
-      <h2 slot="title" style="color:white">Legg til utgift</h2>
-      <AddExpence slot="content" @closing="showingExpense=false;" />
-    </Modal>
     </div>
 </template>
 
@@ -122,8 +117,7 @@
     },
     data(){
         return {
-            users: [],
-          showingExpense:false
+            users: []
         };
     },
     methods:{
