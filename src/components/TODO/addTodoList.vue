@@ -2,14 +2,12 @@
   <div class="box">
     <h2>Opprett en gjøremålsliste</h2>
     <label for="gjoremalsliste">Tittel</label>
-    <input id="gjoremalsliste" type="text" v-model="gjoremalsliste.navn" placeholder="Gjøremål" />
+    <input id="gjoremalsliste" type="text" v-model="navn" placeholder="Gjøremål" />
 
     <label class="help" for="dp">Frist</label>
-    <flatPickr id="dp" v-model="gjoremalsliste.opprettet" :config="{enableTime: false}"></flatPickr>
-
-
-
+    <flatPickr id="dp" v-model="ferdig" :config="{enableTime: false}"></flatPickr>
     <button type="button" class="button" v-on:click="sendListe">Ferdig</button>
+    <button type="button" class="button" v-on:click="">Avbryt</button>
   </div>
 </template>
 
@@ -26,48 +24,20 @@
     },
     data() {
       return {
-        users: [],
-        gjoremalsliste: {
-          navn: '',
-          opprettet: new Date(),
-          ferdig: new Date(),
-          undergruppe_id: store.state.current_group.undergruppe_id
-        },
-        liste_id: 1
+        navn: '',
+        ferdig: new Date()
       }
     },
-    created() {
-      this.getUsers();
-    },
-    methods: {
-      /*
-      clear(){
-        this.gjoremalsliste = {
-          navn: '',
-          opprettet: new Date(),
-          ferdig: new Date(),
-          undergruppe_id: '',
-        }
-      },
-      */
-      getUsers(){
-        axios.get('http://localhost:9000/rest/medlemmerIUndergruppe/' + store.state.current_group.undergruppe_id).then(response => {
-          for(let i = 0; i < response.data.length; i++){
-            this.users.push(response.data[i]);
-          }
-        }).catch(err => {
-          console.log(err);
-        });
-      },
 
+    methods: {
 
       sendListe(){
         let gjoremalsliste =
           {
-            navn: this.gjoremalsliste.navn,
+            navn: this.navn,
             opprettet: new Date(),
-            ferdig: null,
-            undergruppe_id: this.gjoremalsliste.undergruppe_id,
+            ferdig: this.ferdig,
+            undergruppe_id: store.state.current_group.undergruppe_id
           };
 
         axios.post('http://localhost:9000/rest/gjoremalsliste/', gjoremalsliste).then( response => {
