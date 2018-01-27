@@ -2,10 +2,11 @@
 
   <div>
     <!-- START NAV -->
-    <nav class="navbar is-link is-fixed-top">
+    <nav class="navbar is-link is-fixed-top" style="background-color: hsl(217, 71%, 53%);
+    background-image: linear-gradient(to right,hsl(217, 71%, 53%),hsl(204, 86%, 53%))">
         <div class="navbar-brand">
             <router-link class="navbar-item" to="/home">
-              <img src="./img/logo_small.png" alt="image not found" width="45"/>
+              <img src="./img/logo_small.png" alt="image not found" width="50"/>
             </router-link>
           <div class="navbar-item">
             <SelectGroup v-if="showNav" ref="SelectGroup" style="width: 160px"> </SelectGroup>
@@ -26,7 +27,6 @@
               <router-link class="navbar-item" v-if="showNav" to="/TestMail">TestMail</router-link> -->
               <router-link class="navbar-item" v-if="showNav" to="/ShowAccounting"> <span class="icon"><i class="fa fa-calculator fa-lg" > </i>   </span> &nbsp Regnskap &nbsp </router-link>
               <router-link class="navbar-item" v-if="showNav" to="/Statistikk"><span class="icon"><i class="fa fa-bar-chart fa-lg"></i></span> &nbsp Statistikk</router-link>
-
             </div>
             <div class="navbar-end" @click="showBurger = false">
               <router-link class="navbar-item" v-if="showNav" to="/UserInfo"><span class="icon"><i class="fa fa-user fa-lg"></i></span> &nbsp Min Side </router-link>
@@ -116,7 +116,7 @@ export default {
 
   body {
     /** background-color: white; */
-    background-image: url("./components/damn.jpg");
+    background-image: url("./components/urban.jpg");
     /** background-repeat: repeat-x; /** repeting image */
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -130,7 +130,14 @@ export default {
     /** -ms-filter: blur(5px); */
     /** filter: blur(5px); */
 
+
+
+
+
+
   }
+
+
 
    Alternative way:
   html {
@@ -140,6 +147,9 @@ export default {
   -o-background-size: cover;
   background-size: cover;
 }
+
+
+
 
 
 

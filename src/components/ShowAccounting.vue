@@ -1,23 +1,75 @@
 <template>
+  <div class="container">
+    <div class="columns is-centered ">
+      <div class="column is-8">
+        <div class="card is-rounded">
+          <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)	 ">
+            <p class="title">Regnskap</p>
+            <p class="subtitle"> Min personlige økonomiske ballanse: </p>
+            <div class="is-parent is-centered is-12">
 
-  <div class="tile is-vertical">
-    <div class="tile is-ancestor">
-      <div class="tile is-2 is-center"></div>
-    <div class="tile is-8 is-center">
-      <div class=" tile is-parent is-6 ">
-        <div class="tile is-child box" style="background-color: hsl(217, 71%, 53%)	">
-          <GjeldInn :current_user="$parent.current_user"> </GjeldInn>
-        </div>
-      </div>
-      <div class="tile is-parent is-6">
-        <div class="tile is-child box" style="background-color: hsl(217, 71%, 53%)	">
-          <GjeldUt :current_user="$parent.current_user">  </GjeldUt>
+              <div class="tile is-child is-6 is-centered">
+                <div class="block">
+
+                  <br>
+                  <br>
+
+                  <p class="subtitle"> Debet - Gjeld inn: &nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> 941 kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldInn">Administrer </router-link> </span>  </p>
+                  <p class="subtitle"> Kredit - Gjeld ut: &nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: #ff9980; font-weight: bold"> 441 kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldUt">Administrer </router-link> </span> </p>
+                  <div class="block_1"></div> <hr/>
+                  <p class="subtitle"> Ballanse: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> 500 kr </span></p>
+                  <div class="block_1"></div> <hr/>
+                  <br>
+                  <br>
+
+                </div>
+
+              </div>
+              <p class="text"> Jeg SKYLDER ANDRE/ ANDRE SKYLDER MEG <span class="p" style="font-size: 12px"> 500 kr </span></p>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    </div>
+
   </div>
+</template>
 
+<!--
+<template>
+  <div class="container">
+
+      <div class="tile is-ancestor">
+        <div class="tile"></div>
+      <div class="tile is-10 is-center">
+        <div class=" tile is-parent is-10 is-center">
+
+          <div class="tile is-child box is-12 is-center" style="background-color: hsl(217, 71%, 53%)	">
+            <p class="title" style="color: white;"> Regnskap</p>
+            <GjeldInn :current_user="$parent.current_user" > </GjeldInn>
+          </div>
+        </div>
+        <!-- <div class="tile is-parent is-12">
+          <div class="tile is-child box" style="background-color: hsl(217, 71%, 53%)	">
+            <GjeldUt :current_user="$parent.current_user">  </GjeldUt>
+          </div>
+        </div> -->
+      <!--</div>
+      </div>
+
+  </div>
 
 
 </template>
@@ -54,9 +106,27 @@
 
 
 
+<!-- To hovedkollonner-->
 
+<!-- <template>
 
-
+  <div class="tile is-vertical">
+    <div class="tile is-ancestor">
+      <div class="tile is-2 is-center"></div>
+    <div class="tile is-8 is-center">
+      <div class=" tile is-parent is-8 ">
+        <div class="tile is-child box" style="background-color: hsl(217, 71%, 53%)	">
+          <GjeldInn :current_user="$parent.current_user"> </GjeldInn>
+        </div>
+      </div>
+      <div class="tile is-parent is-12">
+        <div class="tile is-child box" style="background-color: hsl(217, 71%, 53%)	">
+          <GjeldUt :current_user="$parent.current_user">  </GjeldUt>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>-->
 
 
 
@@ -225,7 +295,7 @@
 
   div.container {
     alignment: center;
-    width: 70%;
+
 
   }
   .column1 {
@@ -245,10 +315,40 @@
     down: 0;
   }
 
-  div.tile.is-parent {
-    opacity: 1;
-    filter: alpha(opacity=50); /* For IE8 and earlier */
+
+
+
+
+  /** */
+
+
+  div.content1 {
+    height: 235px;
+    overflow: auto;
+  }
+  p.title{
+    color: white;
+  }
+  p{
+    color: white;
   }
 
+  thead th:nth-child(1){
+    width: 70%;
+  }
+  thead th:nth-child(2){
+    width: 15%;
+  }
+  thead th:nth-child(3){
+    width: 15%;
+  }
+  hr { width:100%; height:1px; background: #fff }
+
+  button{
+    background-color: orange;
+    color: black;
+    font-size: medium;
+    font-weight: normal;
+  }
 
 </style>
