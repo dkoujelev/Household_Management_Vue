@@ -37,12 +37,25 @@ let auth = {
     return true;
   },
   checkThatSessionHasUserId(req,res,next,user_id){
-    if(server.loginEnabled){
-      let user = this.getSession(req.cookies.sessionId);
-      if(user.bruker_id !== user_id){
-        res.send(403);
-        return next();
-      }
+    let user = this.getSession(req.cookies.sessionId);
+    if(user.bruker_id !== user_id){
+      res.send(403);
+      return next();
+    }
+  },
+  // Usage:
+  //
+  // if(!checkThatSessionHasUserId(...){return next();}
+  //
+  checkThatSessionHasUserId(req,res,user_id){
+    console.log("checking that user is logged in as user " + user_id);
+    let user = this.getSession(req.cookies.sessionId);
+    if(user.bruker_id !== user_id){
+      res.send(403);
+      return false
+    }
+    else{
+      return true;
     }
   },
   clearLogins(){
