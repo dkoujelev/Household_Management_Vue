@@ -16,7 +16,7 @@
                  </div>
               </div>
             </div>
-            <br>
+            <br> 
             <p class="subtitle">Dine kollektiv og grupper:</p>
             <div class="is-parent">
               <div class="is-child">
