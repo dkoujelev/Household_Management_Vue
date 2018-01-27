@@ -25,7 +25,7 @@
                 </div>
 
               </div>
-              <p class="text"> Jeg SKYLDER ANDRE/ ANDRE SKYLDER MEG <span class="p" style="font-size: 12px"> 500 kr </span></p>
+
             </div>
             <br>
             <br>
