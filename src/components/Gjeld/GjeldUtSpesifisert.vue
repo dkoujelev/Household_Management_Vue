@@ -12,36 +12,34 @@
             <div class="block_1"></div> <hr/>
             <br>
             <div class="child tile" style="background-color:white">
-              <div class="content1">
-                <table class="table">
-                  <thead>
-                  <th scope="col">Utgift for:</th>
-                  <th scope="col">Dato:</th>
-                  <th scope="col">Delsum per handletur:</th>
-                  <th scope="col">Handleliste </th>
+              <table class="table">
+                <thead>
+                <th scope="col">Utgift for:</th>
+                <th scope="col">Dato:</th>
+                <th scope="col">Delsum per handletur:</th>
+                <th scope="col">Handleliste </th>
 
-                  </thead>
+                </thead>
 
-                  <tbody>
-                  <tr v-for="debt in debts">
-                    <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
-                    <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
-                    <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
-                    <td data-label="Tilknyttet handleliste">
-                      <a v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</a>
-                      <p v-else>Ingen handleliste</p>
-                    </td>
-                  </tr>
-                  </tbody>
-
-                </table>
-              </div>
+                <tbody>
+                <tr v-for="debt in debts">
+                  <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
+                  <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
+                  <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
+                  <td data-label="Tilknyttet handleliste">
+                    <button v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</button>
+                    <p v-else></p>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
             </div>
           </div>
           <br>
           <br>
-
-          <router-link class="button" to="$router.back()"> Avbryt </router-link>
+          <br>
+          <br>
+          <a class="button" @click="$router.back()">Avbryt</a>
         </div>
         <br>
 
@@ -49,9 +47,10 @@
       </div>
 
     </div>
-  </div>
-  </div>
-
+    <Modal :modalVisible.sync="showingShoppingList" @modalClosing="showingShoppingList=false;">
+      <h2 slot="title" style="color:white">{{currentList_name}}</h2>
+      <ViewShoppingList :id.sync="currentList_id" slot="content" @closingShoppingList="showingShoppingList=false;"/>
+    </Modal>
   </div>
 </template>
 
@@ -136,8 +135,11 @@
   import axios from 'axios';
   import {store} from '../../store';
   import router from '@/router';
+  import Modal from '@/components/Modal';
+  import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList';
 
   export default {
+    components:{Modal, ViewShoppingList},
     created(){
       axios.post('http://localhost:9000/rest/gjeldSpesifisert', {skylder: store.state.current_user.bruker_id ,
         innkrever: this.$route.params.bruker_skylder_id})
@@ -154,7 +156,10 @@
     data(){
       return {
         user_owes: {fornavn: '', etternavn: ''},
-        debts: []
+        debts: [],
+        currentList_id: null,
+        currentList_name:null,
+        showingShoppingList: false
       };
     },
     methods:{
@@ -163,6 +168,11 @@
       },
       formatDate(raw){
         return raw.substring(8, 10) + "." + raw.substring(5, 7) + "." + raw.substring(0,4);
+      },
+      showShoppingList(debt){
+        this.currentList_id = debt.handleliste_id;
+        this.currentList_name = debt.handleliste_navn;
+        this.showingShoppingList=true;
       }
     },
     computed:{

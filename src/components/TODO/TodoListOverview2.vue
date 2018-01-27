@@ -122,6 +122,16 @@
           this.showModal = true;
         },
 
+        wrongClosing(){
+          this.closeModal()
+        },
+
+        closeWithUpdate(){
+          this.showModal = false;
+          this.showAddNewTodoList = false;
+          this.updated = !this.updated;
+        },
+
         closeModal(){
           this.showModal = false;
           this.showAddNewTodoList = false;

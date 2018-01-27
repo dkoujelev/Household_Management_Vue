@@ -1,5 +1,6 @@
 let crypto = require('crypto');
 let server = require('./server');
+let serverConfig = require('./serverConfig');
 
 let auth = {
   sessions: {},
@@ -29,6 +30,9 @@ let auth = {
     }
   },
   checkThatSessionExists(req, res){
+    if(!serverConfig.loginEnabled)
+      return true;
+
     if(!('sessionId' in req.cookies) || req.cookies.sessionId === '' || !this.hasSession(req.cookies.sessionId)){
       //console.log("REST access has been denied because user doesn't have session on server");
       res.send(403);
@@ -36,27 +40,17 @@ let auth = {
     }
     return true;
   },
-  checkThatSessionHasUserId(req,res,next,user_id){
-    let user = this.getSession(req.cookies.sessionId);
-    if(user.bruker_id !== user_id){
-      res.send(403);
-      return next();
-    }
-  },
-  // Usage:
-  //
-  // if(!checkThatSessionHasUserId(...){return next();}
-  //
   checkThatSessionHasUserId(req,res,user_id){
-    console.log("checking that user is logged in as user " + user_id);
+    if(!serverConfig.loginEnabled)
+      return true;
+
     let user = this.getSession(req.cookies.sessionId);
     if(user.bruker_id !== user_id){
       res.send(403);
       return false
     }
-    else{
+    else
       return true;
-    }
   },
   clearLogins(){
     this.sessions = {};

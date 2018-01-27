@@ -43,6 +43,7 @@
           <br>
           <br>
           <br>
+          <a class="button" @click="$router.back()">Avbryt</a>
 
         </div>
         <br>
@@ -51,9 +52,6 @@
       </div>
 
     </div>
-  </div>
-  </div>
-
   </div>
 </template>
 

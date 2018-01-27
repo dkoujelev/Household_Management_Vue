@@ -87,10 +87,11 @@
                 if(response.data.length > 0) {
                   store.commit('current_group', response.data[0]);
                 }
-                if (response.data.length === 0)
-                  router.push('NewUser');
-                else
-                  router.push('home');
+                if(!store.state.isMember){
+                  router.push('/NewUser');
+                } else{
+                  router.push('/Home');
+                }
               });
             }
           }).catch(err => {
