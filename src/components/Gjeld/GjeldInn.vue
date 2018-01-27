@@ -6,18 +6,22 @@
           <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)">
             <div class="is-parent">
               <p class="title"> Debet - Gjeld inn</p>
-              <p class="subtitle"> Skyld andre har til meg </p>
+              <p class="subtitle"> Skyld andre medlemmer har til meg </p>
+              <br>
 
-              <p class="text"> Totalbeløp: &nbsp &nbsp    <span class="ny" style="font-weight: bold; font-size: large; text-align: center; color: #FF7F50"> {{totalDebt}} kr </span>  </p>
+              <div class="block_1"></div> <hr/>
+              <p class="subtitle"> Debet - Gjeld inn: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> {{totalDebt}} kr </span></p>
+              <div class="block_1"></div> <hr/>
+
               <div class="is-child">
                 <div class="block">
-                  <br>
+
                   <div class="content1">
                     <br>
                     <table class="table is-child">
                       <thead>
                       <th scope="col">Navn</th>
-                      <th scope="col">Person belløp</th>
+                      <th scope="col">Person beløp</th>
                       <th scope="col"> Vis </th>
                       </thead>
 
@@ -38,10 +42,12 @@
             <br>
             <br>
             <br>
-            <br>
+
             <router-link class="button" to="./AddExpence"> Legg til utgift for gruppe </router-link>
             </div>
             <br>
+            <br>
+
 
 
           </div>

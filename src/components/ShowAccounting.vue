@@ -14,10 +14,10 @@
                   <br>
                   <br>
 
-                  <p class="subtitle"> Debet - Gjeld inn: <span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> 941 kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldInn">Administrer </router-link> </span>  </p>
-                  <p class="subtitle"> Kredit - Gjeld ut: <span class="p" style="font-size: 20px; color: #FF7F50; font-weight: bold"> 441 kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldUt">Administrer </router-link> </span> </p>
+                  <p class="subtitle"> Debet - Gjeld inn: &nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> 941 kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldInn">Administrer </router-link> </span>  </p>
+                  <p class="subtitle"> Kredit - Gjeld ut: &nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: #ff9980; font-weight: bold"> 441 kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldUt">Administrer </router-link> </span> </p>
                   <div class="block_1"></div> <hr/>
-                  <p class="subtitle"> Ballanse: <span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> 500 kr </span></p>
+                  <p class="subtitle"> Ballanse: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> 500 kr </span></p>
                   <div class="block_1"></div> <hr/>
                   <br>
                   <br>

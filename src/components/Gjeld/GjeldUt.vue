@@ -6,12 +6,16 @@
         <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)">
           <div class="is-parent">
             <p class="title"> Kredit - Gjeld Ut</p>
-            <p class="subtitle"> Skyld jeg har til andre </p>
+            <p class="subtitle"> Skyld jeg har til andre medlemmer </p>
+            <br>
 
-            <p class="text"> Totalbeløp: &nbsp &nbsp    <span class="ny" style="font-weight: bold; font-size: large; text-align: center; color: #FF7F50"> {{totalDebt}} kr </span>  </p>
+
+            <div class="block_1"></div> <hr/>
+            <p class="subtitle"> Kredit - Gjeld ut total: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: #FF7F50; font-weight: bold"> {{totalDebt}} kr </span></p>
+            <div class="block_1"></div> <hr/>
+
             <div class="is-child">
               <div class="block">
-                <br>
                 <div class="content1">
                   <br>
                   <table class="table is-child">
