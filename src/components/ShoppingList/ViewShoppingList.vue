@@ -58,6 +58,7 @@
 
       <div v-if="!readOnly" class="tile is-child ">
         <div class="block">
+          <ConfirmModal :modalVisible.sync="showConfirm" :rowData.sync="list" :message="text" @cancel="showConfirm = false" @confirm="deleteList"/>
           <nav class="level">
             <!-- left side -->
             <div class="is-pulled-left">
@@ -67,7 +68,7 @@
             <!-- right side -->
             <div class="is-pulled-right">
               <div class="level-item">
-                <button class="button is-danger" v-confirm="{cancel: function(){}, ok: deleteList, message:'Vil du virkelig slette handlelisten?'}">Slett handleliste</button>
+                <button class="button is-danger" @click="showConfirm = true">Slett handleliste</button>
               </div>
             </div>
           </nav>
@@ -80,6 +81,7 @@
 <script>
   import axios from 'axios';
   import router from '@/router'
+  import ConfirmModal from '@/components/ConfirmModal'
 
   export default {
     name: 'Shoppinglists',
@@ -90,6 +92,7 @@
         type: Boolean
       }
   },
+    components:{ConfirmModal},
 
     data(){
       return {
@@ -99,7 +102,11 @@
         newItem: {
           name: '',
           count: 1
-        }
+        },
+
+        showConfirm: false,
+        text: 'Er du sikker på at du vil slette handlelisten?',
+        list: {}
       };
     },
     watch: {
@@ -160,6 +167,7 @@
       },
       deleteList(){
         axios.delete('http://localhost:9000/rest/handleliste/' + this.listId).then(response => {
+          this.showConfirm = false;
           this.$emit('deleteShoppingList');
           this.hide();
         });

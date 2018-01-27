@@ -120,7 +120,7 @@ module.exports = function(connection, server) {
     let liste = Object.assign({}, req.body);
     liste.opprettet = util.getCurrentTimeAsEpoch();
     if('ferdig' in req.body && req.body.ferdig !== null)
-      req.body.ferdig = new Date(req.body.ferdig).getTime();
+      liste.ferdig = new Date(liste.ferdig).getTime();
     /*
     let liste = Object.assign({}, req.body);
     let gjoremaler = [];
