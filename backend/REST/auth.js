@@ -1,10 +1,11 @@
 let crypto = require('crypto');
+let server = require('./server');
 
 let auth = {
   sessions: {},
   newSession(user){
     let id = this.generate_sessionId();
-    //console.log('adding session ' + id + ' for ' + user.epost);
+    console.log('adding session ' + id + ' for ' + user.epost);
     this.sessions[id] = user;
     return id;
   },
@@ -35,18 +36,14 @@ let auth = {
     }
     return true;
   },
-  checkThatSessionHasUserId(req,res,next,id){
-    /*
-    console.log(req.body);
-    console.log(req.headers);
-    let user = this.getSession(id);
-    if(user.bruker_id === req.body.bruker_id){
-      return true;
-    } else {
-      res.send(403);
-      return false;
+  checkThatSessionHasUserId(req,res,next,user_id){
+    if(server.loginEnabled){
+      let user = this.getSession(req.cookies.sessionId);
+      if(user.bruker_id !== user_id){
+        res.send(403);
+        return next();
+      }
     }
-    */
   },
   clearLogins(){
     this.sessions = {};
