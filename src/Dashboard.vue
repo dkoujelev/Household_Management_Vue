@@ -26,7 +26,7 @@
               <router-link class="navbar-item" v-if="showNav" to="/TestMail">TestMail</router-link> -->
               <router-link class="navbar-item" v-if="showNav" to="/ShowAccounting"> <span class="icon"><i class="fa fa-calculator fa-lg" > </i>   </span> &nbsp Regnskap &nbsp </router-link>
               <router-link class="navbar-item" v-if="showNav" to="/UserInfo"><span class="icon"><i class="fa fa-user fa-lg"></i></span> &nbsp Min Side </router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/Statistikk">Statistikk</router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/Statistikk"><span class="icon"><i class="fa fa-bar-chart fa-lg"></i></span> &nbsp Statistikk</router-link>
 
             </div>
             <div class="navbar-end" @click="showBurger = false">
@@ -116,7 +116,7 @@ export default {
 
   body {
     /** background-color: white; */
-    background-image: url("./components/urban.jpg");
+    background-image: url("./components/damn.jpg");
     /** background-repeat: repeat-x; /** repeting image */
     -webkit-background-size: cover;
     -moz-background-size: cover;

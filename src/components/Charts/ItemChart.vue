@@ -1,28 +1,27 @@
 <template>
 
-  <div class="columns is-centered">
-    <div class="column is-7">
-      <div class="card is-rounded is-centered">
-        <div class="is-ancestor box" style="background-color: hsl(48, 100%, 67%)	">
+
+        <div class="is-ancestor">
           <div class="is-parent">
             <div class="is-child">
-              <div class="title">Statistikk</div>
+              <div class="title" style="color:white">Statistikk</div>
+              <div class="field-body">
+                <div class="field"><label style="color:white">Fra dato: </label><flat-pickr :options="{dateFormat:'dd.mm.YYYY'}" v-model="from"></flat-pickr></div>
+                <div class="field"><label style="color:white">Til dato: </label><flat-pickr :options="{dateFormat:'dd.mm.YYYY'}" v-model="to"></flat-pickr></div>
+              </div>
+              <br>
+              <p style="color:white">Oftest kjøpte varer i valgt tidsperiode:</p>
               <div class="content1">
-                <div class="field-body">
-                  <div class="field"><label>fra dato: </label><flat-pickr :options="{dateFormat:'dd.mm.YYYY'}" v-model="from"></flat-pickr></div>
-                  <div class="field"><label>til dato: </label><flat-pickr :options="{dateFormat:'dd.mm.YYYY'}" v-model="to"></flat-pickr></div>
-                </div>
-                <br>
-                Oftest kjøpte varer i valgt tidsperiode:
-                  <ChartAxis :data='chartData'></ChartAxis>
-                  <a class="button" @click="goBack">Tilbake</a>
+
+
+
+                  <ChartAxis style="background-color: white" :data='chartData'></ChartAxis>
+                 <!-- <a class="button" @click="goBack">Tilbake</a> -->
              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+
 
 </template>
 
@@ -112,7 +111,7 @@
 </script>
 
 <style scoped>
-  .chart{
+  .ChartAxis{
     width: 100%;
     height: 400px;
   }
