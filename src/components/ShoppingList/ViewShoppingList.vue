@@ -52,7 +52,7 @@
 
       </div>
 
-      <div class="tile is-child ">
+      <div class="tile is-child">
         <div class="block">
           <nav class="level">
             <!-- left side -->
