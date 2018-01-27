@@ -1,23 +1,18 @@
 <template>
 
-  <div class="columns is-centered">
-    <div class="column is-7">
-      <div class="card is-rounded is-centered">
-        <div class="is-ancestor box" style="background-color: hsl(48, 100%, 67%)	">
+
+        <div class="is-ancestor" >
           <div class="is-parent">
             <div class="is-child">
-              <div class="title">Statistikk</div>
+              <div class="title" style="color:white">Brukere som har mest gjeld i kollektivet</div>
               <div class="content1">
-                Brukere som har mest gjeld i kollektivet:
-                <ChartPie :data='chartData'></ChartPie>
-                <a class="button" @click="goBack">Tilbake</a>
+                <ChartPie style="background-color: white" :data='chartData'></ChartPie>
+                <!--<a class="button" @click="goBack">Tilbake</a>-->
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+
 
 </template>
 

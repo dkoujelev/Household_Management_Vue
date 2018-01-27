@@ -3,7 +3,7 @@
     <div :class="{'is-centered' : !isHome,'columns' : !isHome}">
       <div :class="{'column is-8' : !isHome}">
       <div class="card is-rounded " :class="{'is-centered' :!isHome}">
-        <div class="is-ancestor box"  style="background-color: hsl(217, 71%, 53%)	">
+        <div class="is-ancestor box"   style="background-color:  hsl(217, 71%, 53%);">
           <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
             <h2 slot="title" style="color:white">Lag nyhet</h2>
             <Addnews slot="content" @addedNews="update" @closeAddNews="closeModal" />
@@ -83,16 +83,21 @@
             return axios.get('http://localhost:9000/rest/bruker').then(res => {
               brukere = res.data;
               for (let i = 0; i < resRows.length; i++) {
-                console.log(resRows[i].sendt);
                 let date = this.formateDate(resRows[i].sendt);
                 let obj = {
-                  hvem: brukere[resRows[i].skrevet_av_bruker],
+                  hvem: '',
                   melding_id: resRows[i].melding_id,
                   overskrift: resRows[i].overskrift,
                   nyhet: resRows[i].tekst,
                   nar: date,
                   knapper: (resRows[i].skrevet_av_bruker === store.state.current_user.bruker_id)
                 };
+                for(let j = 0; j < brukere.length; j++){
+                  if(brukere[j].bruker_id === resRows[i].skrevet_av_bruker){
+                    obj.hvem = brukere[j];
+                    break;
+                  }
+                }
                 rows.push(obj);
                 if (cap > 0) {
                   cap -= 1;
@@ -157,7 +162,7 @@
     overflow: auto;
   }
   div.is-ancestor {
-    background-color: #ffffff;
+    /**background-color: #ffffff;
 
     opacity: 1;
     filter: alpha(opacity=60); /* For IE8 and earlier */
@@ -168,5 +173,12 @@
   }
   button.button{
   background-color: orange;
+  }
+
+  div.is-ancestor {
+    /** Trancparancy filter: */
+    background-color: hsl(217, 71%, 53%) /**  ;
+    /** opacity: 0.8; */
+    /** filter: alpha(opacity=60); /* For IE8 and earlier */
   }
 </style>

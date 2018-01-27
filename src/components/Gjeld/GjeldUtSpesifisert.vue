@@ -1,5 +1,65 @@
 
 <template>
+  <div class="container" >
+    <div class="columns is-centered" >
+      <div class="column is-8">
+
+        <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)">
+          <div class="is-parent">
+            <h3 style="color: white">Penger som jeg skylder {{user_owes.fornavn + " " + user_owes.etternavn}}: </h3>
+            <br>
+            <div class="block_1"></div> <hr/>
+            <p class="subtitle"> Kredit - Gjeld ut - {{user_owes.fornavn + " " + user_owes.etternavn}}: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: #FF7F50; font-weight: bold"> {{totalDebt}} kr </span></p>
+            <div class="block_1"></div> <hr/>
+            <br>
+            <div class="child tile" style="background-color:white">
+              <table class="table">
+                <thead>
+                <th scope="col">Utgift for:</th>
+                <th scope="col">Dato:</th>
+                <th scope="col">Delsum per handletur:</th>
+                <th scope="col">Handleliste </th>
+
+                </thead>
+
+                <tbody>
+                <tr v-for="debt in debts">
+                  <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
+                  <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
+                  <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
+                  <td data-label="Tilknyttet handleliste">
+                    <a v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</a>
+                    <p v-else>Ingen handleliste</p>
+                  </td>
+                </tr>
+                </tbody>
+
+              </table>
+
+            </div>
+          </div>
+          <br>
+          <br>
+          <br>
+          <br>
+          <router-link class="button" to="$router.back()"> Avbryt </router-link>
+        </div>
+        <br>
+
+
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+  </div>
+</template>
+
+
+
+<!-- Gjeld ut spesifisert -->
+<!-- <template>
   <div class="tile is-vertical box" style="background-color: white">
     <div class="is-ancestor" style="background-color: white">
       <div class=" is-parent is-vertical " style="background-color: white">
@@ -19,7 +79,7 @@
 
             <tbody>
               <tr v-for="debt in debts">
-                <td data-label="Utgift for:">  Handletur  </td>
+                <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
                 <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
                 <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
                 <td data-label="Tilknyttet handleliste">
@@ -48,7 +108,7 @@
       </div>
     </div>
   </div>
-</template>
+</template> -->
 
 
 
@@ -117,5 +177,93 @@
   };
 </script>
 <style scoped>
+  .FixedHeightContainer
+  {
+    /** float:right; */
+    height: 250px;
+    width:250px;
+    padding:3px;
+    background:#f00;
+  }
+  .Content
+  {
+    height:200px;
+    overflow:auto;
+    /**background:#fff;*/
+  }
 
+
+  div.container {
+    alignment: center;
+
+
+  }
+  .column1 {
+    padding: 1%;
+  }
+  .column2 {
+    padding: 1%;
+
+  }
+  .vl {
+    border-left: 1px solid orange;
+    height: 400px;
+    position: absolute;
+    left: 50%;
+    margin-left: -3px;
+    top: 0;
+    down: 0;
+  }
+
+
+
+
+
+  /** */
+
+
+  div.content1 {
+    height: 330px;
+    overflow: auto;
+  }
+  p.title{
+    color: white;
+  }
+  p{
+    color: white;
+  }
+
+  /** .table {
+    width: 50%
+  } */
+
+  thead th:nth-child(1){
+    width: 70%;
+  }
+  thead th:nth-child(2){
+    width: 15%;
+  }
+  thead th:nth-child(3){
+    width: 15%;
+  }
+  hr { width:100%; height:1px; background: #fff }
+
+  .button {
+    background-color: orange;
+    color: black;
+    font-size: medium;
+    font-weight: normal;
+  }
+
+  button {
+    background-color: orange;
+    color: black;
+    font-size: medium;
+    font-weight: normal;
+  }
+  .container.inner{
+    height:150px;
+    overflow:auto;
+    /**background:#fff;*/
+  }
 </style>
