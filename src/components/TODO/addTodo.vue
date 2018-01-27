@@ -75,6 +75,7 @@
             this.$emit('todoAdded');
             this.clear();
           }).catch(err => {
+            this.$emit('failPost');
             console.log(err);
           });
         }

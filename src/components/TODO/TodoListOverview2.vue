@@ -24,7 +24,7 @@
             <td>Kommer</td>
             <td>{{row.dato}}</td>
             <td>
-              <button class="button is-danger" v-confirm="{cancel: function(){}, ok: deleteList, message:'Vil du virkelig slette handlelisten?'}">
+              <button class="button is-danger" v-confirm="{cancel: function(){}, ok: deleteList, message:'Vil du slette handlelisten?'}">
                 <i class="fa fa-trash-o" aria-hidden="true"></i>
               </button>
             </td>
@@ -45,10 +45,10 @@
         </div>
       </Modal>
 
-      <Modal :modalVisible.sync="showAddNewTodoList" @modalClosing="closeModal" @modalOpen="helpModalOpen">
+      <Modal :modalVisible.sync="showAddNewTodoList" @modalClosing="showModal = false" @modalOpen="helpModalOpen">
       <h2 slot="title">Gjøremål </h2>
       <div slot="content">
-        <addTodoList/>
+        <addTodoList @todoListAdded="closeWithUpdate" @avbryt="closeModal" @failPost="wrongClosing"/>
       </div>
       </Modal>
 
@@ -114,6 +114,16 @@
         openTodo(row) {
           this.id = row.todoId;
           this.showModal = true;
+        },
+
+        wrongClosing(){
+          this.closeModal()
+        },
+
+        closeWithUpdate(){
+          this.showModal = false;
+          this.showAddNewTodoList = false;
+          this.updated = !this.updated;
         },
 
         closeModal(){
