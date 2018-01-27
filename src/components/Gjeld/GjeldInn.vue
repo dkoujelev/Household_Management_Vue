@@ -43,7 +43,7 @@
             <br>
             <br>
 
-            <router-link class="button" to="./AddExpence"> Legg til utgift for gruppe </router-link>
+            <a class="button" @click="showingExpense=true"> Legg til utgift for gruppe</a>
             <a class="button" @click="$router.back()">Avbryt</a>
             </div>
             <br>
@@ -54,10 +54,11 @@
           </div>
 
       </div>
+    <Modal :modalVisible.sync="showingExpense" @modalClosing="showingExpense=false;">
+      <h2 slot="title" style="color:white">Legg til utgift</h2>
+      <AddExpence slot="content" @closing="showingExpense=false;" />
+    </Modal>
     </div>
-  </div>
-
-  </div>
 </template>
 
 
@@ -108,10 +109,13 @@
 <script>
 
   import axios from 'axios';
-  import router from '@/router/index'
-  import {store} from '../../store'
+  import router from '@/router/index';
+  import {store} from '../../store';
+  import Modal from '@/components/Modal';
+  import AddExpence from '@/components/AddExpence';
 
   export default {
+    components:{Modal, AddExpence},
     created(){
       axios.get('http://localhost:9000/rest/gjeldBrukerKreverInn/' + store.state.current_user.bruker_id).then(response => {
         this.users = response.data;
@@ -121,7 +125,8 @@
     },
     data(){
         return {
-            users: []
+            users: [],
+          showingExpense:false
         };
     },
     methods:{
