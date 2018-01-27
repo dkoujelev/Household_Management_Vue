@@ -19,16 +19,20 @@
           </tr>
           </thead>
           <tbody>
+          <ConfirmModal :modalVisible.sync="showConfirmModal" :rowData.sync="list" :message="confirmText" @cancel="showConfirmModal = false" @confirm="deleteList"/>
           <tr v-for="row in rows">
             <td> <a @click="openTodo(row)"> {{row.tittel}} </a> </td> <!--  -->
             <td>Kommer</td>
             <td>{{row.dato}}</td>
             <td>
-              <button class="button is-danger" @click="deleteList">
+              <button class="button is-danger" @click="confirmDelete(row)">
                 <i class="fa fa-trash-o" aria-hidden="true"></i>
               </button>
             </td>
           </tr>
+          <div>
+            <button class="button is-success" @click="helpModalOpen" id="opprett">Opprett gjøremål</button>
+          </div>
           </tbody>
         </table>
       </div>
@@ -38,9 +42,18 @@
       <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
         <h2 slot="title">Gjøremål </h2>
         <div slot="content">
-          <ViewTodoList :my_id.sync="id"/>
+          <ViewTodoList :my_id.sync="todoId"/>
         </div>
       </Modal>
+
+      <Modal :modalVisible.sync="showAddNewTodoList" @modalClosing="closeModal" @modalOpen="helpModalOpen">
+      <h2 slot="title">Gjøremål </h2>
+      <div slot="content">
+        <addTodoList/>
+      </div>
+      </Modal>
+
+
   </div>
   </div>
   </div>
@@ -53,23 +66,30 @@
   import {store} from '@/store';
   import Modal from '@/components/Modal';
   import ViewTodoList from '@/components/TODO/TodoListOverview3'
+  import addTodoList from '@/components/TODO/addTodoList'
+  import ConfirmModal from '@/components/ConfirmModal'
 
     export default {
       name: "todo-list-overview2",
-      components: { Modal, ViewTodoList},
+      components: { Modal, ViewTodoList, addTodoList, ConfirmModal },
 
       data() {
         return{
+          showAddNewTodoList: false,
           updated: false,
-          id: 1,
           addItem: false,
+          todoId: 1,
           newItem: {
             name: '',
             count: 1,
           },
           completeTodo: false,
           showModal: false,
-          tittel: 'Dette er en tittel'
+          tittel: 'Dette er en tittel',
+
+          list: {},
+          confirmText: 'Er du sikker på at du vil slette denne gjøremålslisten?',
+          showConfirmModal: false
         };
       },
       asyncComputed:{
@@ -94,22 +114,38 @@
         }
       },
       methods: {
+        confirmDelete(row){
+          this.list = row;
+          this.showConfirmModal = true;
+        },
         formateDate(raw){
           return raw.substring(8, 10) + "." + raw.substring(5, 7) + "." + raw.substring(2,4);
         },
         openTodo(row) {
-          this.id = row.id;
+          this.id = row.todoId;
           this.showModal = true;
         },
 
         closeModal(){
           this.showModal = false;
+          this.showAddNewTodoList = false;
         },
 
-        deleteList(){
-          axios.delete('http://localhost:9000/rest/gjoremalsliste/' + this.id).then(response => {
+        helpModalOpen(){
+          this.showAddNewTodoList = true;
+        },
+
+
+        modalOpen(){
+          this.showModal = true;
+        },
+
+
+        deleteList(row){
+          axios.delete('http://localhost:9000/rest/gjoremalsliste/' + row.id).then(response => {
             this.$emit('deleteTodoList');
-            this.update();
+            this.updated = !this.updated;
+            this.showConfirmModal = false;
           });
         },
       }

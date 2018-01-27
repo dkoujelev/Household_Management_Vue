@@ -14,6 +14,9 @@ module.exports = function(connection, server) {
       }
       if ('opprettet' in liste && liste.opprettet !== null)
         liste.opprettet = new Date(liste.opprettet);
+      if ('ferdig' in liste && liste.ferdig !== null)
+        liste.ferdig = new Date(liste.ferdig);
+
       connection.query("SELECT Gjoremal.* FROM Gjoremal " +
         "INNER JOIN Gjoremalsliste ON Gjoremalsliste.id = Gjoremal.liste_id WHERE Gjoremalsliste.id=?", [req.params.id], function (err, rows, fields) {
         if (err)
@@ -43,6 +46,8 @@ module.exports = function(connection, server) {
       for (let gjoremalsliste of rows) {
         if ('opprettet' in gjoremalsliste && gjoremalsliste.opprettet !== null)
           gjoremalsliste.opprettet = new Date(gjoremalsliste.opprettet);
+        if('ferdig' in gjoremalsliste && gjoremalsliste.ferdig !== null)
+          gjoremalsliste.ferdig = new Date(gjoremalsliste.ferdig).getTime();
       }
       let liste = JSON.parse(JSON.stringify(rows));
       res.send(liste);
@@ -82,6 +87,8 @@ module.exports = function(connection, server) {
       for (liste of rows) {
         if ('opprettet' in liste && liste.opprettet !== null)
           liste.opprettet = new Date(liste.opprettet);
+        if('ferdig' in req.body && req.body.ferdig !== null)
+          req.body.ferdig = new Date(req.body.ferdig);
       }
       let lister = JSON.parse(JSON.stringify(rows));
       res.send(lister);
@@ -99,6 +106,8 @@ module.exports = function(connection, server) {
       for (liste of rows) {
         if ('opprettet' in liste && liste.opprettet !== null)
           liste.opprettet = new Date(liste.opprettet);
+        if('ferdig' in req.body && req.body.ferdig !== null)
+          req.body.ferdig = new Date(req.body.ferdig);
       }
       let lister = JSON.parse(JSON.stringify(rows));
       res.send(lister);
@@ -110,6 +119,8 @@ module.exports = function(connection, server) {
   server.post('rest/gjoremalsliste/:undergruppe_id', function (req, res, next) {
     let liste = Object.assign({}, req.body);
     liste.opprettet = util.getCurrentTimeAsEpoch();
+    if('ferdig' in req.body && req.body.ferdig !== null)
+      req.body.ferdig = new Date(req.body.ferdig).getTime();
     /*
     let liste = Object.assign({}, req.body);
     let gjoremaler = [];
@@ -159,6 +170,8 @@ module.exports = function(connection, server) {
     let liste = Object.assign({}, req.body);
     if ('opprettet' in liste && liste.opprettet !== null)
       liste.opprettet = new Date(liste.opprettet).getTime();
+    if('ferdig' in req.body && req.body.ferdig !== null)
+      req.body.ferdig = new Date(req.body.ferdig).getTime();
 
     connection.query("UPDATE Gjoremalsliste SET ? WHERE id=?", [req.body, req.body.id], function (err, rows, field) {
       if (err)
