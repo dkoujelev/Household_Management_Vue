@@ -20,12 +20,9 @@
           <div id="navMenu1" class="navbar-menu" v-bind:class="{'is-active': showBurger}">
             <div class="navbar-start" @click="showBurger = false">
               <router-link class="navbar-item" v-if="showNav" to="/Nyhetsfeed"><span class="icon"><i class="fa fa-envelope-open fa-lg"></i></span> &nbsp Nyheter &nbsp </router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/TodoList"><span class="icon"><i class="fa fa-check-square-o fa-lg"></i></span> &nbsp Gjøremål &nbsp </router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/TodoListOverview2"><span class="icon"><i class="fa fa-check-square-o fa-lg"></i></span> &nbsp Gjøremål &nbsp </router-link>
               <router-link class="navbar-item" v-if="showNav" to="/Shoppinglists"><span class="icon"><i class="fa fa-shopping-cart fa-lg"></i></span> &nbsp Handlelister &nbsp </router-link>
-              <!-- <router-link class="navbar-item" v-if="showNav" to="/ShowExpences">Utgifter</router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/Innmelding">Innmelding</router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/TestMail">TestMail</router-link> -->
-              <router-link class="navbar-item" v-if="showNav" to="/ShowAccounting"> <span class="icon"><i class="fa fa-calculator fa-lg" > </i>   </span> &nbsp Regnskap &nbsp </router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/ShowAccounting"> <span class="icon"><i class="fa fa-calculator fa-lg" > </i></span> &nbsp Regnskap &nbsp </router-link>
               <router-link class="navbar-item" v-if="showNav" to="/Statistikk"><span class="icon"><i class="fa fa-bar-chart fa-lg"></i></span> &nbsp Statistikk</router-link>
             </div>
             <div class="navbar-end" @click="showBurger = false">
