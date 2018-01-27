@@ -83,16 +83,21 @@
             return axios.get('http://localhost:9000/rest/bruker').then(res => {
               brukere = res.data;
               for (let i = 0; i < resRows.length; i++) {
-                console.log(resRows[i].sendt);
                 let date = this.formateDate(resRows[i].sendt);
                 let obj = {
-                  hvem: brukere[resRows[i].skrevet_av_bruker],
+                  hvem: '',
                   melding_id: resRows[i].melding_id,
                   overskrift: resRows[i].overskrift,
                   nyhet: resRows[i].tekst,
                   nar: date,
                   knapper: (resRows[i].skrevet_av_bruker === store.state.current_user.bruker_id)
                 };
+                for(let j = 0; j < brukere.length; j++){
+                  if(brukere[j].bruker_id === resRows[i].skrevet_av_bruker){
+                    obj.hvem = brukere[j];
+                    break;
+                  }
+                }
                 rows.push(obj);
                 if (cap > 0) {
                   cap -= 1;
