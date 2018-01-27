@@ -30,6 +30,7 @@ router.beforeEach((to,from,next) => {
   if(store.state.loggedIn){
     //console.log("router.beforeEach: already logged in, don't redirect");
     console.log('not updating');
+    if(!store.state.isMember) router.push('NewUser');
     return next();
   }
 
