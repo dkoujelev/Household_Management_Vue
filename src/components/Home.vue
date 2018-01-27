@@ -38,7 +38,8 @@
       data(){
         return {
           showMe: false,
-          titleTest: 'This is a title'
+          titleTest: 'This is a title',
+          text: 'Confirm action?'
         }
       },
       methods:{

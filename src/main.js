@@ -20,16 +20,18 @@ router.beforeEach((to,from,next) => {
 
   //console.log("router.beforeEach: intercepting route from " + from.path + " to " + to.path);
 
-  if(to.path === '/Login' || to.path === '/Register' || to.path==='/ForgottenPassword'){
+  if(to.path === '/Login' || to.path === '/Register' || to.path === '/ForgottenPassword'){
     //console.log("router.beforeEach: user is already on login/register page, no redirect");
     return next();
   }
 
-
-
   if(store.state.loggedIn){
     //console.log("router.beforeEach: already logged in, don't redirect");
     console.log('not updating');
+    //if(!store.state.isMember && (to.path !== 'NewUser' || to.path !== '/NewUser') ) router.push('/NewUser');
+    if(!store.state.isMember){
+      if(to.path !== '/NewUser' && to.path !== '/Innmelding') router.push('/NewUser')
+    }
     return next();
   }
 

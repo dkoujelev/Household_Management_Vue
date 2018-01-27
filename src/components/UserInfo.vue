@@ -2,24 +2,28 @@
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-8">
-        <div class="card is-rounded is-centered">
-          <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)	 ">
-            <div class="is-parent">
+        <div class="is-centered" >
+          <div class="is-ancestor">
+            <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)	 ">
               <div class="is-child">
                 <div class="block">
                   <p class="title">Min Side</p>
+                  <br>
                   <p class="subtitle">Personalia:</p>
                   <p>Fornavn: {{user_info.first_name}}</p>
                   <p>Etternavn: {{user_info.last_name}}</p>
                   <p>E-mail: {{user_info.email}}</p>
-                  <button class="button is-dark" style="background-color: orange" @click="changingPassword=true">Endre passord</button>
+                  <button class="button" style="background-color: orange" @click="changingPassword=true">Endre passord</button>
                  </div>
               </div>
             </div>
+
             <br> 
             <p class="subtitle">Dine kollektiv og grupper:</p>
             <div class="is-parent">
+
               <div class="is-child">
+                <p class="subtitle">Du er medlem av følgende kollektiv og grupper:</p>
                 <div class="content1">
                   <div>
                     <button @click="fixButtonsForGroups()">Fix buttons</button>
@@ -35,9 +39,9 @@
                           <td>{{ group.navn }}</td>
                           <td>{{ group.beskrivelse }}</td>
                           <td>
-                            <button class="button is-link is-small is-hidden-desktop" @click="showMembers(group)">Vis medlemmer</button>
-                            <button class="button is-link is-hidden-mobile" @click="showMembers(group)">Vis medlemmer</button>
+                            <button class="button is-link" @click="showMembers(group)">Vis medlemmer</button>
                           </td>
+
                           <td v-if="group.canLeave">
                             <button class="button is-danger is-hidden-mobile" @click="leaveSubGroup(group.undergruppe_id)">Forlat</button>
                             <button class="button is-danger is-small is-hidden-desktop" @click="leaveSubGroup(group.undergruppe_id)">Forlat</button>
@@ -45,20 +49,18 @@
                           <td v-if="group.canJoin">
                             <button class="button is-success is-hidden-mobile" @click="joinSubGroup(group.undergruppe_id)">Bli med</button>
                             <button class="button is-success is-small is-hidden-desktop" @click="joinSubGroup(group.undergruppe_id)">Bli med</button>
+
                           </td>
                         </tr>
                       </table>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <br>
-            <div class="is-parent">
-              <div class="is-child">
+                <br>
                 <router-link class="button"  style="background-color: orange" to="/Innmelding">Administrere grupper/kollektiver</router-link>
               </div>
             </div>
+            <br>
           </div>
         </div>
       </div>

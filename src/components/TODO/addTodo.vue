@@ -1,20 +1,39 @@
 <template>
-  <div class="box">
-    <h2>Lag nytt gjøremål</h2>
-    <label for="gjoremal">Tittel</label>
-    <input id="gjoremal" type="text" v-model="gjoremal.navn" placeholder="Gjøremål" />
 
-    <label class="help" for="dp">Frist</label>
-    <flatPickr id="dp" v-model="gjoremal.frist" :config="{enableTime: false}"></flatPickr>
 
-    <label for="slave">Hvem skal utføre gjøremålet?</label>
-    <select id="slave" class="dropdown" v-model="gjoremal.bruker_id">
-      <option disabled value="" class="dropdown-item">Velg bruker</option>
-      <option :value="user.bruker_id" class="dropdown-item" v-for="user in users">{{user.fornavn}} {{user.etternavn}}</option>
-    </select>
+  <div class="is-ancestor">
+    <div class="is-parent">
+      <div class="is-child">
+        <h3>Lag nytt gjøremål</h3>
+        <div class="field">
+          <div class="field-body">
+            <p class="help" style="font-size: large;">Tittel: </p>
+            <input id="gjoremal" type="text" class="input" style="width: 160px" v-model="gjoremal.navn" placeholder="Gjøremål" />
+          </div>
+        </div>
 
-    <button type="button" class="button" v-on:click="add()">Create</button>
+        <div class="field">
+          <div class="field-body">
+            <label class="help" for="dp" style="font-size: large;">Frist:</label>
+            <flatPickr id="dp" v-model="gjoremal.frist" :config="{enableTime: false}"></flatPickr>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-body">
+            <label class="help" for="slave" style="font-size: large;">Hvem skal utføre gjøremålet:</label>
+            <select id="slave" class="dropdown" v-model="gjoremal.bruker_id">
+              <option disabled value="" class="dropdown-item">Velg bruker</option>
+              <option :value="user.bruker_id" class="dropdown-item" v-for="user in users">{{user.fornavn}} {{user.etternavn}}</option>
+            </select>
+            <button type="button" class="button" style="background-color: orange" v-on:click="add()">Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+
 </template>
 
 <script>
@@ -26,17 +45,12 @@
     export default {
       name: "aTodo",
       props: [ 'id' ],
-      computed: {
-        len: function () {
-          return Number.parseInt(this.id);
-        }
-      },
       components: {
         flatPickr
       },
       watch: {
         id(){
-          this.gjoremal.liste_id = Number.parseInt(this.id);
+          this.liste_id = Number.parseInt(this.id);
         }
       },
       data() {
@@ -48,8 +62,8 @@
             frist: new Date(),
             beskrivelse: '',
             bruker_id: '',
-            liste_id: 1
-          }
+          },
+          liste_id: 1
         }
       },
       created() {
@@ -57,14 +71,12 @@
       },
       methods: {
         clear(){
-          this.users = [],
           this.gjoremal = {
             navn: '',
             start: new Date(),
             frist: new Date(),
             beskrivelse: '',
-            bruker_id: '',
-            liste_id: ''
+            bruker_id: ''
           }
         },
         getUsers(){
@@ -77,10 +89,12 @@
           });
         },
         add() {
+          this.gjoremal.liste_id = this.liste_id;
           axios.post('http://localhost:9000/rest/gjoremal', this.gjoremal).then( response => {
             this.$emit('todoAdded');
             this.clear();
           }).catch(err => {
+            this.$emit('failPost');
             console.log(err);
           });
         }

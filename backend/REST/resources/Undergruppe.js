@@ -49,10 +49,9 @@ module.exports = function(connection, server){
 
   // Hent alle medlemmer i en undergruppe
   server.get('rest/medlemmerIUndergruppe/:undergruppe_id', (req,res,next) => {
-    connection.query('SELECT Bruker.* FROM Undergruppe ' +
-      'INNER JOIN Bruker_Undergruppe ON Undergruppe.undergruppe_id=Bruker_Undergruppe.undergruppe_id ' +
+    connection.query('SELECT Bruker.* FROM Bruker_Undergruppe ' +
       'INNER JOIN Bruker ON Bruker_Undergruppe.bruker_id=Bruker.bruker_id ' +
-      'WHERE Undergruppe.undergruppe_id = ?', req.params.undergruppe_id, (err,rows,fields) => {
+      'WHERE undergruppe_id = ?', req.params.undergruppe_id, (err,rows,fields) => {
       if(err)
         return next(err);
 
