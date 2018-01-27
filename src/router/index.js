@@ -37,7 +37,7 @@ export default new Router({
     {
       path: '/',
       name: 'Root',
-      component: Login
+      component: Home
     },
     {
       path: '/home',
