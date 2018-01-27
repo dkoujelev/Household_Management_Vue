@@ -5,27 +5,21 @@
         <div class="card is-rounded">
           <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)	 ">
             <p class="title">Regnskap</p>
-            <p class="subtitle"> Min personlige økonomiske ballanse: </p>
+            <p class="subtitle"> Min personlige økonomiske balanse: </p>
             <div class="is-parent is-centered is-12">
-
               <div class="tile is-child is-6 is-centered">
                 <div class="block">
-
                   <br>
                   <br>
-
-                  <p class="subtitle"> Debet - Gjeld inn: &nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> 941 kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldInn">Administrer </router-link> </span>  </p>
-                  <p class="subtitle"> Kredit - Gjeld ut: &nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: #ff9980; font-weight: bold"> 441 kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldUt">Administrer </router-link> </span> </p>
+                  <p class="subtitle"> Debet - Gjeld inn: &nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> {{totalDebt.sum_in}} kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldInn">Administrer </router-link> </span>  </p>
+                  <p class="subtitle"> Kredit - Gjeld ut: &nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: #ff9980; font-weight: bold"> {{totalDebt.sum_out}} kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldUt">Administrer </router-link> </span> </p>
                   <div class="block_1"></div> <hr/>
-                  <p class="subtitle"> Ballanse: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> 500 kr </span></p>
+                  <p class="subtitle"> Balanse: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> {{totalDebt.balance}} kr </span></p>
                   <div class="block_1"></div> <hr/>
                   <br>
                   <br>
-
                 </div>
-
               </div>
-
             </div>
             <br>
             <br>
@@ -43,8 +37,6 @@
         </div>
       </div>
     </div>
-
-  </div>
 </template>
 
 <!--
@@ -269,10 +261,43 @@
 
 
 <script>
+  import axios from 'axios'
+  import {store} from '@/store'
   import GjeldInn from '@/components/Gjeld/GjeldInn'
   import GjeldUt from '@/components/Gjeld/GjeldUt'
+
   export default {
-    components: {GjeldInn, GjeldUt}
+    components: {GjeldInn, GjeldUt},
+    asyncComputed:{
+      totalDebt:{
+        get(){
+          let users_in, users_out;
+          return axios.get('http://localhost:9000/rest/gjeldBrukerKreverInn/' + store.state.current_user.bruker_id).then(response => {
+            users_in = response.data;
+            return axios.get('http://localhost:9000/rest/gjeldBrukerErSkyldig/' + store.state.current_user.bruker_id);
+          }).then(response=>{
+            users_out = response.data;
+
+            let sum_in=0, sum_out=0, balance;
+
+            for(let user of users_in)
+              sum_in+=user.sum;
+
+            for(let user of users_out)
+              sum_out+=user.sum;
+
+            balance = sum_in-sum_out;
+
+            return {sum_in,sum_out,balance};
+
+          }).catch(err => {
+            console.log(err);
+          });
+        },
+        default:{sum_in:0,sum_out:0,balance:0}
+      }
+    },
+
   }
 </script>
 
