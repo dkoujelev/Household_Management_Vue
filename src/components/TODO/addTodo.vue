@@ -26,17 +26,12 @@
     export default {
       name: "aTodo",
       props: [ 'id' ],
-      computed: {
-        len: function () {
-          return Number.parseInt(this.id);
-        }
-      },
       components: {
         flatPickr
       },
       watch: {
         id(){
-          this.gjoremal.liste_id = Number.parseInt(this.id);
+          this.liste_id = Number.parseInt(this.id);
         }
       },
       data() {
@@ -48,8 +43,8 @@
             frist: new Date(),
             beskrivelse: '',
             bruker_id: '',
-            liste_id: 1
-          }
+          },
+          liste_id: 1
         }
       },
       created() {
@@ -57,14 +52,12 @@
       },
       methods: {
         clear(){
-          this.users = [],
           this.gjoremal = {
             navn: '',
             start: new Date(),
             frist: new Date(),
             beskrivelse: '',
-            bruker_id: '',
-            liste_id: ''
+            bruker_id: ''
           }
         },
         getUsers(){
@@ -77,6 +70,7 @@
           });
         },
         add() {
+          this.gjoremal.liste_id = this.liste_id;
           axios.post('http://localhost:9000/rest/gjoremal', this.gjoremal).then( response => {
             this.$emit('todoAdded');
             this.clear();

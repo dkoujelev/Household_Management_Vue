@@ -1,4 +1,68 @@
+
 <template>
+  <div class="container">
+    <br>
+    <p class="subtitle">Medlemmer jeg skylder penger:</p>
+    <p class="text"> Totalbeløp: &nbsp &nbsp    <span class="ny" style="font-weight: bold; font-size: large; text-align: center; color: red"> {{totalDebt}} kr </span>  </p>
+
+    <table class="table">
+      <thead>
+      <th scope="col">Navn</th>
+      <th scope="col">Sum</th>
+      </thead>
+
+      <tbody>
+      <tr v-for="user in users" @click="selectUser(user)">
+        <td data-label="Navn">  {{user.fornavn}}  {{user.etternavn}}  </td>
+        <td data-label="Sum">  {{user.sum + " kr" }}  </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="columns is-centered">
+
+
+
+
+      <div class="column is-8">
+
+        <div class="card is-rounded is-centered">
+          <div class="is-ancestor box" style="background-color: hsl(217, 71%, 53%)">
+
+
+            <div class="is-parent">
+
+
+
+
+            </div>
+
+            <div class="child tile" >
+
+            </div>
+
+              <div class="is-child">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+
+
+
+
+
+
+
+
+<!-- Old content -->
+<!-- <template>
   <div class="is-ancestor" style="background-color: white">
     <div class=" is-parent is-vertical " style="background-color: white">
       <div class="child tile " style="background-color: white">
@@ -29,7 +93,7 @@
 
     </div>
   </div>
-</template>
+</template> -->
 
 <script>
 
@@ -67,41 +131,8 @@
 </script>
 
 <style scoped>
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    border: 1px solid #ddd;
-  }
 
-  th, td {
-    text-align: left;
-    padding: 16px;
 
-  }
-
-  tr {
-    color: royalblue;
-  }
-
-  th {
-    background-color: gainsboro;
-  }
-
-  tr:nth-child(odd) {
-    background-color: #f2f2f2
-
-  }
-  tr:hover {
-    background-color: azure;
-    text-decoration-line: underline;
-    color: royalblue;
-    cursor: hand;
-
-  }
-  tr:active{
-    color: black;
-  }
 
 
 </style>

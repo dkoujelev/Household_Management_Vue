@@ -28,7 +28,7 @@ module.exports = function(connection, server) {
   });
 
   // Hent gjeld til kollektiv
-  server.get('rest/statistikkGjeldKollektiv/:kolllektiv_id', function (req, res, next) {
+  server.get('rest/statistikkGjeldKollektiv/:kollektiv_id', function (req, res, next) {
     connection.query('SELECT Bruker.bruker_id, Bruker.fornavn, Bruker.etternavn, sum(belop) AS belop FROM Gjeld ' +
     'INNER JOIN Kostnad ON Gjeld.kostnad_id = Kostnad.kostnad_id ' +
     'INNER JOIN Undergruppe ON Kostnad.undergruppe_id = Undergruppe.undergruppe_id ' +
