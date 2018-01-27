@@ -1,6 +1,7 @@
 let clearDB = require('./testutil').clearDB;
 let axios = require('axios');
 let auth = require('../REST/auth');
+let serverConfig = require('../REST/serverConfig');
 
 let chai = require("chai");
 let chaiAsPromised = require("chai-as-promised");
@@ -16,7 +17,7 @@ chai.use(chaiDateString);
 axios.defaults.withCredentials = true;
 
 before((done) => {
-  server.loginEnabled = false;
+  serverConfig.loginEnabled = false;
   require("../REST/runserver_test")(() => done());
 });
 

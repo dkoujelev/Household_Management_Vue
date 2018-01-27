@@ -19,17 +19,21 @@
                 <th scope="col">Utgift for:</th>
                 <th scope="col">Dato:</th>
                 <th scope="col">Delsum per handletur:</th>
+                <th scope="col">Slett gjeld</th>
                 <th scope="col">Handleliste </th>
                 </thead>
 
                 <tbody>
-                <tr v-for="debt in debts" @click="selectUser(debt)">
+                <tr v-for="debt in debts">
                   <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
                   <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
                   <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
-                  <td data-label="Tilknyttet handleliste"> <button> Vis handleliste</button>
-                    <a v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</a>
-                    <p v-else>Ingen handleliste</p>
+                  <td data-label="Slett gjeld">
+                    <input type="checkbox" v-model="debt.delete">
+                  </td>
+                  <td data-label="Tilknyttet handleliste">
+                    <button v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</button>
+                    <p v-else></p>
                   </td>
                 </tr>
                 </tbody>
@@ -41,17 +45,17 @@
           <br>
           <br>
           <br>
-          <router-link class="button" to="$router.back()"> Avbryt </router-link>
+          <a class="button" @click="deleteDebt">Slett gjeld</a>
+          <a class="button" @click="$router.back()">Avbryt</a>
         </div>
         <br>
-
-
       </div>
 
     </div>
-  </div>
-  </div>
-
+    <Modal :modalVisible.sync="showingShoppingList" @modalClosing="showingShoppingList=false;">
+      <h2 slot="title" style="color:white">{{currentList_name}}</h2>
+      <ViewShoppingList :id.sync="currentList_id" slot="content" @closingShoppingList="showingShoppingList=false;"/>
+    </Modal>
   </div>
 </template>
 
@@ -147,16 +151,22 @@
   import axios from 'axios';
   import {store} from '../../store';
   import router from '@/router'
+  import Modal from '@/components/Modal'
+  import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
 
   export default {
     created(){
       this.loadDebt();
     },
+    components:{Modal,ViewShoppingList},
     data(){
       return {
         user_owes: {fornavn: '', etternavn: ''},
         debts: [],
-        users: []
+        users: [],
+        showingShoppingList: false,
+        currentList_id: null,
+        currentList_name:null
       };
     },
     methods:{
@@ -192,11 +202,10 @@
             this.loadDebt();
           }).catch(err => console.log(err));
       },
-
-
-
       showShoppingList(debt){
-        router.push('/ViewShoppingList/' + debt.handleliste_id);
+        this.currentList_id = debt.handleliste_id;
+        this.currentList_name = debt.handleliste_navn;
+        this.showingShoppingList=true;
       }
     },
     computed:{
