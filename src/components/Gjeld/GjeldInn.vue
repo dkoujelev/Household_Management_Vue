@@ -44,6 +44,7 @@
             <br>
 
             <router-link class="button" to="./AddExpence"> Legg til utgift for gruppe </router-link>
+            <a class="button" @click="$router.back()">Avbryt</a>
             </div>
             <br>
             <br>
