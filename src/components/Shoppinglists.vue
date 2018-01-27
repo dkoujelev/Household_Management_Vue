@@ -22,19 +22,23 @@
                     <th>Frist</th>
                     <th></th>
                     </thead>
+                    <ConfirmModal :modalVisible.sync="showConfirmModal" :rowData.sync="list" :message="confirmText" @cancel="showConfirmModal = false" @confirm="changeFavorite"/>
                     <tr v-for="row in rows">
                       <td>{{row.navn}}</td>
                       <td>{{row.frist}}</td>
                       <td>
                         <button class="button is-link" @click="selectList(row)">Se handleliste</button>
-                        <button class="button" :class="{ 'is-success': !row.favorite, 'is-danger': row.favorite}" v-if="!isHome" @click="addFavorite(row)">
-                          <i class="fa fa-star" aria-hidden="true"></i><p v-if="row.favorite">&nbsp; Fjern fra favoritt</p><p v-else>&nbsp; Legg til favoritt</p>
+                        <button class="button is-success" v-if="!isHome && !row.favorite" @click="changeFavorite(row)">
+                          <i class="fa fa-star" aria-hidden="true"></i><p>&nbsp; Legg til favoritt</p>
+                        </button>
+                        <button class="button is-danger" v-else-if="!isHome && row.favorite" @click="confirmation(row)">
+                          <i class="fa fa-star" aria-hidden="true"></i><p>&nbsp; Fjern fra favoritt</p>
                         </button>
                       </td>
                     </tr>
                   </table>
                 </div>
-                <br v-if="len === -1">
+                <br v-if="!isHome">
                 <button class="button" @click="openAddShoppingList" v-if="!isHome">Ny handleliste</button>
               </div>
             </div>
@@ -53,11 +57,12 @@
   import Modal from '@/components/Modal'
   import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
   import ShoppingList from '@/components/ShoppingList/ShoppingList'
+  import ConfirmModal from '@/components/ConfirmModal'
 
   export default {
     name: 'Shoppinglists',
     props: [ 'value' ],
-    components: { Modal, ViewShoppingList, ShoppingList },
+    components: { Modal, ViewShoppingList, ShoppingList, ConfirmModal },
     computed: {
       len: function () {
         return (isNaN(Number.parseInt(this.value)) ? -1 : this.value);
@@ -77,7 +82,7 @@
           return axios.get(rest).then(response => {
             let resRows = response.data;
             for(let i = 0; i < resRows.length; i++){
-              if(resRows[i].handling_utfort === "1970-01-01T00:00:00.000Z" || resRows[i].favoritt) {
+              if(resRows[i].handling_utfort === "1970-01-01T00:00:00.000Z" || resRows[i].favoritt || resRows[i].handling_utfort === null) {
                 let date = this.formateDate(resRows[i].frist);
                 let obj = {handleliste_id: resRows[i].handleliste_id, navn: resRows[i].navn, frist: date, favorite: resRows[i].favoritt};
                 rows.push(obj);
@@ -106,12 +111,18 @@
         showShoppingList: false,
         showAddShoppingList: false,
         updated: false,
+        showConfirmModal: false,
+        confirmText: 'Vil du fjerne denne lista fra favoritter?'
       };
     },
     mounted(){
       this.update();
     },
     methods: {
+      confirmation(row){
+        this.list = row;
+        this.showConfirmModal = true;
+      },
       update(){
         this.closeAddShoppingList();
         this.closeShoppingList();
@@ -129,10 +140,11 @@
       closeAddShoppingList(){
         this.showAddShoppingList = false;
       },
-      addFavorite(row){
+      changeFavorite(row){
         let obj = {favoritt: !row.favorite};
         axios.put('http://localhost:9000/rest/handleliste/' + row.handleliste_id, obj).then(response => {
           this.$emit('favoriteUpdated');
+          this.showConfirmModal = false;
           this.updated = !this.updated;
         });
       },
@@ -142,6 +154,7 @@
         this.openShoppingList();
       },
       formateDate(raw){
+        if(raw === null) return '';
         return raw.substring(8, 10) + "." + raw.substring(5, 7) + "." + raw.substring(2,4);
       }
     }
