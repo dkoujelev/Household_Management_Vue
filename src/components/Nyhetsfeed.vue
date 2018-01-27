@@ -175,10 +175,5 @@
   background-color: orange;
   }
 
-  div.is-ancestor {
-    /** Trancparancy filter: */
-    background-color: hsl(217, 71%, 53%) /**  ;
-    /** opacity: 0.8; */
-    /** filter: alpha(opacity=60); /* For IE8 and earlier */
-  }
+
 </style>
