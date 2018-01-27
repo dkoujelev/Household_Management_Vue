@@ -37,15 +37,10 @@
     <!-- END NAV -->
     <div class="myContainer" style="max-height: 100%">
       <br/><br/><br/>
-
       <div class="content">
         <router-view/>
       </div>
-
-
     </div>
-
-
   </div>
 </template>
 

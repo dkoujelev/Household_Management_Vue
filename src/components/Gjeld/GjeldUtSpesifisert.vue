@@ -6,13 +6,13 @@
 
         <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)">
           <div class="is-parent">
-            <h3 style="color: white">Penger som jeg skylder {{user_owes.fornavn + " " + user_owes.etternavn}}: </h3>
-            <br>
+            <p class="title" style="color: white">Penger som jeg skylder {{user_owes.fornavn + " " + user_owes.etternavn}}: </p>
             <div class="block_1"></div> <hr/>
-            <p class="subtitle"> Kredit - Gjeld ut - {{user_owes.fornavn + " " + user_owes.etternavn}}: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: #FF7F50; font-weight: bold"> {{totalDebt}} kr </span></p>
+            <p class="subtitle"> Kredit - Gjeld ut - {{user_owes.fornavn + " " + user_owes.etternavn}}: &nbsp&nbsp <span class="p" style="font-size: 20px; color: #FF7F50; font-weight: bold"> {{totalDebt}} kr </span></p>
             <div class="block_1"></div> <hr/>
             <br>
             <div class="child tile" style="background-color:white">
+              <div class="content1">
               <table class="table">
                 <thead>
                 <th scope="col">Utgift for</th>
@@ -34,12 +34,10 @@
                 </tr>
                 </tbody>
 
-              </table>
-
+                </table>
+              </div>
             </div>
           </div>
-          <br>
-          <br>
           <br>
           <br>
           <a class="button" @click="$router.back()">Avbryt</a>
