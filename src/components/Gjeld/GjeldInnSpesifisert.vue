@@ -16,11 +16,11 @@
             <div class="child tile" style="background-color:white">
               <table class="table">
                 <thead>
-                <th scope="col">Utgift for:</th>
-                <th scope="col">Dato:</th>
-                <th scope="col">Delsum per handletur:</th>
+                <th scope="col">Utgift for</th>
+                <th scope="col">Dato</th>
+                <th scope="col">Delsum per handletur</th>
                 <th scope="col">Slett gjeld</th>
-                <th scope="col">Handleliste </th>
+                <th scope="col"></th>
                 </thead>
 
                 <tbody>
@@ -32,7 +32,7 @@
                     <input type="checkbox" v-model="debt.delete">
                   </td>
                   <td data-label="Tilknyttet handleliste">
-                    <button v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</button>
+                    <a v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)"><span class="icon"><i class="fa fa-shopping-cart fa-lg"></i></span></a>
                     <p v-else></p>
                   </td>
                 </tr>

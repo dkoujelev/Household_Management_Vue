@@ -15,10 +15,10 @@
             <div class="child tile" style="background-color:white">
               <table class="table">
                 <thead>
-                <th scope="col">Utgift for:</th>
-                <th scope="col">Dato:</th>
-                <th scope="col">Delsum per handletur:</th>
-                <th scope="col">Handleliste </th>
+                <th scope="col">Utgift for</th>
+                <th scope="col">Dato</th>
+                <th scope="col">Delsum per handletur</th>
+                <th scope="col"></th>
 
                 </thead>
 
@@ -28,7 +28,7 @@
                   <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
                   <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
                   <td data-label="Tilknyttet handleliste">
-                    <button v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</button>
+                    <a v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)"><span class="icon"><i class="fa fa-shopping-cart fa-lg"></i></span></a>
                     <p v-else></p>
                   </td>
                 </tr>
