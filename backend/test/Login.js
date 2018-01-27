@@ -4,6 +4,7 @@ let axios = require('axios');
 let clearDB = require('./testutil').clearDB;
 let server = require('../REST/server');
 let serverConfig = require('./testutil').serverConfig();
+let serverConfig_rest = require('../REST/serverConfig');
 let restServer = 'http://' + serverConfig.serverAddress + ':' + serverConfig.serverPort + '/rest/';
 
 let testuser = {
@@ -16,21 +17,21 @@ let testuser = {
 
 let hashed_passord = 'passord';
 
-describe('Login',() => {
+describe.skip('Login',() => {
 
-  before(() => {    server.loginEnabled = true;});
-  after(() => {    server.loginEnabled = false;});
+  before(() => {    serverConfig_rest.loginEnabled = true;});
+  after(() => {    serverConfig_rest.loginEnabled = false;});
 
   beforeEach(() => {
     return clearDB()
     .then(() => {
-      server.loginEnabled = false;
+      serverConfig_rest.loginEnabled = false;
     }).then(() => {
       testuser.hashed_passord = hashed_passord;
       return axios.post(restServer + 'bruker/', testuser);
     }).then((response) => {
       testuser.bruker_id = response.data.insertId;
-      server.loginEnabled = true;
+        serverConfig_rest.loginEnabled = true;
     }).catch(exception => {
       console.log(exception);
     });

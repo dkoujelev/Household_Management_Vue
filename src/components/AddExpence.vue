@@ -9,7 +9,7 @@
     </div>
 
     <div class="field">
-      <a class="button is-danger" @click="$router.back()">Avbryt</a>
+      <a class="button is-danger" @click="$emit('closing')">Avbryt</a>
       <a href="#" class="button is-primary" @click.prevent="addExpence">Legg til utgift for gruppe </a>
 
     </div>
@@ -40,9 +40,7 @@
             newExpence.sum = this.expence.sum;
             newExpence.kvittering = this.expence.kvittering;
 
-            router.back();
-
-            this.$emit('added-expence', newExpence);
+            this.$emit('closing');
           }).catch(err => {
             console.log(JSON.stringify(err));
           });
