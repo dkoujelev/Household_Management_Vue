@@ -12,12 +12,13 @@
             <div class="block_1"></div> <hr/>
             <br>
             <div class="child tile" style="background-color:white">
+              <div class="content1">
               <table class="table">
                 <thead>
-                <th scope="col">Utgift for:</th>
-                <th scope="col">Dato:</th>
-                <th scope="col">Delsum per handletur:</th>
-                <th scope="col">Handleliste </th>
+                <th scope="col">Utgift for</th>
+                <th scope="col">Dato</th>
+                <th scope="col">Delsum per handletur</th>
+                <th scope="col"></th>
 
                 </thead>
 
@@ -27,16 +28,16 @@
                   <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
                   <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
                   <td data-label="Tilknyttet handleliste">
-                    <button v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</button>
+                    <a v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)"><span class="icon"><i class="fa fa-shopping-cart fa-lg"></i></span></a>
                     <p v-else></p>
                   </td>
                 </tr>
                 </tbody>
-              </table>
+
+                </table>
+              </div>
             </div>
           </div>
-          <br>
-          <br>
           <br>
           <br>
           <a class="button" @click="$router.back()">Avbryt</a>
@@ -49,7 +50,7 @@
     </div>
     <Modal :modalVisible.sync="showingShoppingList" @modalClosing="showingShoppingList=false;">
       <h2 slot="title" style="color:white">{{currentList_name}}</h2>
-      <ViewShoppingList :id.sync="currentList_id" slot="content" @closingShoppingList="showingShoppingList=false;"/>
+      <ViewShoppingList :readOnly="true" :id.sync="currentList_id" slot="content" @closingShoppingList="showingShoppingList=false;"/>
     </Modal>
   </div>
 </template>
@@ -163,9 +164,6 @@
       };
     },
     methods:{
-      showShoppingList(debt){
-        router.push('/ViewShoppingList/' + debt.handleliste_id);
-      },
       formatDate(raw){
         return raw.substring(8, 10) + "." + raw.substring(5, 7) + "." + raw.substring(0,4);
       },

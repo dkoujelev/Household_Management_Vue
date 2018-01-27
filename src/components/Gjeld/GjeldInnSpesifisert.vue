@@ -13,30 +13,32 @@
             <br>
 
             <div class="child tile" style="background-color:white">
-              <table class="table">
-                <thead>
-                <th scope="col">Utgift for:</th>
-                <th scope="col">Dato:</th>
-                <th scope="col">Delsum per handletur:</th>
-                <th scope="col">Slett gjeld</th>
-                <th scope="col">Handleliste </th>
-                </thead>
+              <div class="content1">
+                <table class="table">
+                  <thead>
+                  <th scope="col">Utgift for</th>
+                  <th scope="col">Dato</th>
+                  <th scope="col">Delsum per handletur</th>
+                  <th scope="col">Slett gjeld</th>
+                  <th scope="col"></th>
+                  </thead>
 
-                <tbody>
-                <tr v-for="debt in debts">
-                  <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
-                  <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
-                  <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
-                  <td data-label="Slett gjeld">
-                    <input type="checkbox" v-model="debt.delete">
-                  </td>
-                  <td data-label="Tilknyttet handleliste">
-                    <button v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</button>
-                    <p v-else></p>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
+                  <tbody>
+                  <tr v-for="debt in debts">
+                    <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
+                    <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
+                    <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
+                    <td data-label="Slett gjeld">
+                      <input type="checkbox" v-model="debt.delete">
+                    </td>
+                    <td data-label="Tilknyttet handleliste">
+                      <a v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)"><span class="icon"><i class="fa fa-shopping-cart fa-lg"></i></span></a>
+                      <p v-else></p>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
           <br>
@@ -52,7 +54,7 @@
     </div>
     <Modal :modalVisible.sync="showingShoppingList" @modalClosing="showingShoppingList=false;">
       <h2 slot="title" style="color:white">{{currentList_name}}</h2>
-      <ViewShoppingList :id.sync="currentList_id" slot="content" @closingShoppingList="showingShoppingList=false;"/>
+      <ViewShoppingList :readOnly="true" :id.sync="currentList_id" slot="content" @closingShoppingList="showingShoppingList=false;"/>
     </Modal>
   </div>
 </template>
