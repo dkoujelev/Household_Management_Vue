@@ -1,4 +1,5 @@
 let util = require('../util');
+let auth = require('../auth');
 
 module.exports = function(connection, server){
 
@@ -18,6 +19,9 @@ module.exports = function(connection, server){
 
 // Sende melding til bruker eller kollektiv
   server.post('rest/melding',function(req,res,next){
+
+    if(!auth.checkThatSessionHasUserId(req,res,req.body.skrevet_av_bruker))
+      return next();
 
     req.body.sendt = util.getCurrentTimeAsEpoch();
 

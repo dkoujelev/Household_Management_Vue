@@ -3,7 +3,7 @@
     <div :class="{'is-centered' : !isHome,'columns' : !isHome}">
       <div :class="{'column is-8' : !isHome}">
       <div class="card is-rounded " :class="{'is-centered' :!isHome}">
-        <div class="is-ancestor box"  style="background-color: hsl(217, 71%, 53%)	">
+        <div class="is-ancestor box"   style="background-color:  hsl(217, 71%, 53%);">
           <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
             <h2 slot="title" style="color:white">Lag nyhet</h2>
             <Addnews slot="content" @addedNews="update" @closeAddNews="closeModal" />
@@ -162,7 +162,7 @@
     overflow: auto;
   }
   div.is-ancestor {
-    background-color: #ffffff;
+    /**background-color: #ffffff;
 
     opacity: 1;
     filter: alpha(opacity=60); /* For IE8 and earlier */
@@ -173,5 +173,12 @@
   }
   button.button{
   background-color: orange;
+  }
+
+  div.is-ancestor {
+    /** Trancparancy filter: */
+    background-color: hsl(217, 71%, 53%) /**  ;
+    /** opacity: 0.8; */
+    /** filter: alpha(opacity=60); /* For IE8 and earlier */
   }
 </style>

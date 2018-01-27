@@ -2,15 +2,15 @@
   <div class="block">
     <h1 class="title is-3">Legg til utgift</h1>
     <div class="field">
-      <input class="input" type="text" v-model="expence.tittel" placeholder="Tittel">
+      <input class="input" type="text" v-model="expence.tittel" placeholder="Beskrivelse">
     </div>
     <div class="field">
-      <input class="input" type="number" v-model="expence.sum" placeholder="Sum">
+      <input class="input" type="number" v-model="expence.sum" placeholder="Sum - total utgift for gruppe">
     </div>
 
     <div class="field">
       <a class="button is-danger" @click="$router.back()">Avbryt</a>
-      <a href="#" class="button is-primary" @click.prevent="addExpence">Legg til utgift</a>
+      <a href="#" class="button is-primary" @click.prevent="addExpence">Legg til utgift for gruppe </a>
 
     </div>
   </div>

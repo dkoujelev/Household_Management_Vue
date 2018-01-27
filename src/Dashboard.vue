@@ -2,10 +2,11 @@
 
   <div>
     <!-- START NAV -->
-    <nav class="navbar is-link is-fixed-top">
+    <nav class="navbar is-link is-fixed-top" style="background-color: hsl(217, 71%, 53%);
+    background-image: linear-gradient(to right,hsl(217, 71%, 53%),hsl(204, 86%, 53%))">
         <div class="navbar-brand">
             <router-link class="navbar-item" to="/home">
-              <img src="./img/logo_small.png" alt="image not found" width="45"/>
+              <img src="./img/logo_small.png" alt="image not found" width="50"/>
             </router-link>
           <div class="navbar-item">
             <SelectGroup v-if="showNav" ref="SelectGroup" style="width: 160px"> </SelectGroup>
@@ -19,17 +20,16 @@
           <div id="navMenu1" class="navbar-menu" v-bind:class="{'is-active': showBurger}">
             <div class="navbar-start" @click="showBurger = false">
               <router-link class="navbar-item" v-if="showNav" to="/Nyhetsfeed"><span class="icon"><i class="fa fa-envelope-open fa-lg"></i></span> &nbsp Nyheter &nbsp </router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/TodoList"><span class="icon"><i class="fa fa-bell fa-lg"></i></span> &nbsp Gjøremål &nbsp </router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/TodoList"><span class="icon"><i class="fa fa-check-square-o fa-lg"></i></span> &nbsp Gjøremål &nbsp </router-link>
               <router-link class="navbar-item" v-if="showNav" to="/Shoppinglists"><span class="icon"><i class="fa fa-shopping-cart fa-lg"></i></span> &nbsp Handlelister &nbsp </router-link>
               <!-- <router-link class="navbar-item" v-if="showNav" to="/ShowExpences">Utgifter</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/Innmelding">Innmelding</router-link>
               <router-link class="navbar-item" v-if="showNav" to="/TestMail">TestMail</router-link> -->
               <router-link class="navbar-item" v-if="showNav" to="/ShowAccounting"> <span class="icon"><i class="fa fa-calculator fa-lg" > </i>   </span> &nbsp Regnskap &nbsp </router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/UserInfo"><span class="icon"><i class="fa fa-user fa-lg"></i></span> &nbsp Min Side </router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/Statistikk">Statistikk</router-link>
-
+              <router-link class="navbar-item" v-if="showNav" to="/Statistikk"><span class="icon"><i class="fa fa-bar-chart fa-lg"></i></span> &nbsp Statistikk</router-link>
             </div>
             <div class="navbar-end" @click="showBurger = false">
+              <router-link class="navbar-item" v-if="showNav" to="/UserInfo"><span class="icon"><i class="fa fa-user fa-lg"></i></span> &nbsp Min Side </router-link>
               <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut"> <span class="icon"><i class="fa fa-power-off fa-lg"></i></span>  &nbsp Logg Ut</a>
             </div>
           </div>
@@ -130,7 +130,14 @@ export default {
     /** -ms-filter: blur(5px); */
     /** filter: blur(5px); */
 
+
+
+
+
+
   }
+
+
 
    Alternative way:
   html {
@@ -140,6 +147,9 @@ export default {
   -o-background-size: cover;
   background-size: cover;
 }
+
+
+
 
 
 
