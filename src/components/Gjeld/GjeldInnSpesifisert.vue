@@ -19,6 +19,7 @@
                 <th scope="col">Utgift for:</th>
                 <th scope="col">Dato:</th>
                 <th scope="col">Delsum per handletur:</th>
+                <th scope="col">Slett gjeld</th>
                 <th scope="col">Handleliste </th>
                 </thead>
 
@@ -27,6 +28,9 @@
                   <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
                   <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
                   <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
+                  <td data-label="Slett gjeld">
+                    <input type="checkbox" v-model="debt.delete">
+                  </td>
                   <td data-label="Tilknyttet handleliste">
                     <button v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</button>
                     <p v-else></p>
@@ -41,6 +45,7 @@
           <br>
           <br>
           <br>
+          <a class="button" @click="deleteDebt">Slett gjeld</a>
           <a class="button" @click="$router.back()">Avbryt</a>
         </div>
         <br>
