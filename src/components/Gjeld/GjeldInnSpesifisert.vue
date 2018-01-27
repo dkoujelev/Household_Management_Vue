@@ -2,20 +2,27 @@
   <div class="is-ancestor" style="background-color: white">
     <div class=" is-parent is-vertical " style="background-color: white">
       <div class="child tile " style="background-color: white">
-        <h3>Medlemmer som skylder meg penger</h3>
+        <h3>Penger som {{user_owes.fornavn + " " + user_owes.etternavn}} skylder meg:</h3>
       </div>
 
       <div class="child tile" style="background-color:white">
         <table class="table">
           <thead>
-          <th scope="col">Navn</th>
-          <th scope="col">Sum</th>
+          <th scope="col">Utgift for:</th>
+          <th scope="col">Dato:</th>
+          <th scope="col">Delsum per handletur:</th>
+          <th scope="col">Handleliste </th>
           </thead>
 
           <tbody>
           <tr v-for="debt in debts" @click="selectUser(debt)">
-            <td data-label="Navn">  {{debt.fornavn}}  {{debt.etternavn}}  </td>
-            <td data-label="Sum">  {{debt.sum + " kr" }}  </td>
+            <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
+            <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
+            <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
+            <td data-label="Tilknyttet handleliste">
+              <a v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</a>
+              <p v-else>Ingen handleliste</p>
+            </td>
           </tr>
           </tbody>
         </table>

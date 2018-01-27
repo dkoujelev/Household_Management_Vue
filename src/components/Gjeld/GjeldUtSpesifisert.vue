@@ -19,7 +19,7 @@
 
             <tbody>
               <tr v-for="debt in debts">
-                <td data-label="Utgift for:">  Handletur  </td>
+                <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
                 <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
                 <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
                 <td data-label="Tilknyttet handleliste">
