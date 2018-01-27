@@ -7,9 +7,10 @@ import axios from 'axios'
 import {store} from './store';
 import AsyncComputed from 'vue-async-computed';
 import VuejsDialog from 'vuejs-dialog';
-
+import VeeValidate from 'vee-validate';
 Vue.use(AsyncComputed);
 Vue.use(VuejsDialog, {okText: 'OK', cancelText: 'Avbryt', reverse: false});
+Vue.use(VeeValidate);
 
 Vue.config.productionTip = false;
 window.Vue = Vue;

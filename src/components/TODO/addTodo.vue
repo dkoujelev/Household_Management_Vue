@@ -1,9 +1,9 @@
 <template>
   <div class="box">
     <h2>Lag nytt gjøremål</h2>
+    <label class="help is-danger">{{errorMessage}}</label>
     <label for="gjoremal">Tittel</label>
     <input id="gjoremal" type="text" v-model="gjoremal.navn" placeholder="Gjøremål" />
-
     <label class="help" for="dp">Frist</label>
     <flatPickr id="dp" v-model="gjoremal.frist" :config="{enableTime: false}"></flatPickr>
 
@@ -37,12 +37,14 @@
       data() {
         return {
           users: [],
+          errorMessage: '',
           gjoremal: {
             navn: '',
             start: new Date(),
             frist: new Date(),
             beskrivelse: '',
             bruker_id: '',
+
           },
           liste_id: 1
         }
@@ -58,8 +60,18 @@
             frist: new Date(),
             beskrivelse: '',
             bruker_id: ''
+
           }
         },
+          validateData(){
+            this.errorMessage = '';
+            if(this.gjoremal.navn === ''){
+              this.errorMessage = 'Gjøremålslisten må ha et navn/tittel';
+            } else{
+              this.add();
+            }
+          },
+
         getUsers(){
           axios.get('http://localhost:9000/rest/medlemmerIUndergruppe/' + store.state.current_group.undergruppe_id).then(response => {
             for(let i = 0; i < response.data.length; i++){

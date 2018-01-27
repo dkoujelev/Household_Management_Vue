@@ -31,7 +31,6 @@
                       <button class="button is-danger" @click="deleteItem(row)">
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
                       </button>
-
                     </td>
                   </tr>
                   </tbody>
