@@ -45,7 +45,7 @@
           <br>
           <br>
           <br>
-          <a class="button" @click="deleteDebt">Slett gjeld</a>
+          <a class="button" @click="showConfirm = true">Slett gjeld</a>
           <a class="button" @click="$router.back()">Avbryt</a>
         </div>
         <br>
@@ -56,95 +56,9 @@
       <h2 slot="title" style="color:white">{{currentList_name}}</h2>
       <ViewShoppingList :readOnly="true" :id.sync="currentList_id" slot="content" @closingShoppingList="showingShoppingList=false;"/>
     </Modal>
+    <ConfirmModal :modalVisible.sync="showConfirm" :rowData.sync="list" :message="confirmText" @cancel="showConfirm = false" @confirm="deleteDebt"/>
   </div>
 </template>
-
-
-<!-- Old -->
-<!-- <template>
-  <div class="is-ancestor" style="background-color: white">
-    <div class=" is-parent is-vertical " style="background-color: white">
-      <div class="child tile " style="background-color: white">
-        <h3>Penger som {{user_owes.fornavn + " " + user_owes.etternavn}} skylder meg:</h3>
-      </div>
-
-      <div class="child tile" style="background-color:white">
-        <table class="table">
-          <thead>
-          <th scope="col">Utgift for:</th>
-          <th scope="col">Dato:</th>
-          <th scope="col">Delsum per handletur:</th>
-          <th scope="col">Handleliste </th>
-          </thead>
-
-          <tbody>
-          <tr v-for="debt in debts" @click="selectUser(debt)">
-            <td data-label="Utgift for:">  {{debt.beskrivelse}}  </td>
-            <td data-label="Dato:" Dato> {{debt.opprettet}} </td>
-            <td data-label="Delsum:">  {{debt.belop + " kr" }}  </td>
-            <td data-label="Tilknyttet handleliste">
-              <a v-if="debt.handleliste_id !== null" @click="showShoppingList(debt)">Vis handleliste</a>
-              <p v-else>Ingen handleliste</p>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-
-      </div>
-
-
-    </div>
-  </div>
-</template> -->
-
-
-
-
-
-<!-- <template>
-  <div class="box">
-    <div class="title is-size-5">Penger som {{user_owes.fornavn + " " + user_owes.etternavn}} skylder meg </div>
-    <div class="level" v-for="debt in debts">
-      <a>{{debt.belop}}kr -  litt mer info her <input type="checkbox"></a>
-    </div>
-    <button @click="$router.back()">Tilbake</button>
-    <button>Fjern valgt gjeld</button>
-  </div>
-</template> -->
-
-
-
-<!--
-<template>
-  <div class="is-ancestor" style="background-color: white">
-    <div class=" is-parent is-vertical " style="background-color: white">
-      <div class="child tile " style="background-color: white">
-        <h3>Medlemmer som skylder meg penger</h3>
-      </div>
-
-      <div class="child tile" style="background-color:white">
-        <table class="table">
-          <thead>
-          <th scope="col">Navn</th>
-          <th scope="col">Sum</th>
-          </thead>
-
-          <tbody>
-          <tr v-for="user in users" @click="selectUser(user)">
-            <td data-label="Navn">  {{user.fornavn}}  {{user.etternavn}}  </td>
-            <td data-label="Sum">  {{user.sum + " kr" }}  </td>
-          </tr>
-          </tbody>
-        </table>
-
-      </div>
-
-
-    </div>
-  </div>
-</template> -->
-
-
 
 <script>
 
@@ -153,12 +67,13 @@
   import router from '@/router'
   import Modal from '@/components/Modal'
   import ViewShoppingList from '@/components/ShoppingList/ViewShoppingList'
+  import ConfirmModal from '@/components/ConfirmModal'
 
   export default {
     created(){
       this.loadDebt();
     },
-    components:{Modal,ViewShoppingList},
+    components:{ Modal, ViewShoppingList, ConfirmModal },
     data(){
       return {
         user_owes: {fornavn: '', etternavn: ''},
@@ -166,7 +81,11 @@
         users: [],
         showingShoppingList: false,
         currentList_id: null,
-        currentList_name:null
+        currentList_name: null,
+
+        showConfirm: false,
+        confirmText: 'Vil du virkelig slette markert gjeld?',
+        list: {}
       };
     },
     methods:{
@@ -199,6 +118,7 @@
 
         axios.post('http://localhost:9000/rest/settFlereGjeldSomBetalt',{ids: debts_to_be_deleted})
           .then(response => {
+            this.showConfirm = false;
             this.loadDebt();
           }).catch(err => console.log(err));
       },

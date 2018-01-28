@@ -46,7 +46,7 @@
                   </table>
                 </div>
                 <div>
-                  <button class="button" style="background-color: orange" @click="helpModalOpen" id="opprett">Opprett gjøremål</button>
+                  <button class="button" style="background-color: orange" @click="helpModalOpen" id="opprett" v-if="!isHome">Opprett gjøremål</button>
                 </div>
               </div>
             </div>
