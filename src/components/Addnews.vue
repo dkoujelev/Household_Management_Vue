@@ -5,7 +5,7 @@
         <label class="label">Tittel:</label>
             <div class="row">
               <div class="col-25">
-                <p class="help is-white">{{this.errorMessages.overskrift}}</p>
+                <p class="help is-danger">{{errorMessages.overskrift}}</p>
               </div>
               <div class="col-25">
                 <input id="inputBox" type="text" class="input" placeholder="Skriv tittel her" v-model="melding.overskrift">
@@ -13,7 +13,7 @@
             </div>
         <br>
             <label class="label">Beskrivelse:</label>
-            <p class="help is-dark">{{this.errorMessages.tekst}}</p>
+            <p class="help is-danger">{{errorMessages.tekst}}</p>
             <p class="control">
               <textarea class="textarea" placeholder="Skriv nyhet her" v-model="melding.tekst"></textarea>
             </p>
@@ -76,6 +76,8 @@
       clear(){
         this.melding.overskrift = '';
         this.melding.tekst = '';
+        this.errorMessages.overskrift = '';
+        this.errorMessages.tekst = '';
       },
       addNews() {
         this.melding.sendt = new Date();

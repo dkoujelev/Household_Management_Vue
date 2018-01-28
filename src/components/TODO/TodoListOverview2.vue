@@ -10,10 +10,10 @@
               </div>
             </Modal>
 
-            <Modal :modalVisible.sync="showAddNewTodoList" @modalClosing="closeModal" @modalOpen="helpModalOpen">
+            <Modal :modalVisible.sync="showAddNewTodoList" @modalClosing="closeModal">
               <h2 slot="title">Opprett en liste </h2>
               <div slot="content">
-                <addTodoList/>
+                <addTodoList @todoListAdded="closeWithUpdate" @avbryt="closeModal"/>
               </div>
             </Modal>
             <div class="is-parent">
@@ -46,7 +46,7 @@
                   </table>
                 </div>
                 <div>
-                  <button class="button" style="background-color: orange" @click="helpModalOpen" id="opprett" v-if="!isHome">Opprett gjøremål</button>
+                  <button class="button" style="background-color: orange" @click="showAddNewTodoList = true" id="opprett" v-if="!isHome">Opprett gjøremål</button>
                 </div>
               </div>
             </div>
@@ -142,32 +142,15 @@
           this.todoId = row.id;
           this.showModal = true;
         },
-
-        wrongClosing(){
-          this.closeModal()
-        },
-
         closeWithUpdate(){
           this.showModal = false;
           this.showAddNewTodoList = false;
           this.updated = !this.updated;
         },
-
         closeModal(){
           this.showModal = false;
           this.showAddNewTodoList = false;
         },
-
-        helpModalOpen(){
-          this.showAddNewTodoList = true;
-        },
-
-
-        modalOpen(){
-          this.showModal = true;
-        },
-
-
         deleteList(row){
           axios.delete('http://localhost:9000/rest/gjoremalsliste/' + row.id).then(response => {
             this.$emit('deleteTodoList');
