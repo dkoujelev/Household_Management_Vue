@@ -40,22 +40,25 @@
         };
     },
     methods: {
-        addExpence(){
-            this.expence.bruker_id = store.state.current_user.bruker_id;
-            this.expence.undergruppe_id = store.state.current_group.undergruppe_id;
-            this.expence.opprettet = new Date();
-            console.log(JSON.stringify(this.expence));
-          axios.post('http://localhost:9000/rest/kostnad',this.expence).then(response => {
-            let newExpence = {};
-            newExpence.tittel = this.expence.tittel;
-            newExpence.sum = this.expence.sum;
-            newExpence.kvittering = this.expence.kvittering;
-
-            this.$emit('closing');
-          }).catch(err => {
-            console.log(JSON.stringify(err));
-          });
-        }
+      clearInput(){
+        this.expence = {};
+      },
+      addExpence(){
+          this.expence.bruker_id = store.state.current_user.bruker_id;
+          this.expence.undergruppe_id = store.state.current_group.undergruppe_id;
+          this.expence.opprettet = new Date();
+          console.log(JSON.stringify(this.expence));
+        axios.post('http://localhost:9000/rest/kostnad',this.expence).then(response => {
+          let newExpence = {};
+          newExpence.tittel = this.expence.tittel;
+          newExpence.sum = this.expence.sum;
+          newExpence.kvittering = this.expence.kvittering;
+          this.clearInput();
+          this.$emit('closing');
+        }).catch(err => {
+          console.log(JSON.stringify(err));
+        });
+      }
     }
   }
 </script>
