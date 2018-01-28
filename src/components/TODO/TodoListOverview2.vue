@@ -7,7 +7,7 @@
             <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
               <h2 slot="title">Gjøremål </h2>
               <div slot="content">
-                <ViewTodoList :my_id.sync="todoId"/>
+                <ViewTodoList :my_id.sync="todoId" />
               </div>
             </Modal>
 
