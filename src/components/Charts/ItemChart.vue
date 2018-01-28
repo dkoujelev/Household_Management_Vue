@@ -1,6 +1,4 @@
 <template>
-
-
         <div class="is-ancestor">
           <div class="is-parent">
             <div class="is-child" >

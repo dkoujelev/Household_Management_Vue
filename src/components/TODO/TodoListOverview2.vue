@@ -1,8 +1,7 @@
 <template>
-  <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="card is-rounded is-centered">
+  <div :class="{'container' : !isHome}">
+    <div :class="{'is-centered' : !isHome,'columns' : !isHome}">
+      <div :class="{'column is-8' : !isHome}">
           <div class="is-ancestor box" style="background-color: hsl(217, 71%, 53%)">
             <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
               <h2 slot="title">Gjøremål </h2>
@@ -52,7 +51,7 @@
               </div>
             </div>
           </div>
-        </div>
+
       </div>
     </div>
   </div>

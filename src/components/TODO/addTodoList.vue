@@ -5,7 +5,7 @@
               <div class="tile is-child">
                 <div class="field-body">
                   <label for="gjoremalsliste" class="help" style="font-size: large">Tittel:</label>
-                  <input id="gjoremalsliste" type="text" v-model="navn" placeholder="Tittel på gjøremålsliste" />
+                  <input id="gjoremalsliste" type="text" class="input" v-model="navn" placeholder="Tittel på gjøremålsliste" />
                 </div>
                 <br>
                 <div class="field-body">
