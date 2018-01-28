@@ -5,7 +5,7 @@
         <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)	">
           <Modal :modalVisible.sync="showShoppingList" @modalClosing="closeShoppingList">
             <h2 slot="title" style="color:white">{{list.name}}</h2>
-            <ViewShoppingList :id.sync="list.id" slot="content" @closingShoppingList="closeShoppingList" @deleteShoppingList="update" @listCompleted="update"/>
+            <ViewShoppingList :readOnly="isHome" :id.sync="list.id" slot="content" @closingShoppingList="closeShoppingList" @deleteShoppingList="update" @listCompleted="update"/>
           </Modal>
           <Modal :modalVisible.sync="showAddShoppingList" @modalClosing="closeAddShoppingList">
             <h2 slot="title" style="color:white">Ny handleliste</h2>

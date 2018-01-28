@@ -3,7 +3,7 @@
       <div class="is-parent">
         <div class="is-child">
         <h3 class="title"> Liste for: {{$store.state.current_group.navn}}</h3>
-          <addTodo :id.sync="list_id" @todoAdded="updatePage"></addTodo>
+          <addTodo :id.sync="list_id" @todoAdded="updatePage" v-if="!readOnly" />
           <br>
           <div class="content1">
             <table class="table">
@@ -19,10 +19,15 @@
               <tr v-for="row in rows">
                 <td>{{row.navn}}</td> <!--  -->
                 <td>{{row.frist}}</td>
-                <td>
+                <td v-if="!readOnly">
                   <button class="button is-info" v-if="row.ferdig === null" @click="completeTodo(row)">Fullfør</button>
                   <label class="button is-success" v-else><i class="fa fa-check" aria-hidden="true"></i></label>
-                <td>
+                </td>
+                <td v-else>
+                  <label class="button is-danger" v-if="row.ferdig === null"><i class="fa fa-times" aria-hidden="true"></i></label>
+                  <label class="button is-success" v-else><i class="fa fa-check" aria-hidden="true"></i></label>
+                </td>
+                <td v-if="!readOnly">
                   <button class="button is-danger" @click="deleteItem(row)">
                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                   </button>
@@ -43,7 +48,13 @@
 
     export default {
       name: "todo-list-overview3",
-      props: ['my_id'],
+      props: {
+        my_id: {},
+        readOnly: {
+          default: false,
+          type: Boolean
+        }
+      },
       components: { addTodo },
 
       data() {
