@@ -1,5 +1,4 @@
 <template>
-  <div class="container">
     <div class="is-ancestor" >
       <div class="is-parent">
         <div class="is-child">
@@ -35,7 +34,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -115,6 +113,6 @@
 
   div.content1 {
     height: 200px;
-    overflow: auto;
+
   }
 </style>
