@@ -28,7 +28,8 @@
                 <label class="button is-success" v-else><i class="fa fa-check" aria-hidden="true"></i></label>
               </td>
               <td v-if="!readOnly">
-                <button class="button is-danger" @click="deleteItem(row)">
+                <ConfirmModal :modalVisible.sync="showConfirmModal" :rowData.sync="list" :message="confirmText" @cancel="showConfirmModal = false" @confirm="deleteItem"/>
+                <button class="button is-danger" @click="showConfirm(row)">
                   <i class="fa fa-trash-o" aria-hidden="true"></i>
                 </button>
               </td>
@@ -45,6 +46,7 @@
   import axios from 'axios';
   import {store} from '@/store';
   import addTodo from '@/components/TODO/addTodo'
+  import ConfirmModal from '@/components/ConfirmModal'
 
     export default {
       name: "todo-list-overview3",
@@ -55,13 +57,17 @@
           type: Boolean
         }
       },
-      components: { addTodo },
+      components: { addTodo, ConfirmModal },
 
       data() {
         return {
           rows: [],
           modalVisible: false,
-          list_id: 1
+          list_id: 1,
+
+          showConfirmModal: false,
+          list: {},
+          confirmText: 'Vil du virkelig slette dette gjøremålet?'
         };
       },
       mounted() {
@@ -81,6 +87,10 @@
           this.rows = [];
           this.fillRows();
         },
+        showConfirm(row){
+          this.list = row;
+          this.showConfirmModal = true;
+        },
         deleteItem(row){ // + row.item_id
           axios.delete('http://localhost:9000/rest/gjoremal/' + row.id).then(response => {
             this.$emit('ItemRemoved');
@@ -89,6 +99,7 @@
               if(rows[i] === row){
                 this.rows.splice(i, 1);
                 this.updatePage();
+                this.showConfirmModal = false;
                 break;
               }
             }
