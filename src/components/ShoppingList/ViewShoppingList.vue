@@ -2,6 +2,7 @@
   <div class="tile is-ancestor">
 
     <div class="tile is-parent is-vertical">
+      <ConfirmModal :modalVisible.sync="showConfirmDialog" :rowData.sync="selectedItem" :message="confirmText" @cancel="showConfirmDialog = false" @confirm="deleteItem" v-if="!readOnly"/>
       <div class="tile is-child ">
         <table class="table is-bordered is-striped  is-hoverable is-fullwidth">
           <thead>
@@ -23,7 +24,7 @@
                 </label>
               </td>
               <td>
-                <button v-if="!readOnly" class="button is-danger" @click="deleteItem(row)">
+                <button v-if="!readOnly" class="button is-danger" @click="showConfirmDelete(row)">
                   <i class="fa fa-trash-o" aria-hidden="true"></i>
                 </button>
               </td>
@@ -106,7 +107,11 @@
 
         showConfirm: false,
         text: 'Er du sikker på at du vil slette handlelisten?',
-        list: {}
+        list: {},
+
+        showConfirmDialog: false,
+        selectedItem: {},
+        confirmText: 'Er du sikker på at du vil slette denne varen?'
       };
     },
     watch: {
@@ -116,6 +121,10 @@
       }
     },
     methods: {
+      showConfirmDelete(row){
+        this.selectedItem = row;
+        this.showConfirmDialog = true;
+      },
       closeShoppingList(){
         this.$emit('closingShoppingList');
         this.hide();
@@ -138,6 +147,7 @@
           for(let i = 0; i < rows.length; i++){
             if(rows[i] === row){
               this.rows.splice(i, 1);
+              this.showConfirmDialog = false;
               break;
             }
           }

@@ -23,10 +23,10 @@
               <div class="is-child">
                 <p class="title"style="color:white">Opprett grupper og kollektiv</p>
                 <div v-if="showJoinSection===true">
-                  <p style="color: red">{{ joinResult }}</p>
+                  <p style="color:white">{{ joinResult }}</p>
                   <div class="field">
                     <div class="field-body">
-                      <p class="subtitle" style="color:white">Søk medlemskap i et kollektiv: </p>
+                      <p class="subtitle" style="color:white">Søk medlemskap i et kollektiv: &nbsp;</p>
                       <input  type="text" class="input" style="width: 160px" placeholder="Kollektivets navn" v-model="innmelding.kollektiv_navn">
                         <button class="button" style="background-color:orange" v-on:click="joinGroup(innmelding.kollektiv_navn)">
                           Søk medlemskap
@@ -40,7 +40,7 @@
                   <div class="field">
                     <div class="field-body">
 
-                      <p class="subtitle " style="color:white">Opprett et kollektiv:</p>
+                      <p class="subtitle " style="color:white">Opprett et kollektiv: &nbsp;</p>
                       <input  type="text" class="input" style="width: 20%" placeholder="Kollektivets navn" v-model="oppretteMain.navn">
                       <input  type="text" class="input" style="width: 40%" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
                       <button class="button" style="background-color:orange;" v-on:click="createMainGroup(oppretteMain.navn)">
@@ -53,7 +53,7 @@
               </div>
             </div>
 
-            <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)">
+            <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)" v-if="$store.state.isMember">
               <div class="is-child">
                 <!-- Table starting here -->
                 <div v-if="showUsersGroups===true">
@@ -95,7 +95,7 @@
             </div>
 
 
-            <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)" >
+            <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)" v-if="$store.state.isMember">
               <div class="is-child">
                 <div v-if="showGroupSelect===true">
                   <p class="title" style="color:white">Administrer grupper og kollektiv</p>
@@ -172,29 +172,12 @@
                     </tr>
                   </table>
                   {{ leaveJoinSubResult }}
+                  <br>
+                  {{ mailResult }}
+
                 </div>
               </div>
             </div>
-
-            {{ mailResult }}
-          </div>
-
-          <br>
-          <div v-if="showAvailableSubgroups===true">
-            Dette er alle gruppene som hører inn under {{ selected_maingroup_object.navn }}:
-              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                  <thead>
-                  <th>Grupper</th>
-                  <th></th>
-                  </thead>
-                  <tr v-for="option in options_subgroup"  v-bind:key="option.uid">
-                  <td>{{ option.navn }}</td>
-                  <td> <button class="button is-link is-hidden-touch" v-on:click="joinSubGroup(option.uid)">Bli med</button>
-                    <button class="button is-link is-small is-hidden-desktop" v-on:click="joinSubGroup(option.uid)">Bli med</button>
-                  </td>
-                  </tr>
-              </table>
-            {{ leaveJoinSubResult }}
 
           </div>
         </div>
