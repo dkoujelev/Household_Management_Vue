@@ -16,7 +16,7 @@
           <Shoppinglists :value="3"></Shoppinglists>
         </article>
         <article class="tile is-child is-success is-fixed">
-          <Shoppinglists :value=3></Shoppinglists>
+          <Todo :value=5></Todo>
         </article>
       </div>
     </div>
@@ -25,9 +25,9 @@
 </template>
 
 <script>
-    import Todo from './TODO/TodoList';
     import Shoppinglists from '@/components/Shoppinglists'
     import Newsfeed from '@/components/Nyhetsfeed'
+    import Todo from '@/components/TODO/TodoListOverview2'
     import router from '../router/index'
     import {store} from '../store'
 

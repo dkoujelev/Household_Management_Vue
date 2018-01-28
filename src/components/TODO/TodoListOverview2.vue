@@ -27,7 +27,7 @@
                       <th>Tittel</th>
                       <th>Status</th>
                       <th>Dato</th>
-                      <th></th>
+                      <th v-if="!isHome"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -37,7 +37,7 @@
                       <td>Kommer</td>
                       <td>{{row.dato}}</td>
                       <td>
-                        <button class="button is-danger" @click="confirmDelete(row)">
+                        <button class="button is-danger" @click="confirmDelete(row)" v-if="!isHome">
                           <i class="fa fa-trash-o" aria-hidden="true"></i>
                         </button>
                       </td>
@@ -68,6 +68,7 @@
     export default {
       name: "todo-list-overview2",
       components: { Modal, ViewTodoList, addTodoList, ConfirmModal },
+      props: [ 'value' ],
 
       data() {
         return{
@@ -88,16 +89,36 @@
           showConfirmModal: false
         };
       },
+      computed: {
+        len: function () {
+          return (isNaN(Number.parseInt(this.value)) ? -1 : this.value);
+        },
+        isHome: function () {
+          return ((isNaN(Number.parseInt(this.value)) ? -1 : this.value) !== -1);
+        }
+      },
       asyncComputed:{
         rows: {
           get(){
             let rows = [];
-            return axios.get('http://localhost:9000/rest/gjoremalslisterUndergruppe/' + store.state.current_group.undergruppe_id).then(response => {
+
+            let cap = this.len;
+            let rest = 'http://localhost:9000/rest/gjoremalslisterUndergruppe/' + store.state.current_group.undergruppe_id;
+            if(cap > 0) rest = "http://localhost:9000/rest/gjoremalslisterBruker/" + store.state.current_user.bruker_id;
+
+            return axios.get(rest).then(response => {
               let resRows = response.data;
               console.log(resRows);
               for (let i = 0; i < resRows.length; i++) {
                 let obj = {id: resRows[i].id, tittel: resRows[i].navn, gruppe: resRows[i].navn, dato: this.formateDate(resRows[0].opprettet)};
                 rows.push(obj);
+
+                if(cap > 0){
+                  cap -= 1;
+                }
+                if(cap === 0){
+                  break;
+                }
               }
               return rows;
             }).catch(err => {
