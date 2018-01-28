@@ -109,9 +109,11 @@ module.exports = function(connection, server) {
     // console.log(req.params);
 
     let minInnmelding = null;
+    let theUserID = 0;
     if (req.params.kollektiv_id) {
       connection.query("SELECT bruker_id FROM Bruker WHERE epost=?", [req.params.bruker_epost], function (err, rows, fields) {
-        req.params.bruker_id = rows[0].bruker_id;
+        //req.params.bruker_id = rows[0].bruker_id;
+        theUserID = rows[0].bruker_id;
         connection.query("SELECT * FROM Innmelding WHERE bruker_epost=? AND kollektiv_id=?", [req.params.bruker_epost, req.params.kollektiv_id], function (err, rows1, fields) {
           minInnmelding = rows1[0];
 
@@ -156,10 +158,14 @@ module.exports = function(connection, server) {
 
           if (req.params.kollektiv_id) {
             connection.query("UPDATE Innmelding SET ? WHERE kollektiv_id=? AND bruker_epost=?", [minInnmelding, req.body.kollektiv_id, minInnmelding.bruker_epost], function (err, rows2, fields) {
-              connection.query("INSERT INTO Bruker_Kollektiv SET kollektiv_id=?, bruker_id=?, er_admin=0", [req.body.kollektiv_id, req.params.bruker_id], function (err, rows3, fields) {
-                res.send(err ? err : rows3);
-                return next();
-              })
+              connection.query("INSERT INTO Bruker_Kollektiv SET kollektiv_id=?, bruker_id=?, er_admin=0", [req.body.kollektiv_id, theUserID], function (err, rows3, fields) {
+                connection.query("SELECT * FROM Undergruppe WHERE kollektiv_id=? AND default_gruppe=1", [req.body.kollektiv_id], function (err, rows4, fields) {
+                  connection.query("INSERT INTO Bruker_Undergruppe SET undergruppe_id=?, bruker_id=?", [rows4[0].undergruppe_id, theUserID], function (err, rows5, fields) {
+                    res.send(err ? err : rows5);
+                    return next();
+                  });
+                });
+              });
             });
           } else {
             res.send(null);
