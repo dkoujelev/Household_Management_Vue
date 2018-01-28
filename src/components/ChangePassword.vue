@@ -1,27 +1,35 @@
 <template>
   <div class="is-ancestor">
-      <div class="is-child tile is-3 is-block-desktop-only">
-        <div>
-          <p class="help is-danger">{{this.error.all}}</p>
-          <br>
-          <input type="password" class="input"  placeholder="Gammelt passord" v-model="oldPassword"/>
-        </div>
-        <div>
-          <p class="help is-danger">{{this.error.oldPassword}}</p>
-          <br>
-          <input type="password" class="input" placeholder="Nytt passord" v-model="newPassword"/>
-          <br/>
-          <input type="password" class="input" placeholder="Gjenta nytt passord" v-model="newPasswordRepeat"/>
-        </div>
-        <div>
-          <p class="help is-danger">{{this.error.newPasswordMissmatch}}</p>
-          <p class="help is-success">{{passwordChangeMsg}}</p>
-          <br/>
-        </div>
+    <div class="is-child ">
+      <div>
+        <p class="text">Gammelt passord:</p>
+        <p class="help is-danger">{{this.error.all}}</p>
+        <p class="help is-danger">{{this.error.oldPassword}}</p>
+        <input type="password" class="input"  placeholder="Gammelt passord" v-model="oldPassword"/>
+      </div>
+      <br>
+      <div>
+        <p class="text">Nytt passord:</p>
+        <p class="help is-danger">{{this.error.newPasswordMissmatch}}</p>
+        <input type="password" class="input" placeholder="Nytt passord" v-model="newPassword"/>
+        <input type="password" class="input" placeholder="Gjenta nytt passord" v-model="newPasswordRepeat"/>
+      </div>
+      <br>
 
+      <p class="help is-success">{{passwordChangeMsg}}</p>
+      <div class="block">
+        <div class="level">
+          <div class="is-pulled-left">
+            <a class="button " style="background-color: orange" @click="changePassword">Bytt passord</a>
+          </div>
+        <div class="is-pulled-right">
+          <a class="button is-danger" @click="$emit('change-password-canceled')">Tilbake</a>
+        </div>
+        </div>
+      </div>
     </div>
-      <a class="button" @click="$emit('change-password-canceled')">Tilbake</a>
-      <a class="button is-primary" @click="changePassword">Bytt passord</a>
+
+
   </div>
 </template>
 

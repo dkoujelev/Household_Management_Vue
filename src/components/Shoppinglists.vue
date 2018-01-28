@@ -178,6 +178,7 @@
 
   div.content1 {
     height: 450px;
+    overflow: auto;
   }
   p.title{
     color: white;

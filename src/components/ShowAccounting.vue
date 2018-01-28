@@ -2,48 +2,33 @@
   <div class="container">
     <div class="columns is-centered ">
       <div class="column is-8">
-        <div class="card is-rounded">
-          <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)	 ">
-            <p class="title">Regnskap</p>
-            <p class="subtitle"> Min personlige økonomiske balanse: </p>
-            <div class="is-parent is-12">
-              <div class="tile is-child is-6 is-centered">
-                <div class="block is-centered">
-                  <br>
-                  <br>
-                  <a class="button" @click="showingExpense=true"> Legg til utgift for gruppe</a>
-                  <p class="subtitle"> Debet - Gjeld inn: &nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> {{totalDebt.sum_in}} kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldInn">Administrer </router-link> </span>  </p>
-                  <p class="subtitle"> Kredit - Gjeld ut: &nbsp&nbsp&nbsp&nbsp&nbsp<span class="p" style="font-size: 20px; color: #ff9980; font-weight: bold"> {{totalDebt.sum_out}} kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldUt">Administrer </router-link> </span> </p>
-                  <div class="block_1"></div> <hr/>
-                  <p class="subtitle"> Balanse: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    <span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold" v-if="totalDebt.balance >= 0"> {{totalDebt.balance}} kr </span>
-                    <span class="p" style="font-size: 20px; color: #ff9980; font-weight: bold" v-else> {{totalDebt.balance}} kr </span>
-                  </p>
-                  <div class="block_1"></div> <hr/>
-                  <br>
-                  <br>
-                </div>
+        <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)	 ">
+          <p class="title">Regnskap</p>
+          <p class="subtitle"> Min personlige økonomiske balanse: </p>
+          <div class="is-parent is-12">
+            <div class="tile is-child is-6 ">
+              <div class="block is-centered">
+                <p class="subtitle"> Debet - Gjeld inn: &nbsp&nbsp<span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold"> {{totalDebt.sum_in}} kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldInn">Administrer </router-link> </span>  </p>
+                <p class="subtitle"> Kredit - Gjeld ut: &nbsp&nbsp<span class="p" style="font-size: 20px; color: #ff9980; font-weight: bold"> {{totalDebt.sum_out}} kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldUt">Administrer </router-link> </span> </p>
+                <div class="block_1"></div> <hr/>
+                <p class="subtitle"> Balanse: &nbsp&nbsp
+                  <span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold" v-if="totalDebt.balance >= 0"> {{totalDebt.balance}} kr </span>
+                  <span class="p" style="font-size: 20px; color: #ff9980; font-weight: bold" v-else> {{totalDebt.balance}} kr </span>
+                </p>
+                <div class="block_1"></div> <hr/>
+                <br>
+                <a class="button" style="background-color: orange" @click="showingExpense=true"> Legg til utgift for gruppen</a>
               </div>
-            </div>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
             </div>
           </div>
         </div>
       </div>
-    <Modal :modalVisible.sync="showingExpense" @modalClosing="closeModal" :showClose="false">
+    </div>
+      <Modal :modalVisible.sync="showingExpense" @modalClosing="closeModal" :showClose="false">
       <h2 slot="title" style="color:white">Legg til utgift</h2>
       <AddExpence slot="content" @closing="closeModal" />
     </Modal>
-    </div>
+  </div>
 </template>
 
 

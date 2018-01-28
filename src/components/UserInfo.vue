@@ -45,7 +45,7 @@
             <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)">
             <p class="subtitle">Dine kollektiv og grupper:</p>
               <div class="is-child">
-                    <div class="content">
+                    <div class="content1">
                       <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                         <thead>
                           <th>Navn</th>
