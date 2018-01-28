@@ -100,7 +100,7 @@
                   <p class="title" style="color:white">Administrer grupper og kollektiv</p>
                   <div class="field">
                     <div class="field-body">
-                      <p style="color:white">Velg kollektiv:</p>
+                      <p class="help" style="color:white; font-size: large">Velg kollektiv:</p>
                       <select class="dropdown" v-model="selected_maingroup" v-on:change="makeMainGrpObj(selected_maingroup)" style="background-color: white">
                         <option disabled value="">Velg kollektiv</option>
                         <option v-for="option in options_maingroup" v-bind:value="option.value" v-bind:key="option.value">
