@@ -10,7 +10,7 @@ module.exports = function(connection, server){
 
     let regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let valid_to = regex.test(req.params.to);
-    let vaild_from = regex.test(req.params.from);
+    let valid_from = regex.test(req.params.from);
 
     if(!valid_to || !valid_from){
       res.send(null);

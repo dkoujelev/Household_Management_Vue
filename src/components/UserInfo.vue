@@ -179,6 +179,7 @@
             bruker_id: store.state.current_user.bruker_id
           }).then(response => {
             this.getGroups();
+            store.state.updateGroups = !store.state.updateGroups;
           }).catch(err => {
             console.log(err);
           });
@@ -190,6 +191,7 @@
             bruker_id: store.state.current_user.bruker_id
           }).then(response => {
             this.getGroups();
+            store.state.updateGroups = !store.state.updateGroups;
           }).catch(err => {
             console.log(err);
           });
