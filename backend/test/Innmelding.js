@@ -91,11 +91,11 @@ let testInnmelding4 = {
 
 let userNotExistEmailReply = '<html xmlns=http://www.w3.org/1999/xhtml">   <head>       <title>Registrering</title>       <meta http-equiv="refresh" content="0;URL="http://localhost:8080/#/Register" />   </head>   <body>       <p>Du sendes nå til registreringssiden...</p>   </body></html>'
 
-describe.skip('Innmelding',() => {
+describe('Innmelding',() => {
 
     // Legg inn et par testusers i basen. Begge testusers er medlem i test_kollektiv som også ligger i basen.
     // Basen tømmes og dette innholdet legges inn på nytt før hver test kjøres
-  
+
     beforeEach(() => {
       // OBS: Vi må RETURNERE hele kjeden til testbiblioteket vårt, derfor return før clearDB.
       return clearDB()     // Vi må først nullstille testbasen
@@ -105,7 +105,7 @@ describe.skip('Innmelding',() => {
         }).then(response => {
           // Finn ut hvilken bruker_id testuser fikk, og legg til i testuser objektet vårt
           testUser.bruker_id = response.data.insertId;
-          
+
           return axios.post(restServer + 'bruker/', testUser2);
         }).then(response => {
           // Finn ut hvilken bruker_id testuser fikk, og legg til i testuser objektet vårt
@@ -114,7 +114,7 @@ describe.skip('Innmelding',() => {
           return axios.post(restServer + 'kollektiv/' + testUser.bruker_id, testKollektiv);
         }).then(response => {
           testKollektiv.kollektiv_id = response.data.insertId;
-  
+
           // Legg inn testUndergruppe i basen.
           testUndergruppe.kollektiv_id = testKollektiv.kollektiv_id;
           return axios.post(restServer + 'undergruppe/' + testUser.bruker_id, testUndergruppe);
@@ -158,7 +158,7 @@ describe.skip('Innmelding',() => {
         //console.log('       Henter #1...');
         return axios.get(restServer + 'innmelding/' + testKollektiv.kollektiv_id + '?bruker_epost=' + 'invitert@test.com').then((response) => {
             // Vi forventer nå at objektet fra basen inneholder test-objektet vårt som vi la inn tidligere.
-            expect(response.data).to.containSubset(testInnmelding1);       
+            expect(response.data).to.containSubset(testInnmelding1);
 
             //console.log('       Henter #2...');
             return axios.get(restServer + 'innmelding/' + testKollektiv.kollektiv_id + '?bruker_epost=' + 'soker@test.com').then((response) => {
@@ -173,7 +173,7 @@ describe.skip('Innmelding',() => {
             });
         });
     });
-    
+
     // Hent ut alle for et kollektiv og sammenlign
     it('Hent alle innmeldinger for kollektivet', () => {
         // Hent ut testHandleliste og sammenlign
@@ -182,7 +182,7 @@ describe.skip('Innmelding',() => {
             expect(response.data).to.containSubset([testInnmelding1,testInnmelding2,testInnmelding4]);
         });
     });
-    
+
     // Hent ut alle invitasjoner for et kollektiv og sammenlign
     it('Hent alle invitasjoner for kollektivet', () => {
         // Hent ut testHandleliste og sammenlign
@@ -209,11 +209,11 @@ describe.skip('Innmelding',() => {
             expect(response.data).to.containSubset([testInnmelding1,testInnmelding2,testInnmelding3,testInnmelding4]);
         });
     });
-    
+
     // Bruker klikker defekt lenke fra epost:
     it('Klikk lenke med feil i data', () => {
         return axios.get(restServer + 'invitasjon/' + testKollektiv.kollektiv_id + '?bruker_epost=' + 'finnesikke@test.com' +'&bruker_svar=hellno').then((response) => {
-            // Vi forventer nå å få tilbake 'null' 
+            // Vi forventer nå å få tilbake 'null'
             expect(response.data).to.containSubset(null);
         });
     });
@@ -230,7 +230,7 @@ describe.skip('Innmelding',() => {
     // Bruker klikker lenke fra epost:
     it('Klikk lenke fra epost (eksisterende bruker)', () => {
         return axios.get(restServer + 'invitasjon/' + testKollektiv2.kollektiv_id + '?bruker_epost=' + 'test2@test.com' +'&bruker_svar=jatakk').then((response) => {
-            if(response.data[0] != null){    
+            if(response.data[0] != null){
                 // Vi forventer nå at testInnmelding1 har blitt oppdatert slik:
                 let newExpectation = {
                     kollektiv_id: testInnmelding3.kollektiv_id,
@@ -243,7 +243,7 @@ describe.skip('Innmelding',() => {
                     notat_admin: testInnmelding3.notat_admin,
                     notat_bruker: testInnmelding3.notat_bruker
                 };
-                
+
                 // This is needed because the timestamp can't be predicted in anvance:
                 if(response.data[0].dato_svar_bruker != undefined && response.data[0].dato_svar_bruker > 0){
                     newExpectation.dato_svar_bruker=response.data[0].dato_svar_bruker;
@@ -257,15 +257,15 @@ describe.skip('Innmelding',() => {
     });
 
 
-    it('Sjekk at det er sendt ut notifikasjoner relatert til innmeldinger', () => {
-        
+    it.skip('Sjekk at det er sendt ut notifikasjoner relatert til innmeldinger', () => {
+
     // //  Av en eller annen grunn må det ventes, og kjøres en ekstra spørring for at databasen skal få med seg alle handlingene fra beforeEach()....?
     //     console.log('      ...');
     //     let endTime = (new Date).getTime() + (8 * 1000);
     //     while((new Date).getTime() < endTime){ }; // Do nothing while waiting...
     //     let crappyWorkaround1 = axios.get(restServer + 'notifikasjon/' + testUser.bruker_id + '/alle' );
     //     let crappyWorkaround2 = axios.get(restServer + 'notifikasjon/' + testUser.bruker_id + '/alle' );
-        
+
 
     //  Den faktiske testen:
         return axios.get(restServer + 'notifikasjon/' + testUser.bruker_id + '/alle' ).then((response) => {
