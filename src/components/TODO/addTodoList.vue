@@ -4,6 +4,7 @@
       <div class="tile is-child">
         <div class="field-body">
           <label for="gjoremalsliste" class="help" style="font-size: large">Tittel:</label>
+          <p class="help is-danger">{{errorMessage}}</p>
           <input id="gjoremalsliste" type="text" class="input" v-model="navn" placeholder="Tittel på gjøremålsliste" />
         </div>
         <br>
@@ -15,7 +16,7 @@
         <div class="block">
           <nav class="level">
             <div class="is-pulled-left">
-              <button type="button" class="button" style="background-color: orange" v-on:click="sendListe">Ferdig</button>
+              <button type="button" class="button" style="background-color: orange" v-on:click="validateData">Ferdig</button>
             </div>
             <div class="is-pulled-right">
               <button type="button" class="button is-danger"  v-on:click="avbryt">Avbryt</button>
@@ -77,7 +78,7 @@
       validateData(){
         this.errorMessage = '';
         if(this.navn === ''){
-          this.errorMessage = 'Gjøremålsliste må ha et navn/tittel';
+          this.errorMessage = 'Gjøremålsliste må ha navn/tittel';
         } else{
           this.sendListe();
         }
