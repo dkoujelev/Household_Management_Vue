@@ -216,7 +216,7 @@ module.exports = function(connection, server) {
                     connection.query('INSERT INTO Bruker_Undergruppe SET bruker_id=?, undergruppe_id=?', [myBruker_id, myUndergruppe_id], function (err, rows3, fields) {
                       // If we've made it this far, the user has been added to the group!
                       connection.query("SELECT * FROM Innmelding WHERE bruker_epost=? AND kollektiv_id=?", [myBruker_epost, myKollektiv_id], function (err, rows4, fields) {
-                        res.send(rows4);
+                        res.send('Du har blitt registrert i den nye gruppen!');
                         return next();
                       });
                     });
