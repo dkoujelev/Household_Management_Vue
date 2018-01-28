@@ -61,13 +61,10 @@
                           </td>
 
                           <td v-if="group.canLeave">
-                            <button class="button is-danger is-hidden-mobile" @click="leaveSubGroup(group.undergruppe_id)">Forlat</button>
-                            <button class="button is-danger is-small is-hidden-desktop" @click="leaveSubGroup(group.undergruppe_id)">Forlat</button>
+                            <button class="button is-danger " @click="leaveSubGroup(group.undergruppe_id)">Forlat</button>
                           </td>
                           <td v-if="group.canJoin">
-                            <button class="button is-success is-hidden-mobile" @click="joinSubGroup(group.undergruppe_id)">Bli med</button>
-                            <button class="button is-success is-small is-hidden-desktop" @click="joinSubGroup(group.undergruppe_id)">Bli med</button>
-
+                            <button class="button is-success " @click="joinSubGroup(group.undergruppe_id)">Bli med</button>
                           </td>
                         </tr>
                       </table>

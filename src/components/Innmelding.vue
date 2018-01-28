@@ -23,7 +23,7 @@
               <div class="is-child">
                 <p class="title"style="color:white">Opprett grupper og kollektiv</p>
                 <div v-if="showJoinSection===true">
-                  {{ joinResult }}
+                  <p style="color: red">{{ joinResult }}</p>
                   <div class="field">
                     <div class="field-body">
                       <p class="subtitle" style="color:white">Søk medlemskap i et kollektiv: </p>
@@ -36,13 +36,14 @@
                 </div>
                 <br>
                 <div v-if="showCreateMainGroupSection===true">
+                  <p style="color: red"> {{ createMainResult }}</p>
                   <div class="field">
                     <div class="field-body">
-                      {{ createMainResult }}
+
                       <p class="subtitle " style="color:white">Opprett et kollektiv:</p>
-                      <input  type="text" class="input" style="width: 160px" placeholder="Kollektivets navn" v-model="oppretteMain.navn">
-                      <input  type="text" class="input" style="width: 320px" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
-                      <button class="button" style="background-color:orange" v-on:click="createMainGroup(oppretteMain.navn)">
+                      <input  type="text" class="input" style="width: 20%" placeholder="Kollektivets navn" v-model="oppretteMain.navn">
+                      <input  type="text" class="input" style="width: 40%" placeholder="Beskrivelse" v-model="oppretteMain.beskrivelse">
+                      <button class="button" style="background-color:orange;" v-on:click="createMainGroup(oppretteMain.navn)">
                         Opprett kollektiv
                       </button>
                     </div>
@@ -73,16 +74,16 @@
                           {{ option.beskrivelse }}
                         </td>
                         <td>
-                          <button class="button is-link is-small is-hidden-desktop" @click="showMembers(option)">Vis medlemmer</button>
-                          <button class="button is-link is-hidden-mobile" @click="showMembers(option)">Vis medlemmer</button>
+
+                          <button class="button is-link " @click="showMembers(option)">Vis medlemmer</button>
                         </td>
                         <td v-if="option.canLeave===true">
-                          <button class="button is-link is-hidden-mobile" v-on:click="leaveSubGroup(option.uid)">Forlat</button>
-                          <button class="button is-link is-small is-hidden-desktop" v-on:click="leaveSubGroup(option.uid)">Forlat</button>
+                          <button class="button is-danger " v-on:click="leaveSubGroup(option.uid)">Forlat</button>
+
                         </td>
                         <td v-if="option.canJoin===true">
-                          <button class="button is-link is-hidden-mobile" v-on:click="joinSubGroup(option.uid)">Bli med</button>
-                          <button class="button is-link is-small is-hidden-desktop" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+                          <button class="button is-link " v-on:click="joinSubGroup(option.uid)">Bli med</button>
+
 
                         </td>
                       </tr>
@@ -116,8 +117,8 @@
                   <div class="field">
                     <div class="field-body">
                       <p class="subtitle"  style="color:white">Opprett en gruppe i {{ selected_maingroup_object.navn }}:</p>
-                      <input  type="text" class="input" style="width: 160px" placeholder="Navn" v-model="oppretteSub.navn">
-                      <input  type="text" class="input" style="width: 200px" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
+                      <input  type="text" class="input" style="width: 20%" placeholder="Navn" v-model="oppretteSub.navn">
+                      <input  type="text" class="input" style="width: 40%" placeholder="Beskrivelse" v-model="oppretteSub.beskrivelse">
                       <button class="button"  style="background-color:orange" v-on:click="createSubGroup(oppretteSub.navn)">
                         Opprett gruppe
                       </button>

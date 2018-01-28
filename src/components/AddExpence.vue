@@ -15,7 +15,7 @@
         <div class="block">
           <div class="level">
             <div class="is-pulled-left">
-              <a href="#" class="button is-primary" @click.prevent="addExpence">Legg til utgift for gruppe </a>
+              <a href="#" class="button" style="background-color: orange" @click.prevent="addExpence">Legg til utgift for gruppe </a>
             </div>
             <div class="is-pulled-right">
               <a class="button is-danger" @click="$emit('closing')">Avbryt</a>

@@ -18,8 +18,8 @@
             </Modal>
             <div class="is-parent">
               <div class="is-child">
-                <h2 class="title" style="color:white" v-if="!isHome">Gjøremålslister for: {{$store.state.current_group.navn}}</h2>
-                <h2 class="title" style="color:white" v-else>Gjøremålslister for: {{$store.state.current_user.fornavn}} {{$store.state.current_user.etternavn}}</h2>
+                <p class="title" style="color:white" v-if="!isHome">Gjøremålslister for: {{$store.state.current_group.navn}}</p>
+                <p class="title" style="color:white" v-else>Gjøremålslister</p>
                 <div class="container1">
                   <table class="table">
                     <thead>

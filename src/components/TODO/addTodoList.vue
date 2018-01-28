@@ -2,11 +2,12 @@
   <div class="tile is-ancestor" >
     <div class="tile is-parent">
       <div class="tile is-child">
-        <div class="field-body">
+        <div class="block">
           <label for="gjoremalsliste" class="help" style="font-size: large">Tittel:</label>
           <p class="help is-danger">{{errorMessage}}</p>
           <input id="gjoremalsliste" type="text" class="input" v-model="navn" placeholder="Tittel på gjøremålsliste" />
         </div>
+
         <br>
         <div class="field-body">
           <label class="help" for="dp"  style="font-size: large">Frist :</label>
