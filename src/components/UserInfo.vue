@@ -4,7 +4,31 @@
       <div class="column is-8">
         <div class="is-centered" >
           <div class="is-ancestor">
-            <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)	 ">
+
+            <div v-if="notifications.length > 0" class="is-parent box" style="background-color:hsl(217, 71%, 53%)">
+              <div class="is-child">
+                <div class="block">
+                  <p class="title">Beskjeder</p>
+                  <br>
+                   <div class="content">
+                      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                        <thead>
+                          <th>Info</th>
+                          <!-- <th></th> -->
+                        </thead>
+                        <tr v-for="notif in notifications"  v-bind:key="notif.id">
+                          <td>{{ notif.tekst }}</td>
+                          <!-- <td>
+                            <button class="button is-success" @click="notifRead(notif.id)">Lest</button>
+                          </td> -->
+                        </tr>
+                      </table>
+                    </div>
+                 </div>
+              </div>
+            </div>  
+
+            <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)">
               <div class="is-child">
                 <div class="block">
                   <p class="title">Min Side</p>
@@ -16,17 +40,11 @@
                   <button class="button" style="background-color: orange" @click="changingPassword=true">Endre passord</button>
                  </div>
               </div>
-            </div>
-
-            <br> 
+            </div>           
+            
+            <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)">
             <p class="subtitle">Dine kollektiv og grupper:</p>
-            <div class="is-parent">
-
               <div class="is-child">
-                <p class="subtitle">Du er medlem av følgende kollektiv og grupper:</p>
-                <div class="content1">
-                  <div>
-                    <button @click="fixButtonsForGroups()">Fix buttons</button>
                     <div class="content">
                       <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                         <thead>
@@ -54,8 +72,6 @@
                         </tr>
                       </table>
                     </div>
-                  </div>
-                </div>
                 <br>
                 <router-link class="button"  style="background-color: orange" to="/Innmelding">Administrere grupper/kollektiver</router-link>
               </div>
@@ -105,6 +121,7 @@
           groups:[],
           allGroups:[],
           selectedGroup: {text:''},
+          notifications: [],
           groupMembers:[],
           showingMembers: false,
         }
@@ -187,10 +204,34 @@
             this.groupMembers = response.data;
           }).catch(err => console.log(err));
         },
+        getStatusForNotifications(){
+          axios.get('http://localhost:9000/rest/notifikasjon/' + store.state.current_user.bruker_id + '/ulest').then(response => {
+            if(response.data){
+              this.notifications=response.data;
+              axios.put('http://localhost:9000/rest/notifikasjon/' + store.state.current_user.bruker_id + '/lesalle', {
+                bruker_id:store.state.current_user.bruker_id
+              }).then(response => {
+                //this.getStatusForNotifications();
+              }).catch(err => {
+                console.log(err);
+              });
+            };
+          });
+        },
+        notifRead(notif_id){
+          axios.put('http://localhost:9000/rest/notifikasjon/' + notif_id + '/les', {
+            id: notif_id
+          }).then(response => {
+            this.getStatusForNotifications();
+          }).catch(err => {
+            console.log(err);
+          });
+        }
       },
       created(){
         this.getData();
         this.getGroups();
+        this.getStatusForNotifications();
       }
     }
 </script>
