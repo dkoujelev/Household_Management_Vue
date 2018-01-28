@@ -83,7 +83,6 @@
           validateData(){
             this.errorMessages = {};
             let noErrors = true;
-
             if(this.gjoremal.navn === ''){
               this.errorMessages.tittel = 'Gjøremålslisten må ha et navn/tittel';
               noErrors = false;
