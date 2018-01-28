@@ -18,14 +18,13 @@
                 <div class="block_1"></div> <hr/>
                 <br>
                 <a class="button" style="background-color: orange" @click="showingExpense=true"> Legg til utgift for gruppen</a>
-
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <Modal :modalVisible.sync="showingExpense" @modalClosing="closeModal">
+      <Modal :modalVisible.sync="showingExpense" @modalClosing="closeModal" :showClose="false">
       <h2 slot="title" style="color:white">Legg til utgift</h2>
       <AddExpence slot="content" @closing="closeModal" />
     </Modal>

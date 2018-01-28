@@ -10,7 +10,7 @@
               </div>
             </Modal>
 
-            <Modal :modalVisible.sync="showAddNewTodoList" @modalClosing="closeModal">
+            <Modal :modalVisible.sync="showAddNewTodoList" @modalClosing="closeModal" :showClose="false">
               <h2 slot="title">Opprett en liste </h2>
               <div slot="content">
                 <addTodoList @todoListAdded="closeWithUpdate" @avbryt="closeModal"/>

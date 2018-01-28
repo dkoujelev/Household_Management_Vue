@@ -92,7 +92,7 @@
         </tr>
       </table>
     </Modal>
-    <Modal :modalVisible.sync="changingPassword" @modalClosing="changingPassword=false;">
+    <Modal :modalVisible.sync="changingPassword" @modalClosing="changingPassword=false;" :showClose="false">
       <h2 slot="title">Endring av passord</h2>
       <ChangePassword slot="content" @change-password-canceled="changingPassword=false"></ChangePassword>
     </Modal>

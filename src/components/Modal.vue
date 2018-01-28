@@ -5,7 +5,7 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title"><slot name="title"></slot></p>
-        <button class="delete" aria-label="close" @click="closeModal"></button>
+        <button class="delete" aria-label="close" @click="closeModal" v-if="showClose"></button>
       </header>
       <section class="modal-card-body">
         <slot name="content"></slot>
@@ -18,10 +18,16 @@
 <script>
   export default {
     name: "modal",
-    props: [ 'modalVisible' ],
+    props: {
+      modalVisible: false,
+      showClose: {
+        default: true,
+        type: Boolean
+      }
+    },
     data(){
       return{
-        showModal: this.modalVisible
+        showModal: this.modalVisible,
       }
     },
     methods: {

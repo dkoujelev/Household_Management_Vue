@@ -3,7 +3,7 @@
     <div :class="{'is-centered' : !isHome,'columns' : !isHome}">
       <div :class="{'column is-8' : !isHome}">
           <div class="is-ancestor box"   style="background-color:  hsl(217, 71%, 53%);">
-            <Modal :modalVisible.sync="showModal" @modalClosing="closeModal" v-if="!isHome">
+            <Modal :modalVisible.sync="showModal" @modalClosing="closeModal" v-if="!isHome" :showClose="false">
               <h2 slot="title" style="color:white">Lag nyhet</h2>
               <Addnews slot="content" @addedNews="update" @closeAddNews="closeModal" />
             </Modal>
