@@ -12,7 +12,7 @@
             </Modal>
 
             <Modal :modalVisible.sync="showAddNewTodoList" @modalClosing="closeModal" @modalOpen="helpModalOpen">
-              <h2 slot="title">Gjøremål </h2>
+              <h2 slot="title">Opprett en liste </h2>
               <div slot="content">
                 <addTodoList/>
               </div>
