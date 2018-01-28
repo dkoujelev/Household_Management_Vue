@@ -1,6 +1,4 @@
 <template>
-
-
   <div class="is-ancestor">
     <div class="is-parent">
       <div class="is-child">
@@ -32,8 +30,6 @@
       </div>
     </div>
   </div>
-
-
 </template>
 
 <script>
@@ -56,12 +52,14 @@
       data() {
         return {
           users: [],
+          errorMessage: '',
           gjoremal: {
             navn: '',
             start: new Date(),
             frist: new Date(),
             beskrivelse: '',
             bruker_id: '',
+
           },
           liste_id: 1
         }
@@ -77,8 +75,18 @@
             frist: new Date(),
             beskrivelse: '',
             bruker_id: ''
+
           }
         },
+          validateData(){
+            this.errorMessage = '';
+            if(this.gjoremal.navn === ''){
+              this.errorMessage = 'Gjøremålslisten må ha et navn/tittel';
+            } else{
+              this.add();
+            }
+          },
+
         getUsers(){
           axios.get('http://localhost:9000/rest/medlemmerIUndergruppe/' + store.state.current_group.undergruppe_id).then(response => {
             for(let i = 0; i < response.data.length; i++){
