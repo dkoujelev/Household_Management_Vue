@@ -1,17 +1,28 @@
 <template>
-  <div class="block">
-    <h1 class="title is-3">Legg til utgift</h1>
-    <div class="field">
-      <input class="input" type="text" v-model="expence.tittel" placeholder="Beskrivelse">
-    </div>
-    <div class="field">
-      <input class="input" type="number" v-model="expence.sum" placeholder="Sum - total utgift for gruppe">
-    </div>
-
-    <div class="field">
-      <a class="button is-danger" @click="$emit('closing')">Avbryt</a>
-      <a href="#" class="button is-primary" @click.prevent="addExpence">Legg til utgift for gruppe </a>
-
+  <div class="is-ancestor">
+    <div class="is-parent">
+      <div class="is-child">
+        <div class="field-body">
+          <p class="subtitle">Beskrivelse:&nbsp</p>
+          <input class="input" type="text" style="width: 80%" v-model="expence.tittel" placeholder="Beskrivelse">
+        </div>
+        <br>
+        <div class="field-body">
+          <p class="subtitle">Total sum:&nbsp</p>
+          <input class="input" type="number" style="width:80%"  v-model="expence.sum" placeholder="Summen blir delt likt til alle på gruppa">
+        </div>
+        <br>
+        <div class="block">
+          <div class="level">
+            <div class="is-pulled-left">
+              <a href="#" class="button is-primary" @click.prevent="addExpence">Legg til utgift for gruppe </a>
+            </div>
+            <div class="is-pulled-right">
+              <a class="button is-danger" @click="$emit('closing')">Avbryt</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

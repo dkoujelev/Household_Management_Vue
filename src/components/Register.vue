@@ -1,5 +1,5 @@
 <template>
-  <section id="registerDiv" class="hero is-fullheight is-medium is-bold">
+  <section id="registerDiv" >
 
     <div class="hero-body">
       <div class="container">

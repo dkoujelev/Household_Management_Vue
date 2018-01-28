@@ -1,14 +1,35 @@
 <template>
-  <div class="box">
-    <h2>Opprett en gjøremålsliste</h2>
-    <label for="gjoremalsliste">Tittel</label>
-    <input id="gjoremalsliste" type="text" v-model="navn" placeholder="Gjøremål" />
 
-    <label class="help" for="dp">Frist</label>
-    <flatPickr id="dp" v-model="ferdig" :config="{enableTime: false}"></flatPickr>
-    <button type="button" class="button" v-on:click="sendListe">Ferdig</button>
-    <button type="button" class="button" v-on:click="avbryt">Avbryt</button>
-  </div>
+          <div class="tile is-ancestor" >
+            <div class="tile is-parent">
+              <div class="tile is-child">
+                <div class="field-body">
+                  <label for="gjoremalsliste" class="help" style="font-size: large">Tittel:</label>
+                  <input id="gjoremalsliste" type="text" v-model="navn" placeholder="Tittel på gjøremålsliste" />
+                </div>
+                <br>
+                <div class="field-body">
+                  <label class="help" for="dp"  style="font-size: large">Frist :</label>
+                  <flatPickr id="dp" v-model="ferdig" :config="{enableTime: false}"></flatPickr>
+                </div>
+                <br>
+                <div class="block">
+                  <nav class="level">
+                    <div class="is-pulled-left">
+                      <button type="button" class="button" style="background-color: orange" v-on:click="sendListe">Ferdig</button>
+                    </div>
+                    <div class="is-pulled-right">
+                      <button type="button" class="button is-danger"  v-on:click="avbryt">Avbryt</button>
+                    </div>
+                  </nav>
+                </div>
+
+
+
+              </div>
+            </div>
+          </div>
+
 </template>
 
 <script>
