@@ -174,6 +174,39 @@
                 </div>
               </div>
             </div>
+
+            {{ mailResult }}
+          </div>
+          <br>
+          <div v-if="showApproveSection===true">
+            Disse ønsker å bli med i {{ selected_maingroup_object.navn }}. Du kan godkjenne eller avvise søknaden(e).
+            <dl id="approvalsList">
+              <dt v-for="item in approvals"  v-bind:key="item.tid">
+                {{ item.bruker }}
+              </dt>
+              <dd v-for="item in approvals" v-bind:key="item.tid">
+                <button class="button is-link" v-on:click="approve(item.kollektiv, item.bruker,1)"><span class="icon"><i class="fa fa-thumbs-o-up" /></span></button>
+                <button class="button is-link" v-on:click="approve(item.kollektiv, item.bruker,0)"><span class="icon"><i class="fa fa-thumbs-o-down" /></span></button>
+              </dd>
+            </dl>
+          </div>
+          <br>
+          <div v-if="showAvailableSubgroups===true">
+            Dette er alle gruppene som hører inn under {{ selected_maingroup_object.navn }}:
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                  <thead>
+                  <th>Grupper</th>
+                  <th></th>
+                  </thead>
+                  <tr v-for="option in options_subgroup"  v-bind:key="option.uid">
+                  <td>{{ option.navn }}</td>
+                  <td> <button class="button is-link is-hidden-touch" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+                    <button class="button is-link is-small is-hidden-desktop" v-on:click="joinSubGroup(option.uid)">Bli med</button>
+                  </td>
+                  </tr>
+              </table>
+            {{ joinSubResult }}
+
           </div>
         </div>
       </div>

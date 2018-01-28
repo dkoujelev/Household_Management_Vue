@@ -2,50 +2,49 @@
   <div :class="{'container' : !isHome}">
     <div :class="{'is-centered' : !isHome,'columns' : !isHome}">
       <div :class="{'column is-8' : !isHome}">
-      <div class="card is-rounded " :class="{'is-centered' :!isHome}">
-        <div class="is-ancestor box"   style="background-color:  hsl(217, 71%, 53%);">
-          <Modal :modalVisible.sync="showModal" @modalClosing="closeModal">
-            <h2 slot="title" style="color:white">Lag nyhet</h2>
-            <Addnews slot="content" @addedNews="update" @closeAddNews="closeModal" />
-          </Modal>
-          <div class="is-parent">
-            <div class="is-child">
-              <p class="title">Nyheter</p>
-              <div :class="{'content1' : !isHome}">
-                <article class="message is-white" v-for="row in rows">
-                  <div class="message-header">
-                    <h2>{{row.overskrift}}</h2>
-                    <a v-if="row.knapper && !isHome" @click="deleteNews(row)">Slett</a>
-                  </div>
-                  <div class="message-body">
-                    <h4>{{row.nyhet}}</h4>
-
-                    <div class="block">
-                      <nav class="level">
-                        <!-- left side -->
-                        <div class="level-left">
-                          <p class="has-text-grey">{{row.hvem.fornavn}} {{row.hvem.etternavn}}</p>
-                        </div>
-                        <!-- right side -->
-                        <div class="level-right">
-                          <div class="level-item">
-                            <p class="has-text-grey">{{row.nar}}</p>
-                          </div>
-                        </div>
-                      </nav>
+          <div class="is-ancestor box"   style="background-color:  hsl(217, 71%, 53%);">
+            <Modal :modalVisible.sync="showModal" @modalClosing="closeModal" v-if="!isHome">
+              <h2 slot="title" style="color:white">Lag nyhet</h2>
+              <Addnews slot="content" @addedNews="update" @closeAddNews="closeModal" />
+            </Modal>
+            <ConfirmModal :modalVisible.sync="showConfirm" :rowData.sync="selectedNews" :message="confirmText" @cancel="showConfirm = false" @confirm="deleteNews" v-if="!isHome"/>
+            <div class="is-parent">
+              <div class="is-child">
+                <p class="title">Nyheter</p>
+                <div :class="{'content1' : !isHome}">
+                  <article class="message is-white" v-for="row in rows">
+                    <div class="message-header">
+                      <h2>{{row.overskrift}}</h2>
+                      <a v-if="row.knapper && !isHome" @click="showConfirmDialog(row)">Slett</a>
                     </div>
-                  </div>
-                </article>
-              </div>
-              <br>
-              <div class="child" v-if="!isHome">
-                <button class="button" @click="openModal">Lag nyhet</button>
+                    <div class="message-body">
+                      <h4>{{row.nyhet}}</h4>
+
+                      <div class="block">
+                        <nav class="level">
+                          <!-- left side -->
+                          <div class="level-left">
+                            <p class="has-text-grey">{{row.hvem.fornavn}} {{row.hvem.etternavn}}</p>
+                          </div>
+                          <!-- right side -->
+                          <div class="level-right">
+                            <div class="level-item">
+                              <p class="has-text-grey">{{row.nar}}</p>
+                            </div>
+                          </div>
+                        </nav>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+                <br>
+                <div class="child" v-if="!isHome">
+                  <button class="button" @click="openModal">Lag nyhet</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
       </div>
-    </div>
     </div>
   </div>
 </template>
@@ -55,11 +54,12 @@
   import {store} from '@/store'
   import Addnews from '@/components/Addnews'
   import Modal from '@/components/Modal'
+  import ConfirmModal from '@/components/ConfirmModal'
 
   export default {
     name: 'Nyhetsfeed',
     props: [ 'value' ],
-    components: { Modal, Addnews },
+    components: { Modal, Addnews, ConfirmModal },
     computed: {
       len: function () {
         return (isNaN(Number.parseInt(this.value)) ? -1 : this.value);
@@ -122,13 +122,21 @@
     data(){
       return {
         updated: false,
-        showModal: false
+        showModal: false,
+
+        showConfirm: false,
+        selectedNews: {},
+        confirmText: 'Er du sikker på at du vil slette denne nyheten?'
       };
     },
     mounted(){
       this.update();
     },
     methods: {
+      showConfirmDialog(row){
+        this.selectedNews = row;
+        this.showConfirm = true;
+      },
       openModal(){
         this.showModal = true;
       },
@@ -146,7 +154,8 @@
       deleteNews(row){
         let id = row.melding_id;
         axios.delete('http://localhost:9000/rest/melding/' + id).then(response => {
-
+          this.updated = !this.updated;
+          this.showConfirm = false;
         });
       }
     }
@@ -175,10 +184,5 @@
   background-color: orange;
   }
 
-  div.is-ancestor {
-    /** Trancparancy filter: */
-    background-color: hsl(217, 71%, 53%) /**  ;
-    /** opacity: 0.8; */
-    /** filter: alpha(opacity=60); /* For IE8 and earlier */
-  }
+
 </style>

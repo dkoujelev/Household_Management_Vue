@@ -1,48 +1,44 @@
 <template>
-  <div>
-    <div class="column">
-      <div class="columns is-one-quarter">
-        <div class="column is-half">
-          <div class="table is-striped">
-            <section class="panel">
-              <p class="panel-heading">
-                Liste for: {{$store.state.current_group.navn}}
-              </p>
-              <addTodo :id.sync="list_id" @todoAdded="updatePage"></addTodo>
-              <div class="panel-block">
-
-                <table class="table">
-                  <thead>
-                  <tr>
-                    <th>Tittel(navn)</th>
-                    <th>Frist</th>
-                    <th>Ferdig</th>
-                    <!--<th>Status</th> -->
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr v-for="row in rows">
-                    <td> <a @click=""> {{row.navn}} </a> </td> <!--  -->
-                    <td>{{row.frist}}</td>
-                    <td>
-                      <button class="button is-info" v-if="row.ferdig === null" @click="completeTodo(row)">Fullfør</button>
-                      <label class="button is-success" v-else><i class="fa fa-check" aria-hidden="true"></i></label>
-                    <td>
-                      <button class="button is-danger" @click="deleteItem(row)">
-                        <i class="fa fa-trash-o" aria-hidden="true"></i>
-                      </button>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          </div>
+  <div class="is-ancestor" >
+    <div class="is-parent">
+      <div class="is-child">
+      <h3 class="title"> Liste for: {{$store.state.current_group.navn}}</h3>
+        <addTodo :id.sync="list_id" @todoAdded="updatePage" v-if="!readOnly" />
+        <br>
+        <div class="content1">
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Tittel(navn)</th>
+              <th>Frist</th>
+              <th>Ferdig</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="row in rows">
+              <td>{{row.navn}}</td> <!--  -->
+              <td>{{row.frist}}</td>
+              <td v-if="!readOnly">
+                <button class="button is-info" v-if="row.ferdig === null" @click="completeTodo(row)">Fullfør</button>
+                <label class="button is-success" v-else><i class="fa fa-check" aria-hidden="true"></i></label>
+              </td>
+              <td v-else>
+                <label class="button is-danger" v-if="row.ferdig === null"><i class="fa fa-times" aria-hidden="true"></i></label>
+                <label class="button is-success" v-else><i class="fa fa-check" aria-hidden="true"></i></label>
+              </td>
+              <td v-if="!readOnly">
+                <button class="button is-danger" @click="deleteItem(row)">
+                  <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -52,7 +48,13 @@
 
     export default {
       name: "todo-list-overview3",
-      props: ['my_id'],
+      props: {
+        my_id: {},
+        readOnly: {
+          default: false,
+          type: Boolean
+        }
+      },
       components: { addTodo },
 
       data() {
@@ -120,4 +122,8 @@
 
 <style scoped>
 
+  div.content1 {
+    height: 200px;
+
+  }
 </style>

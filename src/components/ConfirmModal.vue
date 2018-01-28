@@ -6,15 +6,9 @@
           <section class="modal-card-body">
             <p>{{text}}</p>
           </section>
-          <section class="modal-card-foot">
-            <nav class="level">
-              <div class="level-left">
-                <button class="button is-danger" @click="cancel">Avbryt</button>
-              </div>
-              <div class="level-right">
-                <button class="button is-info" @click="confirm">Ok</button>
-              </div>
-            </nav>
+          <section class="modal-card-foot" style="justify-content: space-between;">
+            <button class="button is-info" @click="confirm">Ok</button>
+            <button class="button is-danger" @click="cancel">Avbryt</button>
           </section>
         </div>
       </div>

@@ -2,45 +2,43 @@
   <div :class="{'container' : !isHome}">
     <div :class="{'is-centered' : !isHome,'columns' : !isHome}">
       <div :class="{'column is-8' : !isHome}">
-        <div class="card is-rounded is-centered">
-          <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)	">
-            <Modal :modalVisible.sync="showShoppingList" @modalClosing="closeShoppingList">
-              <h2 slot="title" style="color:white">{{list.name}}</h2>
-              <ViewShoppingList :id.sync="list.id" slot="content" @closingShoppingList="closeShoppingList" @deleteShoppingList="update" @listCompleted="update"/>
-            </Modal>
-            <Modal :modalVisible.sync="showAddShoppingList" @modalClosing="closeAddShoppingList">
-              <h2 slot="title" style="color:white">Ny handleliste</h2>
-              <ShoppingList slot="content" @closingAddShoppingList="closeAddShoppingList" @addedShoppingList="update"/>
-            </Modal>
-            <div class="is-parent">
-              <div class="is-child">
-                <p class="title">Handlelister</p>
-                <div :class="{'content1' : !isHome}">
-                  <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                    <thead>
-                    <th>Handleliste</th>
-                    <th>Frist</th>
-                    <th></th>
-                    </thead>
-                    <ConfirmModal :modalVisible.sync="showConfirmModal" :rowData.sync="list" :message="confirmText" @cancel="showConfirmModal = false" @confirm="changeFavorite"/>
-                    <tr v-for="row in rows">
-                      <td>{{row.navn}}</td>
-                      <td>{{row.frist}}</td>
-                      <td>
-                        <button class="button is-link" @click="selectList(row)">Se handleliste</button>
-                        <button class="button is-success" v-if="!isHome && !row.favorite" @click="changeFavorite(row)">
-                          <i class="fa fa-star" aria-hidden="true"></i><p>&nbsp; Legg til favoritt</p>
-                        </button>
-                        <button class="button is-danger" v-else-if="!isHome && row.favorite" @click="confirmation(row)">
-                          <i class="fa fa-star" aria-hidden="true"></i><p>&nbsp; Fjern fra favoritt</p>
-                        </button>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <br v-if="!isHome">
-                <button class="button" @click="openAddShoppingList" v-if="!isHome">Ny handleliste</button>
+        <div class="is-ancestor box" style="background-color:hsl(217, 71%, 53%)	">
+          <Modal :modalVisible.sync="showShoppingList" @modalClosing="closeShoppingList">
+            <h2 slot="title" style="color:white">{{list.name}}</h2>
+            <ViewShoppingList :readOnly="isHome" :id.sync="list.id" slot="content" @closingShoppingList="closeShoppingList" @deleteShoppingList="update" @listCompleted="update"/>
+          </Modal>
+          <Modal :modalVisible.sync="showAddShoppingList" @modalClosing="closeAddShoppingList">
+            <h2 slot="title" style="color:white">Ny handleliste</h2>
+            <ShoppingList slot="content" @closingAddShoppingList="closeAddShoppingList" @addedShoppingList="update"/>
+          </Modal>
+          <div class="is-parent">
+            <div class="is-child">
+              <p class="title">Handlelister</p>
+              <div :class="{'content1' : !isHome}">
+                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                  <thead>
+                  <th>Handleliste</th>
+                  <th>Frist</th>
+                  <th></th>
+                  </thead>
+                  <ConfirmModal :modalVisible.sync="showConfirmModal" :rowData.sync="list" :message="confirmText" @cancel="showConfirmModal = false" @confirm="changeFavorite"/>
+                  <tr v-for="row in rows">
+                    <td>{{row.navn}}</td>
+                    <td>{{row.frist}}</td>
+                    <td>
+                      <button class="button is-link" @click="selectList(row)">Se handleliste</button>
+                      <button class="button is-success" v-if="!isHome && !row.favorite" @click="changeFavorite(row)">
+                        <i class="fa fa-star" aria-hidden="true"></i><p>&nbsp; Legg til favoritt</p>
+                      </button>
+                      <button class="button is-danger" v-else-if="!isHome && row.favorite" @click="confirmation(row)">
+                        <i class="fa fa-star" aria-hidden="true"></i><p>&nbsp; Fjern fra favoritt</p>
+                      </button>
+                    </td>
+                  </tr>
+                </table>
               </div>
+              <br v-if="!isHome">
+              <button class="button" @click="openAddShoppingList" v-if="!isHome">Ny handleliste</button>
             </div>
           </div>
         </div>

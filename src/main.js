@@ -21,16 +21,23 @@ router.beforeEach((to,from,next) => {
 
   //console.log("router.beforeEach: intercepting route from " + from.path + " to " + to.path);
 
-  if(to.path === '/Login' || to.path === '/Register' || to.path==='/ForgottenPassword'){
+  if(to.path === '/Login' || to.path === '/Register' || to.path === '/ForgottenPassword'){
     //console.log("router.beforeEach: user is already on login/register page, no redirect");
     return next();
   }
 
-
-
   if(store.state.loggedIn){
     //console.log("router.beforeEach: already logged in, don't redirect");
     console.log('not updating');
+
+    //Actually, this seems like a good place to update...
+    axios.get('http://localhost:9000/rest/notifikasjon/' + store.state.current_user.bruker_id + '/ulest').then(response => {
+      if(response.data){
+        console.log('Found ' + response.data.length + ' notifications, updating notificationCount...');
+        store.commit('notificationCount', response.data.length);
+      };
+    });
+
     //if(!store.state.isMember && (to.path !== 'NewUser' || to.path !== '/NewUser') ) router.push('/NewUser');
     if(!store.state.isMember){
       if(to.path !== '/NewUser' && to.path !== '/Innmelding') router.push('/NewUser')

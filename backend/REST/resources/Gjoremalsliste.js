@@ -106,8 +106,8 @@ module.exports = function(connection, server) {
       for (liste of rows) {
         if ('opprettet' in liste && liste.opprettet !== null)
           liste.opprettet = new Date(liste.opprettet);
-        if('ferdig' in req.body && req.body.ferdig !== null)
-          req.body.ferdig = new Date(req.body.ferdig);
+        if('ferdig' in liste && liste.ferdig !== null)
+          liste.ferdig = new Date(liste.ferdig);
       }
       let lister = JSON.parse(JSON.stringify(rows));
       res.send(lister);

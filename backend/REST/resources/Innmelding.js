@@ -5,8 +5,6 @@ module.exports = function(connection, server) {
   // Hent alle innmeldinger
   server.get('rest/innmelding/', function (req, res, next) {
     //console.log('DEBUG - GET - rest/innmelding/');
-    //[{"bruker_id":1,"kollektiv_id":1,"status_admin":1,"status_bruker":9,"dato_svar_admin":"2018-01-15T11:12:12.000Z","dato_svar_bruker":null,"aktiv":1,"notat_admin":"Kommer flyttende i mars.","notat_bruker":null},
-    // {"bruker_id":2,"kollektiv_id":1,"status_admin":1,"status_bruker":1,"dato_svar_admin":"2018-01-12T09:21:00.000Z","dato_svar_bruker":"2018-01-12T13:22:20.000Z","aktiv":0,"notat_admin":null,"notat_bruker":null}]
     connection.query("SELECT * FROM Innmelding", function (err, rows, fields) {
       res.send(err ? err : rows);
       return next();
@@ -16,8 +14,6 @@ module.exports = function(connection, server) {
   // Hent alle aktive innmeldinger (søknader) for et kollektiv
   server.get('rest/soknaderForKollektiv/:kollektiv_id', function (req, res, next) {
     //console.log('DEBUG - rest/soknaderForKollektiv/:kollektiv_id');
-    //[{"bruker_id":1,"kollektiv_id":1,"status_admin":1,"status_bruker":9,"dato_svar_admin":"2018-01-15T11:12:12.000Z","dato_svar_bruker":null,"aktiv":1,"notat_admin":"Kommer flyttende i mars.","notat_bruker":null},
-    // {"bruker_id":2,"kollektiv_id":1,"status_admin":1,"status_bruker":1,"dato_svar_admin":"2018-01-12T09:21:00.000Z","dato_svar_bruker":"2018-01-12T13:22:20.000Z","aktiv":0,"notat_admin":null,"notat_bruker":null}]
     connection.query("SELECT * FROM Innmelding WHERE aktiv=true AND status_bruker=1 AND kollektiv_id=?", req.params.kollektiv_id, function (err, rows, fields) {
       res.send(err ? err : rows);
       return next();
@@ -27,8 +23,6 @@ module.exports = function(connection, server) {
   // Hent alle aktive innmeldinger (søknad + invitasjon) for et kollektiv
   server.get('rest/innmeldingerForKollektiv/:kollektiv_id', function (req, res, next) {
     //console.log('DEBUG - rest/innmeldingerForKollektiv/:kollektiv_id');
-    //[{"bruker_id":1,"kollektiv_id":1,"status_admin":1,"status_bruker":9,"dato_svar_admin":"2018-01-15T11:12:12.000Z","dato_svar_bruker":null,"aktiv":1,"notat_admin":"Kommer flyttende i mars.","notat_bruker":null},
-    // {"bruker_id":2,"kollektiv_id":1,"status_admin":1,"status_bruker":1,"dato_svar_admin":"2018-01-12T09:21:00.000Z","dato_svar_bruker":"2018-01-12T13:22:20.000Z","aktiv":0,"notat_admin":null,"notat_bruker":null}]
     connection.query("SELECT * FROM Innmelding WHERE aktiv=true AND kollektiv_id=?", req.params.kollektiv_id, function (err, rows, fields) {
       res.send(err ? err : rows);
       return next();
@@ -38,8 +32,6 @@ module.exports = function(connection, server) {
     // Hent alle aktive innmeldinger (invitasjoner) for et kollektiv
     server.get('rest/invitasjonerForKollektiv/:kollektiv_id', function (req, res, next) {
       //console.log('DEBUG - rest/invitasjonerForKollektiv/:kollektiv_id');
-      //[{"bruker_id":1,"kollektiv_id":1,"status_admin":1,"status_bruker":9,"dato_svar_admin":"2018-01-15T11:12:12.000Z","dato_svar_bruker":null,"aktiv":1,"notat_admin":"Kommer flyttende i mars.","notat_bruker":null},
-      // {"bruker_id":2,"kollektiv_id":1,"status_admin":1,"status_bruker":1,"dato_svar_admin":"2018-01-12T09:21:00.000Z","dato_svar_bruker":"2018-01-12T13:22:20.000Z","aktiv":0,"notat_admin":null,"notat_bruker":null}]
       connection.query("SELECT * FROM Innmelding WHERE aktiv=true AND status_admin=1 AND kollektiv_id=?", req.params.kollektiv_id, function (err, rows, fields) {
         res.send(err ? err : rows);
         return next();
@@ -48,7 +40,7 @@ module.exports = function(connection, server) {
 
   // Hent en bestemt innmelding
   server.get('rest/innmelding/:kollektiv_id', function (req, res, next) {
-    //console.log('DEBUG - rest/innmelding/:kollektiv_id');
+    //console.log('DEBUG - GET - rest/innmelding/:kollektiv_id');
     if (req.params.kollektiv_id) {
       connection.query("SELECT * FROM Innmelding WHERE bruker_epost=? AND kollektiv_id=?", [req.params.bruker_epost, req.params.kollektiv_id], function (err, rows, fields) {
         res.send(err ? err : (rows.length == 1 ? rows[0] : null));
@@ -64,9 +56,48 @@ module.exports = function(connection, server) {
 
 // Legg til innmelding
   server.post('rest/innmelding/', function (req, res, next) {
-    //console.log('DEBUG - rest/innmelding/');
+    //console.log('DEBUG - POST - rest/innmelding/');
     connection.query("INSERT INTO Innmelding SET ?", req.body, function (err, rows, fields) {
-      res.send(err ? err : rows);
+      if(err){
+        res.send(err);
+      }else{
+        // We know it's good, add notification if it's not an invite
+        if(req.body.status_admin==2){
+          //console.log('This Innmelding is a request for membership! status_admin:' + req.body.status_admin);
+          let myTime = util.getCurrentTimeAsEpoch();
+          let msg = req.body.bruker_epost + ' har søkt om tilgang til et kollektiv';
+          let newNotification = {
+            opprettet:myTime,
+            tekst: msg,
+            lest:0,
+            id:null,
+            bruker_id:0
+          };
+          let groupAdmins = [];
+          connection.query("SELECT bruker_id FROM Bruker_Kollektiv WHERE kollektiv_id=? AND er_admin=1", req.body.kollektiv_id, function (err, rows0, fields) {
+            groupAdmins = rows0;
+            for(i=0;i<groupAdmins.length;i++){
+              newNotification.bruker_id=groupAdmins[i].bruker_id;
+              //console.log(newNotification);
+              connection.query("INSERT INTO Notifikasjon SET ?", newNotification, function (err, rows1, fields) {
+                //Do nothing?
+                if(err){
+                  console.log(err.code);
+                  console.log(err.sqlMessage);
+                  console.log(err.sql);
+                }else{
+                  // console.log('------ OK ------');
+                  // console.log(rows1);
+                  // console.log('----------------');
+                };
+              });
+            };
+          });
+        }else{
+          //console.log('This Innmelding is NOT a request for membership! status_admin:' + req.body.status_admin);
+        }
+        res.send(rows);
+      };
       return next();
     });
   });

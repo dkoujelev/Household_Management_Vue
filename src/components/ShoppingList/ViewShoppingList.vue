@@ -5,29 +5,33 @@
       <div class="tile is-child ">
         <table class="table is-bordered is-striped  is-hoverable is-fullwidth">
           <thead>
-          <th>Vare</th>
-          <th>Antall</th>
-          <th>Handlet</th>
-          <th>Slett</th>
+            <th>Vare</th>
+            <th>Antall</th>
+            <template v-if="!readOnly">
+              <th>Handlet</th>
+              <th>Slett</th>
+            </template>
           </thead>
           <tr v-for="row in rows">
             <td>{{row.vare}}</td>
             <td>{{row.antall}}</td>
-            <td>
-              <label class="checkboxContainer">
-                <input type="checkbox">
-                <span class="checkmark"></span>
-              </label>
-            </td>
-            <td>
-              <button class="button is-danger" @click="deleteItem(row)">
-                <i class="fa fa-trash-o" aria-hidden="true"></i>
-              </button>
-            </td>
+            <template v-if="!readOnly">
+              <td>
+                <label class="checkboxContainer">
+                  <input type="checkbox">
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+              <td>
+                <button v-if="!readOnly" class="button is-danger" @click="deleteItem(row)">
+                  <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </button>
+              </td>
+            </template>
           </tr>
         </table>
 
-        <div v-if="addItem">
+        <div v-if="addItem && !readOnly">
           <div class="field-body">
             <button class="button is-danger" @click="hide">
               <i class="fa fa-trash-o" aria-hidden="true"></i>
@@ -43,15 +47,16 @@
             </button>
           </div>
           <br>
-          <button class="button is-link" @click="updateList">
+          <button  class="button is-link" @click="updateList">
             Legg til vare
           </button>
         </div>
-        <button class="button is-link" v-if="!addItem" @click="addItem = true">Legg til vare</button>
+        <button class="button is-link" v-if="!addItem && !readOnly" @click="addItem = true">Legg til vare</button>
         <br>
 
       </div>
-      <div class="tile is-child ">
+
+      <div v-if="!readOnly" class="tile is-child ">
         <div class="block">
           <ConfirmModal :modalVisible.sync="showConfirm" :rowData.sync="list" :message="text" @cancel="showConfirm = false" @confirm="deleteList"/>
           <nav class="level">
@@ -80,8 +85,14 @@
 
   export default {
     name: 'Shoppinglists',
-    props: [ 'id' ],
-    components: { ConfirmModal },
+    props: {
+      id: {},
+      readOnly:{
+        default: false,
+        type: Boolean
+      }
+  },
+    components:{ConfirmModal},
 
     data(){
       return {

@@ -4,7 +4,31 @@
       <div class="column is-8">
         <div class="is-centered" >
           <div class="is-ancestor">
-            <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)	 ">
+
+            <div v-if="notifications.length > 0" class="is-parent box" style="background-color:hsl(217, 71%, 53%)">
+              <div class="is-child">
+                <div class="block">
+                  <p class="title">Beskjeder</p>
+                  <br>
+                   <div class="content">
+                      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                        <thead>
+                          <th>Info</th>
+                          <!-- <th></th> -->
+                        </thead>
+                        <tr v-for="notif in notifications"  v-bind:key="notif.id">
+                          <td>{{ notif.tekst }}</td>
+                          <!-- <td>
+                            <button class="button is-success" @click="notifRead(notif.id)">Lest</button>
+                          </td> -->
+                        </tr>
+                      </table>
+                    </div>
+                 </div>
+              </div>
+            </div>  
+
+            <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)">
               <div class="is-child">
                 <div class="block">
                   <p class="title">Min Side</p>
@@ -16,34 +40,38 @@
                   <button class="button" style="background-color: orange" @click="changingPassword=true">Endre passord</button>
                  </div>
               </div>
-            </div>
-            <br>
-
-            <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)	 ">
+            </div>           
+            
+            <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)">
+            <p class="subtitle">Dine kollektiv og grupper:</p>
               <div class="is-child">
-                <p class="subtitle">Du er medlem av følgende kollektiv og grupper:</p>
-                <div class="content1">
-                  <div>
                     <div class="content">
                       <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                         <thead>
-                        <th>Oversikt</th>
-                        <th></th>
-                        <th></th>
+                          <th>Navn</th>
+                          <th>Beskrivelse</th>
+                          <th>Medlemmer</th>
+                          <th>Handling</th>
                         </thead>
-                        <tr v-for="group in groups">
+                        <tr v-for="group in groups"  v-bind:key="group.uid">
                           <td>{{ group.navn }}</td>
+                          <td>{{ group.beskrivelse }}</td>
                           <td>
                             <button class="button is-link" @click="showMembers(group)">Vis medlemmer</button>
                           </td>
-                          <td>
-                            <button class="button is-danger" v-if="!group.default_gruppe" @click=" leaveSubGroup(group.undergruppe_id)">Forlat gruppe</button>
+
+                          <td v-if="group.canLeave">
+                            <button class="button is-danger is-hidden-mobile" @click="leaveSubGroup(group.undergruppe_id)">Forlat</button>
+                            <button class="button is-danger is-small is-hidden-desktop" @click="leaveSubGroup(group.undergruppe_id)">Forlat</button>
+                          </td>
+                          <td v-if="group.canJoin">
+                            <button class="button is-success is-hidden-mobile" @click="joinSubGroup(group.undergruppe_id)">Bli med</button>
+                            <button class="button is-success is-small is-hidden-desktop" @click="joinSubGroup(group.undergruppe_id)">Bli med</button>
+
                           </td>
                         </tr>
                       </table>
                     </div>
-                  </div>
-                </div>
                 <br>
                 <router-link class="button"  style="background-color: orange" to="/Innmelding">Administrere grupper/kollektiver</router-link>
               </div>
@@ -61,7 +89,7 @@
         <th>Epost</th>
         <th>Navn</th>
         </thead>
-        <tr v-for="member in groupMembers">
+        <tr v-for="member in groupMembers" v-bind:key="member.bruker_id">
           <td>{{member.epost}}</td>
           <td>{{member.fornavn + " " + member.etternavn}}</td>
         </tr>
@@ -91,7 +119,9 @@
             email: ''
           },
           groups:[],
+          allGroups:[],
           selectedGroup: {text:''},
+          notifications: [],
           groupMembers:[],
           showingMembers: false,
         }
@@ -107,18 +137,59 @@
             this.user_info.email = data.epost;
           });
         },
-        getGroups(){
-          let bruker_id = store.state.current_user.bruker_id;
-          axios.get('http://localhost:9000/rest/undergrupperForBruker/' + bruker_id).then(response => {
-            this.groups = response.data;
 
-          });
-          this.showUsersGroups=true;
+        getGroups(){
+          console.log('Getting all of the groups available for the user...');
+          let thiz = this;
+          axios.get('http://localhost:9000/rest/undergrupperForBruker/' + store.state.current_user.bruker_id).then(response => {
+            thiz.usersGroups = response.data;
+            axios.get('http://localhost:9000/rest/tilgjengeligeundergrupperforbruker/' + store.state.current_user.bruker_id).then(response => {
+              thiz.groups=response.data.map((item) => {
+                let canJoin = true;
+                let canLeave = false;
+                thiz.usersGroups.forEach(function(grpU){
+                  if(grpU.undergruppe_id==item.undergruppe_id){
+                    canJoin=false;
+                    canLeave=true;
+                  };
+                  if(grpU.default_gruppe){ 
+                    canLeave=false;
+                  };
+                });              
+
+                return {
+                  text: item.navn,
+                  value: item.kollektiv_id,
+                  navn: item.navn,
+                  gid: item.kollektiv_id,
+                  uid: item.undergruppe_id,
+                  undergruppe_id:item.undergruppe_id,
+                  kollektiv_id:item.kollektiv_id,
+                  beskrivelse: item.beskrivelse,
+                  isDef:item.default_gruppe,
+                  canJoin:canJoin,
+                  canLeave:canLeave
+                };
+              })
+            })
+          })
         },
-        leaveSubGroup(group){
-           console.log('DEBUG - leaveSubGroup(' + group.undergruppe_id + ')');
-          axios.put('http://localhost:9000/rest/undergruppeFjernBruker/' + group.undergruppe_id, {
-            undergruppe_id: group.undergruppe_id,
+
+        leaveSubGroup(undergruppe_id){
+           console.log('DEBUG - leaveSubGroup(' + undergruppe_id + ')');
+          axios.put('http://localhost:9000/rest/undergruppeFjernBruker/' + undergruppe_id, {
+            undergruppe_id: undergruppe_id,
+            bruker_id: store.state.current_user.bruker_id
+          }).then(response => {
+            this.getGroups();
+          }).catch(err => {
+            console.log(err);
+          });
+        },
+        joinSubGroup(undergruppe_id){
+          console.log('DEBUG - joinSubGroup(' + undergruppe_id + ')');
+          axios.post('http://localhost:9000/rest/undergruppeLeggTilBruker/' + undergruppe_id, {
+            undergruppe_id: undergruppe_id,
             bruker_id: store.state.current_user.bruker_id
           }).then(response => {
             this.getGroups();
@@ -133,10 +204,34 @@
             this.groupMembers = response.data;
           }).catch(err => console.log(err));
         },
+        getStatusForNotifications(){
+          axios.get('http://localhost:9000/rest/notifikasjon/' + store.state.current_user.bruker_id + '/ulest').then(response => {
+            if(response.data){
+              this.notifications=response.data;
+              axios.put('http://localhost:9000/rest/notifikasjon/' + store.state.current_user.bruker_id + '/lesalle', {
+                bruker_id:store.state.current_user.bruker_id
+              }).then(response => {
+                //this.getStatusForNotifications();
+              }).catch(err => {
+                console.log(err);
+              });
+            };
+          });
+        },
+        notifRead(notif_id){
+          axios.put('http://localhost:9000/rest/notifikasjon/' + notif_id + '/les', {
+            id: notif_id
+          }).then(response => {
+            this.getStatusForNotifications();
+          }).catch(err => {
+            console.log(err);
+          });
+        }
       },
       created(){
         this.getData();
         this.getGroups();
+        this.getStatusForNotifications();
       }
     }
 </script>

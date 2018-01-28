@@ -20,16 +20,13 @@
           <div id="navMenu1" class="navbar-menu" v-bind:class="{'is-active': showBurger}">
             <div class="navbar-start" @click="showBurger = false">
               <router-link class="navbar-item" v-if="showNav" to="/Nyhetsfeed"><span class="icon"><i class="fa fa-envelope-open fa-lg"></i></span> &nbsp Nyheter &nbsp </router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/TodoList"><span class="icon"><i class="fa fa-check-square-o fa-lg"></i></span> &nbsp Gjøremål &nbsp </router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/TodoListOverview2"><span class="icon"><i class="fa fa-check-square-o fa-lg"></i></span> &nbsp Gjøremål &nbsp </router-link>
               <router-link class="navbar-item" v-if="showNav" to="/Shoppinglists"><span class="icon"><i class="fa fa-shopping-cart fa-lg"></i></span> &nbsp Handlelister &nbsp </router-link>
-              <!-- <router-link class="navbar-item" v-if="showNav" to="/ShowExpences">Utgifter</router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/Innmelding">Innmelding</router-link>
-              <router-link class="navbar-item" v-if="showNav" to="/TestMail">TestMail</router-link> -->
-              <router-link class="navbar-item" v-if="showNav" to="/ShowAccounting"> <span class="icon"><i class="fa fa-calculator fa-lg" > </i>   </span> &nbsp Regnskap &nbsp </router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/ShowAccounting"> <span class="icon"><i class="fa fa-calculator fa-lg" > </i></span> &nbsp Regnskap &nbsp </router-link>
               <router-link class="navbar-item" v-if="showNav" to="/Statistikk"><span class="icon"><i class="fa fa-bar-chart fa-lg"></i></span> &nbsp Statistikk</router-link>
             </div>
             <div class="navbar-end" @click="showBurger = false">
-              <router-link class="navbar-item" v-if="showNav" to="/UserInfo"><span class="icon"><i class="fa fa-user fa-lg"></i></span> &nbsp Min Side </router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/UserInfo"><span class="icon"><i class="fa fa-user fa-lg"></i></span> &nbsp Min Side <span class="tag is-rounded" v-if="myNotificationCount>0"><b>{{ myNotificationCount }}</b></span></router-link>
               <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut"> <span class="icon"><i class="fa fa-power-off fa-lg"></i></span>  &nbsp Logg Ut</a>
             </div>
           </div>
@@ -37,15 +34,10 @@
     <!-- END NAV -->
     <div class="myContainer" style="max-height: 100%">
       <br/><br/><br/>
-
       <div class="content">
         <router-view/>
       </div>
-
-
     </div>
-
-
   </div>
 </template>
 
@@ -62,6 +54,13 @@ export default {
   name: 'dashboard',
   components: {SelectGroup, AddCollective, AddGroup},
   methods:{
+    // getStatusForNotifications(){
+    //   axios.get('http://localhost:9000/rest/notifikasjon/' + store.state.current_user.bruker_id + '/ulest').then(response => {
+    //     if(response.data){
+    //       this.notificationCount=response.data.length;
+    //     };
+    //   });
+    // },
     addedGroup(group){
       this.$refs.SelectGroup.loadGroups();
       this.addingGroup = false;
@@ -73,7 +72,7 @@ export default {
     logOut(){
         store.state.loggedIn=false;
         axios.post('http://localhost:9000/rest/logout');
-        router.push('Login');
+        router.push('/Login');
     }
   },
   created(){
@@ -83,17 +82,27 @@ export default {
         store.commit('loggedIn',true);
       }
     });
+    //console.log('store.state.notificationCount: ' + store.state.notificationCount);
+    //this.myNotificationCount=store.state.notificationCount;
+    //this.getStatusForNotifications();
+  },
+  updated(){
+    console.log('Checking store.state.notificationCount: ' + store.state.notificationCount);
+    this.myNotificationCount=store.state.notificationCount;
   },
   data(){
       return {
         showBurger: false,
         addingCollective: false,
-        addingGroup: false
+        addingGroup: false,
+        myNotificationCount: 0
+        // notificationCount: 0
       };
   },
   computed:{
     showNav(){
       //console.log(store.state.loggedIn + " " + store.state.isMember);
+      
       return store.state.loggedIn && store.state.isMember;
     },
     loggedIn(){
