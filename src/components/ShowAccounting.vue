@@ -12,7 +12,7 @@
                 <p class="subtitle"> Kredit - Gjeld ut: &nbsp&nbsp<span class="p" style="font-size: 20px; color: #ff9980; font-weight: bold"> {{totalDebt.sum_out}} kr &nbsp &nbsp <router-link class="button"  style="background-color: orange" to="/GjeldUt">Administrer </router-link> </span> </p>
                 <div class="block_1"></div> <hr/>
                 <p class="subtitle"> Balanse: &nbsp&nbsp
-                  <span class="p" style="font-size: 20px; color: lawngreen; font-weight: bold" v-if="totalDebt.balance >= 0"> {{totalDebt.balance}} kr </span>
+                  <span class="p" v-bind:class="{negative: balanceIsNegative, positive: !balanceIsNegative}" v-if="totalDebt.balance >= 0"> {{totalDebt.balance}} kr </span>
                   <span class="p" style="font-size: 20px; color: #ff9980; font-weight: bold" v-else> {{totalDebt.balance}} kr </span>
                 </p>
                 <div class="block_1"></div> <hr/>
@@ -45,7 +45,8 @@
     data(){
       return {
         showingExpense:false,
-        updated: false
+        updated: false,
+        balanceIsNegative: false
       };
     },
     methods: {
@@ -74,6 +75,7 @@
               sum_out+=user.sum;
 
             balance = sum_in-sum_out;
+            this.balanceIsNegative = (balance < 0);
 
             return {sum_in,sum_out,balance};
 
@@ -164,6 +166,12 @@
     color: black;
     font-size: medium;
     font-weight: normal;
+  }
+  .positive{
+    font-size: 20px; color: lawngreen; font-weight: bold
+  }
+  .negative{
+    font-size: 20px; color: #ff9980; font-weight: bold
   }
 
 </style>
