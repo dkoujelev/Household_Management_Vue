@@ -19,7 +19,8 @@
             </Modal>
             <div class="is-parent">
               <div class="is-child">
-                <h2 class="title" style="color:white">Gjøremålsliste for: {{$store.state.current_group.navn}}</h2>
+                <h2 class="title" style="color:white" v-if="!isHome">Gjøremålslister for: {{$store.state.current_group.navn}}</h2>
+                <h2 class="title" style="color:white" v-else>Gjøremålslister for: {{$store.state.current_user.fornavn}} {{$store.state.current_user.etternavn}}</h2>
                 <div class="container1">
                   <table class="table">
                     <thead>
@@ -139,7 +140,7 @@
           return raw.substring(8, 10) + "." + raw.substring(5, 7) + "." + raw.substring(2,4);
         },
         openTodo(row) {
-          this.id = row.todoId;
+          this.todoId = row.id;
           this.showModal = true;
         },
 
