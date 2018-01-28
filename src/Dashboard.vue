@@ -26,7 +26,7 @@
               <router-link class="navbar-item" v-if="showNav" to="/Statistikk"><span class="icon"><i class="fa fa-bar-chart fa-lg"></i></span> &nbsp Statistikk</router-link>
             </div>
             <div class="navbar-end" @click="showBurger = false">
-              <router-link class="navbar-item" v-if="showNav" to="/UserInfo"><span class="icon"><i class="fa fa-user fa-lg"></i></span> &nbsp Min Side </router-link>
+              <router-link class="navbar-item" v-if="showNav" to="/UserInfo"><span class="icon"><i class="fa fa-user fa-lg"></i></span> &nbsp Min Side <span class="tag is-rounded" v-if="myNotificationCount>0"><b>{{ myNotificationCount }}</b></span></router-link>
               <a href="" class="navbar-item" v-if="loggedIn" @click.prevent="logOut"> <span class="icon"><i class="fa fa-power-off fa-lg"></i></span>  &nbsp Logg Ut</a>
             </div>
           </div>
@@ -54,6 +54,13 @@ export default {
   name: 'dashboard',
   components: {SelectGroup, AddCollective, AddGroup},
   methods:{
+    // getStatusForNotifications(){
+    //   axios.get('http://localhost:9000/rest/notifikasjon/' + store.state.current_user.bruker_id + '/ulest').then(response => {
+    //     if(response.data){
+    //       this.notificationCount=response.data.length;
+    //     };
+    //   });
+    // },
     addedGroup(group){
       this.$refs.SelectGroup.loadGroups();
       this.addingGroup = false;
@@ -75,17 +82,27 @@ export default {
         store.commit('loggedIn',true);
       }
     });
+    //console.log('store.state.notificationCount: ' + store.state.notificationCount);
+    //this.myNotificationCount=store.state.notificationCount;
+    //this.getStatusForNotifications();
+  },
+  updated(){
+    console.log('Checking store.state.notificationCount: ' + store.state.notificationCount);
+    this.myNotificationCount=store.state.notificationCount;
   },
   data(){
       return {
         showBurger: false,
         addingCollective: false,
-        addingGroup: false
+        addingGroup: false,
+        myNotificationCount: 0
+        // notificationCount: 0
       };
   },
   computed:{
     showNav(){
       //console.log(store.state.loggedIn + " " + store.state.isMember);
+      
       return store.state.loggedIn && store.state.isMember;
     },
     loggedIn(){
