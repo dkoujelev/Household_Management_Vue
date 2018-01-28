@@ -4,6 +4,7 @@
       <div class="is-child">
         <h3>Lag nytt gjøremål</h3>
         <div class="field">
+          <p class="help is-danger">{{this.errorMessages.tittel}}</p>
           <div class="field-body">
             <p class="help" style="font-size: large;">Tittel: </p>
             <input id="gjoremal" type="text" class="input" style="width: 160px" v-model="gjoremal.navn" placeholder="Gjøremål" />
@@ -18,13 +19,14 @@
         </div>
 
         <div class="field">
+          <p class="help is-danger">{{this.errorMessages.slave}}</p>
           <div class="field-body">
             <label class="help" for="slave" style="font-size: large;">Hvem skal utføre gjøremålet:</label>
             <select id="slave" class="dropdown" v-model="gjoremal.bruker_id">
               <option disabled value="" class="dropdown-item">Velg bruker</option>
               <option :value="user.bruker_id" class="dropdown-item" v-for="user in users">{{user.fornavn}} {{user.etternavn}}</option>
             </select>
-            <button type="button" class="button" style="background-color: orange" v-on:click="add()">Create</button>
+            <button type="button" class="button" style="background-color: orange" v-on:click="validateData">Create</button>
           </div>
         </div>
       </div>
@@ -52,7 +54,7 @@
       data() {
         return {
           users: [],
-          errorMessage: '',
+          errorMessages: '',
           gjoremal: {
             navn: '',
             start: new Date(),
@@ -79,10 +81,17 @@
           }
         },
           validateData(){
-            this.errorMessage = '';
+            this.errorMessages = {};
+            let noErrors = true;
             if(this.gjoremal.navn === ''){
-              this.errorMessage = 'Gjøremålslisten må ha et navn/tittel';
-            } else{
+              this.errorMessages.tittel = 'Gjøremålslisten må ha et navn/tittel';
+              noErrors = false;
+            }
+            if(this.gjoremal.bruker_id === ''){
+              this.errorMessages.slave = 'Velg noen som skal utføre gjøremålet';
+              noErrors = false;
+            }
+            if(noErrors) {
               this.add();
             }
           },

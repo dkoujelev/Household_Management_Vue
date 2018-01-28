@@ -66,6 +66,7 @@
           this.error.newPasswordMissmatch = '';
           this.error.oldPassword = '';
           this.error.all = '';
+          this.passwordChangeMsg = '';
         },
         validateInfo(){
           let isValid = true;
@@ -100,6 +101,8 @@
               if(response.data.updated){
                 this.passwordChangeMsg = 'Passord endret.';
                 this.$emit('passwordUpdated');
+                this.clearErrors();
+                this.clearFields();
                 //router.push(''); // Push to my profile page
               } else{
                 this.$emit('passwordChangeFailed');

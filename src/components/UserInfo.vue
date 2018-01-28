@@ -94,7 +94,7 @@
     </Modal>
     <Modal :modalVisible.sync="changingPassword" @modalClosing="changingPassword=false;" :showClose="false">
       <h2 slot="title">Endring av passord</h2>
-      <ChangePassword slot="content" @change-password-canceled="changingPassword=false"></ChangePassword>
+      <ChangePassword slot="content" @change-password-canceled="changingPassword=false" @passwordUpdated="changingPassword = false"></ChangePassword>
     </Modal>
   </div>
 </template>
@@ -179,6 +179,7 @@
             bruker_id: store.state.current_user.bruker_id
           }).then(response => {
             this.getGroups();
+            store.state.updateGroups = !store.state.updateGroups;
           }).catch(err => {
             console.log(err);
           });
@@ -190,6 +191,7 @@
             bruker_id: store.state.current_user.bruker_id
           }).then(response => {
             this.getGroups();
+            store.state.updateGroups = !store.state.updateGroups;
           }).catch(err => {
             console.log(err);
           });
