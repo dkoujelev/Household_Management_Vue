@@ -7,7 +7,7 @@
             <h2 slot="title" style="color:white">{{list.name}}</h2>
             <ViewShoppingList :readOnly="isHome" :id.sync="list.id" slot="content" @closingShoppingList="closeShoppingList" @deleteShoppingList="update" @listCompleted="update"/>
           </Modal>
-          <Modal :modalVisible.sync="showAddShoppingList" @modalClosing="closeAddShoppingList">
+          <Modal :modalVisible.sync="showAddShoppingList" @modalClosing="closeAddShoppingList" :showClose="false">
             <h2 slot="title" style="color:white">Ny handleliste</h2>
             <ShoppingList slot="content" @closingAddShoppingList="closeAddShoppingList" @addedShoppingList="update"/>
           </Modal>

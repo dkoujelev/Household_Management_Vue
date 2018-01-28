@@ -26,7 +26,7 @@
                     </div>
                  </div>
               </div>
-            </div>  
+            </div>
 
             <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)">
               <div class="is-child">
@@ -40,8 +40,8 @@
                   <button class="button" style="background-color: orange" @click="changingPassword=true">Endre passord</button>
                  </div>
               </div>
-            </div>           
-            
+            </div>
+
             <div class="is-parent box" style="background-color:hsl(217, 71%, 53%)">
             <p class="subtitle">Dine kollektiv og grupper:</p>
               <div class="is-child">
@@ -95,7 +95,7 @@
         </tr>
       </table>
     </Modal>
-    <Modal :modalVisible.sync="changingPassword" @modalClosing="changingPassword=false;">
+    <Modal :modalVisible.sync="changingPassword" @modalClosing="changingPassword=false;" :showClose="false">
       <h2 slot="title">Endring av passord</h2>
       <ChangePassword slot="content" @change-password-canceled="changingPassword=false"></ChangePassword>
     </Modal>
@@ -152,10 +152,10 @@
                     canJoin=false;
                     canLeave=true;
                   };
-                  if(grpU.default_gruppe){ 
+                  if(grpU.default_gruppe){
                     canLeave=false;
                   };
-                });              
+                });
 
                 return {
                   text: item.navn,
