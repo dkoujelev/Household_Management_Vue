@@ -2,14 +2,15 @@
   <div class="is-ancestor">
     <div class="is-parent">
       <div class="is-child">
+        <p class="help is-danger">{{errorMessages.beskrivelse}}</p>
         <div class="field-body">
-          <p class="help is-danger">{{errorMessages.beskrivelse}}</p>
+
           <p class="subtitle">Beskrivelse:&nbsp</p>
           <input class="input" type="text" style="width: 80%" v-model="expence.tittel" placeholder="Beskrivelse">
         </div>
         <br>
+        <p class="help is-danger">{{errorMessages.sum}}</p>
         <div class="field-body">
-          <p class="help is-danger">{{errorMessages.sum}}</p>
           <p class="subtitle">Total sum:&nbsp</p>
           <input class="input" type="number" style="width:80%"  v-model="expence.sum" placeholder="Summen blir delt likt til alle på gruppa">
         </div>
