@@ -3,8 +3,8 @@
     <div class="select is-rounded">
       <select v-model="currentGroup">
         <option v-for="group in groups" :value="group">
-          <template v-if="group.default_gruppe">{{group.kollektiv_navn}}</template>
-          <template v-else>{{group.kollektiv_navn + " - " + group.navn}}</template>
+          <template v-if="group.default_gruppe"><span style="font-weight: bold">{{group.kollektiv_navn}}</span></template>
+          <template v-else>&nbsp; -  {{group.navn}}</template>
         </option>
       </select>
     </div>
@@ -24,6 +24,7 @@
         get(){
           let groups;
           let a = store.state.updateGroups;
+          console.log(a + 'updating group selector');
           console.log('loading groups for user ' + store.state.current_user.epost);
           return axios.get('http://localhost:9000/rest/undergrupperForBruker/' + store.state.current_user.bruker_id).then(response => {
             groups = response.data;
@@ -31,6 +32,9 @@
           }).catch(err => {
             console.log(err);
           });
+        },
+        watch(){
+          store.state.updateGroups;
         }
       }
     },

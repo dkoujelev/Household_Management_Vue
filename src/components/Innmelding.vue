@@ -171,7 +171,7 @@
                       </td>
                     </tr>
                   </table>
-                  {{ joinSubResult }}
+                  {{ leaveJoinSubResult }}
                 </div>
               </div>
             </div>
@@ -206,7 +206,7 @@
                   </td>
                   </tr>
               </table>
-            {{ joinSubResult }}
+            {{ leaveJoinSubResult }}
 
           </div>
         </div>
@@ -291,15 +291,21 @@
             options_usersgroups: ''
       }
     },
-    watch(){
-      this.updated;
+    mounted() {
+      this.load();
     },
-    created: function() {
-        this.getGroupsWhereAdminFor(this.current_user.bruker_id);
-        this.getAllGroupsFor(this.current_user.bruker_id);
-
+    render(){
+      this.load();
     },
     methods: {
+      load(){
+        this.options_maingroup = [];
+        this.options_subgroup = '';
+        this.options_epic = [];
+        this.options_usersgroups = '';
+        this.getGroupsWhereAdminFor(this.current_user.bruker_id);
+        this.getAllGroupsFor(this.current_user.bruker_id);
+      },
         showMembers(gruppe){
           axios.get('http://localhost:9000/rest/medlemmerIUndergruppe/' + gruppe.uid).then(response => {
             this.showingMembers = true;
@@ -535,6 +541,7 @@
             console.log(response);
             store.state.updateGroups = !store.state.updateGroups;
             this.updated = !this.updated;
+            this.load();
             //TODO: Hide the button / entire line / just add status green tick?
         }).catch(err => {
               console.log(err);
@@ -552,6 +559,7 @@
                 this.createMainResult="Du har opprettet et kollektiv!";
                 store.state.updateGroups = !store.state.updateGroups;
                 this.updated = !this.updated;
+                this.load();
                 //TODO: Hide the button / entire line / just add status green tick?
             }).catch(err => {
                 this.createMainResult="Noe gikk galt!";
@@ -572,6 +580,7 @@
         this.createSubResult="Du har opprettet en gruppe!";
         store.state.updateGroups = !store.state.updateGroups;
         this.updated = !this.updated;
+        this.load();
       //TODO: Hide the button / entire line / just add status green tick?
     }).catch(err => {
         this.createSubResult="Noe gikk galt!";
@@ -603,6 +612,7 @@
                             this.joinResult="Du har søkt om medlemskap!";
                             store.state.updateGroups = !store.state.updateGroups;
                             this.updated = !this.updated;
+                            this.load();
                             //TODO: Hide the button / entire line / just add status green tick?
                         }).catch(err => {
                             this.joinResult="Noe gikk galt!";
@@ -625,6 +635,7 @@
                this.leaveJoinSubResult = 'Innmelding OK!';
                 store.state.updateGroups = !store.state.updateGroups;
                  this.updated = !this.updated;
+                 this.load();
            }).catch(err => {
                console.log(err);
                this.leaveJoinSubResult = 'Innmelding IKKE OK!';
@@ -640,6 +651,7 @@
                this.leaveJoinSubResult = 'Fjerning OK!';
                 store.state.updateGroups = !store.state.updateGroups;
                 this.updated = !this.updated;
+                this.load();
            }).catch(err => {
                console.log(err);
                this.leaveJoinSubResult = 'Fjerning IKKE OK!';
@@ -653,7 +665,7 @@
                  to: this.innmelding.epost,
                  from: 'test@team1.zzz',
                  subject: 'Invitasjon',
-                 body: 'Du har blitt invitert til å bli med i kollektivet "' + this.selected_maingroup.navn +
+                 body: 'Du har blitt invitert til å bli med i kollektivet "' + this.selected_maingroup_object.navn +
                  ". Trykk på denne lenken for å godta invitasjonen: http://localhost:9000/rest/invitasjon/" + this.selected_maingroup + "?bruker_epost=" + this.innmelding.epost + "&bruker_svar=jatakk"
              }).then(response => {
                 axios.post('http://localhost:9000/rest/innmelding/', {
